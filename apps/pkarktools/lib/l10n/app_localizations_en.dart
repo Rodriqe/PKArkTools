@@ -2440,13 +2440,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get updateSection => 'Updates';
-
-  @override
-  String get updateSectionDesc =>
-      'Checks the latest version published on GitHub. On Android it is downloaded and installed over the current one: your copies, settings and Arca folder are kept.';
-
-  @override
   String get updateCheck => 'Check for updates';
 
   @override
@@ -2463,18 +2456,42 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String updateAvailable(String version) {
-    return 'A new version is available: $version';
+  String get updateAutoCheck => 'Check for updates automatically';
+
+  @override
+  String get updateAutoCheckDesc =>
+      'When the app opens, at most once a day. It only asks api.github.com; nothing of yours is sent.';
+
+  @override
+  String updateBannerTitle(String version) {
+    return 'PKArkTools $version available';
   }
 
   @override
-  String get updateInstall => 'Download and install';
-
-  @override
-  String get updateOpenPage => 'Open the download page';
+  String get updateBannerBody => 'See what\'s new and update when you like.';
 
   @override
   String get updateNotes => 'What\'s new';
+
+  @override
+  String get updateNow => 'Update';
+
+  @override
+  String get updateDownload => 'Download';
+
+  @override
+  String get updateSkip => 'Skip this version';
+
+  @override
+  String get updateLater => 'Not now';
+
+  @override
+  String updateSkipped(String version) {
+    return 'You won\'t be reminded about $version again.';
+  }
+
+  @override
+  String get updateOpenPage => 'Open the release page';
 
   @override
   String updateDownloading(String done, String total) {
@@ -2482,28 +2499,64 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get updateVerifying => 'Checking the APK signature…';
+
+  @override
   String get updateCancel => 'Cancel';
 
   @override
   String get updateInstalling =>
-      'Confirm the installation in the Android window. The app will close and reopen updated.';
+      'Confirm the installation in the Android window. The app will close and reopen updated, with your copies and settings.';
 
   @override
-  String get updateBack => 'Back';
+  String get updateAndroidHint =>
+      'The APK is downloaded from GitHub, checked to be signed with the same key as this app, and Android asks you to confirm. Your copies, settings and Ark folder are kept.';
+
+  @override
+  String get updateDesktopHint =>
+      'The release file is downloaded; then you install it yourself. Your copies and settings are kept.';
+
+  @override
+  String get updateIosHint =>
+      'On iPhone and iPad it can\'t be installed from the app: the release page opens.';
 
   @override
   String get updatePermissionTitle => 'Allow installing the update';
 
   @override
   String get updatePermissionBody =>
-      'Android only lets PKArkTools install its own update if you allow it once: on the screen that opens, turn on \"Allow from this source\", come back and press \"Download and install\" again.';
+      'Android only lets PKArkTools install its own update if you allow it once. On the screen that opens, turn on \"Allow from this source\", come back and press \"Update\" again.';
 
   @override
   String get updatePermissionOpen => 'Open settings';
 
   @override
+  String updateSaved(String path) {
+    return 'Saved to $path';
+  }
+
+  @override
+  String get updateShowFolder => 'Show in folder';
+
+  @override
+  String get updateStepsMacos =>
+      'Quit PKArkTools, unzip the file and drag PKArkTools.app into Applications, replacing the old one. Then open it again.';
+
+  @override
+  String get updateStepsWindows =>
+      'Close PKArkTools and run the installer: it updates the installed version.';
+
+  @override
+  String get updateStepsLinux =>
+      'Close PKArkTools, extract the tar.gz and replace the old folder with the new one.';
+
+  @override
   String get updateErrorNetwork =>
       'Couldn\'t reach GitHub. Check your connection and try again.';
+
+  @override
+  String get updateErrorRate =>
+      'GitHub limits requests without an account. Try again in a while.';
 
   @override
   String updateErrorGeneric(String code) {
@@ -2511,17 +2564,27 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get updateErrorSize => 'The download was incomplete. Try again.';
+  String get updateErrorSize =>
+      'The download was incomplete or the wrong size. Try again.';
 
   @override
-  String get updateErrorAborted => 'Installation cancelled.';
+  String get updateErrorAborted => 'Update cancelled.';
+
+  @override
+  String get updateErrorSignature =>
+      'Not installed: the downloaded APK isn\'t signed with the same certificate as this app. Only download it from the official release page.';
+
+  @override
+  String get updateErrorUntrusted =>
+      'The download link isn\'t from the PKArkTools repository on GitHub: it won\'t be downloaded.';
 
   @override
   String get updateErrorConflict =>
-      'Android can\'t install this version over yours: it\'s signed with a different key (e.g. a test build). Export your Arca before uninstalling and installing the new one.';
+      'Android can\'t install this version over yours: it\'s signed with a different key. Export your Ark before uninstalling and installing the new one.';
 
   @override
-  String get updateErrorStorage => 'There isn\'t enough space for the update.';
+  String get updateErrorStorage =>
+      'Couldn\'t save the download (out of space?).';
 
   @override
   String get updateErrorPermission =>

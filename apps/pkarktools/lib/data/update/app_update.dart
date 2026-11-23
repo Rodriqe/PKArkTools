@@ -4,7 +4,10 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../app_version.dart';
 
@@ -56,8 +59,8 @@ class AppVersion implements Comparable<AppVersion> {
   String toString() => '$major.$minor.$patch${pre.isEmpty ? '' : '-$pre'}';
 }
 
-/// Plataformas con descarga propia en los releases.
-enum UpdatePlatform { android, macos, windows, linux, other }
+/// Plataformas con descarga propia en los releases (iOS solo abre la página).
+enum UpdatePlatform { android, macos, windows, linux, ios, other }
 
 UpdatePlatform get currentUpdatePlatform {
   if (kIsWeb) return UpdatePlatform.other;
@@ -65,7 +68,52 @@ UpdatePlatform get currentUpdatePlatform {
   if (Platform.isMacOS) return UpdatePlatform.macos;
   if (Platform.isWindows) return UpdatePlatform.windows;
   if (Platform.isLinux) return UpdatePlatform.linux;
+  if (Platform.isIOS) return UpdatePlatform.ios;
   return UpdatePlatform.other;
+}
+
+/// Solo se descarga del repositorio de PKArkTools, por HTTPS y desde los
+/// dominios de GitHub (`github.com` redirige a `*.githubusercontent.com`).
+bool isTrustedDownload(Uri url) {
+  if (url.scheme != 'https' || url.hasPort && url.port != 443) return false;
+  final host = url.host.toLowerCase();
+  if (host == 'github.com') return url.path.startsWith('/${AppUpdater.repo}/releases/download/');
+  return host == 'objects.githubusercontent.com' || host == 'release-assets.githubusercontent.com';
+}
+
+/// La página de un release solo se abre si es de este repositorio.
+bool isTrustedPage(Uri url) =>
+    url.scheme == 'https' && url.host.toLowerCase() == 'github.com' && url.path.startsWith('/${AppUpdater.repo}/releases');
+
+/// Firma de un paquete Android: nombre y huellas SHA-256 de sus certificados.
+@immutable
+class ApkSignature {
+  const ApkSignature(this.package, this.certificates);
+  final String package;
+  final Set<String> certificates;
+
+  static ApkSignature? fromChannel(Object? m) {
+    if (m is! Map) return null;
+    final pkg = m['package'], certs = m['certificates'];
+    if (pkg is! String || certs is! List) return null;
+    return ApkSignature(pkg, {for (final c in certs) '$c'.toLowerCase()});
+  }
+}
+
+/// Dónde guarda el comprobador lo suyo (ETag, última respuesta, fecha de la
+/// última consulta, versión omitida y si busca solo). En la app es la tabla de
+/// ajustes del índice local; en los tests, memoria.
+abstract class UpdateStore {
+  Future<String?> read(String key);
+  Future<void> write(String key, String value);
+}
+
+class MemoryUpdateStore implements UpdateStore {
+  final values = <String, String>{};
+  @override
+  Future<String?> read(String key) async => values[key];
+  @override
+  Future<void> write(String key, String value) async => values[key] = value;
 }
 
 @immutable
@@ -109,11 +157,10 @@ class ReleaseInfo {
       UpdatePlatform.macos => (n) => n.endsWith('-macos.zip'),
       UpdatePlatform.windows => (n) => n.endsWith('-setup.exe'),
       UpdatePlatform.linux => (n) => n.endsWith('-linux-x64.tar.gz'),
-      UpdatePlatform.other => (_) => false,
+      UpdatePlatform.ios || UpdatePlatform.other => (_) => false,
     };
-    final page = json['html_url'] is String
-        ? Uri.parse(json['html_url'] as String)
-        : Uri.parse('https://github.com/${AppUpdater.repo}/releases/tag/$tag');
+    final html = json['html_url'] is String ? Uri.tryParse(json['html_url'] as String) : null;
+    final page = html != null && isTrustedPage(html) ? html : Uri.parse('https://github.com/${AppUpdater.repo}/releases/tag/$tag');
     return ReleaseInfo(
       version: version,
       tag: tag as String,
@@ -127,8 +174,8 @@ class ReleaseInfo {
 class UpdateException implements Exception {
   const UpdateException(this.code, [this.detail]);
 
-  /// `network`, `http`, `format`, `size`, `permission`, `conflict`,
-  /// `incompatible`, `storage`, `aborted`, `install`.
+  /// `network`, `http`, `rate`, `format`, `size`, `untrusted`, `signature`,
+  /// `permission`, `conflict`, `incompatible`, `storage`, `aborted`, `install`.
   final String code;
   final String? detail;
 
@@ -136,48 +183,123 @@ class UpdateException implements Exception {
   String toString() => 'UpdateException($code${detail == null ? '' : ': $detail'})';
 }
 
-/// Busca la última versión en GitHub Releases y, en Android, descarga el APK
-/// y lo entrega al instalador del sistema (que pide una confirmación: Android
-/// no deja actualizar apps de fuera de la tienda sin ella). Los datos se
-/// conservan porque es una actualización, no una instalación nueva.
+/// Busca la última versión en GitHub Releases (con ETag y caché para no gastar
+/// el límite de 60 consultas por hora de la API sin token) y descarga el
+/// archivo de esta plataforma. En Android comprueba que el APK está firmado
+/// con el mismo certificado que la app instalada y lo entrega al instalador
+/// del sistema, que pide una confirmación; los datos se conservan porque es
+/// una actualización. En escritorio el archivo se guarda donde diga el usuario
+/// y en iOS solo se abre la página del release.
 class AppUpdater {
-  AppUpdater({HttpClient Function()? client, Uri? api, this.platform = UpdatePlatform.other, this.downloadDir})
-      : _client = client ?? HttpClient.new,
-        _api = api ?? Uri.parse('https://api.github.com/repos/$repo/releases/latest');
+  AppUpdater({
+    HttpClient Function()? client,
+    Uri? api,
+    this.platform = UpdatePlatform.other,
+    this.downloadDir,
+    UpdateStore? store,
+    DateTime Function()? now,
+    bool Function(Uri)? trusted,
+  })  : _client = client ?? HttpClient.new,
+        _api = api ?? Uri.parse('https://api.github.com/repos/$repo/releases/latest'),
+        store = store ?? MemoryUpdateStore(),
+        _now = now ?? DateTime.now,
+        _trusted = trusted ?? isTrustedDownload;
 
-  factory AppUpdater.forCurrentPlatform() => AppUpdater(platform: currentUpdatePlatform);
+  factory AppUpdater.forCurrentPlatform({UpdateStore? store}) => AppUpdater(platform: currentUpdatePlatform, store: store);
 
   static const repo = 'Rodriqe/PKArkTools';
   static const releasesPage = 'https://github.com/$repo/releases/latest';
+
+  /// Como mucho una consulta automática por periodo.
+  static const autoInterval = Duration(hours: 24);
+
   static const _channel = MethodChannel('dev.pkarktools/update');
+  static const kEtag = 'update.etag', kBody = 'update.body', kChecked = 'update.checkedAt';
+  static const kSkipped = 'update.skipped', kAuto = 'update.auto';
 
   final HttpClient Function() _client;
   final Uri _api;
   final UpdatePlatform platform;
+  final UpdateStore store;
+  final DateTime Function() _now;
+  final bool Function(Uri) _trusted;
 
-  /// Carpeta de descarga del APK (por defecto, la caché de la app).
+  /// Carpeta temporal de las descargas (por defecto, la caché de la app).
   final Directory? downloadDir;
 
-  /// En esta plataforma se puede descargar e instalar desde la app.
+  /// Android: se descarga e instala desde la app.
   bool get canInstallInApp => platform == UpdatePlatform.android;
+
+  /// Escritorio: se descarga el archivo y el usuario lo instala a mano.
+  bool get canDownload => const {UpdatePlatform.macos, UpdatePlatform.windows, UpdatePlatform.linux}.contains(platform);
 
   HttpClient _http() => _client()
     ..connectionTimeout = const Duration(seconds: 10)
     ..userAgent = 'PKArkTools/$kAppVersion';
 
-  /// El último release, o `null` si no hay ninguno publicado.
+  // ------------------------------------------------------------ preferencias
+
+  /// «Buscar actualizaciones automáticamente» (activado por defecto).
+  Future<bool> autoCheckEnabled() async => await store.read(kAuto) != 'false';
+  Future<void> setAutoCheck(bool on) => store.write(kAuto, '$on');
+
+  /// Versión que el usuario pidió omitir (no vuelve a avisar de ella).
+  Future<AppVersion?> skippedVersion() async => AppVersion.tryParse(await store.read(kSkipped) ?? '');
+  Future<void> skip(AppVersion v) => store.write(kSkipped, '$v');
+
+  Future<DateTime?> lastChecked() async => DateTime.tryParse(await store.read(kChecked) ?? '');
+
+  /// El release de la última respuesta guardada (sin red).
+  Future<ReleaseInfo?> cached() async {
+    final body = await store.read(kBody);
+    if (body == null || body.isEmpty) return null;
+    try {
+      final json = jsonDecode(body);
+      return json is Map<String, Object?> ? ReleaseInfo.fromGitHub(json, platform) : null;
+    } on FormatException {
+      return null;
+    }
+  }
+
+  // ---------------------------------------------------------------- consulta
+
+  /// El último release, o `null` si no hay ninguno publicado. Manda el ETag
+  /// de la respuesta anterior: si no ha cambiado, GitHub contesta 304 (que no
+  /// cuenta para el límite) y se usa la guardada.
   Future<ReleaseInfo?> latest() async {
     final http = _http();
     try {
+      final etag = await store.read(kEtag);
+      final hasBody = (await store.read(kBody))?.isNotEmpty ?? false;
       final req = await http.getUrl(_api);
       req.headers.set(HttpHeaders.acceptHeader, 'application/vnd.github+json');
+      req.headers.set('X-GitHub-Api-Version', '2022-11-28');
+      if (etag != null && etag.isNotEmpty && hasBody) req.headers.set(HttpHeaders.ifNoneMatchHeader, etag);
       final res = await req.close().timeout(const Duration(seconds: 15));
       final body = await utf8.decodeStream(res).timeout(const Duration(seconds: 15));
-      if (res.statusCode == 404) return null;
-      if (res.statusCode != 200) throw UpdateException('http', '${res.statusCode}');
+      switch (res.statusCode) {
+        case 304:
+          await store.write(kChecked, _now().toUtc().toIso8601String());
+          return await cached() ?? (throw const UpdateException('format', 'caché vacía'));
+        case 404:
+          await store.write(kBody, '');
+          await store.write(kEtag, '');
+          await store.write(kChecked, _now().toUtc().toIso8601String());
+          return null;
+        case 403 || 429:
+          throw UpdateException('rate', '${res.statusCode}');
+        case 200:
+          break;
+        default:
+          throw UpdateException('http', '${res.statusCode}');
+      }
       final json = jsonDecode(body);
       if (json is! Map<String, Object?>) throw const UpdateException('format');
-      return ReleaseInfo.fromGitHub(json, platform) ?? (throw const UpdateException('format'));
+      final release = ReleaseInfo.fromGitHub(json, platform) ?? (throw const UpdateException('format'));
+      await store.write(kBody, body);
+      await store.write(kEtag, res.headers.value(HttpHeaders.etagHeader) ?? '');
+      await store.write(kChecked, _now().toUtc().toIso8601String());
+      return release;
     } on UpdateException {
       rethrow;
     } on FormatException catch (e) {
@@ -195,16 +317,77 @@ class AppUpdater {
     }
   }
 
+  /// Chequeo al abrir la app: si está activado, consulta GitHub como mucho
+  /// una vez cada [autoInterval] (si no, usa la respuesta guardada) y nunca
+  /// falla. Devuelve el release solo si es más nuevo y no se ha omitido.
+  Future<ReleaseInfo?> autoCheck() async {
+    try {
+      if (!await autoCheckEnabled()) return null;
+      final last = await lastChecked();
+      final now = _now();
+      ReleaseInfo? r;
+      if (last != null && now.difference(last) < autoInterval && !now.isBefore(last)) {
+        r = await cached();
+      } else {
+        try {
+          r = await latest();
+        } on UpdateException {
+          r = await cached();
+        }
+      }
+      return await offer(r);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// [r] si merece aviso: más nuevo que la instalada y no omitido.
+  Future<ReleaseInfo?> offer(ReleaseInfo? r) async {
+    if (r == null || !r.isNewer) return null;
+    return await skippedVersion() == r.version ? null : r;
+  }
+
+  // ---------------------------------------------------------------- descarga
+
   Future<Directory> _dir() async {
     final d = downloadDir ?? Directory(p.join(Directory.systemTemp.path, 'actualizaciones'));
     await d.create(recursive: true);
     return d;
   }
 
-  /// Descarga el archivo de [release] (comprobando su tamaño) y devuelve la
-  /// ruta. Borra antes las descargas anteriores. [cancel] la detiene.
+  /// Borra lo que quedara en la carpeta de descargas (tras instalar, Android
+  /// cierra la app antes de que pueda hacerlo).
+  Future<void> cleanDownloads() async {
+    final d = downloadDir ?? Directory(p.join(Directory.systemTemp.path, 'actualizaciones'));
+    try {
+      if (await d.exists()) await d.delete(recursive: true);
+    } catch (_) {}
+  }
+
+  /// Abre [url] siguiendo a mano las redirecciones, para comprobar que cada
+  /// salto sigue siendo HTTPS hacia GitHub.
+  Future<HttpClientResponse> _get(HttpClient http, Uri url) async {
+    for (var hops = 0; hops < 6; hops++) {
+      if (!_trusted(url)) throw UpdateException('untrusted', '$url');
+      final req = await http.getUrl(url);
+      req.followRedirects = false;
+      req.headers.set(HttpHeaders.acceptHeader, 'application/octet-stream');
+      final res = await req.close().timeout(const Duration(seconds: 30));
+      if (!res.isRedirect) return res;
+      final loc = res.headers.value(HttpHeaders.locationHeader);
+      await res.drain<void>().catchError((_) {});
+      if (loc == null) throw const UpdateException('http', 'redirección sin destino');
+      url = url.resolve(loc);
+    }
+    throw const UpdateException('http', 'demasiadas redirecciones');
+  }
+
+  /// Descarga el archivo de [release] (comprobando su tamaño) a la carpeta
+  /// temporal y devuelve la ruta. Borra antes las descargas anteriores.
+  /// [cancel] la detiene; nada queda a medias.
   Future<File> download(ReleaseInfo release, {void Function(int received, int total)? onProgress, Future<void>? cancel}) async {
     final asset = release.asset ?? (throw const UpdateException('format', 'sin archivo para esta plataforma'));
+    if (!_trusted(asset.url)) throw UpdateException('untrusted', '${asset.url}');
     final dir = await _dir();
     await for (final e in dir.list()) {
       try {
@@ -225,8 +408,7 @@ class AppUpdater {
     }));
     IOSink? sink;
     try {
-      final req = await http.getUrl(asset.url);
-      final res = await req.close().timeout(const Duration(seconds: 30));
+      final res = await _get(http, asset.url);
       if (res.statusCode != 200) {
         await res.drain<void>().catchError((_) {});
         throw UpdateException('http', '${res.statusCode}');
@@ -238,8 +420,14 @@ class AppUpdater {
       final out = sink;
       sub = res.timeout(const Duration(seconds: 30)).listen(
         (chunk) {
-          out.add(chunk);
           received += chunk.length;
+          // Más de lo anunciado: no es el archivo del release.
+          if (asset.size > 0 && received > asset.size) {
+            if (!finished.isCompleted) finished.completeError(UpdateException('size', '> ${asset.size}'));
+            unawaited(sub?.cancel());
+            return;
+          }
+          out.add(chunk);
           onProgress?.call(received, total);
         },
         onError: (Object e) {
@@ -256,7 +444,8 @@ class AppUpdater {
       sink = null;
       if (asset.size > 0 && received != asset.size) throw UpdateException('size', '$received ≠ ${asset.size}');
       return await part.rename(target.path);
-    } on UpdateException {
+    } on UpdateException catch (e) {
+      if (cancelled && e.code != 'aborted') throw const UpdateException('aborted');
       rethrow;
     } catch (e) {
       if (cancelled) throw const UpdateException('aborted');
@@ -269,12 +458,84 @@ class AppUpdater {
     }
   }
 
+  // ------------------------------------------------------------ escritorio
+
+  /// Escritorio: guarda [file] donde elija el usuario (diálogo «Guardar como»
+  /// que empieza en Descargas); si no hay diálogo, en Descargas. Devuelve la
+  /// ruta final o `null` si el usuario cancela. Borra [file].
+  Future<String?> saveDownload(File file, String name) async {
+    try {
+      String? dir;
+      try {
+        dir = (await getDownloadsDirectory())?.path;
+      } catch (_) {}
+      Uri? uri;
+      var dialog = true;
+      try {
+        uri = await FilePicker.saveFile(
+            dialogTitle: name, fileName: name, initialDirectory: dir, bytes: await file.readAsBytes());
+      } on PlatformException {
+        dialog = false;
+      } on UnimplementedError {
+        dialog = false;
+      }
+      if (dialog) {
+        if (uri == null) return null;
+        return uri.scheme == 'file' ? uri.toFilePath() : uri.toString();
+      }
+      if (dir == null) throw const UpdateException('storage', 'sin carpeta de descargas');
+      final out = p.join(dir, name);
+      await file.copy(out);
+      return out;
+    } on FileSystemException catch (e) {
+      throw UpdateException('storage', e.message);
+    } finally {
+      await file.delete().catchError((_) => file);
+    }
+  }
+
+  /// Borra una descarga (el APK, tras instalar o al cancelar).
+  Future<void> deleteDownload(File f) async {
+    try {
+      if (await f.exists()) await f.delete();
+    } catch (_) {}
+  }
+
+  /// Escritorio: muestra la carpeta que contiene [path].
+  Future<bool> reveal(String path) => _launch(Uri.directory(p.dirname(path)));
+
+  // ----------------------------------------------------------------- Android
+
   /// Android: si la app puede pedir instalar paquetes (permiso «Instalar apps
   /// desconocidas» para PKArkTools).
   Future<bool> canRequestInstall() async => await _channel.invokeMethod<bool>('canInstall') ?? false;
 
   /// Android: abre el ajuste del sistema «Instalar apps desconocidas».
   Future<void> openInstallPermission() => _channel.invokeMethod<void>('openInstallPermission');
+
+  /// Android: firma de la app instalada.
+  Future<ApkSignature?> installedSignature() async => ApkSignature.fromChannel(await _channel.invokeMethod<Object?>('installedSignature'));
+
+  /// Android: firma del APK en [apk] (null si no se puede leer).
+  Future<ApkSignature?> apkSignature(File apk) async =>
+      ApkSignature.fromChannel(await _channel.invokeMethod<Object?>('apkSignature', {'path': apk.path}));
+
+  /// Comprueba que [apk] es PKArkTools firmado con la misma clave que la app
+  /// instalada. Si no, lanza `signature` y no se instala.
+  Future<void> verify(File apk) async {
+    final ApkSignature? mine, theirs;
+    try {
+      mine = await installedSignature();
+      theirs = await apkSignature(apk);
+    } on PlatformException catch (e) {
+      throw UpdateException('signature', e.message);
+    }
+    if (mine == null || mine.certificates.isEmpty) throw const UpdateException('signature', 'instalada sin firma');
+    if (theirs == null || theirs.certificates.isEmpty) throw const UpdateException('signature', 'APK sin firma o dañado');
+    if (theirs.package != mine.package) throw UpdateException('signature', 'paquete ${theirs.package}');
+    Set<String> norm(Set<String> c) => {for (final x in c) x.toLowerCase()};
+    if (!setEquals(norm(theirs.certificates), norm(mine.certificates))) throw const UpdateException('signature', 'otro certificado');
+  }
 
   /// Android: entrega [apk] al instalador del sistema. Si el usuario acepta,
   /// Android cierra la app y la reabre ya actualizada (no se vuelve de aquí);
@@ -287,16 +548,14 @@ class AppUpdater {
     }
   }
 
-  /// Escritorio: abre la página del release en el navegador.
-  Future<bool> openPage(Uri url) async {
-    if (kIsWeb) return false;
-    final (cmd, args) = Platform.isMacOS
-        ? ('open', [url.toString()])
-        : Platform.isWindows
-            ? ('rundll32', ['url.dll,FileProtocolHandler', url.toString()])
-            : ('xdg-open', [url.toString()]);
+  // ------------------------------------------------------------------ página
+
+  /// Abre la página del release en el navegador (solo páginas del repo).
+  Future<bool> openPage(Uri url) => isTrustedPage(url) ? _launch(url) : Future.value(false);
+
+  Future<bool> _launch(Uri url) async {
     try {
-      return (await Process.run(cmd, args)).exitCode == 0;
+      return await launchUrl(url, mode: LaunchMode.externalApplication);
     } catch (_) {
       return false;
     }

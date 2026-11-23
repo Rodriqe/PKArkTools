@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../data/update/update_notice.dart';
 import '../theme/app_theme.dart';
 import 'common/brand_mark.dart';
 import 'common/format.dart';
 import 'settings/game_folders.dart';
 
 /// Contenedor adaptativo: rail lateral en pantallas anchas, barra inferior en móvil.
-class AppShell extends StatelessWidget {
+class AppShell extends ConsumerWidget {
   const AppShell({super.key, required this.shell});
   final StatefulNavigationShell shell;
 
@@ -16,8 +18,11 @@ class AppShell extends StatelessWidget {
   void _go(int i) => shell.goBranch(i, initialLocation: i == shell.currentIndex);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    // Punto en Ajustes cuando hay una versión nueva de la que avisar.
+    final update = ref.watch(updateNoticeProvider.select((n) => n.available != null));
+    Widget dot(int i, IconData icon) => i == 2 && update ? Badge(smallSize: 8, child: Icon(icon)) : Icon(icon);
     final destinations = [
       (Icons.inventory_2_outlined, Icons.inventory_2_rounded, l10n.navArca),
       (Icons.history_rounded, Icons.history_rounded, l10n.navActivity),
@@ -39,8 +44,8 @@ class AppShell extends StatelessWidget {
                 child: _Logo(extended: extended),
               ),
               destinations: [
-                for (final (icon, sel, label) in destinations)
-                  NavigationRailDestination(icon: Icon(icon), selectedIcon: Icon(sel), label: Text(label)),
+                for (final (i, (icon, sel, label)) in destinations.indexed)
+                  NavigationRailDestination(icon: dot(i, icon), selectedIcon: dot(i, sel), label: Text(label)),
               ],
             ),
             VerticalDivider(width: 1, color: context.tokens.hairline),
@@ -54,8 +59,8 @@ class AppShell extends StatelessWidget {
           selectedIndex: shell.currentIndex,
           onDestinationSelected: _go,
           destinations: [
-            for (final (icon, sel, label) in destinations)
-              NavigationDestination(icon: Icon(icon), selectedIcon: Icon(sel), label: label),
+            for (final (i, (icon, sel, label)) in destinations.indexed)
+              NavigationDestination(icon: dot(i, icon), selectedIcon: dot(i, sel), label: label),
           ],
         ),
       );

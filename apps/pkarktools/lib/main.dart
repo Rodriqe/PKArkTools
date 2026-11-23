@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
 import 'data/arca_session.dart';
 import 'data/folder/folder_access.dart';
+import 'data/update/update_notice.dart';
 import 'providers.dart';
 
 /// Ruta inicial opcional (útil para capturas): `--dart-define=INITIAL_ROUTE=/ajustes`.
@@ -39,6 +40,8 @@ Future<void> main() async {
     container: container,
     child: const PKArkToolsApp(initialLocation: _initialRoute),
   ));
+  // Buscar actualizaciones (como mucho una vez al día; falla en silencio).
+  unawaited(container.read(updateNoticeProvider.notifier).startup());
   // Reindexado incremental al abrir y vigilancia de la carpeta en escritorio.
   if (boot.setup is SetupReady) {
     final controller = container.read(arcaSetupProvider.notifier);

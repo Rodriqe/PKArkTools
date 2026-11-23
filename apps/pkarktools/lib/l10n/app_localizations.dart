@@ -3967,18 +3967,6 @@ abstract class AppLocalizations {
   /// **'Importando {done} de {total}…'**
   String importProgress(String done, String total);
 
-  /// No description provided for @updateSection.
-  ///
-  /// In es, this message translates to:
-  /// **'Actualizaciones'**
-  String get updateSection;
-
-  /// No description provided for @updateSectionDesc.
-  ///
-  /// In es, this message translates to:
-  /// **'Busca la última versión publicada en GitHub. En Android se descarga y se instala encima de la actual: tus copias, ajustes y la carpeta del Arca se conservan.'**
-  String get updateSectionDesc;
-
   /// No description provided for @updateCheck.
   ///
   /// In es, this message translates to:
@@ -4003,23 +3991,29 @@ abstract class AppLocalizations {
   /// **'Tienes la última versión ({version}).'**
   String updateUpToDate(String version);
 
-  /// No description provided for @updateAvailable.
+  /// No description provided for @updateAutoCheck.
   ///
   /// In es, this message translates to:
-  /// **'Hay una versión nueva: {version}'**
-  String updateAvailable(String version);
+  /// **'Buscar actualizaciones automáticamente'**
+  String get updateAutoCheck;
 
-  /// No description provided for @updateInstall.
+  /// No description provided for @updateAutoCheckDesc.
   ///
   /// In es, this message translates to:
-  /// **'Descargar e instalar'**
-  String get updateInstall;
+  /// **'Al abrir la app, como mucho una vez al día. Solo consulta api.github.com; no se envía nada tuyo.'**
+  String get updateAutoCheckDesc;
 
-  /// No description provided for @updateOpenPage.
+  /// No description provided for @updateBannerTitle.
   ///
   /// In es, this message translates to:
-  /// **'Abrir la página de descarga'**
-  String get updateOpenPage;
+  /// **'PKArkTools {version} disponible'**
+  String updateBannerTitle(String version);
+
+  /// No description provided for @updateBannerBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Mira las novedades y actualiza cuando quieras.'**
+  String get updateBannerBody;
 
   /// No description provided for @updateNotes.
   ///
@@ -4027,11 +4021,53 @@ abstract class AppLocalizations {
   /// **'Novedades'**
   String get updateNotes;
 
+  /// No description provided for @updateNow.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get updateNow;
+
+  /// No description provided for @updateDownload.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar'**
+  String get updateDownload;
+
+  /// No description provided for @updateSkip.
+  ///
+  /// In es, this message translates to:
+  /// **'Omitir esta versión'**
+  String get updateSkip;
+
+  /// No description provided for @updateLater.
+  ///
+  /// In es, this message translates to:
+  /// **'Ahora no'**
+  String get updateLater;
+
+  /// No description provided for @updateSkipped.
+  ///
+  /// In es, this message translates to:
+  /// **'No volverás a ver el aviso de la {version}.'**
+  String updateSkipped(String version);
+
+  /// No description provided for @updateOpenPage.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir la página del release'**
+  String get updateOpenPage;
+
   /// No description provided for @updateDownloading.
   ///
   /// In es, this message translates to:
   /// **'Descargando {done} de {total}…'**
   String updateDownloading(String done, String total);
+
+  /// No description provided for @updateVerifying.
+  ///
+  /// In es, this message translates to:
+  /// **'Comprobando la firma del APK…'**
+  String get updateVerifying;
 
   /// No description provided for @updateCancel.
   ///
@@ -4042,14 +4078,26 @@ abstract class AppLocalizations {
   /// No description provided for @updateInstalling.
   ///
   /// In es, this message translates to:
-  /// **'Confirma la instalación en la ventana de Android. La app se cerrará y se abrirá ya actualizada.'**
+  /// **'Confirma la instalación en la ventana de Android. La app se cerrará y se abrirá ya actualizada, con tus copias y ajustes.'**
   String get updateInstalling;
 
-  /// No description provided for @updateBack.
+  /// No description provided for @updateAndroidHint.
   ///
   /// In es, this message translates to:
-  /// **'Volver'**
-  String get updateBack;
+  /// **'Se descarga el APK de GitHub, se comprueba que está firmado con la misma clave que esta app y Android te pide confirmar. Tus copias, ajustes y la carpeta del Arca se conservan.'**
+  String get updateAndroidHint;
+
+  /// No description provided for @updateDesktopHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Se descarga el archivo del release; luego lo instalas tú. Tus copias y ajustes se conservan.'**
+  String get updateDesktopHint;
+
+  /// No description provided for @updateIosHint.
+  ///
+  /// In es, this message translates to:
+  /// **'En iPhone y iPad no se puede instalar desde la app: se abre la página del release.'**
+  String get updateIosHint;
 
   /// No description provided for @updatePermissionTitle.
   ///
@@ -4060,7 +4108,7 @@ abstract class AppLocalizations {
   /// No description provided for @updatePermissionBody.
   ///
   /// In es, this message translates to:
-  /// **'Android solo deja que PKArkTools instale su propia actualización si se lo permites una vez: en la pantalla que se abre, activa «Permitir de esta fuente», vuelve aquí y pulsa de nuevo «Descargar e instalar».'**
+  /// **'Android solo deja que PKArkTools instale su propia actualización si se lo permites una vez. En la pantalla que se abre, activa «Permitir de esta fuente», vuelve aquí y pulsa otra vez «Actualizar».'**
   String get updatePermissionBody;
 
   /// No description provided for @updatePermissionOpen.
@@ -4069,11 +4117,47 @@ abstract class AppLocalizations {
   /// **'Abrir ajustes'**
   String get updatePermissionOpen;
 
+  /// No description provided for @updateSaved.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardado en {path}'**
+  String updateSaved(String path);
+
+  /// No description provided for @updateShowFolder.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar en la carpeta'**
+  String get updateShowFolder;
+
+  /// No description provided for @updateStepsMacos.
+  ///
+  /// In es, this message translates to:
+  /// **'Cierra PKArkTools, descomprime el zip y arrastra PKArkTools.app a Aplicaciones sustituyendo la anterior. Ábrela de nuevo.'**
+  String get updateStepsMacos;
+
+  /// No description provided for @updateStepsWindows.
+  ///
+  /// In es, this message translates to:
+  /// **'Cierra PKArkTools y ejecuta el instalador: actualiza la versión instalada.'**
+  String get updateStepsWindows;
+
+  /// No description provided for @updateStepsLinux.
+  ///
+  /// In es, this message translates to:
+  /// **'Cierra PKArkTools, descomprime el tar.gz y sustituye la carpeta anterior por la nueva.'**
+  String get updateStepsLinux;
+
   /// No description provided for @updateErrorNetwork.
   ///
   /// In es, this message translates to:
   /// **'No se pudo conectar con GitHub. Revisa la conexión e inténtalo de nuevo.'**
   String get updateErrorNetwork;
+
+  /// No description provided for @updateErrorRate.
+  ///
+  /// In es, this message translates to:
+  /// **'GitHub limita las consultas sin cuenta. Inténtalo dentro de un rato.'**
+  String get updateErrorRate;
 
   /// No description provided for @updateErrorGeneric.
   ///
@@ -4084,25 +4168,37 @@ abstract class AppLocalizations {
   /// No description provided for @updateErrorSize.
   ///
   /// In es, this message translates to:
-  /// **'La descarga llegó incompleta. Inténtalo de nuevo.'**
+  /// **'La descarga llegó incompleta o con otro tamaño. Inténtalo de nuevo.'**
   String get updateErrorSize;
 
   /// No description provided for @updateErrorAborted.
   ///
   /// In es, this message translates to:
-  /// **'Instalación cancelada.'**
+  /// **'Actualización cancelada.'**
   String get updateErrorAborted;
+
+  /// No description provided for @updateErrorSignature.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha instalado: el APK descargado no está firmado con el mismo certificado que esta app. Descárgalo solo desde la página oficial del release.'**
+  String get updateErrorSignature;
+
+  /// No description provided for @updateErrorUntrusted.
+  ///
+  /// In es, this message translates to:
+  /// **'El enlace de descarga no es del repositorio de PKArkTools en GitHub: no se descarga.'**
+  String get updateErrorUntrusted;
 
   /// No description provided for @updateErrorConflict.
   ///
   /// In es, this message translates to:
-  /// **'Android no puede instalar esta versión encima de la tuya: está firmada con otra clave (p. ej. una versión de prueba). Exporta tu Arca antes de desinstalar e instalar la nueva.'**
+  /// **'Android no puede instalar esta versión encima de la tuya: está firmada con otra clave. Exporta tu Arca antes de desinstalar e instalar la nueva.'**
   String get updateErrorConflict;
 
   /// No description provided for @updateErrorStorage.
   ///
   /// In es, this message translates to:
-  /// **'No hay espacio suficiente para la actualización.'**
+  /// **'No se pudo guardar la descarga (¿falta espacio?).'**
   String get updateErrorStorage;
 
   /// No description provided for @updateErrorPermission.

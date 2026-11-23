@@ -3,13 +3,17 @@ package dev.pkarktools.app
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
+import android.content.pm.PackageManager
+import android.content.pm.Signature
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
+import java.security.MessageDigest
 import java.util.concurrent.Executors
 
 /**
@@ -35,9 +39,60 @@ class AppUpdateInstaller(private val activity: Activity, messenger: BinaryMessen
                     result.success(null)
                 }
                 "install" -> install(call.argument<String>("path")!!, result)
+                "installedSignature" -> result.success(installedSignature())
+                "apkSignature" -> {
+                    val path = call.argument<String>("path")!!
+                    io.execute {
+                        val sig = try { apkSignature(path) } catch (e: Exception) { null }
+                        activity.runOnUiThread { result.success(sig) }
+                    }
+                }
                 else -> result.notImplemented()
             }
         }
+    }
+
+    private fun sha256(bytes: ByteArray): String =
+        MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
+
+    @Suppress("DEPRECATION")
+    private fun describe(info: PackageInfo?): Map<String, Any>? {
+        if (info == null) return null
+        val certs: Array<Signature>? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && info.signingInfo != null) {
+            val s = info.signingInfo!!
+            if (s.hasMultipleSigners()) s.apkContentsSigners else s.signingCertificateHistory
+        } else {
+            info.signatures
+        }
+        return mapOf(
+            "package" to info.packageName,
+            "certificates" to (certs ?: emptyArray()).map { sha256(it.toByteArray()) },
+        )
+    }
+
+    private val signatureFlags: Int
+        @Suppress("DEPRECATION")
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) PackageManager.GET_SIGNING_CERTIFICATES
+        else PackageManager.GET_SIGNATURES
+
+    /** Paquete y huellas SHA-256 de los certificados de la app instalada. */
+    private fun installedSignature(): Map<String, Any>? =
+        describe(activity.packageManager.getPackageInfo(activity.packageName, signatureFlags))
+
+    /**
+     * Lo mismo, de un APK sin instalar: así se comprueba antes de instalarlo
+     * que viene firmado con la misma clave que la app.
+     */
+    private fun apkSignature(path: String): Map<String, Any>? {
+        val pm = activity.packageManager
+        var info = pm.getPackageArchiveInfo(path, signatureFlags)
+        // Algunas versiones no rellenan signingInfo de un archivo: se reintenta
+        // con las firmas clásicas (verificadas igualmente por el sistema).
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && info?.signingInfo == null) {
+            info = pm.getPackageArchiveInfo(path, PackageManager.GET_SIGNATURES)
+        }
+        return describe(info)
     }
 
     private fun canInstall(): Boolean =

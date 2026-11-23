@@ -47,6 +47,7 @@ class SettingsScreen extends ConsumerWidget {
               children: [
                 Text(l10n.navSettings, style: compact ? context.text.displaySmall : context.text.displayMedium),
                 const SizedBox(height: 28),
+                const UpdateBanner(),
                 section(l10n.folderSection, const ArcaFolderSection(), body: l10n.folderSectionDesc),
                 section(
                   l10n.theme,
@@ -98,8 +99,6 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   body: l10n.sampleDataDesc,
                 ),
-                if (UpdateSection.supported(ref.watch(appUpdaterProvider)))
-                  section(l10n.updateSection, const UpdateSection(), body: l10n.updateSectionDesc),
                 section(
                   l10n.about,
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -109,10 +108,13 @@ class SettingsScreen extends ConsumerWidget {
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text('PKArkTools', style: context.text.titleLarge!.copyWith(fontFamily: AppTheme.display)),
-                          Text(kAppVersion, style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
+                          Text(l10n.updateCurrent(kAppVersion),
+                              style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
                         ]),
                       ),
                     ]),
+                    const SizedBox(height: 12),
+                    const UpdateAboutControls(),
                     const SizedBox(height: 12),
                     Text(
                         l10n.spritesCredits(kSpriteCommits['smogon/sprites']!.substring(0, 7),

@@ -12,15 +12,11 @@ import 'data/arca_session.dart';
 import 'data/db/arca_database.dart';
 import 'data/file_sources.dart';
 import 'data/folder/arca_layout.dart';
-import 'data/update/app_update.dart';
 
 export 'data/arca_session.dart'
     show arcaRepositoryProvider, arcaSetupProvider, folderAccessProvider, legacyArcaProvider, initialArcaSetupProvider, reindexReportProvider;
 
 final fileSourcesProvider = Provider<FileSources>((ref) => const FileSources());
-
-/// Buscar e instalar versiones nuevas (sustituible en los tests).
-final appUpdaterProvider = Provider<AppUpdater>((ref) => AppUpdater.forCurrentPlatform());
 
 /// Abre el índice local (drift) en el soporte de la app: nunca dentro de la
 /// carpeta sincronizada. Es reconstruible desde la carpeta.
