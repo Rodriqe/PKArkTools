@@ -257,7 +257,7 @@
   "dexCaught": "Caught",
   "dexShiny": "Shiny seen",
   "dexFilterAll": "All",
-  "dexFilterMissing": "Missing",
+  "dexFilterMissing": "Not caught",
   "dexFilterSeen": "Seen only",
   "dexFilterCaught": "Caught",
   "dexSearch": "Search by name or number",
@@ -714,7 +714,7 @@
   "dexProgress": "Progress",
   "dexByGeneration": "By generation and region",
   "dexByGame": "By game",
-  "dexGameLine": "{caught} caught · {seen} seen of {available} · {count} saves",
+  "dexGameLine": "{caught} caught · {seen} seen of {available} · {count, plural, =1{1 save} other{{count} saves}}",
   "dexSettings": "Dex settings",
   "dexLivingTitle": "Living dex",
   "dexLivingBody": "Counts a species as caught only if you have one in a box or team in some save, not just registered in its Pokédex. Shows what you are really missing.",
@@ -729,7 +729,7 @@
   "dexHiddenAbility": "hidden",
   "dexGender": "Gender",
   "dexGenderless": "Genderless",
-  "dexGenderRatio": "{male}% ♂ · {female}% ♀",
+  "dexGenderRatio": "{male}% male · {female}% female",
   "dexEvolution": "Evolution",
   "dexNoEvolution": "Does not evolve.",
   "dexForms": "Forms",
@@ -784,5 +784,9 @@
   "dexPrev": "Previous",
   "dexNext": "Next",
   "dexFormsCount": "{count} forms",
-  "dexLockedCount": "{count} to unlock"
+  "dexLockedCount": "{count} to unlock",
+  "dexShinyCount": "{count} shiny",
+  "dexAllSpecies": "All",
+  "dexMissingSpecies": "Missing",
+  "dexCaughtSpecies": "Caught"
 }

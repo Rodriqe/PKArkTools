@@ -967,16 +967,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dexShiny => 'Variocolor vistos';
 
   @override
-  String get dexFilterAll => 'Todos';
+  String get dexFilterAll => 'Todas';
 
   @override
-  String get dexFilterMissing => 'Faltantes';
+  String get dexFilterMissing => 'Por capturar';
 
   @override
   String get dexFilterSeen => 'Solo vistas';
 
   @override
-  String get dexFilterCaught => 'Capturados';
+  String get dexFilterCaught => 'Capturadas';
 
   @override
   String get dexSearch => 'Buscar por nombre o número';
@@ -2714,7 +2714,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String dexGameLine(String available, String caught, int count, String seen) {
-    return '$caught capturados · $seen vistos de $available · $count partidas';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count partidas',
+      one: '1 partida',
+    );
+    return '$caught capturados · $seen vistos de $available · $_temp0';
   }
 
   @override
@@ -2762,7 +2768,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String dexGenderRatio(String female, String male) {
-    return '$male % ♂ · $female % ♀';
+    return '$male % machos · $female % hembras';
   }
 
   @override
@@ -2985,4 +2991,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String dexLockedCount(int count) {
     return '$count por desbloquear';
   }
+
+  @override
+  String dexShinyCount(int count) {
+    return '$count variocolor';
+  }
+
+  @override
+  String get dexAllSpecies => 'Todos';
+
+  @override
+  String get dexMissingSpecies => 'Faltantes';
+
+  @override
+  String get dexCaughtSpecies => 'Capturados';
 }

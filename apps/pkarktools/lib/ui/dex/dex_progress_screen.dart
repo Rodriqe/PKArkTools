@@ -58,7 +58,7 @@ class DexProgressScreen extends ConsumerWidget {
               value: living ? byGen[g]!.owned : byGen[g]!.caught,
               total: byGen[g]!.total,
               trailing: '${living ? byGen[g]!.owned : byGen[g]!.caught} / ${byGen[g]!.total}'
-                  '${byGen[g]!.shiny > 0 ? '  ✦${byGen[g]!.shiny}' : ''}',
+                  '${byGen[g]!.shiny > 0 ? ' · ${l10n.dexShinyCount(byGen[g]!.shiny)}' : ''}',
             ),
           ),
         ),

@@ -602,10 +602,10 @@
   "dexSeen": "Vistos",
   "dexCaught": "Capturados",
   "dexShiny": "Variocolor vistos",
-  "dexFilterAll": "Todos",
-  "dexFilterMissing": "Faltantes",
+  "dexFilterAll": "Todas",
+  "dexFilterMissing": "Por capturar",
   "dexFilterSeen": "Solo vistas",
-  "dexFilterCaught": "Capturados",
+  "dexFilterCaught": "Capturadas",
   "dexSearch": "Buscar por nombre o número",
   "dexComplete": "Completar",
   "dexCompleteShiny": "Completar con variocolor",
@@ -1838,7 +1838,7 @@
   "dexProgress": "Progreso",
   "dexByGeneration": "Por generación y región",
   "dexByGame": "Por juego",
-  "dexGameLine": "{caught} capturados · {seen} vistos de {available} · {count} partidas",
+  "dexGameLine": "{caught} capturados · {seen} vistos de {available} · {count, plural, =1{1 partida} other{{count} partidas}}",
   "@dexGameLine": {
     "placeholders": {
       "available": {
@@ -1869,7 +1869,7 @@
   "dexHiddenAbility": "oculta",
   "dexGender": "Género",
   "dexGenderless": "Sin género",
-  "dexGenderRatio": "{male} % ♂ · {female} % ♀",
+  "dexGenderRatio": "{male} % machos · {female} % hembras",
   "@dexGenderRatio": {
     "placeholders": {
       "female": {
@@ -2141,5 +2141,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "dexShinyCount": "{count} variocolor",
+  "@dexShinyCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dexAllSpecies": "Todos",
+  "dexMissingSpecies": "Faltantes",
+  "dexCaughtSpecies": "Capturados"
 }

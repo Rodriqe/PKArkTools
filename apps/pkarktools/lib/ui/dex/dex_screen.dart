@@ -386,11 +386,11 @@ class DexFilterBar extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       EdgeFadeScroller(
         child: Row(children: [
-          status(DexStatusFilter.all, l10n.dexFilterAll),
+          status(DexStatusFilter.all, l10n.dexAllSpecies),
           const SizedBox(width: 8),
-          status(DexStatusFilter.caught, l10n.dexFilterCaught),
+          status(DexStatusFilter.caught, l10n.dexCaughtSpecies),
           const SizedBox(width: 8),
-          status(DexStatusFilter.missing, l10n.dexFilterMissing),
+          status(DexStatusFilter.missing, l10n.dexMissingSpecies),
           const SizedBox(width: 8),
           status(DexStatusFilter.seenOnly, l10n.dexFilterSeenOnly),
         ]),

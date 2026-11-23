@@ -1637,13 +1637,13 @@ abstract class AppLocalizations {
   /// No description provided for @dexFilterAll.
   ///
   /// In es, this message translates to:
-  /// **'Todos'**
+  /// **'Todas'**
   String get dexFilterAll;
 
   /// No description provided for @dexFilterMissing.
   ///
   /// In es, this message translates to:
-  /// **'Faltantes'**
+  /// **'Por capturar'**
   String get dexFilterMissing;
 
   /// No description provided for @dexFilterSeen.
@@ -1655,7 +1655,7 @@ abstract class AppLocalizations {
   /// No description provided for @dexFilterCaught.
   ///
   /// In es, this message translates to:
-  /// **'Capturados'**
+  /// **'Capturadas'**
   String get dexFilterCaught;
 
   /// No description provided for @dexSearch.
@@ -4390,7 +4390,7 @@ abstract class AppLocalizations {
   /// No description provided for @dexGameLine.
   ///
   /// In es, this message translates to:
-  /// **'{caught} capturados · {seen} vistos de {available} · {count} partidas'**
+  /// **'{caught} capturados · {seen} vistos de {available} · {count, plural, =1{1 partida} other{{count} partidas}}'**
   String dexGameLine(String available, String caught, int count, String seen);
 
   /// No description provided for @dexSettings.
@@ -4480,7 +4480,7 @@ abstract class AppLocalizations {
   /// No description provided for @dexGenderRatio.
   ///
   /// In es, this message translates to:
-  /// **'{male} % ♂ · {female} % ♀'**
+  /// **'{male} % machos · {female} % hembras'**
   String dexGenderRatio(String female, String male);
 
   /// No description provided for @dexEvolution.
@@ -4812,6 +4812,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'{count} por desbloquear'**
   String dexLockedCount(int count);
+
+  /// No description provided for @dexShinyCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} variocolor'**
+  String dexShinyCount(int count);
+
+  /// No description provided for @dexAllSpecies.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos'**
+  String get dexAllSpecies;
+
+  /// No description provided for @dexMissingSpecies.
+  ///
+  /// In es, this message translates to:
+  /// **'Faltantes'**
+  String get dexMissingSpecies;
+
+  /// No description provided for @dexCaughtSpecies.
+  ///
+  /// In es, this message translates to:
+  /// **'Capturados'**
+  String get dexCaughtSpecies;
 }
 
 class _AppLocalizationsDelegate

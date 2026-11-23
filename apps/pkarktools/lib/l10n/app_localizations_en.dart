@@ -970,7 +970,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dexFilterAll => 'All';
 
   @override
-  String get dexFilterMissing => 'Missing';
+  String get dexFilterMissing => 'Not caught';
 
   @override
   String get dexFilterSeen => 'Seen only';
@@ -2691,7 +2691,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String dexGameLine(String available, String caught, int count, String seen) {
-    return '$caught caught · $seen seen of $available · $count saves';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count saves',
+      one: '1 save',
+    );
+    return '$caught caught · $seen seen of $available · $_temp0';
   }
 
   @override
@@ -2739,7 +2745,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String dexGenderRatio(String female, String male) {
-    return '$male% ♂ · $female% ♀';
+    return '$male% male · $female% female';
   }
 
   @override
@@ -2962,4 +2968,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String dexLockedCount(int count) {
     return '$count to unlock';
   }
+
+  @override
+  String dexShinyCount(int count) {
+    return '$count shiny';
+  }
+
+  @override
+  String get dexAllSpecies => 'All';
+
+  @override
+  String get dexMissingSpecies => 'Missing';
+
+  @override
+  String get dexCaughtSpecies => 'Caught';
 }

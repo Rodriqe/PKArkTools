@@ -57,10 +57,8 @@ String specialFormHowTo(BuildContext context, SpecialForm f) {
   final games = [for (final g in GameVersion.values) if (f.games.contains(g)) shortGame(context, g)].join(', ');
   switch (f.kind) {
     case SpecialFormKind.gigantamax:
-      final base = f.baseForms != null && f.baseForms!.length == 1
-          ? pokemonName(context, f.species, f.baseForms!.first, GameVersion.swordShield)
-          : speciesName(context, f.species);
-      return l10n.dexHowGmax(base);
+      // «Toxtricity (Aguda)», «Urshifu (Estilo Brusco)»: la del nombre de la forma.
+      return l10n.dexHowGmax(specialFormName(context, f).split(' · ').first);
     case SpecialFormKind.ultraBurst:
       return l10n.dexHowUltra;
     case SpecialFormKind.mega || SpecialFormKind.primal:
