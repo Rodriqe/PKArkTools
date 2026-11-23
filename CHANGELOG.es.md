@@ -30,6 +30,10 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 - Los nombres de carpeta que macOS devuelve descompuestos (NFD) en volúmenes
   SMB/AFP («Pokémon») ya no hacen que cada reindexado quite y vuelva a añadir
   todas las copias y reescriba los archivos principales.
+- En recursos SMB de macOS, un archivo con acentos («Pokémon») se encuentra
+  aunque el recurso solo responda a su forma descompuesta (visto en un NAS real
+  tras listar una carpeta): ya no se da por desaparecido y volver a crearlo ya
+  no puede reemplazar la copia existente.
 - La app nunca escribe en un recurso desmontado: detecta la carpeta local
   `/Volumes/<recurso>` que puede quedar en su lugar y nunca crea la carpeta
   raíz.

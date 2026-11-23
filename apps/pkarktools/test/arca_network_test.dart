@@ -123,6 +123,23 @@ void main() {
       expect(toNfc('MAY (12345)'), 'MAY (12345)');
       expect(toNfd('Pokémon'), 'Poke\u0301mon');
       expect(toNfc(toNfd('Pokémon Rubí Omega / Zafiro Alfa ガ')), 'Pokémon Rubí Omega / Zafiro Alfa ガ');
+      expect(toNfd('각'), '각');
+      expect(toNfd('ǖ'), 'ǖ');
+      expect(toNfd('MAY (12345)'), 'MAY (12345)');
+    });
+
+    test('lo que solo aparece por NFD (smbfs tras listar) se encuentra: writeNew no lo pisa', () async {
+      final root = Directory(p.join(tmp.path, 'share'))..createSync();
+      final dir = Directory(p.join(root.path, 'PKArkTools', toNfd('Pokémon Esmeralda')))..createSync(recursive: true);
+      File(p.join(dir.path, toNfd('Pokémon Esmeralda.sav'))).writeAsStringSync('viejo');
+      final fs = IoFolderFs(root, mounts: StaticMountTable(const []), nfdLookups: true);
+      const rel = 'PKArkTools/Pokémon Esmeralda/Pokémon Esmeralda.sav';
+      expect(await fs.exists(rel), isTrue);
+      expect(utf8.decode(await fs.read(rel)), 'viejo');
+      await expectLater(fs.writeNew(rel, Uint8List(1)), throwsA(isA<FsExistsException>()));
+      await fs.writeNew('PKArkTools/Pokémon Esmeralda/MAY/ñ.sav', Uint8List(1));
+      expect(Directory(p.join(root.path, 'PKArkTools')).listSync().map((e) => toNfc(p.basename(e.path))), ['Pokémon Esmeralda']);
+      expect(utf8.decode(await fs.read(rel)), 'viejo');
     });
 
     test('se ignoran AppleDouble, .DS_Store y las papeleras e índices del NAS', () {

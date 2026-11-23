@@ -30,6 +30,10 @@ developer documentation in `docs/` is in Spanish.
 - Folder names that macOS returns decomposed (NFD) on SMB/AFP volumes
   ("Pokémon") no longer make every re-index drop and re-add all copies and
   rewrite the main files.
+- On macOS SMB shares, a file with an accented name ("Pokémon") is found even
+  when the share only answers to its decomposed spelling (seen on a real NAS
+  after a folder is listed): it is no longer reported missing, and creating it
+  again can no longer replace the existing copy.
 - The app never writes into an unmounted share: a stale local
   `/Volumes/<share>` folder is detected and the root folder is never created.
 - Choosing a folder that already contains `PKArkTools/` (or the

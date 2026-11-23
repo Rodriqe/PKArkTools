@@ -3,28 +3,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:pkarktools/data/folder/folder_fs.dart';
-import 'package:pkarktools/data/folder/nfc_table.dart';
 import 'package:pkarktools/data/folder/resilient_folder_fs.dart';
 import 'package:pkarktools/data/folder/unicode_names.dart';
 import 'package:pkarktools/data/folder/volume_info.dart';
-
-/// Descompone en NFD (lo que devuelve smbfs en macOS) con la tabla inversa.
-String toNfd(String s) {
-  final inverse = {for (final MapEntry(:key, :value) in nfcPairs.entries) value: key};
-  final out = <int>[];
-  void add(int r) {
-    final pair = inverse[r];
-    if (pair == null) {
-      out.add(r);
-      return;
-    }
-    add(pair >> 21);
-    out.add(pair & 0x1FFFFF);
-  }
-
-  s.runes.forEach(add);
-  return String.fromCharCodes(out);
-}
 
 /// Una operación del NAS simulado: `list`, `read`, `exists`, `writeNew`,
 /// `writeReplace`, `delete`.

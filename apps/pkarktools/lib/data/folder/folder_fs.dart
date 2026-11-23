@@ -117,10 +117,14 @@ extension FolderFsNetwork on FolderFs {
 /// local vacía (o sin carpeta), y escribir ahí crearía un Arca en el disco
 /// del Mac. Además nunca se crea la propia carpeta raíz.
 class IoFolderFs implements FolderFs {
-  IoFolderFs(this.root, {String? label, MountTable? mounts, bool expectNetwork = false, this.statConcurrency = 8})
+  IoFolderFs(this.root,
+      {String? label, MountTable? mounts, bool expectNetwork = false, this.statConcurrency = 8, bool? nfdLookups})
       : _label = label,
         _mounts = mounts ?? MountTable.system,
-        _expectNetwork = expectNetwork;
+        _expectNetwork = expectNetwork,
+        _nfdLookupsOverride = nfdLookups;
+
+  final bool? _nfdLookupsOverride;
 
   final Directory root;
   final String? _label;
@@ -185,6 +189,35 @@ class IoFolderFs implements FolderFs {
   String _abs(String rel) =>
       p.joinAll([root.path, ..._resolve(rel.split('/').where((s) => s.isNotEmpty).join('/')).split('/').where((s) => s.isNotEmpty)]);
 
+  /// Buscar por NFD lo que no aparece por NFC (smbfs/AFP en macOS).
+  bool get _nfdLookups => _nfdLookupsOverride ?? (Platform.isMacOS && (_expectNetwork || isNetwork));
+
+  /// Ruta absoluta de [rel] tal como la encuentra el disco. En smbfs de
+  /// macOS, tras listar una carpeta sus entradas pueden no encontrarse por la
+  /// ruta en NFC (la que usa el Arca) pero sí por la de NFD: sin esto,
+  /// `exists` diría que falta un archivo que está y `writeNew` lo
+  /// reemplazaría. Solo cuesta un `stat` extra con nombres no ASCII que no
+  /// aparecen por NFC; si no existe en ninguna forma, se resuelve la carpeta
+  /// padre y el nombre nuevo se crea en NFC.
+  Future<String> _locate(String rel) async {
+    final abs = _abs(rel);
+    if (!_nfdLookups || !rel.codeUnits.any((c) => c >= 0xC0)) return abs;
+    if (await FileSystemEntity.type(abs, followLinks: false) != FileSystemEntityType.notFound) return abs;
+    final relReal = p.relative(abs, from: root.path);
+    final nfd = toNfd(relReal);
+    if (nfd != relReal) {
+      final alt = p.join(root.path, nfd);
+      if (await FileSystemEntity.type(alt, followLinks: false) != FileSystemEntityType.notFound) {
+        final clean = rel.split('/').where((s) => s.isNotEmpty).join('/');
+        _real[clean] = nfd.split(p.separator).join('/');
+        return alt;
+      }
+    }
+    final segs = rel.split('/').where((s) => s.isNotEmpty).toList();
+    if (segs.length < 2) return abs;
+    return p.join(await _locate(segs.take(segs.length - 1).join('/')), p.basename(abs));
+  }
+
   /// La raíz está bajo `/Volumes/<volumen>` pero ese volumen no está montado
   /// (la ruta caería en el disco del sistema).
   bool get _onDetachedVolume {
@@ -211,7 +244,7 @@ class IoFolderFs implements FolderFs {
   @override
   Future<List<FsEntry>> list(String dir) async {
     _guard();
-    final base = Directory(_abs(dir));
+    final base = Directory(await _locate(dir));
     if (!await base.exists()) {
       if (!await root.exists()) throw FolderAccessLostException('La carpeta ${root.path} ya no existe');
       return const [];
@@ -268,15 +301,15 @@ class IoFolderFs implements FolderFs {
   }
 
   @override
-  Future<Uint8List> read(String path) {
+  Future<Uint8List> read(String path) async {
     _guard();
-    return File(_abs(path)).readAsBytes();
+    return File(await _locate(path)).readAsBytes();
   }
 
   @override
   Future<bool> exists(String path) async {
     _guard();
-    return File(_abs(path)).exists();
+    return File(await _locate(path)).exists();
   }
 
   File _tmpFor(File f) => File(p.join(f.parent.path, '.${p.basename(f.path)}.${_rand.nextInt(1 << 32).toRadixString(16)}.tmp'));
@@ -284,7 +317,7 @@ class IoFolderFs implements FolderFs {
   @override
   Future<void> writeNew(String path, Uint8List bytes) async {
     _guard();
-    final f = File(_abs(path));
+    final f = File(await _locate(path));
     if (await f.exists()) throw FsExistsException(path);
     await _mkdirs(f.parent);
     // El temporal empieza por '.' y termina en '.tmp': el reindexado lo ignora
@@ -303,7 +336,7 @@ class IoFolderFs implements FolderFs {
   @override
   Future<void> writeReplace(String path, Uint8List bytes) async {
     _guard();
-    final f = File(_abs(path));
+    final f = File(await _locate(path));
     await _mkdirs(f.parent);
     final tmp = _tmpFor(f);
     try {
@@ -338,7 +371,7 @@ class IoFolderFs implements FolderFs {
   @override
   Future<void> delete(String path) async {
     _guard();
-    final f = File(_abs(path));
+    final f = File(await _locate(path));
     if (await f.exists()) await f.delete();
   }
 
