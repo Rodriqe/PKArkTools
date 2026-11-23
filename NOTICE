@@ -77,6 +77,11 @@ proyecto; los derivados se generan con tool/gen_branding.py.
 * Fuentes Manrope y Bricolage Grotesque — SIL Open Font License 1.1
   (apps/pkarktools/assets/fonts/OFL-*.txt).
 
+* Noto Sans Symbols y Noto Sans Symbols 2 (subconjuntos de símbolos como ♂/♀,
+  generados con tool/gen_symbol_fonts.py) — https://github.com/notofonts/symbols
+  — © The Noto Project Authors, SIL Open Font License 1.1
+  (apps/pkarktools/assets/fonts/OFL-NotoSansSymbols.txt).
+
 Pokémon y los nombres de personajes son marcas de Nintendo, Creatures Inc. y
 GAME FREAK inc. Este proyecto no está afiliado a ellos y no distribuye ROMs,
 claves, sprites ni otro contenido de los juegos.

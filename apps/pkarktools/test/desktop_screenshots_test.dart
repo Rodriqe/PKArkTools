@@ -39,6 +39,8 @@ Future<void> _loadFonts() async {
   final fonts = <(String, String)>[
     ('Manrope', 'assets/fonts/Manrope.ttf'),
     ('Bricolage', 'assets/fonts/BricolageGrotesque.ttf'),
+    ('NotoSansSymbols', 'assets/fonts/NotoSansSymbols-Subset.ttf'),
+    ('NotoSansSymbols2', 'assets/fonts/NotoSansSymbols2-Subset.ttf'),
     if (flutterRoot != null) ('MaterialIcons', '$flutterRoot/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf'),
   ];
   for (final (family, file) in fonts) {

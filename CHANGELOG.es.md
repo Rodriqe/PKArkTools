@@ -63,6 +63,16 @@ propios datos; actualizaciones desde la app; y ahora la Dex.
   agregan y filtran en unos 10 ms; escanear esas 50 partidas lleva unos 0,3 s,
   una sola vez.
 
+### Corregido
+- **♂/♀ y otros símbolos ya no salen como un cuadro** (Nidoran♂/♀, el
+  selector de género, objetos con ★, atajos con ⌘, ⚠): la app incluye
+  subconjuntos de Noto Sans Symbols y Noto Sans Symbols 2 (SIL OFL 1.1) como
+  fuente de respaldo, así que se ven igual en Android, iOS, macOS, Windows,
+  Linux y en las capturas. Un test comprueba que cada carácter de los nombres
+  de especies, formas, movimientos, habilidades, objetos, lugares, cintas y
+  eventos (es/en) tiene glifo. El lugar de relleno «－－－» de Gen 5+ ahora se
+  muestra como «un lugar desconocido».
+
 ### Desarrollo
 - pkcore: `GlobalDex`, `SaveDexScan`, `SpecialForms`, `DexForms` y
   `Evolutions`; el oráculo PKHeX vuelca la tabla de Mega/Primigenio/Ultra/

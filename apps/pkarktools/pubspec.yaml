@@ -53,3 +53,9 @@ flutter:
     - family: Bricolage
       fonts:
         - asset: assets/fonts/BricolageGrotesque.ttf
+    - family: NotoSansSymbols
+      fonts:
+        - asset: assets/fonts/NotoSansSymbols-Subset.ttf
+    - family: NotoSansSymbols2
+      fonts:
+        - asset: assets/fonts/NotoSansSymbols2-Subset.ttf

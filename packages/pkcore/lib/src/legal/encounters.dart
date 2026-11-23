@@ -82,6 +82,7 @@ abstract final class EncounterTables {
   }
 
   static final Map<String, Map<int, String>> _names = {};
+  static final _dashesOnly = RegExp(r'^[\s\-－—–]*$');
 
   static String _locKey(int version) => switch (version) {
         42 || 43 => 'lgpe',
@@ -109,7 +110,9 @@ abstract final class EncounterTables {
       };
     });
     final name = map[location];
-    if (name != null && name.trim().isNotEmpty) return name;
+    // Los juegos de Gen 5+ nombran el lugar 0 solo con guiones («－－－»,
+    // «——»): no es un nombre, se trata como lugar desconocido.
+    if (name != null && !_dashesOnly.hasMatch(name)) return name;
     // Nunca «#0»: un lugar sin nombre se describe con texto legible.
     final es = lang == DataLanguage.es;
     if (location <= 0) return es ? 'un lugar desconocido' : 'an unknown place';

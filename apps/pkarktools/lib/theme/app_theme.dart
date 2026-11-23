@@ -71,8 +71,14 @@ abstract final class AppTheme {
   static const display = 'Bricolage';
   static const body = 'Manrope';
 
+  /// Respaldo para los glifos que Manrope y Bricolage no tienen (♂ ♀ ★ ⚠ ⌘…):
+  /// subconjuntos de Noto Sans Symbols empaquetados (tool/gen_symbol_fonts.py),
+  /// para no depender de las fuentes del sistema ni salir como cuadros.
+  static const symbolFallback = ['NotoSansSymbols', 'NotoSansSymbols2'];
+
   static TextStyle _t(String family, double size, FontWeight w, {double? height, double? spacing}) => TextStyle(
         fontFamily: family,
+        fontFamilyFallback: symbolFallback,
         fontSize: size,
         fontWeight: w,
         fontVariations: [FontVariation('wght', w.value.toDouble())],
@@ -166,6 +172,7 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: tokens.base,
       textTheme: text,
       fontFamily: body,
+      fontFamilyFallback: symbolFallback,
       extensions: [tokens],
       splashFactory: InkSparkle.splashFactory,
       appBarTheme: AppBarTheme(

@@ -21,7 +21,7 @@ Future<void> main() async {
         '© Kaphotics y colaboradores, bajo GPL-3.0.');
     yield const LicenseEntryWithLineBreaks(['PokeAPI'],
         'Datos de especies de PokeAPI (https://github.com/PokeAPI/pokeapi), licencia BSD-3-Clause.');
-    yield const LicenseEntryWithLineBreaks(['Manrope', 'Bricolage Grotesque'],
+    yield const LicenseEntryWithLineBreaks(['Manrope', 'Bricolage Grotesque', 'Noto Sans Symbols', 'Noto Sans Symbols 2'],
         'Fuentes bajo SIL Open Font License 1.1 (ver assets/fonts).');
   });
   const access = PlatformFolderAccess();

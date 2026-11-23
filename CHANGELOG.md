@@ -60,6 +60,15 @@ their own data; in-app updates; and now the Dex.
   crosses the cache: 50 synthetic saves (1,500 specimens) build, aggregate and
   filter in about 10 ms; scanning those 50 saves takes about 0.3 s, once.
 
+### Fixed
+- **♂/♀ and other symbols no longer show as a box** (Nidoran♂/♀, the gender
+  selector, ★ items, ⌘ shortcuts, ⚠): the app bundles subsets of Noto Sans
+  Symbols and Noto Sans Symbols 2 (SIL OFL 1.1) as a font fallback, so they
+  render the same on Android, iOS, macOS, Windows, Linux and in screenshots. A
+  test checks that every character of the species, form, move, ability, item,
+  location, ribbon and event names (es/en) has a glyph. The Gen 5+ placeholder
+  location «－－－» now reads "an unknown place".
+
 ### Development
 - pkcore: `GlobalDex`, `SaveDexScan`, `SpecialForms`, `DexForms` and
   `Evolutions`; the PKHeX oracle dumps the Mega/Primal/Ultra/Gigantamax table

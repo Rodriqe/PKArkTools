@@ -53,7 +53,12 @@ final _errors = <String>[];
 /// dispositivo (la fuente de prueba por defecto es más ancha y daría falsos
 /// positivos de truncado).
 Future<void> loadAppFonts() async {
-  for (final (family, file) in [('Manrope', 'assets/fonts/Manrope.ttf'), ('Bricolage', 'assets/fonts/BricolageGrotesque.ttf')]) {
+  for (final (family, file) in [
+    ('Manrope', 'assets/fonts/Manrope.ttf'),
+    ('Bricolage', 'assets/fonts/BricolageGrotesque.ttf'),
+    ('NotoSansSymbols', 'assets/fonts/NotoSansSymbols-Subset.ttf'),
+    ('NotoSansSymbols2', 'assets/fonts/NotoSansSymbols2-Subset.ttf'),
+  ]) {
     final bytes = File(file).readAsBytesSync();
     await (FontLoader(family)..addFont(Future.value(ByteData.sublistView(bytes)))).load();
   }

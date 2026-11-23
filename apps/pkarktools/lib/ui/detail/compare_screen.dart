@@ -247,7 +247,7 @@ class _MonCard extends StatelessWidget {
       MonChangeKind.added => slot(diff.to!),
       MonChangeKind.removed => slot(diff.from!),
       MonChangeKind.changed => slot(diff.to!),
-      MonChangeKind.moved => '${slot(diff.from!)}  ⟶  ${slot(diff.to!)}',
+      MonChangeKind.moved => '${slot(diff.from!)}  →  ${slot(diff.to!)}',
     };
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
