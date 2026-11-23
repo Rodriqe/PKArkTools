@@ -320,7 +320,7 @@ class _LayoutExplainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final mono = context.text.bodySmall!.copyWith(fontFamily: 'monospace', color: context.tokens.muted);
+    final mono = context.text.bodySmall!.copyWith(color: context.tokens.muted, height: 1.5);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(14),

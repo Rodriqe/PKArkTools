@@ -1543,7 +1543,7 @@
       }
     }
   },
-  "inboxProblemsToast": "{count} saves de la bandeja necesitan tu atención",
+  "inboxProblemsToast": "{count, plural, =1{1 save de la bandeja necesita tu atención} other{{count} saves de la bandeja necesitan tu atención}}",
   "@inboxProblemsToast": {
     "placeholders": {
       "count": {

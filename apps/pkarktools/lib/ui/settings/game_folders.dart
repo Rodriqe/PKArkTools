@@ -205,11 +205,17 @@ class _ArcaEventsHostState extends ConsumerState<ArcaEventsHost> {
     });
   }
 
+  /// Una sola pregunta abierta aunque haya más de un anfitrión montado.
+  static bool _askingAny = false;
+
   Future<void> _ask() async {
-    if (_asking) return;
-    _asking = true;
-    await askGameFolders(context, ref);
-    _asking = false;
+    if (_asking || _askingAny) return;
+    _asking = _askingAny = true;
+    try {
+      await askGameFolders(context, ref);
+    } finally {
+      _asking = _askingAny = false;
+    }
   }
 
   void _onReport(ReindexReport? r) {

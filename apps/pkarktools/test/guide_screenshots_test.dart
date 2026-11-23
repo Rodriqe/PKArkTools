@@ -18,6 +18,7 @@ import 'package:pkarktools/data/arca_session.dart';
 import 'package:pkarktools/data/db/arca_database.dart';
 import 'package:pkarktools/data/file_sources.dart';
 import 'package:pkarktools/data/folder/arca_folder.dart';
+import 'package:pkarktools/data/folder/arca_game_folders.dart';
 import 'package:pkarktools/data/folder/folder_access.dart';
 import 'package:pkarktools/data/folder/memory_folder_fs.dart';
 import 'package:pkarktools/data/sprites/sprite_cache.dart';
@@ -265,6 +266,13 @@ void main() {
     await capture('08_ajustes');
 
     // ---------------------------------------------------------------- Fase 2: editor
+    // Con la app montada, sus consultas (zona de fake async) pueden retener
+    // el candado de drift y bloquear una importación dentro de runAsync.
+    Future<void> unmount() async {
+      await tester.pumpWidget(const SizedBox());
+      await settle(3);
+    }
+
     Future<void> tapText(String text, {bool last = false}) async {
       final f = last ? find.text(text).last : find.text(text).first;
       await tester.ensureVisible(f);
@@ -350,7 +358,12 @@ void main() {
     await tapText(tr('Eventos'));
     await capture('19_eventos');
 
-    // Comparar la última copia con la anterior.
+    // Comparar la última copia con la anterior (el historial empieza plegado).
+    final fold = find.textContaining(shotsSpanish ? 'Historial (' : 'History (');
+    await tester.ensureVisible(fold);
+    await settle(4);
+    await tester.tap(fold);
+    await settle(10);
     await tapText(tr('Comparar con…'));
     await settle(20);
     await capture('22_comparar_copias');
@@ -441,6 +454,7 @@ void main() {
       swDex.setFormSeen(849, f, true);
     }
     swEd.writeTrainer(swEd.readTrainer().copyWith(money: 412500));
+    await unmount();
     await tester.runAsync(
       () => repo.importBytes(
         swEd.buildVerified(),
@@ -476,6 +490,7 @@ void main() {
     for (var i = 0; i < named.length; i += 2) {
       usEv.setFlag(named[i].index, true);
     }
+    await unmount();
     await tester.runAsync(
       () => repo.importBytes(
         usEd.buildVerified(),
@@ -503,6 +518,7 @@ void main() {
       ..metLocation = slot.location
       ..metLevel = 60;
     xyEd.set(const SlotRef.party(0), pika);
+    await unmount();
     await tester.runAsync(
       () => repo.importBytes(
         xyEd.buildVerified(),
@@ -682,5 +698,113 @@ void main() {
     for (final db in dbs) {
       await tester.runAsync(db.close);
     }
+  });
+
+  testWidgets('capturas de la guía: última versión, carpetas de juegos y bandeja', skip: !_enabled, (tester) async {
+    await prepare(tester);
+    late final MemoryFolderFs fs;
+    late final ArcaDatabase db;
+    late final ArcaRepository repo;
+    late final int may;
+    const icloud = '/Users/entrenador/Library/Mobile Documents/com~apple~CloudDocs/Juegos';
+    await tester.runAsync(() async {
+      fs = MemoryFolderFs(label: icloud);
+      db = ArcaDatabase(DatabaseConnection(NativeDatabase.memory(), closeStreamsSynchronously: true));
+      repo = ArcaRepository(db, ArcaFolder(fs), deviceName: 'Mac (macos)', inboxSettle: Duration.zero);
+      final base = DateTime(2026, 11, 22, 17, 52, 58);
+      for (final (i, hours) in [(0, 31), (1, 44), (2, 48)]) {
+        await repo.importBytes(
+          SyntheticSaves.gen3(
+            trainer: SynthTrainer(name: 'MAY', tid: 31415, sid: 9265, gender: 1, hours: hours, minutes: 12),
+            party: [
+              const SynthMon(254, level: 52, nickname: 'LEAFY'),
+              const SynthMon(282, level: 49, shiny: true),
+              if (i > 0) const SynthMon(384, level: 70),
+            ],
+          ),
+          fileName: 'Pokemon Emerald.sav',
+          origin: i == 1 ? ImportOrigin.edit : ImportOrigin.folder,
+          note: i == 1 ? 'Team: Rayquaza' : null,
+          now: base.subtract(Duration(days: 2 - i)),
+        );
+      }
+      may = (await repo.allSlots()).single.$1.id;
+      await ArcaGameFolders.create(repo.folder, {GameVersion.emerald, GameVersion.platinum, GameVersion.swordShield},
+          es: shotsSpanish);
+      // Un save de otro juego dejado en la bandeja de Esmeralda.
+      await fs.writeNew('PKArkTools/Pokémon Esmeralda/POKEMON_PL_CPUS01.sav',
+          SyntheticSaves.gen4(trainer: const SynthTrainer(name: 'DAWN', tid: 4242)));
+      await repo.reindex();
+    });
+
+    final boundary = GlobalKey();
+    Future<void> settle([int frames = 25]) async {
+      for (var f = 0; f < frames; f++) {
+        await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 15)));
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+    }
+
+    late ProviderContainer container;
+    Future<void> show(String location, Size size) async {
+      tester.view.physicalSize = size * 2;
+      tester.view.devicePixelRatio = 2;
+      await tester.pumpWidget(const SizedBox());
+      await settle(3);
+      await tester.pumpWidget(
+        RepaintBoundary(
+          key: boundary,
+          child: ProviderScope(
+            key: UniqueKey(),
+            overrides: [
+              arcaRepositoryProvider.overrideWithValue(repo),
+              initialArcaSetupProvider.overrideWithValue(
+                  const SetupReady(ArcaLocation(LocationKind.bookmark, value: 'x', label: icloud))),
+              folderAccessProvider.overrideWithValue(_ShotAccess(fs)),
+            ],
+            child: PKArkToolsApp(initialLocation: location),
+          ),
+        ),
+      );
+      await settle(8);
+      container = ProviderScope.containerOf(tester.element(find.byType(PKArkToolsApp)));
+      await tester.runAsync(() => container.read(settingsProvider.notifier).setThemeMode(ThemeMode.dark));
+      await tester.runAsync(() => container.read(settingsProvider.notifier).setLocale(Locale(shotsLang)));
+      await settle();
+    }
+
+    Future<void> capture(String name) async {
+      await settle(10);
+      await write(tester, boundary, name);
+    }
+
+    await show('/arca/save/$may', const Size(1440, 1000));
+    await capture('v2/mac_42_version_actual');
+
+    // El usuario copia a mano un save nuevo encima del archivo principal.
+    await tester.runAsync(() async {
+      await fs.writeReplace('PKArkTools/Pokémon Esmeralda/MAY (31415)/Pokémon Esmeralda.sav',
+          SyntheticSaves.gen3(trainer: const SynthTrainer(name: 'MAY', tid: 31415, sid: 9265, gender: 1, hours: 52)));
+      await repo.reindex();
+    });
+    await show('/ajustes', const Size(1280, 1900));
+    await capture('v2/mac_43_ajustes_arca');
+
+    await show('/arca', const Size(1440, 900));
+    await tester.runAsync(() async {
+      await repo.setSetting(GameFoldersPrompt.askedKey, '');
+      await container.read(gameFoldersPromptProvider.notifier).request();
+    });
+    await settle(15);
+    await capture('v2/mac_40_carpetas_juegos_pregunta');
+    await tester.tap(find.text(tr('Elegir juegos…')));
+    await settle(15);
+    await tester.tap(find.byKey(const ValueKey('platform-nintendoSwitch')).last);
+    await settle(6);
+    await capture('v2/mac_41_carpetas_juegos_selector');
+
+    await tester.pumpWidget(const SizedBox());
+    await settle(4);
+    await tester.runAsync(db.close);
   });
 }

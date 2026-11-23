@@ -2278,7 +2278,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String inboxProblemsToast(int count) {
-    return '$count inbox saves need your attention';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count inbox saves need your attention',
+      one: '1 inbox save needs your attention',
+    );
+    return '$_temp0';
   }
 
   @override

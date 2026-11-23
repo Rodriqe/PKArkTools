@@ -85,12 +85,12 @@ void main() {
     final boundary = GlobalKey();
 
     var n = 0;
-    Future<void> shot(String name) async {
+    Future<void> shot(String name, {int? number}) async {
       // Deja que terminen de leerse los iconos del disco.
       await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 600)));
       await settle(8);
       n++;
-      await binding.takeScreenshot('${_prefix}_${n.toString().padLeft(2, '0')}_$name');
+      await binding.takeScreenshot('${_prefix}_${(number ?? n).toString().padLeft(2, '0')}_$name');
     }
 
     Future<void> open(String location, {ArcaSetup? setup}) async {
@@ -178,6 +178,22 @@ void main() {
     await tapKey('panel-show', 15);
     await shot('arca_filtrada');
     await tapKey('arca-filters-clear', 5);
+
+    // 7. Ficha con la versión actual destacada y el historial plegado:
+    //    dos copias más nuevas del mismo Rubí.
+    for (final hours in [41, 47]) {
+      await tester.runAsync(() => repo.importBytes(
+          SyntheticSaves.gen3(
+              game: GameVersion.rubySapphire,
+              trainer: SynthTrainer(name: 'BRENDAN', tid: 2024, sid: 77, hours: hours),
+              party: const [SynthMon(258, level: 41), SynthMon(282, level: 38), SynthMon(384, level: 70)]),
+          fileName: 'Rubi.sav',
+          origin: ImportOrigin.file,
+          sourcePath: _sources['Rubi.sav'],
+          now: DateTime.now().add(Duration(minutes: hours))));
+    }
+    await open('/arca/save/${ids['Rubi.sav']!}');
+    await shot('version_actual', number: 42);
 
     await tester.pumpWidget(const SizedBox());
     await settle(5);

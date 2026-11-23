@@ -611,6 +611,6 @@
   "inboxWrongGame": "It's from {actual}, not {folder}",
   "inboxMoveTo": "Move to {game}",
   "inboxAdoptedToast": "Picked up from the inbox: {files}",
-  "inboxProblemsToast": "{count} inbox saves need your attention",
+  "inboxProblemsToast": "{count, plural, =1{1 inbox save needs your attention} other{{count} inbox saves need your attention}}",
   "inboxSee": "View"
 }

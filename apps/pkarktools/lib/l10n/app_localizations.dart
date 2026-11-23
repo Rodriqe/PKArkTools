@@ -3772,7 +3772,7 @@ abstract class AppLocalizations {
   /// No description provided for @inboxProblemsToast.
   ///
   /// In es, this message translates to:
-  /// **'{count} saves de la bandeja necesitan tu atención'**
+  /// **'{count, plural, =1{1 save de la bandeja necesita tu atención} other{{count} saves de la bandeja necesitan tu atención}}'**
   String inboxProblemsToast(int count);
 
   /// No description provided for @inboxSee.
