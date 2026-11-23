@@ -2582,94 +2582,10 @@ abstract class AppLocalizations {
   /// **'problemas'**
   String get statIssues;
 
-  /// No description provided for @statLoose.
-  ///
-  /// In es, this message translates to:
-  /// **'sueltos'**
-  String get statLoose;
-
-  /// No description provided for @statIgnored.
-  ///
-  /// In es, this message translates to:
-  /// **'ignorados'**
-  String get statIgnored;
-
-  /// No description provided for @issuesTitle.
-  ///
-  /// In es, this message translates to:
-  /// **'Problemas'**
-  String get issuesTitle;
-
-  /// No description provided for @issueMissingSave.
-  ///
-  /// In es, this message translates to:
-  /// **'Falta el save de este .json (puede estar sincronizándose)'**
-  String get issueMissingSave;
-
-  /// No description provided for @issueMissingSidecar.
-  ///
-  /// In es, this message translates to:
-  /// **'Falta el .json de este save (puede estar sincronizándose)'**
-  String get issueMissingSidecar;
-
-  /// No description provided for @issueCorruptSidecar.
-  ///
-  /// In es, this message translates to:
-  /// **'.json dañado o ilegible'**
-  String get issueCorruptSidecar;
-
-  /// No description provided for @issueSizeMismatch.
-  ///
-  /// In es, this message translates to:
-  /// **'El tamaño no coincide con el .json'**
-  String get issueSizeMismatch;
-
-  /// No description provided for @issueHashMismatch.
-  ///
-  /// In es, this message translates to:
-  /// **'El contenido no coincide con su SHA-256'**
-  String get issueHashMismatch;
-
-  /// No description provided for @issueUnreadable.
-  ///
-  /// In es, this message translates to:
-  /// **'No se pudo leer'**
-  String get issueUnreadable;
-
-  /// No description provided for @looseTitle.
-  ///
-  /// In es, this message translates to:
-  /// **'Saves sueltos'**
-  String get looseTitle;
-
-  /// No description provided for @looseDesc.
-  ///
-  /// In es, this message translates to:
-  /// **'Archivos copiados a mano en la carpeta. Al adoptarlos se identifica su juego y se colocan en su sitio con su .json.'**
-  String get looseDesc;
-
-  /// No description provided for @adopt.
-  ///
-  /// In es, this message translates to:
-  /// **'Adoptar'**
-  String get adopt;
-
-  /// No description provided for @adoptAll.
-  ///
-  /// In es, this message translates to:
-  /// **'Adoptar todos'**
-  String get adoptAll;
-
-  /// No description provided for @adoptDone.
-  ///
-  /// In es, this message translates to:
-  /// **'Adoptado: {game}'**
-  String adoptDone(String game);
-
   /// No description provided for @ignoredFiles.
   ///
   /// In es, this message translates to:
-  /// **'{count, plural, =1{1 archivo ignorado (temporal, parcial o copia de conflicto de la nube).} other{{count} archivos ignorados (temporales, parciales o copias de conflicto de la nube).}}'**
+  /// **'{count, plural, =1{1 archivo omitido (temporal, parcial o copia de conflicto de la nube).} other{{count} archivos omitidos (temporales, parciales o copias de conflicto de la nube).}}'**
   String ignoredFiles(int count);
 
   /// No description provided for @snapshotDamaged.
@@ -3619,18 +3535,6 @@ abstract class AppLocalizations {
   /// **'Cada partida tiene su carpeta con la última versión, con el nombre que usa el juego (main, SaveData.bin, Esmeralda.sav…), lista para copiar al juego o al emulador. Debajo, historial/ guarda todas las copias sin modificarlas nunca. La última versión es una copia derivada: se regenera siempre desde el historial, así que nada se pierde aunque la borres o la cambies.'**
   String get arcaLayoutDesc;
 
-  /// No description provided for @modifiedMainsTitle.
-  ///
-  /// In es, this message translates to:
-  /// **'Archivos principales cambiados a mano'**
-  String get modifiedMainsTitle;
-
-  /// No description provided for @modifiedMainsDesc.
-  ///
-  /// In es, this message translates to:
-  /// **'No coinciden con ninguna copia del historial. Guárdalos como copia nueva; la app no los toca hasta entonces.'**
-  String get modifiedMainsDesc;
-
   /// No description provided for @historyMigrated.
   ///
   /// In es, this message translates to:
@@ -3733,36 +3637,6 @@ abstract class AppLocalizations {
   /// **'Carpetas creadas: {created} (ya existían: {existing})'**
   String gameFoldersDone(String created, String existing);
 
-  /// No description provided for @inboxTitle.
-  ///
-  /// In es, this message translates to:
-  /// **'Bandeja de entrada'**
-  String get inboxTitle;
-
-  /// No description provided for @inboxDesc.
-  ///
-  /// In es, this message translates to:
-  /// **'Saves dejados en la carpeta de un juego que no se pudieron recoger. Se quedan donde están.'**
-  String get inboxDesc;
-
-  /// No description provided for @inboxUnreadable.
-  ///
-  /// In es, this message translates to:
-  /// **'No se puede leer: {detail}'**
-  String inboxUnreadable(String detail);
-
-  /// No description provided for @inboxWrongGame.
-  ///
-  /// In es, this message translates to:
-  /// **'Es de {actual}, no de {folder}'**
-  String inboxWrongGame(String actual, String folder);
-
-  /// No description provided for @inboxMoveTo.
-  ///
-  /// In es, this message translates to:
-  /// **'Mover a {game}'**
-  String inboxMoveTo(String game);
-
   /// No description provided for @inboxAdoptedToast.
   ///
   /// In es, this message translates to:
@@ -3780,6 +3654,264 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ver'**
   String get inboxSee;
+
+  /// No description provided for @problemsNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Arca sin problemas'**
+  String get problemsNone;
+
+  /// No description provided for @problemsSummary.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =1{1 problema en el Arca} other{{n} problemas en el Arca}}'**
+  String problemsSummary(int n);
+
+  /// No description provided for @problemsErrors.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =1{1 error} other{{n} errores}}'**
+  String problemsErrors(int n);
+
+  /// No description provided for @problemsWarnings.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =1{1 aviso} other{{n} avisos}}'**
+  String problemsWarnings(int n);
+
+  /// No description provided for @problemsFixAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Arreglar todo'**
+  String get problemsFixAll;
+
+  /// No description provided for @problemsFix.
+  ///
+  /// In es, this message translates to:
+  /// **'Arreglar'**
+  String get problemsFix;
+
+  /// No description provided for @problemsIgnore.
+  ///
+  /// In es, this message translates to:
+  /// **'Ignorar'**
+  String get problemsIgnore;
+
+  /// No description provided for @problemsFixGroup.
+  ///
+  /// In es, this message translates to:
+  /// **'Arreglar ({n})'**
+  String problemsFixGroup(int n);
+
+  /// No description provided for @problemsIgnoreGroup.
+  ///
+  /// In es, this message translates to:
+  /// **'Ignorar ({n})'**
+  String problemsIgnoreGroup(int n);
+
+  /// No description provided for @problemsShowIgnored.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar ignorados ({n})'**
+  String problemsShowIgnored(int n);
+
+  /// No description provided for @problemsHideIgnored.
+  ///
+  /// In es, this message translates to:
+  /// **'Ocultar ignorados'**
+  String get problemsHideIgnored;
+
+  /// No description provided for @problemsUnignore.
+  ///
+  /// In es, this message translates to:
+  /// **'Dejar de ignorar'**
+  String get problemsUnignore;
+
+  /// No description provided for @problemsIgnoredHint.
+  ///
+  /// In es, this message translates to:
+  /// **'No vuelven a avisar mientras el archivo no cambie. Se guardan solo en este dispositivo.'**
+  String get problemsIgnoredHint;
+
+  /// No description provided for @problemsMore.
+  ///
+  /// In es, this message translates to:
+  /// **'y {n} más'**
+  String problemsMore(int n);
+
+  /// No description provided for @problemsConfirmTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =1{¿Arreglar 1 problema?} other{¿Arreglar {n} problemas?}}'**
+  String problemsConfirmTitle(int n);
+
+  /// No description provided for @problemsConfirmBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Los .json se regeneran desde sus saves, los saves sueltos se adoptan y las copias que ya están en el historial se retiran. Nada se borra: lo que no se pueda reparar se mueve a PKArkTools/_cuarentena/ con una nota.'**
+  String get problemsConfirmBody;
+
+  /// No description provided for @problemsFixing.
+  ///
+  /// In es, this message translates to:
+  /// **'Arreglando {nDone} de {nTotal}…'**
+  String problemsFixing(int nDone, int nTotal);
+
+  /// No description provided for @problemsResultFixed.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =1{1 arreglado} other{{n} arreglados}}'**
+  String problemsResultFixed(int n);
+
+  /// No description provided for @problemsResultQuarantined.
+  ///
+  /// In es, this message translates to:
+  /// **'{n} en cuarentena'**
+  String problemsResultQuarantined(int n);
+
+  /// No description provided for @problemsResultFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =1{1 sin arreglar} other{{n} sin arreglar}}'**
+  String problemsResultFailed(int n);
+
+  /// No description provided for @problemsSeeSettings.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver en Ajustes'**
+  String get problemsSeeSettings;
+
+  /// No description provided for @problemCorruptSidecar.
+  ///
+  /// In es, this message translates to:
+  /// **'.json dañado'**
+  String get problemCorruptSidecar;
+
+  /// No description provided for @problemCorruptSidecarDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede leer. Arreglar lo regenera releyendo su save.'**
+  String get problemCorruptSidecarDesc;
+
+  /// No description provided for @problemMissingSidecar.
+  ///
+  /// In es, this message translates to:
+  /// **'Save sin su .json'**
+  String get problemMissingSidecar;
+
+  /// No description provided for @problemMissingSidecarDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Puede estar sincronizándose. Arreglar crea el .json desde el save.'**
+  String get problemMissingSidecarDesc;
+
+  /// No description provided for @problemMissingSave.
+  ///
+  /// In es, this message translates to:
+  /// **'.json sin su save'**
+  String get problemMissingSave;
+
+  /// No description provided for @problemMissingSaveDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Puede estar sincronizándose. Arreglar aparta el .json a la cuarentena.'**
+  String get problemMissingSaveDesc;
+
+  /// No description provided for @problemContentMismatch.
+  ///
+  /// In es, this message translates to:
+  /// **'El save no coincide con su .json'**
+  String get problemContentMismatch;
+
+  /// No description provided for @problemContentMismatchDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Se cambió por fuera. Arreglar guarda su contenido como copia nueva y aparta la pareja antigua.'**
+  String get problemContentMismatchDesc;
+
+  /// No description provided for @problemUnreadable.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo leer'**
+  String get problemUnreadable;
+
+  /// No description provided for @problemUnreadableDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Permiso o archivo bloqueado. Arreglar lo vuelve a leer y regenera el .json.'**
+  String get problemUnreadableDesc;
+
+  /// No description provided for @problemMainFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'Última versión sin actualizar'**
+  String get problemMainFailed;
+
+  /// No description provided for @problemMainFailedDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo escribir el archivo principal o ultima.json. Arreglar los reconstruye desde el historial.'**
+  String get problemMainFailedDesc;
+
+  /// No description provided for @problemInboxUnreadable.
+  ///
+  /// In es, this message translates to:
+  /// **'Bandeja: no es un save legible'**
+  String get problemInboxUnreadable;
+
+  /// No description provided for @problemInboxUnreadableDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Arreglar lo aparta a la cuarentena.'**
+  String get problemInboxUnreadableDesc;
+
+  /// No description provided for @problemInboxWrongGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Bandeja: save de otro juego'**
+  String get problemInboxWrongGame;
+
+  /// No description provided for @problemInboxWrongGameDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Arreglar lo guarda en la partida de su juego.'**
+  String get problemInboxWrongGameDesc;
+
+  /// No description provided for @problemModifiedMain.
+  ///
+  /// In es, this message translates to:
+  /// **'Última versión cambiada a mano'**
+  String get problemModifiedMain;
+
+  /// No description provided for @problemModifiedMainDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Su contenido no está en el historial. Arreglar lo guarda como copia nueva; el archivo se queda.'**
+  String get problemModifiedMainDesc;
+
+  /// No description provided for @problemConflictCopy.
+  ///
+  /// In es, this message translates to:
+  /// **'Copia de conflicto de la nube'**
+  String get problemConflictCopy;
+
+  /// No description provided for @problemConflictCopyDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Si su contenido ya está en el historial, Arreglar la retira; si no, la adopta.'**
+  String get problemConflictCopyDesc;
+
+  /// No description provided for @problemLooseSave.
+  ///
+  /// In es, this message translates to:
+  /// **'Save suelto'**
+  String get problemLooseSave;
+
+  /// No description provided for @problemLooseSaveDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiado a mano fuera de su sitio. Arreglar detecta su juego y lo guarda en el historial.'**
+  String get problemLooseSaveDesc;
 }
 
 class _AppLocalizationsDelegate

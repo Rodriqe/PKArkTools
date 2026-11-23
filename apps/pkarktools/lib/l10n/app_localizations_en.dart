@@ -1533,60 +1533,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statIssues => 'issues';
 
   @override
-  String get statLoose => 'loose';
-
-  @override
-  String get statIgnored => 'ignored';
-
-  @override
-  String get issuesTitle => 'Issues';
-
-  @override
-  String get issueMissingSave =>
-      'The save for this .json is missing (it may still be syncing)';
-
-  @override
-  String get issueMissingSidecar =>
-      'The .json for this save is missing (it may still be syncing)';
-
-  @override
-  String get issueCorruptSidecar => 'Damaged or unreadable .json';
-
-  @override
-  String get issueSizeMismatch => 'Size does not match the .json';
-
-  @override
-  String get issueHashMismatch => 'Content does not match its SHA-256';
-
-  @override
-  String get issueUnreadable => 'Could not be read';
-
-  @override
-  String get looseTitle => 'Loose saves';
-
-  @override
-  String get looseDesc =>
-      'Files copied into the folder by hand. Adopting them detects their game and files them in place with their .json.';
-
-  @override
-  String get adopt => 'Adopt';
-
-  @override
-  String get adoptAll => 'Adopt all';
-
-  @override
-  String adoptDone(String game) {
-    return 'Adopted: $game';
-  }
-
-  @override
   String ignoredFiles(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other:
-          '$count files ignored (temporary, partial or cloud conflict copies).',
-      one: '1 file ignored (temporary, partial or a cloud conflict copy).',
+          '$count files skipped (temporary, partial or cloud conflict copies).',
+      one: '1 file skipped (temporary, partial or a cloud conflict copy).',
     );
     return '$_temp0';
   }
@@ -2176,13 +2129,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Each save has its own folder with the latest version, named the way the game expects (main, SaveData.bin, Emerald.sav…), ready to copy to the game or emulator. Below it, historial/ keeps every copy and never modifies them. The latest version is derived: it is always rebuilt from the history, so nothing is lost even if you delete or change it.';
 
   @override
-  String get modifiedMainsTitle => 'Main files changed by hand';
-
-  @override
-  String get modifiedMainsDesc =>
-      'They don\'t match any copy in the history. Save them as a new copy; the app leaves them alone until then.';
-
-  @override
   String historyMigrated(int count) {
     return 'Folder updated: $count copies moved to historial/';
   }
@@ -2250,28 +2196,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get inboxTitle => 'Inbox';
-
-  @override
-  String get inboxDesc =>
-      'Saves dropped in a game folder that couldn\'t be picked up. They stay where they are.';
-
-  @override
-  String inboxUnreadable(String detail) {
-    return 'Can\'t be read: $detail';
-  }
-
-  @override
-  String inboxWrongGame(String actual, String folder) {
-    return 'It\'s from $actual, not $folder';
-  }
-
-  @override
-  String inboxMoveTo(String game) {
-    return 'Move to $game';
-  }
-
-  @override
   String inboxAdoptedToast(String files) {
     return 'Picked up from the inbox: $files';
   }
@@ -2289,4 +2213,192 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inboxSee => 'View';
+
+  @override
+  String get problemsNone => 'No problems in the Arca';
+
+  @override
+  String problemsSummary(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n problems in the Arca',
+      one: '1 problem in the Arca',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String problemsErrors(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n errors',
+      one: '1 error',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String problemsWarnings(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n warnings',
+      one: '1 warning',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get problemsFixAll => 'Fix all';
+
+  @override
+  String get problemsFix => 'Fix';
+
+  @override
+  String get problemsIgnore => 'Ignore';
+
+  @override
+  String problemsFixGroup(int n) {
+    return 'Fix ($n)';
+  }
+
+  @override
+  String problemsIgnoreGroup(int n) {
+    return 'Ignore ($n)';
+  }
+
+  @override
+  String problemsShowIgnored(int n) {
+    return 'Show ignored ($n)';
+  }
+
+  @override
+  String get problemsHideIgnored => 'Hide ignored';
+
+  @override
+  String get problemsUnignore => 'Stop ignoring';
+
+  @override
+  String get problemsIgnoredHint =>
+      'They won\'t warn again unless the file changes. Saved on this device only.';
+
+  @override
+  String problemsMore(int n) {
+    return 'and $n more';
+  }
+
+  @override
+  String problemsConfirmTitle(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Fix $n problems?',
+      one: 'Fix 1 problem?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get problemsConfirmBody =>
+      'Each .json is rebuilt from its save, loose saves are adopted and copies already in the history are removed. Nothing is deleted: anything that can\'t be repaired is moved to PKArkTools/_cuarentena/ with a note.';
+
+  @override
+  String problemsFixing(int nDone, int nTotal) {
+    return 'Fixing $nDone of $nTotal…';
+  }
+
+  @override
+  String problemsResultFixed(int n) {
+    return '$n fixed';
+  }
+
+  @override
+  String problemsResultQuarantined(int n) {
+    return '$n quarantined';
+  }
+
+  @override
+  String problemsResultFailed(int n) {
+    return '$n not fixed';
+  }
+
+  @override
+  String get problemsSeeSettings => 'View in Settings';
+
+  @override
+  String get problemCorruptSidecar => 'Damaged .json';
+
+  @override
+  String get problemCorruptSidecarDesc =>
+      'It can\'t be read. Fix rebuilds it by re-reading its save.';
+
+  @override
+  String get problemMissingSidecar => 'Save without its .json';
+
+  @override
+  String get problemMissingSidecarDesc =>
+      'It may still be syncing. Fix creates the .json from the save.';
+
+  @override
+  String get problemMissingSave => '.json without its save';
+
+  @override
+  String get problemMissingSaveDesc =>
+      'It may still be syncing. Fix moves the .json to quarantine.';
+
+  @override
+  String get problemContentMismatch => 'Save doesn\'t match its .json';
+
+  @override
+  String get problemContentMismatchDesc =>
+      'It was changed outside the app. Fix saves its content as a new copy and sets the old pair aside.';
+
+  @override
+  String get problemUnreadable => 'Couldn\'t be read';
+
+  @override
+  String get problemUnreadableDesc =>
+      'Permission or locked file. Fix reads it again and rebuilds the .json.';
+
+  @override
+  String get problemMainFailed => 'Latest version not updated';
+
+  @override
+  String get problemMainFailedDesc =>
+      'The main file or ultima.json couldn\'t be written. Fix rebuilds them from the history.';
+
+  @override
+  String get problemInboxUnreadable => 'Inbox: not a readable save';
+
+  @override
+  String get problemInboxUnreadableDesc => 'Fix moves it to quarantine.';
+
+  @override
+  String get problemInboxWrongGame => 'Inbox: save from another game';
+
+  @override
+  String get problemInboxWrongGameDesc => 'Fix files it under its own game.';
+
+  @override
+  String get problemModifiedMain => 'Latest version changed by hand';
+
+  @override
+  String get problemModifiedMainDesc =>
+      'Its content isn\'t in the history. Fix saves it as a new copy; the file stays.';
+
+  @override
+  String get problemConflictCopy => 'Cloud conflict copy';
+
+  @override
+  String get problemConflictCopyDesc =>
+      'If its content is already in the history, Fix removes it; otherwise it adopts it.';
+
+  @override
+  String get problemLooseSave => 'Loose save';
+
+  @override
+  String get problemLooseSaveDesc =>
+      'Copied by hand outside its place. Fix detects its game and files it in the history.';
 }

@@ -974,28 +974,7 @@
   },
   "statBackups": "copias",
   "statIssues": "problemas",
-  "statLoose": "sueltos",
-  "statIgnored": "ignorados",
-  "issuesTitle": "Problemas",
-  "issueMissingSave": "Falta el save de este .json (puede estar sincronizándose)",
-  "issueMissingSidecar": "Falta el .json de este save (puede estar sincronizándose)",
-  "issueCorruptSidecar": ".json dañado o ilegible",
-  "issueSizeMismatch": "El tamaño no coincide con el .json",
-  "issueHashMismatch": "El contenido no coincide con su SHA-256",
-  "issueUnreadable": "No se pudo leer",
-  "looseTitle": "Saves sueltos",
-  "looseDesc": "Archivos copiados a mano en la carpeta. Al adoptarlos se identifica su juego y se colocan en su sitio con su .json.",
-  "adopt": "Adoptar",
-  "adoptAll": "Adoptar todos",
-  "adoptDone": "Adoptado: {game}",
-  "@adoptDone": {
-    "placeholders": {
-      "game": {
-        "type": "String"
-      }
-    }
-  },
-  "ignoredFiles": "{count, plural, =1{1 archivo ignorado (temporal, parcial o copia de conflicto de la nube).} other{{count} archivos ignorados (temporales, parciales o copias de conflicto de la nube).}}",
+  "ignoredFiles": "{count, plural, =1{1 archivo omitido (temporal, parcial o copia de conflicto de la nube).} other{{count} archivos omitidos (temporales, parciales o copias de conflicto de la nube).}}",
   "@ignoredFiles": {
     "placeholders": {
       "count": {
@@ -1459,8 +1438,6 @@
   },
   "arcaLayoutTitle": "Cómo se organiza la carpeta",
   "arcaLayoutDesc": "Cada partida tiene su carpeta con la última versión, con el nombre que usa el juego (main, SaveData.bin, Esmeralda.sav…), lista para copiar al juego o al emulador. Debajo, historial/ guarda todas las copias sin modificarlas nunca. La última versión es una copia derivada: se regenera siempre desde el historial, así que nada se pierde aunque la borres o la cambies.",
-  "modifiedMainsTitle": "Archivos principales cambiados a mano",
-  "modifiedMainsDesc": "No coinciden con ninguna copia del historial. Guárdalos como copia nueva; la app no los toca hasta entonces.",
   "historyMigrated": "Carpeta actualizada: {count} copias movidas a historial/",
   "@historyMigrated": {
     "placeholders": {
@@ -1509,35 +1486,6 @@
       }
     }
   },
-  "inboxTitle": "Bandeja de entrada",
-  "inboxDesc": "Saves dejados en la carpeta de un juego que no se pudieron recoger. Se quedan donde están.",
-  "inboxUnreadable": "No se puede leer: {detail}",
-  "@inboxUnreadable": {
-    "placeholders": {
-      "detail": {
-        "type": "String"
-      }
-    }
-  },
-  "inboxWrongGame": "Es de {actual}, no de {folder}",
-  "@inboxWrongGame": {
-    "placeholders": {
-      "actual": {
-        "type": "String"
-      },
-      "folder": {
-        "type": "String"
-      }
-    }
-  },
-  "inboxMoveTo": "Mover a {game}",
-  "@inboxMoveTo": {
-    "placeholders": {
-      "game": {
-        "type": "String"
-      }
-    }
-  },
   "inboxAdoptedToast": "Recogido de la bandeja: {files}",
   "@inboxAdoptedToast": {
     "placeholders": {
@@ -1554,5 +1502,135 @@
       }
     }
   },
-  "inboxSee": "Ver"
+  "inboxSee": "Ver",
+  "problemsNone": "Arca sin problemas",
+  "problemsSummary": "{n, plural, =1{1 problema en el Arca} other{{n} problemas en el Arca}}",
+  "@problemsSummary": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsErrors": "{n, plural, =1{1 error} other{{n} errores}}",
+  "@problemsErrors": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsWarnings": "{n, plural, =1{1 aviso} other{{n} avisos}}",
+  "@problemsWarnings": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsFixAll": "Arreglar todo",
+  "problemsFix": "Arreglar",
+  "problemsIgnore": "Ignorar",
+  "problemsFixGroup": "Arreglar ({n})",
+  "@problemsFixGroup": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsIgnoreGroup": "Ignorar ({n})",
+  "@problemsIgnoreGroup": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsShowIgnored": "Mostrar ignorados ({n})",
+  "@problemsShowIgnored": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsHideIgnored": "Ocultar ignorados",
+  "problemsUnignore": "Dejar de ignorar",
+  "problemsIgnoredHint": "No vuelven a avisar mientras el archivo no cambie. Se guardan solo en este dispositivo.",
+  "problemsMore": "y {n} más",
+  "@problemsMore": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsConfirmTitle": "{n, plural, =1{¿Arreglar 1 problema?} other{¿Arreglar {n} problemas?}}",
+  "@problemsConfirmTitle": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsConfirmBody": "Los .json se regeneran desde sus saves, los saves sueltos se adoptan y las copias que ya están en el historial se retiran. Nada se borra: lo que no se pueda reparar se mueve a PKArkTools/_cuarentena/ con una nota.",
+  "problemsFixing": "Arreglando {nDone} de {nTotal}…",
+  "@problemsFixing": {
+    "placeholders": {
+      "nDone": {
+        "type": "int"
+      },
+      "nTotal": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsResultFixed": "{n, plural, =1{1 arreglado} other{{n} arreglados}}",
+  "@problemsResultFixed": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsResultQuarantined": "{n} en cuarentena",
+  "@problemsResultQuarantined": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsResultFailed": "{n, plural, =1{1 sin arreglar} other{{n} sin arreglar}}",
+  "@problemsResultFailed": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "problemsSeeSettings": "Ver en Ajustes",
+  "problemCorruptSidecar": ".json dañado",
+  "problemCorruptSidecarDesc": "No se puede leer. Arreglar lo regenera releyendo su save.",
+  "problemMissingSidecar": "Save sin su .json",
+  "problemMissingSidecarDesc": "Puede estar sincronizándose. Arreglar crea el .json desde el save.",
+  "problemMissingSave": ".json sin su save",
+  "problemMissingSaveDesc": "Puede estar sincronizándose. Arreglar aparta el .json a la cuarentena.",
+  "problemContentMismatch": "El save no coincide con su .json",
+  "problemContentMismatchDesc": "Se cambió por fuera. Arreglar guarda su contenido como copia nueva y aparta la pareja antigua.",
+  "problemUnreadable": "No se pudo leer",
+  "problemUnreadableDesc": "Permiso o archivo bloqueado. Arreglar lo vuelve a leer y regenera el .json.",
+  "problemMainFailed": "Última versión sin actualizar",
+  "problemMainFailedDesc": "No se pudo escribir el archivo principal o ultima.json. Arreglar los reconstruye desde el historial.",
+  "problemInboxUnreadable": "Bandeja: no es un save legible",
+  "problemInboxUnreadableDesc": "Arreglar lo aparta a la cuarentena.",
+  "problemInboxWrongGame": "Bandeja: save de otro juego",
+  "problemInboxWrongGameDesc": "Arreglar lo guarda en la partida de su juego.",
+  "problemModifiedMain": "Última versión cambiada a mano",
+  "problemModifiedMainDesc": "Su contenido no está en el historial. Arreglar lo guarda como copia nueva; el archivo se queda.",
+  "problemConflictCopy": "Copia de conflicto de la nube",
+  "problemConflictCopyDesc": "Si su contenido ya está en el historial, Arreglar la retira; si no, la adopta.",
+  "problemLooseSave": "Save suelto",
+  "problemLooseSaveDesc": "Copiado a mano fuera de su sitio. Arreglar detecta su juego y lo guarda en el historial."
 }

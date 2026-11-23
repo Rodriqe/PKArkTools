@@ -198,6 +198,11 @@ abstract final class ArcaLayout {
 
   static final _managedPrefix = RegExp(r'^\d{4}-\d{2}-\d{2}_\d{6}_[0-9a-f]{8}');
 
+  /// Copia de conflicto de la nube de una copia del historial o de su `.json`
+  /// (`2026-01-01_120000_1a2b3c4d (1).sav`…).
+  static bool isHistoryConflict(String name) =>
+      _managedPrefix.hasMatch(name) && !managedSave.hasMatch(name) && !managedSidecar.hasMatch(name);
+
   static final _conflict = RegExp(
     r'(conflicted copy|copia en conflicto|\bconflict\b|\.sync-conflict-|\s\(\d+\)$)',
     caseSensitive: false,

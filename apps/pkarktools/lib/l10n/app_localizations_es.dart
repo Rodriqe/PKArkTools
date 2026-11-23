@@ -1534,61 +1534,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get statIssues => 'problemas';
 
   @override
-  String get statLoose => 'sueltos';
-
-  @override
-  String get statIgnored => 'ignorados';
-
-  @override
-  String get issuesTitle => 'Problemas';
-
-  @override
-  String get issueMissingSave =>
-      'Falta el save de este .json (puede estar sincronizándose)';
-
-  @override
-  String get issueMissingSidecar =>
-      'Falta el .json de este save (puede estar sincronizándose)';
-
-  @override
-  String get issueCorruptSidecar => '.json dañado o ilegible';
-
-  @override
-  String get issueSizeMismatch => 'El tamaño no coincide con el .json';
-
-  @override
-  String get issueHashMismatch => 'El contenido no coincide con su SHA-256';
-
-  @override
-  String get issueUnreadable => 'No se pudo leer';
-
-  @override
-  String get looseTitle => 'Saves sueltos';
-
-  @override
-  String get looseDesc =>
-      'Archivos copiados a mano en la carpeta. Al adoptarlos se identifica su juego y se colocan en su sitio con su .json.';
-
-  @override
-  String get adopt => 'Adoptar';
-
-  @override
-  String get adoptAll => 'Adoptar todos';
-
-  @override
-  String adoptDone(String game) {
-    return 'Adoptado: $game';
-  }
-
-  @override
   String ignoredFiles(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other:
-          '$count archivos ignorados (temporales, parciales o copias de conflicto de la nube).',
+          '$count archivos omitidos (temporales, parciales o copias de conflicto de la nube).',
       one:
-          '1 archivo ignorado (temporal, parcial o copia de conflicto de la nube).',
+          '1 archivo omitido (temporal, parcial o copia de conflicto de la nube).',
     );
     return '$_temp0';
   }
@@ -2183,13 +2136,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Cada partida tiene su carpeta con la última versión, con el nombre que usa el juego (main, SaveData.bin, Esmeralda.sav…), lista para copiar al juego o al emulador. Debajo, historial/ guarda todas las copias sin modificarlas nunca. La última versión es una copia derivada: se regenera siempre desde el historial, así que nada se pierde aunque la borres o la cambies.';
 
   @override
-  String get modifiedMainsTitle => 'Archivos principales cambiados a mano';
-
-  @override
-  String get modifiedMainsDesc =>
-      'No coinciden con ninguna copia del historial. Guárdalos como copia nueva; la app no los toca hasta entonces.';
-
-  @override
   String historyMigrated(int count) {
     return 'Carpeta actualizada: $count copias movidas a historial/';
   }
@@ -2258,28 +2204,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get inboxTitle => 'Bandeja de entrada';
-
-  @override
-  String get inboxDesc =>
-      'Saves dejados en la carpeta de un juego que no se pudieron recoger. Se quedan donde están.';
-
-  @override
-  String inboxUnreadable(String detail) {
-    return 'No se puede leer: $detail';
-  }
-
-  @override
-  String inboxWrongGame(String actual, String folder) {
-    return 'Es de $actual, no de $folder';
-  }
-
-  @override
-  String inboxMoveTo(String game) {
-    return 'Mover a $game';
-  }
-
-  @override
   String inboxAdoptedToast(String files) {
     return 'Recogido de la bandeja: $files';
   }
@@ -2297,4 +2221,206 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get inboxSee => 'Ver';
+
+  @override
+  String get problemsNone => 'Arca sin problemas';
+
+  @override
+  String problemsSummary(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n problemas en el Arca',
+      one: '1 problema en el Arca',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String problemsErrors(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n errores',
+      one: '1 error',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String problemsWarnings(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n avisos',
+      one: '1 aviso',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get problemsFixAll => 'Arreglar todo';
+
+  @override
+  String get problemsFix => 'Arreglar';
+
+  @override
+  String get problemsIgnore => 'Ignorar';
+
+  @override
+  String problemsFixGroup(int n) {
+    return 'Arreglar ($n)';
+  }
+
+  @override
+  String problemsIgnoreGroup(int n) {
+    return 'Ignorar ($n)';
+  }
+
+  @override
+  String problemsShowIgnored(int n) {
+    return 'Mostrar ignorados ($n)';
+  }
+
+  @override
+  String get problemsHideIgnored => 'Ocultar ignorados';
+
+  @override
+  String get problemsUnignore => 'Dejar de ignorar';
+
+  @override
+  String get problemsIgnoredHint =>
+      'No vuelven a avisar mientras el archivo no cambie. Se guardan solo en este dispositivo.';
+
+  @override
+  String problemsMore(int n) {
+    return 'y $n más';
+  }
+
+  @override
+  String problemsConfirmTitle(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '¿Arreglar $n problemas?',
+      one: '¿Arreglar 1 problema?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get problemsConfirmBody =>
+      'Los .json se regeneran desde sus saves, los saves sueltos se adoptan y las copias que ya están en el historial se retiran. Nada se borra: lo que no se pueda reparar se mueve a PKArkTools/_cuarentena/ con una nota.';
+
+  @override
+  String problemsFixing(int nDone, int nTotal) {
+    return 'Arreglando $nDone de $nTotal…';
+  }
+
+  @override
+  String problemsResultFixed(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n arreglados',
+      one: '1 arreglado',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String problemsResultQuarantined(int n) {
+    return '$n en cuarentena';
+  }
+
+  @override
+  String problemsResultFailed(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n sin arreglar',
+      one: '1 sin arreglar',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get problemsSeeSettings => 'Ver en Ajustes';
+
+  @override
+  String get problemCorruptSidecar => '.json dañado';
+
+  @override
+  String get problemCorruptSidecarDesc =>
+      'No se puede leer. Arreglar lo regenera releyendo su save.';
+
+  @override
+  String get problemMissingSidecar => 'Save sin su .json';
+
+  @override
+  String get problemMissingSidecarDesc =>
+      'Puede estar sincronizándose. Arreglar crea el .json desde el save.';
+
+  @override
+  String get problemMissingSave => '.json sin su save';
+
+  @override
+  String get problemMissingSaveDesc =>
+      'Puede estar sincronizándose. Arreglar aparta el .json a la cuarentena.';
+
+  @override
+  String get problemContentMismatch => 'El save no coincide con su .json';
+
+  @override
+  String get problemContentMismatchDesc =>
+      'Se cambió por fuera. Arreglar guarda su contenido como copia nueva y aparta la pareja antigua.';
+
+  @override
+  String get problemUnreadable => 'No se pudo leer';
+
+  @override
+  String get problemUnreadableDesc =>
+      'Permiso o archivo bloqueado. Arreglar lo vuelve a leer y regenera el .json.';
+
+  @override
+  String get problemMainFailed => 'Última versión sin actualizar';
+
+  @override
+  String get problemMainFailedDesc =>
+      'No se pudo escribir el archivo principal o ultima.json. Arreglar los reconstruye desde el historial.';
+
+  @override
+  String get problemInboxUnreadable => 'Bandeja: no es un save legible';
+
+  @override
+  String get problemInboxUnreadableDesc =>
+      'Arreglar lo aparta a la cuarentena.';
+
+  @override
+  String get problemInboxWrongGame => 'Bandeja: save de otro juego';
+
+  @override
+  String get problemInboxWrongGameDesc =>
+      'Arreglar lo guarda en la partida de su juego.';
+
+  @override
+  String get problemModifiedMain => 'Última versión cambiada a mano';
+
+  @override
+  String get problemModifiedMainDesc =>
+      'Su contenido no está en el historial. Arreglar lo guarda como copia nueva; el archivo se queda.';
+
+  @override
+  String get problemConflictCopy => 'Copia de conflicto de la nube';
+
+  @override
+  String get problemConflictCopyDesc =>
+      'Si su contenido ya está en el historial, Arreglar la retira; si no, la adopta.';
+
+  @override
+  String get problemLooseSave => 'Save suelto';
+
+  @override
+  String get problemLooseSaveDesc =>
+      'Copiado a mano fuera de su sitio. Arreglar detecta su juego y lo guarda en el historial.';
 }

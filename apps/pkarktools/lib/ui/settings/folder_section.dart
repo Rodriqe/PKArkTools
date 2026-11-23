@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../data/arca_repository.dart';
 import '../../data/arca_session.dart';
-import '../../data/folder/arca_folder.dart';
-import '../../data/folder/arca_main_files.dart';
 import '../../data/folder/folder_access.dart';
 import '../../theme/app_theme.dart';
 import '../common/format.dart';
-import '../detail/snapshot_history.dart' show saveMainAsNewCopy;
+import 'arca_problems_section.dart';
 import 'game_folders.dart';
 import '../onboarding/folder_flows.dart';
 
 final _snapshotCountProvider = StreamProvider<int>((ref) => ref.watch(arcaRepositoryProvider).watchSnapshotCount());
 
 /// Ajustes → Carpeta del Arca: dónde está, estado del último reindexado,
-/// problemas, saves sueltos para adoptar y cambio de carpeta.
+/// resumen plegable de problemas (con Arreglar/Ignorar) y cambio de carpeta.
 class ArcaFolderSection extends ConsumerStatefulWidget {
   const ArcaFolderSection({super.key});
 
@@ -26,7 +23,6 @@ class ArcaFolderSection extends ConsumerStatefulWidget {
 
 class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
   bool _reindexing = false;
-  final Set<String> _adopting = {};
 
   Future<void> _reindex() async {
     setState(() => _reindexing = true);
@@ -41,44 +37,6 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
         ..showSnackBar(SnackBar(content: Text(l10n.reindexResult(r.added, r.removed, r.duplicates))));
     }
   }
-
-  Future<void> _saveMain(String path) async {
-    setState(() => _adopting.add(path));
-    await saveMainAsNewCopy(context, ref, path);
-    if (mounted) setState(() => _adopting.remove(path));
-  }
-
-  Future<void> _adopt(List<String> paths) async {
-    setState(() => _adopting.addAll(paths));
-    final messenger = ScaffoldMessenger.of(context);
-    final l10n = context.l10n;
-    final lang = Localizations.localeOf(context).languageCode;
-    final repo = ref.read(arcaRepositoryProvider);
-    final lines = <String>[];
-    for (final path in paths) {
-      final out = await repo.adopt(path);
-      lines.add(switch (out) {
-        ImportAdded(:final save) || ImportDuplicate(:final save) => l10n.adoptDone(
-          '${lang == 'en' ? save.game.nameEn : save.game.nameEs} · ${save.trainer.name}',
-        ),
-        ImportFailed(:final fileName, :final reason) => '$fileName: $reason',
-      });
-    }
-    if (!mounted) return;
-    setState(() => _adopting.removeAll(paths));
-    messenger
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(lines.join('\n')), duration: const Duration(seconds: 5)));
-  }
-
-  String _issueText(BuildContext context, ArcaIssueKind k) => switch (k) {
-    ArcaIssueKind.missingSave => context.l10n.issueMissingSave,
-    ArcaIssueKind.missingSidecar => context.l10n.issueMissingSidecar,
-    ArcaIssueKind.corruptSidecar => context.l10n.issueCorruptSidecar,
-    ArcaIssueKind.sizeMismatch => context.l10n.issueSizeMismatch,
-    ArcaIssueKind.hashMismatch => context.l10n.issueHashMismatch,
-    ArcaIssueKind.unreadable => context.l10n.issueUnreadable,
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -104,10 +62,7 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
       ],
     );
 
-    final issues = report?.issues ?? const <ArcaIssue>[];
-    final loose = report?.loose ?? const [];
-    final modified = report?.modifiedMains ?? const <MainFileStatus>[];
-    final inbox = report?.inboxProblems ?? const <InboxProblem>[];
+    final problems = ref.watch(visibleArcaProblemsProvider).shown;
     final moved = (report?.historyMigration?.copied ?? 0) + (report?.historyMigration?.skipped ?? 0);
     final time = report == null
         ? null
@@ -168,9 +123,8 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
                 runSpacing: 12,
                 children: [
                   stat('$count', l10n.statBackups),
-                  stat('${issues.length}', l10n.statIssues, color: issues.isEmpty ? null : context.colors.error),
-                  stat('${loose.length}', l10n.statLoose, color: loose.isEmpty ? null : context.tokens.shiny),
-                  stat('${report?.ignoredCount ?? 0}', l10n.statIgnored),
+                  stat('${problems.length}', l10n.statIssues,
+                      color: problems.isEmpty ? null : (problems.any((p) => p.kind.isError) ? context.colors.error : context.tokens.shiny)),
                 ],
               ),
               const SizedBox(height: 16),
@@ -208,100 +162,11 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
             ],
           ),
         ),
-        if (issues.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Text('${l10n.issuesTitle} (${issues.length})', style: context.text.titleSmall),
-          const SizedBox(height: 6),
-          for (final i in issues.take(50))
-            ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(Icons.report_gmailerrorred_rounded, color: context.colors.error),
-              title: Text(_issueText(context, i.kind)),
-              subtitle: Text(i.detail == null ? i.path : '${i.path}\n${i.detail}', maxLines: 3),
-            ),
-        ],
+        const SizedBox(height: 14),
+        const ArcaProblemsPanel(),
         if (moved > 0) ...[
           const SizedBox(height: 12),
           Text(l10n.historyMigrated(moved), style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
-        ],
-        if (inbox.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Text('${l10n.inboxTitle} (${inbox.length})', style: context.text.titleSmall),
-          Text(l10n.inboxDesc, style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
-          const SizedBox(height: 6),
-          for (final i in inbox)
-            ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(
-                i.kind == InboxProblemKind.wrongGame ? Icons.swap_horiz_rounded : Icons.report_gmailerrorred_rounded,
-                color: i.kind == InboxProblemKind.wrongGame ? context.tokens.shiny : context.colors.error,
-              ),
-              title: Text(i.path.split('/').last),
-              subtitle: Text([
-                i.path,
-                switch (i.kind) {
-                  InboxProblemKind.wrongGame => l10n.inboxWrongGame(
-                      gameTitle(context, i.actualGame!), i.folderGame == null ? '?' : gameTitle(context, i.folderGame!)),
-                  InboxProblemKind.unreadable => l10n.inboxUnreadable(i.detail ?? '?'),
-                },
-              ].join('\n')),
-              trailing: i.kind != InboxProblemKind.wrongGame
-                  ? null
-                  : _adopting.contains(i.path)
-                      ? const SizedBox.square(dimension: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                      : TextButton(
-                          onPressed: _adopting.isNotEmpty ? null : () => _adopt([i.path]),
-                          child: Text(l10n.inboxMoveTo(gameTitle(context, i.actualGame!))),
-                        ),
-            ),
-        ],
-        if (modified.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Text('${l10n.modifiedMainsTitle} (${modified.length})', style: context.text.titleSmall),
-          Text(l10n.modifiedMainsDesc, style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
-          const SizedBox(height: 6),
-          for (final m in modified)
-            ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(Icons.edit_document, color: context.tokens.shiny),
-              title: Text(m.name),
-              subtitle: Text(m.path),
-              trailing: TextButton(
-                onPressed: _adopting.isNotEmpty ? null : () => _saveMain(m.path),
-                child: Text(l10n.saveAsNewCopy),
-              ),
-            ),
-        ],
-        if (loose.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(child: Text('${l10n.looseTitle} (${loose.length})', style: context.text.titleSmall)),
-              TextButton(
-                onPressed: _adopting.isNotEmpty ? null : () => _adopt([for (final e in loose) e.path]),
-                child: Text(l10n.adoptAll),
-              ),
-            ],
-          ),
-          Text(l10n.looseDesc, style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
-          const SizedBox(height: 6),
-          for (final e in loose.take(100))
-            ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(Icons.sd_card_alert_rounded, color: context.tokens.shiny),
-              title: Text(e.path.split('/').last),
-              subtitle: Text('${e.path} · ${formatBytes(e.size)}'),
-              trailing: _adopting.contains(e.path)
-                  ? const SizedBox.square(dimension: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                  : TextButton(
-                      onPressed: _adopting.isNotEmpty ? null : () => _adopt([e.path]),
-                      child: Text(l10n.adopt),
-                    ),
-            ),
         ],
         if ((report?.ignoredCount ?? 0) > 0) ...[
           const SizedBox(height: 10),

@@ -138,7 +138,7 @@ void main() {
     expect(find.text('Tu Arca está vacía'), findsOneWidget);
   });
 
-  testWidgets('Ajustes: carpeta, reindexar y adoptar un save suelto', (tester) async {
+  testWidgets('Ajustes: carpeta, reindexar y arreglar (adoptar) un save suelto', (tester) async {
     final repo = ArcaRepository(db, ArcaFolder(IoFolderFs(cloud)), deviceName: 'Mac');
     await tester.runAsync(() async {
       await repo.importBytes(SyntheticSaves.gen3(trainer: const SynthTrainer(name: 'MAY')),
@@ -155,20 +155,26 @@ void main() {
         size: const Size(1280, 1600));
     expect(find.text('Carpeta del Arca'), findsOneWidget);
     expect(find.text('Sincronizada con iCloud Drive'), findsOneWidget);
-    expect(find.text('Saves sueltos (1)'), findsOneWidget);
-    expect(find.textContaining('1 archivo ignorado'), findsOneWidget);
+    // Plegado: una sola línea con el recuento; el detalle no se ve.
+    expect(find.text('1 problema en el Arca'), findsOneWidget);
+    expect(find.textContaining('Save suelto'), findsNothing);
+    expect(find.textContaining('1 archivo omitido'), findsOneWidget);
 
     await tester.tap(find.text('Reindexar'));
     await settle(tester, until: find.textContaining('Reindexado:'));
     expect(find.textContaining('Reindexado: 0 nuevas'), findsOneWidget);
 
-    await tester.tap(find.text('Adoptar').first);
-    for (var i = 0; i < 5 && find.textContaining('Adoptado:').evaluate().isEmpty; i++) {
-      await settle(tester, until: find.textContaining('Adoptado:'));
-    }
-    expect(find.textContaining(RegExp(r'Adoptado: Pokémon .+ · DAWN')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('arca-problems-summary')));
     await settle(tester);
-    expect(find.textContaining('Saves sueltos'), findsNothing);
+    expect(find.text('Save suelto (1)'), findsOneWidget);
+    expect(find.text('Platino copiado.sav'), findsOneWidget);
+    await tester.tap(find.byTooltip('Arreglar'));
+    for (var i = 0; i < 5 && find.textContaining('1 arreglado').evaluate().isEmpty; i++) {
+      await settle(tester, until: find.textContaining('1 arreglado'));
+    }
+    expect(find.textContaining('1 arreglado'), findsWidgets);
+    await settle(tester);
+    expect(find.text('Arca sin problemas'), findsOneWidget);
     expect(File(p.join(cloud.path, 'PKArkTools', 'Platino copiado.sav')).existsSync(), isFalse);
   });
 }

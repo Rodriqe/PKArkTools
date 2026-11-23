@@ -166,8 +166,9 @@ class ReindexReport {
   /// el historial).
   int conflictsCleaned = 0;
 
-  /// Copias de conflicto de la nube que siguen en la carpeta (las del
-  /// principal con contenido desconocido van en [loose]).
+  /// Copias de conflicto de la nube de copias del historial que siguen en la
+  /// carpeta (las del principal con contenido desconocido van en [loose]; las
+  /// de otros archivos se ignoran).
   List<FsEntry> conflicts = const [];
 
   /// Todos los archivos de la carpeta (ruta → tamaño y fecha), para la clave
@@ -673,7 +674,10 @@ class ArcaRepository {
       ..entries = listing.entries
       ..conflicts = [
         for (final c in listing.conflicts)
-          if (!mains.cleanedPaths.contains(c.path) && !looseNow.contains(c.path)) c,
+          if (!mains.cleanedPaths.contains(c.path) &&
+              !looseNow.contains(c.path) &&
+              ArcaLayout.isHistoryConflict(c.path.split('/').last))
+            c,
       ];
     await _processInbox(report);
     return report;

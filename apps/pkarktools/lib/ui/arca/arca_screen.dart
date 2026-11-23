@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../settings/arca_problems_section.dart' show ArcaProblemsNotice;
 import '../../providers.dart';
 import '../../theme/app_theme.dart';
 import '../common/format.dart';
@@ -119,7 +120,11 @@ class _ArcaScreenState extends ConsumerState<ArcaScreen> {
                     sliver: SliverToBoxAdapter(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: compact ? pad : 0),
-                        child: ArcaFilterBar(all: all, showFiltersButton: !sidePanel),
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                          ArcaFilterBar(all: all, showFiltersButton: !sidePanel),
+                          // Como mucho una línea discreta: el detalle vive en Ajustes.
+                          const ArcaProblemsNotice(),
+                        ]),
                       ),
                     ),
                   ),
