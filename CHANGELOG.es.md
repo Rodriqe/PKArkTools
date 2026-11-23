@@ -11,6 +11,67 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-11-23
+
+**PKArkTools 1.0: el Arca oficial.** Esta versión añade la **Dex**, una
+Pokédex global de todas las partidas del Arca, y cierra la serie 0.1.x.
+Respecto a 0.1.x, la 1.0 reúne en una app para Android, iOS, macOS, Windows y
+Linux: un Arca de copias inmutables y versionadas en la carpeta que elijas
+(varios dispositivos, carpetas de juego como bandeja de entrada, reindexar,
+zip); importar desde archivos, carpetas, emuladores y Checkpoint/JKSM; lectura
+**y edición** de todas las generaciones, de Rojo/Azul a Escarlata/Púrpura y
+Leyendas Z-A (Pokémon, cajas, entrenador, inventario, Pokédex, eventos,
+cintas, origen); legalidad con correcciones seguras; detección de saves
+dañados y reparación de checksums; formas regionales y alternativas con sus
+propios datos; actualizaciones desde la app; y ahora la Dex.
+
+### Añadido
+- **Pestaña Dex** (junto a Arca, Actividad y Ajustes): las 1025 especies de la
+  Nacional llenas con **todas las partidas**: silueta (sin registrar),
+  atenuada (vista), a color (capturada) e insignia ✦ si tienes un variocolor.
+- **Progreso**: capturados, vistos, variocolor y formas desbloqueadas, con
+  desglose por generación/región y por juego (especies del juego frente a las
+  registradas en tus partidas de ese juego).
+- **Ficha de especie** solo con datos objetivos (sin textos de la Pokédex ni
+  arte oficial): tipos, estadísticas base, habilidades (incluida la oculta),
+  ratio de género, la familia evolutiva con sus métodos (de los árboles de
+  evolución de PKHeX), formas coleccionables con sus tipos y estadísticas,
+  juegos donde aparece, **tus registros** (en qué partidas está vista o
+  capturada) y **tus ejemplares** (juego, entrenador, apodo, nivel, variocolor,
+  forma, factor Gigamax y hueco), cada uno abre su partida **en su caja con el
+  Pokémon resaltado**.
+- **Formas especiales desbloqueables**, normal y variocolor por separado, desde
+  una tabla de reglas (`SpecialForms`) verificada contra PKHeX: Megas por juego
+  (X/Y, ROZA, Sol/Luna, Ultrasol/Ultraluna, Let's Go y Leyendas Z-A, con las
+  nuevas de Z-A y Mega Dimensión), Kyogre/Groudon primigenios, Ultra Necrozma
+  (Necrozma fusionado en USUL) y Gigamax (un ejemplar con el factor Gigamax del
+  PK8 en Espada/Escudo; una por forma en Urshifu y Toxtricity). La piedra u
+  orbe en la mochila de esa partida se muestra como indicador. Las bloqueadas
+  son siluetas que explican cómo desbloquearlas; Eternamax nunca se
+  desbloquea. Reglas: [guía de la Dex](docs/usuario/dex.md).
+- **Filtros y búsqueda**: capturados, faltantes, solo vistos, variocolor,
+  formas por desbloquear, tipo, generación/región y juego; búsqueda por nombre
+  (español o inglés, sin acentos) o número; orden por número o nombre.
+- **Living dex** (ajustes de la Dex): una especie cuenta como capturada solo si
+  tienes un ejemplar en equipo o cajas, para ver lo que de verdad te falta.
+
+### Rendimiento
+- El índice de la Dex se calcula **en segundo plano** al reindexar el Arca o
+  importar, una vez por copia (por SHA-256), y se cachea en el índice local
+  (drift, esquema 5, `dex_scans`) de forma incremental. Abrir la pestaña solo
+  cruza la caché: 50 partidas sintéticas (1500 ejemplares) se construyen,
+  agregan y filtran en unos 10 ms; escanear esas 50 partidas lleva unos 0,3 s,
+  una sola vez.
+
+### Desarrollo
+- pkcore: `GlobalDex`, `SaveDexScan`, `SpecialForms`, `DexForms` y
+  `Evolutions`; el oráculo PKHeX vuelca la tabla de Mega/Primigenio/Ultra/
+  Gigamax y los árboles de evolución (`tool/gen_dex_tables.sh`).
+- Tests de las reglas de desbloqueo (Gigamax con factor en EspEsc, normal y
+  variocolor; Megas por juego con piedra; Z-A; nada fuera de juegos válidos;
+  huevos), cruce de varias partidas, living dex, filtros, rendimiento y diseño
+  en 320×568, 360×800, 430×932 y escritorio.
+
 ## [0.1.5] — 2026-11-23
 
 Las formas regionales y alternativas usan sus propios datos en vez de los de

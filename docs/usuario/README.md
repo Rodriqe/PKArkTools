@@ -9,10 +9,11 @@ editarla y exportarla lista para el juego o el emulador.
 2. [Importar saves](importar.md): un archivo, una carpeta entera, emuladores y exports de Checkpoint/JKSM.
 3. [El Arca](arca.md): historial, notas, versión del cartucho, comparar, exportar, restaurar y zip.
 4. [Editor](editor.md): Pokémon, cajas, entrenador, inventario, Pokédex, eventos, cintas y origen.
-5. [Legalidad y avisos](legalidad.md): qué se comprueba y qué hace «Intentar corregir».
-6. [Saves dañados y reparar checksums](reparar-checksums.md).
-7. [Iconos](iconos.md): sprites bajo demanda y su caché.
-8. [Preguntas frecuentes y solución de problemas](faq.md).
+5. [Dex](dex.md): la Pokédex global de todas tus partidas, formas especiales desbloqueables y living dex.
+6. [Legalidad y avisos](legalidad.md): qué se comprueba y qué hace «Intentar corregir».
+7. [Saves dañados y reparar checksums](reparar-checksums.md).
+8. [Iconos](iconos.md): sprites bajo demanda y su caché.
+9. [Preguntas frecuentes y solución de problemas](faq.md).
 
 Consulta también [Formatos soportados](../formatos.md) y
 [Seguridad de datos y privacidad](../seguridad-datos.md).

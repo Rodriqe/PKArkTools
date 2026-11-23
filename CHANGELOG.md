@@ -11,6 +11,64 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-11-23
+
+**PKArkTools 1.0: the official Ark.** This release adds the **Dex**, a global
+Pokédex of every save in the Ark, and closes the 0.1.x series. Compared with
+0.1.x, 1.0 brings, in one app for Android, iOS, macOS, Windows and Linux:
+an Ark of immutable, versioned copies in a folder you choose (multi-device,
+game folders as inbox, reindex, zip export); import from files, folders,
+emulators and Checkpoint/JKSM; reading **and editing** of every generation
+from Red/Blue to Scarlet/Violet and Legends: Z-A (Pokémon, boxes, trainer,
+inventory, Pokédex, events, ribbons, origin); legality checks with safe fixes;
+damaged-save detection and checksum repair; regional and alternate forms with
+their own data; in-app updates; and now the Dex.
+
+### Added
+- **Dex tab** (next to Ark, Activity and Settings): the 1025 National Dex
+  species filled in from **all saves**: silhouette (not registered), dimmed
+  (seen), in colour (caught) and a ✦ badge when you own a shiny.
+- **Progress**: caught, seen, shiny and unlocked forms, broken down by
+  generation/region and by game (species available in that game vs. those
+  registered in your saves of that game).
+- **Species sheet** with objective data only (no Pokédex flavour text or
+  official artwork): types, base stats, abilities (hidden included), gender
+  ratio, the evolution family with methods (from PKHeX's evolution trees),
+  collectable forms with their types and stats, games it appears in, **your
+  records** (which saves have it seen or caught) and **your specimens** (game,
+  trainer, nickname, level, shiny, form, Gigantamax Factor and slot), each
+  one opening its save **at its box with the Pokémon highlighted**.
+- **Unlockable special forms**, normal and shiny separately, from one rules
+  table (`SpecialForms`) verified against PKHeX: Mega Evolutions per game
+  (X/Y, ORAS, Sun/Moon, Ultra Sun/Ultra Moon, Let's Go and Legends: Z-A,
+  including Z-A's new Megas and Mega Dimension), Primal Kyogre/Groudon, Ultra
+  Necrozma (fused Necrozma in USUM) and Gigantamax (a specimen with the PK8
+  Gigantamax Factor in Sword/Shield; one per form for Urshifu and
+  Toxtricity). The activating stone or orb in that save's bag is shown as an
+  indicator. Locked forms are silhouettes that explain how to unlock them;
+  Eternamax is never unlocked. Rules: [Dex guide](docs/usuario/dex.md).
+- **Filters and search**: caught, missing, seen only, shiny, forms to unlock,
+  type, generation/region and game; search by name (Spanish or English,
+  accent-insensitive) or number; sort by number or name.
+- **Living dex** (Dex settings): a species counts as caught only if you own
+  a specimen in a team or box, to see what you are really missing.
+
+### Performance
+- The Dex index is computed **in the background** when the Ark is reindexed
+  or a save is imported, once per copy (by SHA-256), and cached in the local
+  index (drift schema 5, `dex_scans`), incrementally. Opening the tab only
+  crosses the cache: 50 synthetic saves (1,500 specimens) build, aggregate and
+  filter in about 10 ms; scanning those 50 saves takes about 0.3 s, once.
+
+### Development
+- pkcore: `GlobalDex`, `SaveDexScan`, `SpecialForms`, `DexForms` and
+  `Evolutions`; the PKHeX oracle dumps the Mega/Primal/Ultra/Gigantamax table
+  and the evolution trees (`tool/gen_dex_tables.sh`).
+- Tests for the unlock rules (Gigantamax with the factor in SwSh, normal and
+  shiny; Megas per game with the stone; Z-A; nothing outside valid games;
+  eggs), several saves crossed, living dex, filters, performance and layouts
+  at 320×568, 360×800, 430×932 and desktop.
+
 ## [0.1.5] — 2026-11-23
 
 Regional and alternate forms use their own data instead of the base

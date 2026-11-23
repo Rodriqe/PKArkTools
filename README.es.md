@@ -51,6 +51,25 @@ Sin cuentas, sin servidores, sin telemetría: pon el Arca en iCloud Drive,
 Google Drive, OneDrive, Dropbox o Syncthing y todos tus dispositivos la
 comparten.
 
+## Novedad de la 1.0: la Dex
+
+<p align="center">
+  <img src="docs/screenshots/dex/02_species_charizard.png" width="100%" alt="Dex: Charizard con sus Megaevoluciones y Gigamax desbloqueadas">
+</p>
+
+Una **Pokédex global de todas tus partidas**: las 1025 especies se llenan con
+todo lo registrado o capturado en cualquier juego del Arca (silueta, vista,
+capturada, ✦ variocolor). Cada especie tiene una ficha de datos objetivos
+(tipos, estadísticas base, habilidades, género, métodos de evolución, formas,
+juegos), dónde la has visto o capturado y **cada ejemplar que tienes**, a un
+toque de su caja. Las **Megaevoluciones, Gigamax, Regresión primigenia y Ultra
+Necrozma** se desbloquean —normal y variocolor por separado— solo con un
+ejemplar que las habilite en un juego donde existen (un Charizard variocolor
+con factor Gigamax en Espada desbloquea Charizard Gigamax variocolor).
+Progreso por generación, región y juego, filtros, buscador y **living dex**
+opcional. Se indexa en segundo plano y se cachea: abre al instante.
+[Guía de la Dex](docs/usuario/dex.md).
+
 ## Funcionalidades
 
 **Arca y copias versionadas**
@@ -156,6 +175,7 @@ El vídeo se reconstruye a partir de las grabaciones con
 
 | Escritorio | | |
 |---|---|---|
+| <img src="docs/screenshots/dex/01_grid.png" alt="Cuadrícula de la Dex"> | <img src="docs/screenshots/dex/03_locked_forms.png" alt="Dex: formas especiales bloqueadas"> | <img src="docs/screenshots/dex/05_progress.png" alt="Progreso de la Dex"> |
 | <img src="docs/screenshots/v2/mac_03_arca_colores_pareja.png" alt="Arca con colores por versión"> | <img src="docs/screenshots/v2/mac_04_cajas_iconos.png" alt="Cajas"> | <img src="docs/screenshots/v2/mac_05_ficha_iconos.png" alt="Editor de Pokémon"> |
 | <img src="docs/screenshots/v2/mac_07_cintas.png" alt="Cintas"> | <img src="docs/screenshots/20_legalidad_detallada.png" alt="Legalidad"> | <img src="docs/screenshots/22_comparar_copias.png" alt="Comparar copias"> |
 | <img src="docs/screenshots/24_pokedex_switch.png" alt="Pokédex"> | <img src="docs/screenshots/21_importacion_masiva.png" alt="Importación en bloque"> | <img src="docs/screenshots/v2/mac_01_onboarding_logo.png" alt="Elige tu carpeta"> |
@@ -169,18 +189,18 @@ Todas las capturas usan saves sintéticos.
 
 ## Instalar
 
-La versión actual es la **v0.1.5**. Descárgala desde el
+La versión actual es la **v1.0.0**. Descárgala desde el
 [último release](https://github.com/Rodriqe/PKArkTools/releases/latest)
 ([todos los releases](https://github.com/Rodriqe/PKArkTools/releases),
 [CHANGELOG](CHANGELOG.es.md)).
 
 | Plataforma | Cómo |
 |---|---|
-| Android | `PKArkTools-v0.1.5.apk`: ábrelo en el teléfono y permite instalar desde ese origen cuando Android lo pida. |
-| macOS | `PKArkTools-v0.1.5-macos.zip`: descomprímelo y mueve `PKArkTools.app` a Aplicaciones. No está notarizada: la primera vez, **clic derecho → Abrir → Abrir**. |
+| Android | `PKArkTools-v1.0.0.apk`: ábrelo en el teléfono y permite instalar desde ese origen cuando Android lo pida. |
+| macOS | `PKArkTools-v1.0.0-macos.zip`: descomprímelo y mueve `PKArkTools.app` a Aplicaciones. No está notarizada: la primera vez, **clic derecho → Abrir → Abrir**. |
 | iPhone / iPad | Aún sin build descargable: compílala desde el código con Xcode (abajo). |
-| Windows | `PKArkTools-v0.1.5-windows-x64-setup.exe` (instalador) o `PKArkTools-v0.1.5-windows-x64.zip` (portátil: descomprímelo y abre `PKArkTools.exe`). No está firmado: si SmartScreen avisa, pulsa **Más información → Ejecutar de todas formas**. |
-| Linux | `PKArkTools-v0.1.5-linux-x64.tar.gz`: extráelo y ejecuta `PKArkTools/pkarktools` (GTK 3; el selector de carpetas necesita `zenity` o `kdialog`). |
+| Windows | `PKArkTools-v1.0.0-windows-x64-setup.exe` (instalador) o `PKArkTools-v1.0.0-windows-x64.zip` (portátil: descomprímelo y abre `PKArkTools.exe`). No está firmado: si SmartScreen avisa, pulsa **Más información → Ejecutar de todas formas**. |
+| Linux | `PKArkTools-v1.0.0-linux-x64.tar.gz`: extráelo y ejecuta `PKArkTools/pkarktools` (GTK 3; el selector de carpetas necesita `zenity` o `kdialog`). |
 
 Una vez instalada, la app busca versiones nuevas sola (**Ajustes › Acerca de**) y en
 Android las instala tras comprobar la firma del APK.
@@ -218,6 +238,7 @@ iconos. Lee [Seguridad de datos y privacidad](docs/seguridad-datos.md).
 
 Toda la documentación está en [`docs/`](docs/README.md):
 [guía de usuario](docs/usuario/README.md) ·
+[Dex](docs/usuario/dex.md) ·
 [formatos soportados](docs/formatos.md) ·
 [seguridad de datos](docs/seguridad-datos.md) ·
 [arquitectura](docs/arquitectura.md) ·

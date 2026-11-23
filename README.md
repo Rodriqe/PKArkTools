@@ -49,6 +49,24 @@ file back to your console or emulator.
 No accounts, no servers, no telemetry: put the Ark in iCloud Drive, Google
 Drive, OneDrive, Dropbox or Syncthing and all your devices share it.
 
+## New in 1.0: the Dex
+
+<p align="center">
+  <img src="docs/screenshots/dex/02_species_charizard.png" width="100%" alt="Dex: Charizard with its Mega Evolutions and Gigantamax unlocked">
+</p>
+
+A **global Pokédex of all your saves**: the 1025 species fill in with
+everything registered or caught in any game of the Ark (silhouette, seen,
+caught, ✦ shiny). Each species has an objective data sheet (types, base
+stats, abilities, gender ratio, evolution methods, forms, games), where you
+have seen or caught it, and **every specimen you own**, one tap away from its
+box. **Mega Evolutions, Gigantamax, Primal Reversion and Ultra Necrozma**
+unlock — normal and shiny separately — only with a specimen that enables them
+in a game where they exist (a shiny Charizard with the Gigantamax Factor in
+Sword unlocks shiny Gigantamax Charizard). Progress by generation, region and
+game, filters, search and an optional **living dex**. Indexed in the
+background and cached, it opens instantly. [Dex guide](docs/usuario/dex.md).
+
 ## Features
 
 **Ark and versioned backups**
@@ -148,6 +166,7 @@ The video is rebuilt from the recordings with `tool/record_demo_video.sh` and
 
 | Desktop | | |
 |---|---|---|
+| <img src="docs/screenshots/dex/01_grid.png" alt="Dex grid"> | <img src="docs/screenshots/dex/03_locked_forms.png" alt="Dex: locked special forms"> | <img src="docs/screenshots/dex/05_progress.png" alt="Dex progress"> |
 | <img src="docs/screenshots/v2/mac_03_arca_colores_pareja.png" alt="Ark with version colours"> | <img src="docs/screenshots/v2/mac_04_cajas_iconos.png" alt="Boxes"> | <img src="docs/screenshots/v2/mac_05_ficha_iconos.png" alt="Pokémon editor"> |
 | <img src="docs/screenshots/v2/mac_07_cintas.png" alt="Ribbons"> | <img src="docs/screenshots/20_legalidad_detallada.png" alt="Legality"> | <img src="docs/screenshots/22_comparar_copias.png" alt="Compare copies"> |
 | <img src="docs/screenshots/24_pokedex_switch.png" alt="Pokédex"> | <img src="docs/screenshots/21_importacion_masiva.png" alt="Bulk import"> | <img src="docs/screenshots/v2/mac_01_onboarding_logo.png" alt="Choose your folder"> |
@@ -161,18 +180,18 @@ All screenshots use synthetic saves.
 
 ## Install
 
-The current version is **v0.1.5**. Download it from the
+The current version is **v1.0.0**. Download it from the
 [latest release](https://github.com/Rodriqe/PKArkTools/releases/latest)
 ([all releases](https://github.com/Rodriqe/PKArkTools/releases),
 [changelog](CHANGELOG.md)).
 
 | Platform | How |
 |---|---|
-| Android | `PKArkTools-v0.1.5.apk`: open it on the phone and allow installing from that source when Android asks. |
-| macOS | `PKArkTools-v0.1.5-macos.zip`: unzip it and move `PKArkTools.app` to Applications. It is not notarized, so the first time **right-click → Open → Open**. |
+| Android | `PKArkTools-v1.0.0.apk`: open it on the phone and allow installing from that source when Android asks. |
+| macOS | `PKArkTools-v1.0.0-macos.zip`: unzip it and move `PKArkTools.app` to Applications. It is not notarized, so the first time **right-click → Open → Open**. |
 | iPhone / iPad | No downloadable build yet: compile it from source with Xcode (below). |
-| Windows | `PKArkTools-v0.1.5-windows-x64-setup.exe` (installer) or `PKArkTools-v0.1.5-windows-x64.zip` (portable: unzip and run `PKArkTools.exe`). It is not signed: if SmartScreen warns, click **More info → Run anyway**. |
-| Linux | `PKArkTools-v0.1.5-linux-x64.tar.gz`: extract it and run `PKArkTools/pkarktools` (GTK 3; the folder picker needs `zenity` or `kdialog`). |
+| Windows | `PKArkTools-v1.0.0-windows-x64-setup.exe` (installer) or `PKArkTools-v1.0.0-windows-x64.zip` (portable: unzip and run `PKArkTools.exe`). It is not signed: if SmartScreen warns, click **More info → Run anyway**. |
+| Linux | `PKArkTools-v1.0.0-linux-x64.tar.gz`: extract it and run `PKArkTools/pkarktools` (GTK 3; the folder picker needs `zenity` or `kdialog`). |
 
 Once installed, the app checks for new versions itself (**Settings › About**) and on
 Android installs them after checking the APK signature.
@@ -209,6 +228,7 @@ Read [Data safety and privacy](docs/seguridad-datos.md).
 
 Full documentation (in Spanish) lives in [`docs/`](docs/README.md):
 [user guide](docs/usuario/README.md) ·
+[Dex](docs/usuario/dex.md) ·
 [supported formats](docs/formatos.md) ·
 [data safety](docs/seguridad-datos.md) ·
 [architecture](docs/arquitectura.md) ·

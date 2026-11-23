@@ -17,6 +17,7 @@ macOS, Windows y Linux, sin cuentas ni telemetría.
 | [Importar saves](usuario/importar.md) | Archivo, carpeta, emuladores de consola y de Switch en Android/iOS, Checkpoint/JKSM |
 | [El Arca](usuario/arca.md) | Historial, comparar copias, exportar y restaurar, zip del Arca, saves sueltos |
 | [Editor](usuario/editor.md) | Pokémon, cajas, entrenador, inventario, Pokédex, eventos, cintas y origen |
+| [Dex](usuario/dex.md) | Pokédex global de todas las partidas, formas especiales (Mega, Gigamax…) y sus reglas, living dex |
 | [Legalidad y avisos](usuario/legalidad.md) | Qué se comprueba, «Intentar corregir», límites |
 | [Saves dañados y reparar checksums](usuario/reparar-checksums.md) | Solo lectura, avisos leves y graves, reparar y exportar |
 | [Iconos](usuario/iconos.md) | Descarga bajo demanda, caché, sin conexión |
