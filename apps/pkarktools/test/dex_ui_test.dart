@@ -178,6 +178,7 @@ void main() {
     expect(find.byKey(const ValueKey('dex-variant-gmax:3:*-normal-off')), findsOneWidget);
     expect(find.textContaining('Have a Venusaur with the Gigantamax Factor in Sword/Shield.'), findsOneWidget);
     expect(find.textContaining('Have a Venusaur in X / Y'), findsOneWidget);
+    expect(find.textContaining('The shiny one needs a shiny specimen'), findsNWidgets(2), reason: 'ningún Venusaur');
 
     await t.tap(find.byKey(const ValueKey('dex-next')));
     await settle(t);

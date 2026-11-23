@@ -124,7 +124,9 @@ class SpecialFormCard extends StatelessWidget {
             const SizedBox(width: 6),
             Expanded(
               child: Text(
-                unlock.normalUnlocked ? l10n.dexHowShiny : '${specialFormHowTo(context, f)} ${l10n.dexHowShiny}',
+                unlock.normalUnlocked
+                    ? l10n.dexHowShiny
+                    : (unlock.shinyUnlocked ? specialFormHowTo(context, f) : '${specialFormHowTo(context, f)} ${l10n.dexHowShiny}'),
                 style: context.text.bodySmall!.copyWith(color: tokens.muted),
               ),
             ),

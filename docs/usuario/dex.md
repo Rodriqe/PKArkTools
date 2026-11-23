@@ -156,3 +156,25 @@ alguna Pokédex la registra. Así se ve lo que de verdad te falta (filtro
   <img src="../screenshots/dex/07_phone_grid.png" width="32%" alt="Dex en el teléfono">
   <img src="../screenshots/dex/08_phone_species.png" width="32%" alt="Ficha en el teléfono">
 </p>
+
+En Android (emulador) y iPhone (simulador):
+
+<p>
+  <img src="../screenshots/android/dex_01_grid.png" width="24%" alt="Android: cuadrícula">
+  <img src="../screenshots/android/dex_03_special_forms.png" width="24%" alt="Android: formas especiales">
+  <img src="../screenshots/ios/dex_04_locked_forms.png" width="24%" alt="iPhone: formas bloqueadas">
+  <img src="../screenshots/ios/dex_05_progress.png" width="24%" alt="iPhone: progreso">
+</p>
+
+<details><summary>Más capturas</summary>
+<p>
+  <img src="../screenshots/android/dex_02_species.png" width="24%" alt="Android: ficha">
+  <img src="../screenshots/android/dex_04_locked_forms.png" width="24%" alt="Android: formas bloqueadas">
+  <img src="../screenshots/android/dex_05_progress.png" width="24%" alt="Android: progreso">
+  <img src="../screenshots/android/dex_06_filter_shiny.png" width="24%" alt="Android: filtro variocolor">
+  <img src="../screenshots/ios/dex_01_grid.png" width="24%" alt="iPhone: cuadrícula">
+  <img src="../screenshots/ios/dex_02_species.png" width="24%" alt="iPhone: ficha">
+  <img src="../screenshots/ios/dex_03_special_forms.png" width="24%" alt="iPhone: formas especiales">
+  <img src="../screenshots/ios/dex_06_filter_shiny.png" width="24%" alt="iPhone: filtro variocolor">
+</p>
+</details>
