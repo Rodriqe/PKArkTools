@@ -66,6 +66,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final access = ref.watch(folderAccessProvider);
     final legacy = setup is SetupNeeded ? setup.legacyCount : 0;
     final lost = setup is SetupAccessLost ? setup : null;
+    final networkLost = lost != null && lost.location.network;
+    final networkName = lost == null ? '' : (lost.location.volume.isEmpty ? lost.location.label : lost.location.volume);
     final wide = MediaQuery.sizeOf(context).width >= 900;
     final compact = MediaQuery.sizeOf(context).width < 600;
 
@@ -83,14 +85,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         style: context.text.labelLarge!.copyWith(color: context.colors.primary, letterSpacing: 1.4),
       ),
       const SizedBox(height: 10),
-      Text(lost != null ? l10n.accessLostTitle : l10n.onbTitle,
+      Text(networkLost ? l10n.networkLostTitle : (lost != null ? l10n.accessLostTitle : l10n.onbTitle),
           style: compact ? context.text.displaySmall : context.text.displayMedium),
       const SizedBox(height: 14),
-      Text(lost != null ? l10n.accessLostBody : l10n.onbBody,
+      Text(networkLost ? l10n.networkLostBody(networkName) : (lost != null ? l10n.accessLostBody : l10n.onbBody),
           style: context.text.bodyLarge!.copyWith(color: context.tokens.muted, height: 1.5)),
       if (lost != null) ...[
         const SizedBox(height: 16),
-        _Note(icon: Icons.folder_off_rounded, text: '${lost.location.label}\n${lost.message}'),
+        _Note(
+          icon: networkLost ? Icons.portable_wifi_off_rounded : Icons.folder_off_rounded,
+          text: '${lost.location.label}\n${lost.message}',
+        ),
       ] else ...[
         const SizedBox(height: 20),
         _Note(
@@ -114,24 +119,42 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         child: _busy
             ? SizedBox(key: const ValueKey('busy'), width: 420, child: FolderProgressView(progress: _progress))
             : _Actions(key: const ValueKey('actions'), stacked: compact, children: [
+                if (networkLost)
+                  FilledButton.icon(
+                    key: const ValueKey('network-retry'),
+                    style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18)),
+                    onPressed: _retry,
+                    icon: const Icon(Icons.refresh_rounded),
+                    label: Text(l10n.accessRetry),
+                  ),
+                if (networkLost)
+                  OutlinedButton.icon(
+                    key: const ValueKey('network-choose-other'),
+                    style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18)),
+                    onPressed: () => _run(access.pick),
+                    icon: const Icon(Icons.create_new_folder_rounded),
+                    label: Text(l10n.accessChooseOther),
+                  )
+                else
                 FilledButton.icon(
                   style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18)),
                   onPressed: () => _run(access.pick),
                   icon: const Icon(Icons.create_new_folder_rounded),
                   label: Text(lost != null ? l10n.accessChooseAgain : l10n.onbChoose),
                 ),
-                if (lost != null)
+                if (lost != null && !networkLost)
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18)),
                     onPressed: _retry,
                     icon: const Icon(Icons.refresh_rounded),
                     label: Text(l10n.accessRetry),
                   ),
-                TextButton(
-                  style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18)),
-                  onPressed: () => _run(access.appLocal),
-                  child: Text(l10n.onbUseLocal),
-                ),
+                if (!networkLost)
+                  TextButton(
+                    style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18)),
+                    onPressed: () => _run(access.appLocal),
+                    child: Text(l10n.onbUseLocal),
+                  ),
               ]),
       ),
       if (errorText != null) ...[

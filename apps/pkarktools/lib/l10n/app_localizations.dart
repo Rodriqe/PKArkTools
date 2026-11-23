@@ -3930,6 +3930,42 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Igual que {name}, que se conserva'**
   String problemDuplicateOf(String name);
+
+  /// No description provided for @folderNetwork.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta de red (NAS) · {name}'**
+  String folderNetwork(String name);
+
+  /// No description provided for @folderNetworkHint.
+  ///
+  /// In es, this message translates to:
+  /// **'En una carpeta de red los cambios de otros dispositivos se buscan cada minuto mientras la app está abierta y al volver a ella.'**
+  String get folderNetworkHint;
+
+  /// No description provided for @networkLostTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta de red no disponible'**
+  String get networkLostTitle;
+
+  /// No description provided for @networkLostBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu Arca está en una carpeta de red ({name}) que ahora no está montada o no responde. Conéctate al NAS (en el Mac: Finder → Ir → Conectarse al servidor) y pulsa Reintentar. Mientras tanto no se crea, mueve ni borra nada.'**
+  String networkLostBody(String name);
+
+  /// No description provided for @accessChooseOther.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegir otra'**
+  String get accessChooseOther;
+
+  /// No description provided for @importProgress.
+  ///
+  /// In es, this message translates to:
+  /// **'Importando {done} de {total}…'**
+  String importProgress(String done, String total);
 }
 
 class _AppLocalizationsDelegate

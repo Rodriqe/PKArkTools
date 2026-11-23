@@ -2413,4 +2413,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String problemDuplicateOf(String name) {
     return 'Same as $name, which is kept';
   }
+
+  @override
+  String folderNetwork(String name) {
+    return 'Network folder (NAS) · $name';
+  }
+
+  @override
+  String get folderNetworkHint =>
+      'In a network folder, changes from other devices are checked every minute while the app is open and whenever you return to it.';
+
+  @override
+  String get networkLostTitle => 'Network folder unavailable';
+
+  @override
+  String networkLostBody(String name) {
+    return 'Your Arca is in a network folder ($name) that isn\'t mounted or isn\'t responding right now. Connect to the NAS (on a Mac: Finder → Go → Connect to Server) and press Retry. Meanwhile nothing is created, moved or deleted.';
+  }
+
+  @override
+  String get accessChooseOther => 'Choose another';
+
+  @override
+  String importProgress(String done, String total) {
+    return 'Importing $done of $total…';
+  }
 }

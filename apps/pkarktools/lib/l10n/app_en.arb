@@ -637,5 +637,11 @@
   "problemLooseSaveDesc": "Copied by hand outside its place. Fix detects its game and files it in the history.",
   "problemDuplicateCopy": "Duplicate copies in the history",
   "problemDuplicateCopyDesc": "Same content (SHA-256) as an older copy of the same save. Fix keeps the oldest and moves the others, with their .json, to _cuarentena/duplicados/.",
-  "problemDuplicateOf": "Same as {name}, which is kept"
+  "problemDuplicateOf": "Same as {name}, which is kept",
+  "folderNetwork": "Network folder (NAS) · {name}",
+  "folderNetworkHint": "In a network folder, changes from other devices are checked every minute while the app is open and whenever you return to it.",
+  "networkLostTitle": "Network folder unavailable",
+  "networkLostBody": "Your Arca is in a network folder ({name}) that isn't mounted or isn't responding right now. Connect to the NAS (on a Mac: Finder → Go → Connect to Server) and press Retry. Meanwhile nothing is created, moved or deleted.",
+  "accessChooseOther": "Choose another",
+  "importProgress": "Importing {done} of {total}…"
 }

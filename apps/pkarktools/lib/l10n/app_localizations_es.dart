@@ -2435,4 +2435,29 @@ class AppLocalizationsEs extends AppLocalizations {
   String problemDuplicateOf(String name) {
     return 'Igual que $name, que se conserva';
   }
+
+  @override
+  String folderNetwork(String name) {
+    return 'Carpeta de red (NAS) · $name';
+  }
+
+  @override
+  String get folderNetworkHint =>
+      'En una carpeta de red los cambios de otros dispositivos se buscan cada minuto mientras la app está abierta y al volver a ella.';
+
+  @override
+  String get networkLostTitle => 'Carpeta de red no disponible';
+
+  @override
+  String networkLostBody(String name) {
+    return 'Tu Arca está en una carpeta de red ($name) que ahora no está montada o no responde. Conéctate al NAS (en el Mac: Finder → Ir → Conectarse al servidor) y pulsa Reintentar. Mientras tanto no se crea, mueve ni borra nada.';
+  }
+
+  @override
+  String get accessChooseOther => 'Elegir otra';
+
+  @override
+  String importProgress(String done, String total) {
+    return 'Importando $done de $total…';
+  }
 }

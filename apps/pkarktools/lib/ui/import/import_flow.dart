@@ -212,13 +212,51 @@ Future<List<ImportOutcome>> runImport(BuildContext context, WidgetRef ref, List<
     {bool showSummary = true}) async {
   final repo = ref.read(arcaRepositoryProvider);
   final outcomes = <ImportOutcome>[];
-  for (final f in files) {
-    outcomes.add(await repo.importBytes(f.bytes, fileName: f.name, origin: f.origin, sourcePath: f.sourcePath));
+  // Importaciones grandes (y sobre todo en un NAS, donde cada copia son varias
+  // idas y vueltas): diálogo con «Importando N de M».
+  final progress = ValueNotifier<(int, int)>((0, files.length));
+  final showProgress = files.length >= importProgressThreshold && context.mounted;
+  if (showProgress) {
+    unawaited(showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => ImportProgressDialog(progress: progress),
+    ));
+  }
+  try {
+    for (final f in files) {
+      outcomes.add(await repo.importBytes(f.bytes, fileName: f.name, origin: f.origin, sourcePath: f.sourcePath));
+      progress.value = (outcomes.length, files.length);
+    }
+  } finally {
+    if (showProgress && context.mounted) Navigator.of(context, rootNavigator: true).pop();
+    progress.dispose();
   }
   if (showSummary && context.mounted) {
     await showDialog<void>(context: context, builder: (_) => ImportSummaryDialog(outcomes: outcomes));
   }
   return outcomes;
+}
+
+/// A partir de cuántos archivos se muestra el progreso de la importación.
+const importProgressThreshold = 4;
+
+/// «Importando N de M» con barra de progreso.
+class ImportProgressDialog extends StatelessWidget {
+  const ImportProgressDialog({super.key, required this.progress});
+  final ValueListenable<(int, int)> progress;
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+        content: ValueListenableBuilder<(int, int)>(
+          valueListenable: progress,
+          builder: (context, v, _) => Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(context.l10n.importProgress('${v.$1}', '${v.$2}')),
+            const SizedBox(height: 14),
+            LinearProgressIndicator(value: v.$2 == 0 ? null : v.$1 / v.$2),
+          ]),
+        ),
+      );
 }
 
 class _ProgressDialog extends StatelessWidget {

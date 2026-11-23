@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../data/arca_session.dart';
 import '../../data/folder/folder_access.dart';
+import '../../data/folder/folder_fs.dart';
 import '../../theme/app_theme.dart';
 import '../common/format.dart';
 import 'arca_problems_section.dart';
@@ -47,7 +48,10 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
     final count = ref.watch(_snapshotCountProvider).value ?? 0;
     final location = setup is SetupReady ? setup.location : null;
     final label = repo.hasFolder ? repo.folder.label : (location?.label ?? '');
-    final provider = location?.kind == LocationKind.appLocal ? SyncProvider.none : detectSyncProvider(label);
+    final network = (repo.hasFolder && repo.folder.fs.isNetwork) || (location?.network ?? false);
+    final volumeName = (repo.hasFolder ? repo.folder.fs.volume?.displayName : null) ?? location?.volume ?? '';
+    final provider =
+        location?.kind == LocationKind.appLocal ? SyncProvider.none : detectSyncProvider(label, network: network);
     final synced = provider != SyncProvider.none;
     final arcaPath = repo.hasFolder && repo.folder.prefix.isNotEmpty ? '$label/${repo.folder.prefix}' : label;
 
@@ -91,7 +95,9 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
-                      synced ? Icons.cloud_sync_rounded : Icons.folder_rounded,
+                      provider == SyncProvider.nas
+                          ? Icons.lan_rounded
+                          : (synced ? Icons.cloud_sync_rounded : Icons.folder_rounded),
                       color: context.colors.primary,
                     ),
                   ),
@@ -101,7 +107,9 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          synced
+                          provider == SyncProvider.nas
+                              ? l10n.folderNetwork(volumeName.isEmpty ? 'NAS' : volumeName)
+                              : synced
                               ? l10n.folderSynced(syncProviderName(provider))
                               : (location?.kind == LocationKind.appLocal ? l10n.folderAppLocal : l10n.folderLocalOnly),
                           style: context.text.titleMedium,
@@ -117,6 +125,14 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
                   ),
                 ],
               ),
+              if (provider == SyncProvider.nas) ...[
+                const SizedBox(height: 10),
+                Text(
+                  l10n.folderNetworkHint,
+                  key: const ValueKey('folder-network-hint'),
+                  style: context.text.bodySmall!.copyWith(color: context.tokens.muted),
+                ),
+              ],
               const SizedBox(height: 18),
               Wrap(
                 spacing: 28,

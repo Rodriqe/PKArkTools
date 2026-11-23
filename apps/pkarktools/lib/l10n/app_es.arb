@@ -1642,5 +1642,35 @@
         "type": "String"
       }
     }
+  },
+  "folderNetwork": "Carpeta de red (NAS) · {name}",
+  "@folderNetwork": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "folderNetworkHint": "En una carpeta de red los cambios de otros dispositivos se buscan cada minuto mientras la app está abierta y al volver a ella.",
+  "networkLostTitle": "Carpeta de red no disponible",
+  "networkLostBody": "Tu Arca está en una carpeta de red ({name}) que ahora no está montada o no responde. Conéctate al NAS (en el Mac: Finder → Ir → Conectarse al servidor) y pulsa Reintentar. Mientras tanto no se crea, mueve ni borra nada.",
+  "@networkLostBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "accessChooseOther": "Elegir otra",
+  "importProgress": "Importando {done} de {total}…",
+  "@importProgress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
   }
 }
