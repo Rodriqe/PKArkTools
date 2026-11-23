@@ -1,0 +1,53 @@
+name: pkarktools
+description: "PKArkTools — el Arca de tus partidas guardadas."
+publish_to: 'none'
+version: 0.1.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  archive: ^4.7.1
+  collection: ^1.19.1
+  crypto: ^3.0.8
+  drift: ^2.35.4
+  drift_flutter: ^0.3.1
+  file_picker: ^13.4.1
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^3.5.0
+  go_router: ^18.1.4
+  intl: ^0.20.3
+  path: ^1.9.1
+  path_provider: ^2.1.6
+  pkcore:
+    path: ../../packages/pkcore
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  drift_dev: ^2.35.3
+  build_runner: ^2.16.1
+
+flutter:
+  config:
+    enable-swift-package-manager: true
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/branding/logo_256.png
+  fonts:
+    - family: Manrope
+      fonts:
+        - asset: assets/fonts/Manrope.ttf
+    - family: Bricolage
+      fonts:
+        - asset: assets/fonts/BricolageGrotesque.ttf

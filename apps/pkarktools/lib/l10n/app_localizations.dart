@@ -1,0 +1,3529 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+
+// ignore_for_file: type=lint
+
+/// Callers can lookup localized strings with an instance of AppLocalizations
+/// returned by `AppLocalizations.of(context)`.
+///
+/// Applications need to include `AppLocalizations.delegate()` in their app's
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
+///
+/// ```dart
+/// import 'l10n/app_localizations.dart';
+///
+/// return MaterialApp(
+///   localizationsDelegates: AppLocalizations.localizationsDelegates,
+///   supportedLocales: AppLocalizations.supportedLocales,
+///   home: MyApplicationHome(),
+/// );
+/// ```
+///
+/// ## Update pubspec.yaml
+///
+/// Please make sure to update your pubspec.yaml to include the following
+/// packages:
+///
+/// ```yaml
+/// dependencies:
+///   # Internationalization support.
+///   flutter_localizations:
+///     sdk: flutter
+///   intl: any # Use the pinned version from flutter_localizations
+///
+///   # Rest of dependencies
+/// ```
+///
+/// ## iOS Applications
+///
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the AppLocalizations.supportedLocales
+/// property.
+abstract class AppLocalizations {
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+
+  final String localeName;
+
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
+  }
+
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
+
+  /// A list of this localizations delegate along with the default localizations
+  /// delegates.
+  ///
+  /// Returns a list of localizations delegates containing this delegate along with
+  /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
+  /// and GlobalWidgetsLocalizations.delegate.
+  ///
+  /// Additional delegates can be added by appending to this list in
+  /// MaterialApp. This list does not have to be used at all if a custom list
+  /// of delegates is preferred or required.
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
+
+  /// A list of this localizations delegate's supported locales.
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('es'),
+  ];
+
+  /// No description provided for @appTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'PKArkTools'**
+  String get appTitle;
+
+  /// No description provided for @navArca.
+  ///
+  /// In es, this message translates to:
+  /// **'Arca'**
+  String get navArca;
+
+  /// No description provided for @navActivity.
+  ///
+  /// In es, this message translates to:
+  /// **'Actividad'**
+  String get navActivity;
+
+  /// No description provided for @navSettings.
+  ///
+  /// In es, this message translates to:
+  /// **'Ajustes'**
+  String get navSettings;
+
+  /// No description provided for @arcaTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu Arca'**
+  String get arcaTitle;
+
+  /// No description provided for @arcaSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =0{Aún no hay partidas} =1{1 partida a salvo} other{{count} partidas a salvo}}'**
+  String arcaSubtitle(int count);
+
+  /// No description provided for @importAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar'**
+  String get importAction;
+
+  /// No description provided for @importFile.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar archivo'**
+  String get importFile;
+
+  /// No description provided for @importFolder.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar carpeta'**
+  String get importFolder;
+
+  /// No description provided for @importSheetTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir al Arca'**
+  String get importSheetTitle;
+
+  /// No description provided for @importFileDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Saves de cartucho o exportados: .sav, .srm, .dsv, main…'**
+  String get importFileDesc;
+
+  /// No description provided for @importFolderDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpetas de Checkpoint, JKSM o de emuladores de Switch. Se buscan saves dentro.'**
+  String get importFolderDesc;
+
+  /// No description provided for @emptyTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu Arca está vacía'**
+  String get emptyTitle;
+
+  /// No description provided for @emptyBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Importa un save para guardar una copia segura con su historial. Nada sale de este dispositivo.'**
+  String get emptyBody;
+
+  /// No description provided for @loadDemo.
+  ///
+  /// In es, this message translates to:
+  /// **'Probar con partidas de ejemplo'**
+  String get loadDemo;
+
+  /// No description provided for @demoLoaded.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{Se añadió 1 partida de ejemplo} other{Se añadieron {count} partidas de ejemplo}}'**
+  String demoLoaded(int count);
+
+  /// No description provided for @hoursShort.
+  ///
+  /// In es, this message translates to:
+  /// **'{hours} h'**
+  String hoursShort(int hours);
+
+  /// No description provided for @playTime.
+  ///
+  /// In es, this message translates to:
+  /// **'Tiempo de juego'**
+  String get playTime;
+
+  /// No description provided for @trainerId.
+  ///
+  /// In es, this message translates to:
+  /// **'ID'**
+  String get trainerId;
+
+  /// No description provided for @secretId.
+  ///
+  /// In es, this message translates to:
+  /// **'ID secreta'**
+  String get secretId;
+
+  /// No description provided for @inBoxes.
+  ///
+  /// In es, this message translates to:
+  /// **'En cajas'**
+  String get inBoxes;
+
+  /// No description provided for @copies.
+  ///
+  /// In es, this message translates to:
+  /// **'Copias'**
+  String get copies;
+
+  /// No description provided for @lastCopy.
+  ///
+  /// In es, this message translates to:
+  /// **'Última copia: {date}'**
+  String lastCopy(String date);
+
+  /// No description provided for @team.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipo'**
+  String get team;
+
+  /// No description provided for @boxes.
+  ///
+  /// In es, this message translates to:
+  /// **'Cajas'**
+  String get boxes;
+
+  /// No description provided for @history.
+  ///
+  /// In es, this message translates to:
+  /// **'Historial'**
+  String get history;
+
+  /// No description provided for @emptyTeam.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin Pokémon en el equipo'**
+  String get emptyTeam;
+
+  /// No description provided for @notSupportedStorage.
+  ///
+  /// In es, this message translates to:
+  /// **'Este juego todavía no muestra equipo ni cajas; llegará en una próxima fase. El entrenador y el historial ya funcionan.'**
+  String get notSupportedStorage;
+
+  /// No description provided for @shiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor'**
+  String get shiny;
+
+  /// No description provided for @egg.
+  ///
+  /// In es, this message translates to:
+  /// **'Huevo'**
+  String get egg;
+
+  /// No description provided for @level.
+  ///
+  /// In es, this message translates to:
+  /// **'Nv. {level}'**
+  String level(int level);
+
+  /// No description provided for @export.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar'**
+  String get export;
+
+  /// No description provided for @restore.
+  ///
+  /// In es, this message translates to:
+  /// **'Restaurar'**
+  String get restore;
+
+  /// No description provided for @viewing.
+  ///
+  /// In es, this message translates to:
+  /// **'En pantalla'**
+  String get viewing;
+
+  /// No description provided for @view.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver'**
+  String get view;
+
+  /// No description provided for @latest.
+  ///
+  /// In es, this message translates to:
+  /// **'Más reciente'**
+  String get latest;
+
+  /// No description provided for @exportDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportado a {path}'**
+  String exportDone(String path);
+
+  /// No description provided for @exportFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo exportar: {error}'**
+  String exportFailed(String error);
+
+  /// No description provided for @restoreTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Restaurar esta copia?'**
+  String get restoreTitle;
+
+  /// No description provided for @restoreBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se reemplazará el archivo original:\n{path}\n\nAntes, el Arca guardará una copia del archivo actual para que puedas volver atrás.'**
+  String restoreBody(String path);
+
+  /// No description provided for @cancel.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get cancel;
+
+  /// No description provided for @restoreDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Copia restaurada en su ubicación original'**
+  String get restoreDone;
+
+  /// No description provided for @restoreFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo restaurar: {error}'**
+  String restoreFailed(String error);
+
+  /// No description provided for @restoreUnavailable.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta copia no tiene un archivo original accesible. Usa Exportar para guardarla donde quieras.'**
+  String get restoreUnavailable;
+
+  /// No description provided for @importResultTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Importación terminada'**
+  String get importResultTitle;
+
+  /// No description provided for @importAdded.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 copia nueva} other{{count} copias nuevas}}'**
+  String importAdded(int count);
+
+  /// No description provided for @importDuplicates.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 ya estaba en el Arca} other{{count} ya estaban en el Arca}}'**
+  String importDuplicates(int count);
+
+  /// No description provided for @importFailedCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 archivo no reconocido} other{{count} archivos no reconocidos}}'**
+  String importFailedCount(int count);
+
+  /// No description provided for @done.
+  ///
+  /// In es, this message translates to:
+  /// **'Listo'**
+  String get done;
+
+  /// No description provided for @openSave.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir partida'**
+  String get openSave;
+
+  /// No description provided for @folderScanning.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscando saves… {count} archivos revisados'**
+  String folderScanning(int count);
+
+  /// No description provided for @folderFound.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =0{No se encontraron saves} =1{1 save encontrado} other{{count} saves encontrados}}'**
+  String folderFound(int count);
+
+  /// No description provided for @folderNoneHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Revisa que la carpeta tenga archivos de save (no ROMs). En emuladores de Switch elige la carpeta nand/user/save.'**
+  String get folderNoneHint;
+
+  /// No description provided for @importSelected.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{Importar 1 save} other{Importar {count} saves}}'**
+  String importSelected(int count);
+
+  /// No description provided for @deleteSave.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar del Arca'**
+  String get deleteSave;
+
+  /// No description provided for @deleteTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Eliminar esta partida del Arca?'**
+  String get deleteTitle;
+
+  /// No description provided for @deleteBody.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{Se borrará su copia guardada.} other{Se borrarán sus {count} copias guardadas.}} Los archivos originales no se tocan.'**
+  String deleteBody(int count);
+
+  /// No description provided for @delete.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar'**
+  String get delete;
+
+  /// No description provided for @checksumValid.
+  ///
+  /// In es, this message translates to:
+  /// **'Checksum correcto'**
+  String get checksumValid;
+
+  /// No description provided for @activityEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Aquí verás cada copia que entre al Arca, en orden.'**
+  String get activityEmpty;
+
+  /// No description provided for @theme.
+  ///
+  /// In es, this message translates to:
+  /// **'Tema'**
+  String get theme;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In es, this message translates to:
+  /// **'Oscuro'**
+  String get themeDark;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In es, this message translates to:
+  /// **'Claro'**
+  String get themeLight;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In es, this message translates to:
+  /// **'Sistema'**
+  String get themeSystem;
+
+  /// No description provided for @language.
+  ///
+  /// In es, this message translates to:
+  /// **'Idioma'**
+  String get language;
+
+  /// No description provided for @languageSystem.
+  ///
+  /// In es, this message translates to:
+  /// **'Sistema'**
+  String get languageSystem;
+
+  /// No description provided for @about.
+  ///
+  /// In es, this message translates to:
+  /// **'Acerca de'**
+  String get about;
+
+  /// No description provided for @aboutBody.
+  ///
+  /// In es, this message translates to:
+  /// **'PKArkTools guarda copias versionadas de tus partidas de Pokémon de todas las generaciones. Es software libre (GPL-3.0) y porta lógica de PKHeX.Core. No incluye ROMs, claves ni contenido de los juegos.'**
+  String get aboutBody;
+
+  /// No description provided for @licenses.
+  ///
+  /// In es, this message translates to:
+  /// **'Licencias de código abierto'**
+  String get licenses;
+
+  /// No description provided for @sampleData.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de ejemplo'**
+  String get sampleData;
+
+  /// No description provided for @sampleDataDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Añade partidas sintéticas para explorar la app.'**
+  String get sampleDataDesc;
+
+  /// No description provided for @originFile.
+  ///
+  /// In es, this message translates to:
+  /// **'Archivo'**
+  String get originFile;
+
+  /// No description provided for @originFolder.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta'**
+  String get originFolder;
+
+  /// No description provided for @originSaf.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta del emulador'**
+  String get originSaf;
+
+  /// No description provided for @originDemo.
+  ///
+  /// In es, this message translates to:
+  /// **'Ejemplo'**
+  String get originDemo;
+
+  /// No description provided for @originRestore.
+  ///
+  /// In es, this message translates to:
+  /// **'Respaldo antes de restaurar'**
+  String get originRestore;
+
+  /// No description provided for @genLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Gen {gen}'**
+  String genLabel(int gen);
+
+  /// No description provided for @boxEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Caja vacía'**
+  String get boxEmpty;
+
+  /// No description provided for @loadError.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo leer esta copia: {error}'**
+  String loadError(String error);
+
+  /// No description provided for @moreActions.
+  ///
+  /// In es, this message translates to:
+  /// **'Más acciones'**
+  String get moreActions;
+
+  /// No description provided for @pokemonCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 Pokémon} other{{count} Pokémon}}'**
+  String pokemonCount(int count);
+
+  /// No description provided for @snapshotOf.
+  ///
+  /// In es, this message translates to:
+  /// **'Copia del {date}'**
+  String snapshotOf(String date);
+
+  /// No description provided for @searchHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar por entrenador o juego'**
+  String get searchHint;
+
+  /// No description provided for @noResults.
+  ///
+  /// In es, this message translates to:
+  /// **'Nada coincide con «{query}»'**
+  String noResults(String query);
+
+  /// No description provided for @ability.
+  ///
+  /// In es, this message translates to:
+  /// **'Habilidad'**
+  String get ability;
+
+  /// No description provided for @addItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir objeto'**
+  String get addItem;
+
+  /// No description provided for @addToSlot.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir al hueco'**
+  String get addToSlot;
+
+  /// No description provided for @addToTeam.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir al equipo'**
+  String get addToTeam;
+
+  /// No description provided for @andMore.
+  ///
+  /// In es, this message translates to:
+  /// **'…y {count} cambios más'**
+  String andMore(int count);
+
+  /// No description provided for @applyChanges.
+  ///
+  /// In es, this message translates to:
+  /// **'Aplicar cambios'**
+  String get applyChanges;
+
+  /// No description provided for @avs.
+  ///
+  /// In es, this message translates to:
+  /// **'Valores de despertar (AV)'**
+  String get avs;
+
+  /// No description provided for @ball.
+  ///
+  /// In es, this message translates to:
+  /// **'Poké Ball'**
+  String get ball;
+
+  /// No description provided for @baseTotal.
+  ///
+  /// In es, this message translates to:
+  /// **'Total base'**
+  String get baseTotal;
+
+  /// No description provided for @boxFull.
+  ///
+  /// In es, this message translates to:
+  /// **'Esa caja está llena'**
+  String get boxFull;
+
+  /// No description provided for @boxesFull.
+  ///
+  /// In es, this message translates to:
+  /// **'Todas las cajas están llenas'**
+  String get boxesFull;
+
+  /// No description provided for @changeNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción de los cambios'**
+  String get changeNote;
+
+  /// No description provided for @changesStayInDraft.
+  ///
+  /// In es, this message translates to:
+  /// **'Los cambios van al borrador; el archivo original no se toca.'**
+  String get changesStayInDraft;
+
+  /// No description provided for @clonePokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Clonar en la primera caja libre'**
+  String get clonePokemon;
+
+  /// No description provided for @clonedTo.
+  ///
+  /// In es, this message translates to:
+  /// **'Clon colocado en {slot}'**
+  String clonedTo(String slot);
+
+  /// No description provided for @createPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear Pokémon'**
+  String get createPokemon;
+
+  /// No description provided for @createPokemonDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Con tu nombre de entrenador, tu ID y movimientos de su nivel'**
+  String get createPokemonDesc;
+
+  /// No description provided for @deletePokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar del save'**
+  String get deletePokemon;
+
+  /// No description provided for @discard.
+  ///
+  /// In es, this message translates to:
+  /// **'Descartar'**
+  String get discard;
+
+  /// No description provided for @discardDraftBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se perderán todas las ediciones que no hayas guardado en el Arca.'**
+  String get discardDraftBody;
+
+  /// No description provided for @discardDraftTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Descartar los cambios?'**
+  String get discardDraftTitle;
+
+  /// No description provided for @discardPokemonBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Los cambios de este Pokémon no se aplicarán al borrador.'**
+  String get discardPokemonBody;
+
+  /// No description provided for @discardPokemonTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Salir sin aplicar?'**
+  String get discardPokemonTitle;
+
+  /// No description provided for @dragHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Arrastra un Pokémon para moverlo o intercambiarlo; suéltalo en el nombre de una caja para enviarlo allí.'**
+  String get dragHint;
+
+  /// No description provided for @dragHintGb.
+  ///
+  /// In es, this message translates to:
+  /// **'En Game Boy las cajas son listas: al mover o borrar, los Pokémon se reordenan sin huecos.'**
+  String get dragHintGb;
+
+  /// No description provided for @dragHintTouch.
+  ///
+  /// In es, this message translates to:
+  /// **'Mantén pulsado un Pokémon para arrastrarlo; suéltalo en otro hueco o en el nombre de una caja.'**
+  String get dragHintTouch;
+
+  /// No description provided for @dvs.
+  ///
+  /// In es, this message translates to:
+  /// **'DVs (valores determinantes)'**
+  String get dvs;
+
+  /// No description provided for @editBoxName.
+  ///
+  /// In es, this message translates to:
+  /// **'Caja {box} renombrada a «{name}»'**
+  String editBoxName(int box, String name);
+
+  /// No description provided for @editClear.
+  ///
+  /// In es, this message translates to:
+  /// **'{species} borrado de {slot}'**
+  String editClear(String species, String slot);
+
+  /// No description provided for @editInventory.
+  ///
+  /// In es, this message translates to:
+  /// **'Inventario actualizado'**
+  String get editInventory;
+
+  /// No description provided for @editMove.
+  ///
+  /// In es, this message translates to:
+  /// **'Movido de {from} a {to}'**
+  String editMove(String from, String to);
+
+  /// No description provided for @editPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar Pokémon'**
+  String get editPokemon;
+
+  /// No description provided for @editSet.
+  ///
+  /// In es, this message translates to:
+  /// **'{species} en {slot}'**
+  String editSet(String species, String slot);
+
+  /// No description provided for @editTrainer.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos del entrenador actualizados'**
+  String get editTrainer;
+
+  /// No description provided for @editedSuffix.
+  ///
+  /// In es, this message translates to:
+  /// **'editado'**
+  String get editedSuffix;
+
+  /// No description provided for @evTotal.
+  ///
+  /// In es, this message translates to:
+  /// **'{total} / {max}'**
+  String evTotal(int total, int max);
+
+  /// No description provided for @evs.
+  ///
+  /// In es, this message translates to:
+  /// **'EVs (puntos de esfuerzo)'**
+  String get evs;
+
+  /// No description provided for @experience.
+  ///
+  /// In es, this message translates to:
+  /// **'Experiencia'**
+  String get experience;
+
+  /// No description provided for @exportFile.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar archivo'**
+  String get exportFile;
+
+  /// No description provided for @exportPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar como .{ext}'**
+  String exportPokemon(String ext);
+
+  /// No description provided for @exportReady.
+  ///
+  /// In es, this message translates to:
+  /// **'Archivo listo para el juego en {path}'**
+  String exportReady(String path);
+
+  /// No description provided for @female.
+  ///
+  /// In es, this message translates to:
+  /// **'Chica'**
+  String get female;
+
+  /// No description provided for @form.
+  ///
+  /// In es, this message translates to:
+  /// **'Forma'**
+  String get form;
+
+  /// No description provided for @formBase.
+  ///
+  /// In es, this message translates to:
+  /// **'Normal'**
+  String get formBase;
+
+  /// No description provided for @formN.
+  ///
+  /// In es, this message translates to:
+  /// **'Forma {n}'**
+  String formN(int n);
+
+  /// No description provided for @friendship.
+  ///
+  /// In es, this message translates to:
+  /// **'Amistad'**
+  String get friendship;
+
+  /// No description provided for @gender.
+  ///
+  /// In es, this message translates to:
+  /// **'Género'**
+  String get gender;
+
+  /// No description provided for @gvs.
+  ///
+  /// In es, this message translates to:
+  /// **'Niveles de esfuerzo (GV)'**
+  String get gvs;
+
+  /// No description provided for @heldItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Objeto equipado'**
+  String get heldItem;
+
+  /// No description provided for @hiddenAbility.
+  ///
+  /// In es, this message translates to:
+  /// **'oculta'**
+  String get hiddenAbility;
+
+  /// No description provided for @hours.
+  ///
+  /// In es, this message translates to:
+  /// **'Horas'**
+  String get hours;
+
+  /// No description provided for @hpDerived.
+  ///
+  /// In es, this message translates to:
+  /// **'El DV de PS se deriva del resto'**
+  String get hpDerived;
+
+  /// No description provided for @importInvalidPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo no contiene un Pokémon válido (checksum incorrecto).'**
+  String get importInvalidPokemon;
+
+  /// No description provided for @importPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar .{ext}'**
+  String importPokemon(String ext);
+
+  /// No description provided for @importPokemonDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Un Pokémon exportado de este mismo formato'**
+  String get importPokemonDesc;
+
+  /// No description provided for @importWrongFormat.
+  ///
+  /// In es, this message translates to:
+  /// **'Un .{got} no es compatible con este juego; necesita .{want}.'**
+  String importWrongFormat(String got, String want);
+
+  /// No description provided for @importedPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'{species} importado al borrador'**
+  String importedPokemon(String species);
+
+  /// No description provided for @inventoryApplied.
+  ///
+  /// In es, this message translates to:
+  /// **'Inventario aplicado al borrador'**
+  String get inventoryApplied;
+
+  /// No description provided for @inventoryUnsupported.
+  ///
+  /// In es, this message translates to:
+  /// **'El inventario de este juego todavía no se puede editar.'**
+  String get inventoryUnsupported;
+
+  /// No description provided for @itemWrongPouch.
+  ///
+  /// In es, this message translates to:
+  /// **'Este objeto no suele ir en este bolsillo'**
+  String get itemWrongPouch;
+
+  /// No description provided for @ivs.
+  ///
+  /// In es, this message translates to:
+  /// **'IVs (valores individuales)'**
+  String get ivs;
+
+  /// No description provided for @keepEditing.
+  ///
+  /// In es, this message translates to:
+  /// **'Seguir editando'**
+  String get keepEditing;
+
+  /// No description provided for @leaveDraftBody.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{Hay 1 cambio sin guardar en el Arca.} other{Hay {count} cambios sin guardar en el Arca.}} Si sales, se descartan.'**
+  String leaveDraftBody(int count);
+
+  /// No description provided for @leaveDraftTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Salir sin guardar?'**
+  String get leaveDraftTitle;
+
+  /// No description provided for @legalityClean.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin avisos de legalidad básicos.'**
+  String get legalityClean;
+
+  /// No description provided for @legalityHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Son solo avisos: puedes guardar igualmente.'**
+  String get legalityHint;
+
+  /// No description provided for @legalityTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 aviso} other{{count} avisos}}'**
+  String legalityTitle(int count);
+
+  /// No description provided for @legendBase.
+  ///
+  /// In es, this message translates to:
+  /// **'Base'**
+  String get legendBase;
+
+  /// No description provided for @levelLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel'**
+  String get levelLabel;
+
+  /// No description provided for @male.
+  ///
+  /// In es, this message translates to:
+  /// **'Chico'**
+  String get male;
+
+  /// No description provided for @maxPpUps.
+  ///
+  /// In es, this message translates to:
+  /// **'Más PP al máximo'**
+  String get maxPpUps;
+
+  /// No description provided for @mint.
+  ///
+  /// In es, this message translates to:
+  /// **'Menta (naturaleza de stats)'**
+  String get mint;
+
+  /// No description provided for @minutes.
+  ///
+  /// In es, this message translates to:
+  /// **'Minutos'**
+  String get minutes;
+
+  /// No description provided for @money.
+  ///
+  /// In es, this message translates to:
+  /// **'Dinero'**
+  String get money;
+
+  /// No description provided for @moneyMax.
+  ///
+  /// In es, this message translates to:
+  /// **'Máximo {max}'**
+  String moneyMax(int max);
+
+  /// No description provided for @moveN.
+  ///
+  /// In es, this message translates to:
+  /// **'Movimiento {n}'**
+  String moveN(int n);
+
+  /// No description provided for @nature.
+  ///
+  /// In es, this message translates to:
+  /// **'Naturaleza'**
+  String get nature;
+
+  /// No description provided for @neutral.
+  ///
+  /// In es, this message translates to:
+  /// **'neutra'**
+  String get neutral;
+
+  /// No description provided for @newPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo Pokémon'**
+  String get newPokemon;
+
+  /// No description provided for @nickname.
+  ///
+  /// In es, this message translates to:
+  /// **'Apodo'**
+  String get nickname;
+
+  /// No description provided for @no.
+  ///
+  /// In es, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @noChanges.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin cambios: el borrador coincide con esta copia'**
+  String get noChanges;
+
+  /// No description provided for @noMatches.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin resultados'**
+  String get noMatches;
+
+  /// No description provided for @none.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguno'**
+  String get none;
+
+  /// No description provided for @originEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Edición'**
+  String get originEdit;
+
+  /// No description provided for @otGender.
+  ///
+  /// In es, this message translates to:
+  /// **'Género del entrenador'**
+  String get otGender;
+
+  /// No description provided for @otName.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrenador original'**
+  String get otName;
+
+  /// No description provided for @pokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon'**
+  String get pokemon;
+
+  /// No description provided for @pouchBalls.
+  ///
+  /// In es, this message translates to:
+  /// **'Poké Balls'**
+  String get pouchBalls;
+
+  /// No description provided for @pouchBattle.
+  ///
+  /// In es, this message translates to:
+  /// **'Combate'**
+  String get pouchBattle;
+
+  /// No description provided for @pouchBerries.
+  ///
+  /// In es, this message translates to:
+  /// **'Bayas'**
+  String get pouchBerries;
+
+  /// No description provided for @pouchCandy.
+  ///
+  /// In es, this message translates to:
+  /// **'Caramelos y materiales'**
+  String get pouchCandy;
+
+  /// No description provided for @pouchEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Este bolsillo está vacío. Añade objetos con el buscador.'**
+  String get pouchEmpty;
+
+  /// No description provided for @pouchFull.
+  ///
+  /// In es, this message translates to:
+  /// **'Bolsillo lleno'**
+  String get pouchFull;
+
+  /// No description provided for @pouchIngredients.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingredientes'**
+  String get pouchIngredients;
+
+  /// No description provided for @pouchItems.
+  ///
+  /// In es, this message translates to:
+  /// **'Objetos'**
+  String get pouchItems;
+
+  /// No description provided for @pouchKey.
+  ///
+  /// In es, this message translates to:
+  /// **'Objetos clave'**
+  String get pouchKey;
+
+  /// No description provided for @pouchMail.
+  ///
+  /// In es, this message translates to:
+  /// **'Cartas'**
+  String get pouchMail;
+
+  /// No description provided for @pouchMedicine.
+  ///
+  /// In es, this message translates to:
+  /// **'Botiquín'**
+  String get pouchMedicine;
+
+  /// No description provided for @pouchPc.
+  ///
+  /// In es, this message translates to:
+  /// **'PC'**
+  String get pouchPc;
+
+  /// No description provided for @pouchTms.
+  ///
+  /// In es, this message translates to:
+  /// **'MT y MO'**
+  String get pouchTms;
+
+  /// No description provided for @pouchTreasure.
+  ///
+  /// In es, this message translates to:
+  /// **'Tesoros'**
+  String get pouchTreasure;
+
+  /// No description provided for @pouchUsage.
+  ///
+  /// In es, this message translates to:
+  /// **'{used} / {capacity}'**
+  String pouchUsage(int used, int capacity);
+
+  /// No description provided for @pouchZ.
+  ///
+  /// In es, this message translates to:
+  /// **'Cristales Z / mejoras'**
+  String get pouchZ;
+
+  /// No description provided for @ppUps.
+  ///
+  /// In es, this message translates to:
+  /// **'Más PP'**
+  String get ppUps;
+
+  /// No description provided for @presetClear.
+  ///
+  /// In es, this message translates to:
+  /// **'Limpiar'**
+  String get presetClear;
+
+  /// No description provided for @presetMaxAvs.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos a 200'**
+  String get presetMaxAvs;
+
+  /// No description provided for @presetMaxGvs.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos a 10'**
+  String get presetMaxGvs;
+
+  /// No description provided for @presetMaxStatExp.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo al máximo'**
+  String get presetMaxStatExp;
+
+  /// No description provided for @presetPerfectIvs.
+  ///
+  /// In es, this message translates to:
+  /// **'IVs perfectos'**
+  String get presetPerfectIvs;
+
+  /// No description provided for @presetPhysWall.
+  ///
+  /// In es, this message translates to:
+  /// **'Muro físico'**
+  String get presetPhysWall;
+
+  /// No description provided for @presetPhysical.
+  ///
+  /// In es, this message translates to:
+  /// **'Atacante físico'**
+  String get presetPhysical;
+
+  /// No description provided for @presetSpecWall.
+  ///
+  /// In es, this message translates to:
+  /// **'Muro especial'**
+  String get presetSpecWall;
+
+  /// No description provided for @presetSpecial.
+  ///
+  /// In es, this message translates to:
+  /// **'Atacante especial'**
+  String get presetSpecial;
+
+  /// No description provided for @presetZeroAttack.
+  ///
+  /// In es, this message translates to:
+  /// **'0 en Ataque'**
+  String get presetZeroAttack;
+
+  /// No description provided for @presetZeroSpeed.
+  ///
+  /// In es, this message translates to:
+  /// **'0 en Velocidad'**
+  String get presetZeroSpeed;
+
+  /// No description provided for @redo.
+  ///
+  /// In es, this message translates to:
+  /// **'Rehacer'**
+  String get redo;
+
+  /// No description provided for @removeItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar'**
+  String get removeItem;
+
+  /// No description provided for @restorePp.
+  ///
+  /// In es, this message translates to:
+  /// **'Rellenar PP'**
+  String get restorePp;
+
+  /// No description provided for @revert.
+  ///
+  /// In es, this message translates to:
+  /// **'Revertir'**
+  String get revert;
+
+  /// No description provided for @saveDraftBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se crea una copia nueva en el Arca con estos cambios. La copia actual y el archivo original quedan intactos.'**
+  String get saveDraftBody;
+
+  /// No description provided for @saveDraftTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar en el Arca'**
+  String get saveDraftTitle;
+
+  /// No description provided for @saveFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo guardar: {error}'**
+  String saveFailed(String error);
+
+  /// No description provided for @saveToArca.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar en el Arca'**
+  String get saveToArca;
+
+  /// No description provided for @savedToArca.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardado como copia nueva en el Arca'**
+  String get savedToArca;
+
+  /// No description provided for @seconds.
+  ///
+  /// In es, this message translates to:
+  /// **'Segundos'**
+  String get seconds;
+
+  /// No description provided for @sectionIdentity.
+  ///
+  /// In es, this message translates to:
+  /// **'Identidad'**
+  String get sectionIdentity;
+
+  /// No description provided for @sectionInventory.
+  ///
+  /// In es, this message translates to:
+  /// **'Inventario'**
+  String get sectionInventory;
+
+  /// No description provided for @sectionMoves.
+  ///
+  /// In es, this message translates to:
+  /// **'Movimientos'**
+  String get sectionMoves;
+
+  /// No description provided for @sectionPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon'**
+  String get sectionPokemon;
+
+  /// No description provided for @sectionStats.
+  ///
+  /// In es, this message translates to:
+  /// **'Estadísticas'**
+  String get sectionStats;
+
+  /// No description provided for @sectionTrainer.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrenador original'**
+  String get sectionTrainer;
+
+  /// No description provided for @sectionTrainerTab.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrenador'**
+  String get sectionTrainerTab;
+
+  /// No description provided for @sectionTraits.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel y rasgos'**
+  String get sectionTraits;
+
+  /// No description provided for @shinySquare.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuadrado'**
+  String get shinySquare;
+
+  /// No description provided for @shinyStar.
+  ///
+  /// In es, this message translates to:
+  /// **'Estrella'**
+  String get shinyStar;
+
+  /// No description provided for @slotBox.
+  ///
+  /// In es, this message translates to:
+  /// **'{box}, hueco {n}'**
+  String slotBox(String box, int n);
+
+  /// No description provided for @slotParty.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipo, hueco {n}'**
+  String slotParty(int n);
+
+  /// No description provided for @special.
+  ///
+  /// In es, this message translates to:
+  /// **'Especial'**
+  String get special;
+
+  /// No description provided for @species.
+  ///
+  /// In es, this message translates to:
+  /// **'Especie'**
+  String get species;
+
+  /// No description provided for @statExp.
+  ///
+  /// In es, this message translates to:
+  /// **'Stat exp'**
+  String get statExp;
+
+  /// No description provided for @statsAtLevel.
+  ///
+  /// In es, this message translates to:
+  /// **'Estadísticas a nivel {level}'**
+  String statsAtLevel(int level);
+
+  /// No description provided for @teraOriginal.
+  ///
+  /// In es, this message translates to:
+  /// **'Teratipo original'**
+  String get teraOriginal;
+
+  /// No description provided for @teraType.
+  ///
+  /// In es, this message translates to:
+  /// **'Teratipo'**
+  String get teraType;
+
+  /// No description provided for @trainerApplied.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos del entrenador aplicados al borrador'**
+  String get trainerApplied;
+
+  /// No description provided for @trainerGender.
+  ///
+  /// In es, this message translates to:
+  /// **'Personaje'**
+  String get trainerGender;
+
+  /// No description provided for @trainerIdLong.
+  ///
+  /// In es, this message translates to:
+  /// **'ID de entrenador (16 bits)'**
+  String get trainerIdLong;
+
+  /// No description provided for @trainerIdNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar el ID no cambia el de tus Pokémon: los que capturaste dejarían de ser \"tuyos\".'**
+  String get trainerIdNote;
+
+  /// No description provided for @trainerName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre'**
+  String get trainerName;
+
+  /// No description provided for @trainerNotEditable.
+  ///
+  /// In es, this message translates to:
+  /// **'Los datos del entrenador de este save no se pueden editar.'**
+  String get trainerNotEditable;
+
+  /// No description provided for @undo.
+  ///
+  /// In es, this message translates to:
+  /// **'Deshacer'**
+  String get undo;
+
+  /// No description provided for @unsavedChanges.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 cambio sin guardar} other{{count} cambios sin guardar}}'**
+  String unsavedChanges(int count);
+
+  /// No description provided for @useSpeciesName.
+  ///
+  /// In es, this message translates to:
+  /// **'Usar el nombre de la especie'**
+  String get useSpeciesName;
+
+  /// No description provided for @visibleId.
+  ///
+  /// In es, this message translates to:
+  /// **'En el juego: {id}'**
+  String visibleId(String id);
+
+  /// No description provided for @pouchMega.
+  ///
+  /// In es, this message translates to:
+  /// **'Megapiedras'**
+  String get pouchMega;
+
+  /// No description provided for @pouchRecipes.
+  ///
+  /// In es, this message translates to:
+  /// **'Recetas'**
+  String get pouchRecipes;
+
+  /// No description provided for @pouchSatchel.
+  ///
+  /// In es, this message translates to:
+  /// **'Bolsa'**
+  String get pouchSatchel;
+
+  /// No description provided for @pouchStorage.
+  ///
+  /// In es, this message translates to:
+  /// **'Almacén'**
+  String get pouchStorage;
+
+  /// No description provided for @sectionPokedex.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokédex'**
+  String get sectionPokedex;
+
+  /// No description provided for @sectionEvents.
+  ///
+  /// In es, this message translates to:
+  /// **'Eventos'**
+  String get sectionEvents;
+
+  /// No description provided for @legalityAreaOrigin.
+  ///
+  /// In es, this message translates to:
+  /// **'Origen y encuentro'**
+  String get legalityAreaOrigin;
+
+  /// No description provided for @legalityAreaMoves.
+  ///
+  /// In es, this message translates to:
+  /// **'Movimientos'**
+  String get legalityAreaMoves;
+
+  /// No description provided for @legalityAreaStats.
+  ///
+  /// In es, this message translates to:
+  /// **'Estadísticas'**
+  String get legalityAreaStats;
+
+  /// No description provided for @legalityAreaMisc.
+  ///
+  /// In es, this message translates to:
+  /// **'Otros datos'**
+  String get legalityAreaMisc;
+
+  /// No description provided for @legalityFix.
+  ///
+  /// In es, this message translates to:
+  /// **'Intentar corregir'**
+  String get legalityFix;
+
+  /// No description provided for @legalityFixAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Corregir lo seguro ({n})'**
+  String legalityFixAll(int n);
+
+  /// No description provided for @legalityManual.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin corrección automática: revísalo a mano.'**
+  String get legalityManual;
+
+  /// No description provided for @legalityScope.
+  ///
+  /// In es, this message translates to:
+  /// **'Se comprueban reglas de origen, ball, habilidad, variocolor y aprendizaje, y el encuentro (lugar, nivel y especie) contra las tablas de PKHeX. Incluye las incursiones Dinamax de Espada/Escudo; eventos y teraincursiones aún no se verifican.'**
+  String get legalityScope;
+
+  /// No description provided for @legalityFixedSnack.
+  ///
+  /// In es, this message translates to:
+  /// **'Corrección aplicada. Revisa el resultado antes de guardar.'**
+  String get legalityFixedSnack;
+
+  /// No description provided for @dexSeen.
+  ///
+  /// In es, this message translates to:
+  /// **'Vistos'**
+  String get dexSeen;
+
+  /// No description provided for @dexCaught.
+  ///
+  /// In es, this message translates to:
+  /// **'Capturados'**
+  String get dexCaught;
+
+  /// No description provided for @dexShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor vistos'**
+  String get dexShiny;
+
+  /// No description provided for @dexFilterAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Todas'**
+  String get dexFilterAll;
+
+  /// No description provided for @dexFilterMissing.
+  ///
+  /// In es, this message translates to:
+  /// **'Por capturar'**
+  String get dexFilterMissing;
+
+  /// No description provided for @dexFilterSeen.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo vistas'**
+  String get dexFilterSeen;
+
+  /// No description provided for @dexFilterCaught.
+  ///
+  /// In es, this message translates to:
+  /// **'Capturadas'**
+  String get dexFilterCaught;
+
+  /// No description provided for @dexSearch.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar por nombre o número'**
+  String get dexSearch;
+
+  /// No description provided for @dexComplete.
+  ///
+  /// In es, this message translates to:
+  /// **'Completar'**
+  String get dexComplete;
+
+  /// No description provided for @dexCompleteShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Completar con variocolor'**
+  String get dexCompleteShiny;
+
+  /// No description provided for @dexClear.
+  ///
+  /// In es, this message translates to:
+  /// **'Limpiar'**
+  String get dexClear;
+
+  /// No description provided for @dexConfirmCompleteTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Completar la Pokédex?'**
+  String get dexConfirmCompleteTitle;
+
+  /// No description provided for @dexConfirmCompleteBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Las {n} especies quedarán vistas y capturadas. Algunos juegos dan premios o activan eventos al completarla, así que cambia tu progreso. Puedes deshacerlo antes de guardar.'**
+  String dexConfirmCompleteBody(int n);
+
+  /// No description provided for @dexConfirmClearTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Limpiar la Pokédex?'**
+  String get dexConfirmClearTitle;
+
+  /// No description provided for @dexConfirmClearBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se borrarán todos los registros de vistos y capturados. Puedes deshacerlo antes de guardar.'**
+  String get dexConfirmClearBody;
+
+  /// No description provided for @dexUnsupported.
+  ///
+  /// In es, this message translates to:
+  /// **'La Pokédex de este juego todavía no se puede editar.'**
+  String get dexUnsupported;
+
+  /// No description provided for @dexNoMatch.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguna especie coincide con el filtro.'**
+  String get dexNoMatch;
+
+  /// No description provided for @dexToggleSeen.
+  ///
+  /// In es, this message translates to:
+  /// **'Visto'**
+  String get dexToggleSeen;
+
+  /// No description provided for @dexToggleCaught.
+  ///
+  /// In es, this message translates to:
+  /// **'Capturado'**
+  String get dexToggleCaught;
+
+  /// No description provided for @dexToggleShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor'**
+  String get dexToggleShiny;
+
+  /// No description provided for @eventsWarningTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar eventos puede romper la partida'**
+  String get eventsWarningTitle;
+
+  /// No description provided for @eventsWarningBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Flags y constantes controlan la historia, los objetos recogidos y los combates. Un valor equivocado puede bloquear el avance o hacer desaparecer personajes. Cambia solo lo que entiendas: el original queda a salvo en el Arca.'**
+  String get eventsWarningBody;
+
+  /// No description provided for @eventsFlags.
+  ///
+  /// In es, this message translates to:
+  /// **'Flags ({n})'**
+  String eventsFlags(int n);
+
+  /// No description provided for @eventsWork.
+  ///
+  /// In es, this message translates to:
+  /// **'Constantes ({n})'**
+  String eventsWork(int n);
+
+  /// No description provided for @eventsNamed.
+  ///
+  /// In es, this message translates to:
+  /// **'Con nombre'**
+  String get eventsNamed;
+
+  /// No description provided for @eventsRaw.
+  ///
+  /// In es, this message translates to:
+  /// **'Lista completa'**
+  String get eventsRaw;
+
+  /// No description provided for @eventsSearch.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar por nombre o número'**
+  String get eventsSearch;
+
+  /// No description provided for @eventsUnsupported.
+  ///
+  /// In es, this message translates to:
+  /// **'Este juego todavía no tiene editor de eventos.'**
+  String get eventsUnsupported;
+
+  /// No description provided for @eventsNoMatch.
+  ///
+  /// In es, this message translates to:
+  /// **'Nada coincide con la búsqueda.'**
+  String get eventsNoMatch;
+
+  /// No description provided for @eventsUnnamed.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin nombre conocido'**
+  String get eventsUnnamed;
+
+  /// No description provided for @eventsNoNames.
+  ///
+  /// In es, this message translates to:
+  /// **'Para este juego no hay tabla de nombres fiable: se muestra la lista cruda.'**
+  String get eventsNoNames;
+
+  /// No description provided for @eventsShowing.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrando {shown} de {n}'**
+  String eventsShowing(int n, String shown);
+
+  /// No description provided for @bulkTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Importación en bloque'**
+  String get bulkTitle;
+
+  /// No description provided for @bulkDetected.
+  ///
+  /// In es, this message translates to:
+  /// **'Detectados ({n})'**
+  String bulkDetected(int n);
+
+  /// No description provided for @bulkDuplicates.
+  ///
+  /// In es, this message translates to:
+  /// **'Ya en el Arca ({n})'**
+  String bulkDuplicates(int n);
+
+  /// No description provided for @bulkRepeated.
+  ///
+  /// In es, this message translates to:
+  /// **'Repetidos en la selección ({n})'**
+  String bulkRepeated(int n);
+
+  /// No description provided for @bulkUnrecognized.
+  ///
+  /// In es, this message translates to:
+  /// **'No reconocidos ({n})'**
+  String bulkUnrecognized(int n);
+
+  /// No description provided for @bulkIgnored.
+  ///
+  /// In es, this message translates to:
+  /// **'{n} archivos ignorados por tamaño o tipo (ROMs, claves, imágenes…).'**
+  String bulkIgnored(int n);
+
+  /// No description provided for @bulkImportNew.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar {n} nuevos'**
+  String bulkImportNew(int n);
+
+  /// No description provided for @bulkNothingNew.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay nada nuevo que importar.'**
+  String get bulkNothingNew;
+
+  /// No description provided for @bulkSubfolders.
+  ///
+  /// In es, this message translates to:
+  /// **'{n} archivos revisados en la carpeta y sus subcarpetas.'**
+  String bulkSubfolders(int n);
+
+  /// No description provided for @archiveExport.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar el Arca (zip)'**
+  String get archiveExport;
+
+  /// No description provided for @archiveExportDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Todas las copias con su estructura por juego y un manifiesto JSON.'**
+  String get archiveExportDesc;
+
+  /// No description provided for @archiveRestore.
+  ///
+  /// In es, this message translates to:
+  /// **'Restaurar desde zip'**
+  String get archiveRestore;
+
+  /// No description provided for @archiveRestoreDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Recupera un zip exportado: añade lo que falte y salta los duplicados.'**
+  String get archiveRestoreDesc;
+
+  /// No description provided for @archiveExported.
+  ///
+  /// In es, this message translates to:
+  /// **'Arca exportada: {n} copias.'**
+  String archiveExported(int n);
+
+  /// No description provided for @archiveEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'El Arca está vacía: no hay nada que exportar.'**
+  String get archiveEmpty;
+
+  /// No description provided for @archiveInvalid.
+  ///
+  /// In es, this message translates to:
+  /// **'Ese zip no es una exportación del Arca (falta manifest.json).'**
+  String get archiveInvalid;
+
+  /// No description provided for @compareAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Comparar con…'**
+  String get compareAction;
+
+  /// No description provided for @compareTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Comparar copias'**
+  String get compareTitle;
+
+  /// No description provided for @compareBefore.
+  ///
+  /// In es, this message translates to:
+  /// **'Antes'**
+  String get compareBefore;
+
+  /// No description provided for @compareAfter.
+  ///
+  /// In es, this message translates to:
+  /// **'Después'**
+  String get compareAfter;
+
+  /// No description provided for @comparePick.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige la otra copia'**
+  String get comparePick;
+
+  /// No description provided for @compareTrainer.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrenador'**
+  String get compareTrainer;
+
+  /// No description provided for @compareParty.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipo'**
+  String get compareParty;
+
+  /// No description provided for @compareBoxes.
+  ///
+  /// In es, this message translates to:
+  /// **'Cajas'**
+  String get compareBoxes;
+
+  /// No description provided for @compareInventory.
+  ///
+  /// In es, this message translates to:
+  /// **'Inventario'**
+  String get compareInventory;
+
+  /// No description provided for @comparePokedex.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokédex'**
+  String get comparePokedex;
+
+  /// No description provided for @compareAdded.
+  ///
+  /// In es, this message translates to:
+  /// **'Entró'**
+  String get compareAdded;
+
+  /// No description provided for @compareRemoved.
+  ///
+  /// In es, this message translates to:
+  /// **'Salió'**
+  String get compareRemoved;
+
+  /// No description provided for @compareChanged.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambió'**
+  String get compareChanged;
+
+  /// No description provided for @compareMoved.
+  ///
+  /// In es, this message translates to:
+  /// **'Se movió'**
+  String get compareMoved;
+
+  /// No description provided for @compareIdentical.
+  ///
+  /// In es, this message translates to:
+  /// **'Las dos copias tienen el mismo contenido.'**
+  String get compareIdentical;
+
+  /// No description provided for @compareSummary.
+  ///
+  /// In es, this message translates to:
+  /// **'{n} diferencias'**
+  String compareSummary(int n);
+
+  /// No description provided for @compareDexGained.
+  ///
+  /// In es, this message translates to:
+  /// **'{n} especies nuevas en la Pokédex'**
+  String compareDexGained(int n);
+
+  /// No description provided for @compareDexLost.
+  ///
+  /// In es, this message translates to:
+  /// **'{n} especies quitadas de la Pokédex'**
+  String compareDexLost(int n);
+
+  /// No description provided for @compareSwap.
+  ///
+  /// In es, this message translates to:
+  /// **'Intercambiar'**
+  String get compareSwap;
+
+  /// No description provided for @fieldName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre'**
+  String get fieldName;
+
+  /// No description provided for @fieldTid.
+  ///
+  /// In es, this message translates to:
+  /// **'ID'**
+  String get fieldTid;
+
+  /// No description provided for @fieldSid.
+  ///
+  /// In es, this message translates to:
+  /// **'ID secreto'**
+  String get fieldSid;
+
+  /// No description provided for @fieldMoney.
+  ///
+  /// In es, this message translates to:
+  /// **'Dinero'**
+  String get fieldMoney;
+
+  /// No description provided for @fieldPlayTime.
+  ///
+  /// In es, this message translates to:
+  /// **'Tiempo de juego'**
+  String get fieldPlayTime;
+
+  /// No description provided for @fieldGender.
+  ///
+  /// In es, this message translates to:
+  /// **'Género'**
+  String get fieldGender;
+
+  /// No description provided for @fieldSpecies.
+  ///
+  /// In es, this message translates to:
+  /// **'Especie'**
+  String get fieldSpecies;
+
+  /// No description provided for @fieldForm.
+  ///
+  /// In es, this message translates to:
+  /// **'Forma'**
+  String get fieldForm;
+
+  /// No description provided for @fieldNickname.
+  ///
+  /// In es, this message translates to:
+  /// **'Mote'**
+  String get fieldNickname;
+
+  /// No description provided for @fieldLevel.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel'**
+  String get fieldLevel;
+
+  /// No description provided for @fieldExp.
+  ///
+  /// In es, this message translates to:
+  /// **'Experiencia'**
+  String get fieldExp;
+
+  /// No description provided for @fieldMoves.
+  ///
+  /// In es, this message translates to:
+  /// **'Movimientos'**
+  String get fieldMoves;
+
+  /// No description provided for @fieldItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Objeto'**
+  String get fieldItem;
+
+  /// No description provided for @fieldAbility.
+  ///
+  /// In es, this message translates to:
+  /// **'Habilidad'**
+  String get fieldAbility;
+
+  /// No description provided for @fieldNature.
+  ///
+  /// In es, this message translates to:
+  /// **'Naturaleza'**
+  String get fieldNature;
+
+  /// No description provided for @fieldIvs.
+  ///
+  /// In es, this message translates to:
+  /// **'IVs'**
+  String get fieldIvs;
+
+  /// No description provided for @fieldEvs.
+  ///
+  /// In es, this message translates to:
+  /// **'EVs'**
+  String get fieldEvs;
+
+  /// No description provided for @fieldShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor'**
+  String get fieldShiny;
+
+  /// No description provided for @fieldBall.
+  ///
+  /// In es, this message translates to:
+  /// **'Ball'**
+  String get fieldBall;
+
+  /// No description provided for @fieldFriendship.
+  ///
+  /// In es, this message translates to:
+  /// **'Amistad'**
+  String get fieldFriendship;
+
+  /// No description provided for @showMore.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar más'**
+  String get showMore;
+
+  /// No description provided for @editPokedex.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokédex actualizada'**
+  String get editPokedex;
+
+  /// No description provided for @editEvents.
+  ///
+  /// In es, this message translates to:
+  /// **'Eventos modificados'**
+  String get editEvents;
+
+  /// No description provided for @dexRegionAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Todas'**
+  String get dexRegionAll;
+
+  /// No description provided for @dexRegionNational.
+  ///
+  /// In es, this message translates to:
+  /// **'Nacional'**
+  String get dexRegionNational;
+
+  /// No description provided for @dexRegion_galar.
+  ///
+  /// In es, this message translates to:
+  /// **'Galar'**
+  String get dexRegion_galar;
+
+  /// No description provided for @dexRegion_armor.
+  ///
+  /// In es, this message translates to:
+  /// **'Isla de la Armadura'**
+  String get dexRegion_armor;
+
+  /// No description provided for @dexRegion_crown.
+  ///
+  /// In es, this message translates to:
+  /// **'Corona Nieve'**
+  String get dexRegion_crown;
+
+  /// No description provided for @dexRegion_hisui.
+  ///
+  /// In es, this message translates to:
+  /// **'Hisui'**
+  String get dexRegion_hisui;
+
+  /// No description provided for @dexRegion_paldea.
+  ///
+  /// In es, this message translates to:
+  /// **'Paldea'**
+  String get dexRegion_paldea;
+
+  /// No description provided for @dexRegion_kitakami.
+  ///
+  /// In es, this message translates to:
+  /// **'Kitakami'**
+  String get dexRegion_kitakami;
+
+  /// No description provided for @dexRegion_blueberry.
+  ///
+  /// In es, this message translates to:
+  /// **'Arándano'**
+  String get dexRegion_blueberry;
+
+  /// No description provided for @dexRegion_lumiose.
+  ///
+  /// In es, this message translates to:
+  /// **'Luminalia'**
+  String get dexRegion_lumiose;
+
+  /// No description provided for @dexRegion_hyperspace.
+  ///
+  /// In es, this message translates to:
+  /// **'Hiperespacio'**
+  String get dexRegion_hyperspace;
+
+  /// No description provided for @dexDetailHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Mantén pulsada una especie (o clic derecho) para editar géneros y formas.'**
+  String get dexDetailHint;
+
+  /// No description provided for @dexDetailTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Registro de la Pokédex'**
+  String get dexDetailTitle;
+
+  /// No description provided for @dexDetailSeen.
+  ///
+  /// In es, this message translates to:
+  /// **'Visto'**
+  String get dexDetailSeen;
+
+  /// No description provided for @dexDetailCaught.
+  ///
+  /// In es, this message translates to:
+  /// **'Capturado'**
+  String get dexDetailCaught;
+
+  /// No description provided for @dexDetailShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Visto variocolor'**
+  String get dexDetailShiny;
+
+  /// No description provided for @dexDetailGenders.
+  ///
+  /// In es, this message translates to:
+  /// **'Géneros vistos'**
+  String get dexDetailGenders;
+
+  /// No description provided for @dexDetailMale.
+  ///
+  /// In es, this message translates to:
+  /// **'Macho'**
+  String get dexDetailMale;
+
+  /// No description provided for @dexDetailFemale.
+  ///
+  /// In es, this message translates to:
+  /// **'Hembra'**
+  String get dexDetailFemale;
+
+  /// No description provided for @dexDetailGenderless.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin género'**
+  String get dexDetailGenderless;
+
+  /// No description provided for @dexDetailForms.
+  ///
+  /// In es, this message translates to:
+  /// **'Formas vistas'**
+  String get dexDetailForms;
+
+  /// No description provided for @dexDetailForm.
+  ///
+  /// In es, this message translates to:
+  /// **'Forma {form}'**
+  String dexDetailForm(String form);
+
+  /// No description provided for @dexDetailFormBase.
+  ///
+  /// In es, this message translates to:
+  /// **'Base'**
+  String get dexDetailFormBase;
+
+  /// No description provided for @dexDetailFormUnavailable.
+  ///
+  /// In es, this message translates to:
+  /// **'No está en este juego'**
+  String get dexDetailFormUnavailable;
+
+  /// No description provided for @dexResearch.
+  ///
+  /// In es, this message translates to:
+  /// **'Investigación'**
+  String get dexResearch;
+
+  /// No description provided for @dexResearchNote.
+  ///
+  /// In es, this message translates to:
+  /// **'El nivel de investigación se calcula a partir de las tareas del juego; aquí solo se muestra. Completar la Pokédex no lo modifica.'**
+  String get dexResearchNote;
+
+  /// No description provided for @dexDetailApply.
+  ///
+  /// In es, this message translates to:
+  /// **'Aplicar'**
+  String get dexDetailApply;
+
+  /// No description provided for @dexRegionalNumber.
+  ///
+  /// In es, this message translates to:
+  /// **'{region} n.º {number}'**
+  String dexRegionalNumber(String number, String region);
+
+  /// No description provided for @exportVerified.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportado y verificado (checksums y contenido releídos): {path}'**
+  String exportVerified(String path);
+
+  /// No description provided for @exportVerifyFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se exportó: al releer el archivo generado no coincidía con el borrador ({detail}). Tu save original no se ha tocado.'**
+  String exportVerifyFailed(String detail);
+
+  /// No description provided for @legalityAreaEncounter.
+  ///
+  /// In es, this message translates to:
+  /// **'Encuentro según las tablas del juego (lugar, nivel y especie)'**
+  String get legalityAreaEncounter;
+
+  /// No description provided for @originAdopted.
+  ///
+  /// In es, this message translates to:
+  /// **'Adoptado de la carpeta'**
+  String get originAdopted;
+
+  /// No description provided for @originMigrated.
+  ///
+  /// In es, this message translates to:
+  /// **'Migrado del Arca anterior'**
+  String get originMigrated;
+
+  /// No description provided for @onbEyebrow.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienvenido a PKArkTools'**
+  String get onbEyebrow;
+
+  /// No description provided for @onbTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu Arca, en tu carpeta'**
+  String get onbTitle;
+
+  /// No description provided for @onbBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige una carpeta y todas tus copias vivirán ahí. Si la carpeta está en una nube que sincroniza, tus dispositivos compartirán el Arca sin hacer nada más.'**
+  String get onbBody;
+
+  /// No description provided for @onbSuggestICloud.
+  ///
+  /// In es, this message translates to:
+  /// **'Sugerencia: crea una carpeta en iCloud Drive y tendrás el mismo Arca en el iPhone, el iPad y el Mac.'**
+  String get onbSuggestICloud;
+
+  /// No description provided for @onbSuggestDocuments.
+  ///
+  /// In es, this message translates to:
+  /// **'Sugerencia: una carpeta en Documentos, o dentro de Google Drive, OneDrive, Dropbox o Syncthing para compartirla entre dispositivos.'**
+  String get onbSuggestDocuments;
+
+  /// No description provided for @onbChoose.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegir carpeta'**
+  String get onbChoose;
+
+  /// No description provided for @onbUseLocal.
+  ///
+  /// In es, this message translates to:
+  /// **'Usar carpeta local de la app'**
+  String get onbUseLocal;
+
+  /// No description provided for @onbLater.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes cambiarla cuando quieras en Ajustes.'**
+  String get onbLater;
+
+  /// No description provided for @onbPointNoAccount.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin cuentas ni inicio de sesión'**
+  String get onbPointNoAccount;
+
+  /// No description provided for @onbPointReadable.
+  ///
+  /// In es, this message translates to:
+  /// **'Archivos legibles: Juego / Entrenador / fecha'**
+  String get onbPointReadable;
+
+  /// No description provided for @onbPointSafe.
+  ///
+  /// In es, this message translates to:
+  /// **'Nada se sobrescribe nunca'**
+  String get onbPointSafe;
+
+  /// No description provided for @onbLegacy.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{Tu copia actual se copiará a la carpeta elegida y se comprobará.} other{Tus {count} copias actuales se copiarán a la carpeta elegida y se comprobarán una a una.}}'**
+  String onbLegacy(int count);
+
+  /// No description provided for @folderPreparing.
+  ///
+  /// In es, this message translates to:
+  /// **'Preparando el Arca…'**
+  String get folderPreparing;
+
+  /// No description provided for @folderProgress.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiando y verificando {done} de {total}'**
+  String folderProgress(int done, int total);
+
+  /// No description provided for @migrationFailures.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 copia no se pudo migrar.} other{{count} copias no se pudieron migrar.}} El Arca anterior se conserva intacta para no perder nada.'**
+  String migrationFailures(int count);
+
+  /// No description provided for @folderPickFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo usar esa carpeta: {error}'**
+  String folderPickFailed(String error);
+
+  /// No description provided for @accessLostTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'No podemos abrir tu Arca'**
+  String get accessLostTitle;
+
+  /// No description provided for @accessLostBody.
+  ///
+  /// In es, this message translates to:
+  /// **'La app perdió el permiso sobre la carpeta o ya no está disponible (unidad desconectada, carpeta movida o permiso revocado). Tus copias siguen en la carpeta: vuelve a elegirla para continuar.'**
+  String get accessLostBody;
+
+  /// No description provided for @accessRetry.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get accessRetry;
+
+  /// No description provided for @accessChooseAgain.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver a elegir la carpeta'**
+  String get accessChooseAgain;
+
+  /// No description provided for @folderSection.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta del Arca'**
+  String get folderSection;
+
+  /// No description provided for @folderSectionDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Todas las copias viven en esta carpeta. La base de datos de la app es solo un índice de este dispositivo y se reconstruye desde aquí.'**
+  String get folderSectionDesc;
+
+  /// No description provided for @folderSynced.
+  ///
+  /// In es, this message translates to:
+  /// **'Sincronizada con {provider}'**
+  String folderSynced(String provider);
+
+  /// No description provided for @folderLocalOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo en este dispositivo'**
+  String get folderLocalOnly;
+
+  /// No description provided for @folderAppLocal.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta local de la app'**
+  String get folderAppLocal;
+
+  /// No description provided for @folderReindex.
+  ///
+  /// In es, this message translates to:
+  /// **'Reindexar'**
+  String get folderReindex;
+
+  /// No description provided for @folderChange.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar carpeta…'**
+  String get folderChange;
+
+  /// No description provided for @folderChangeTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Mover o copiar el Arca?'**
+  String get folderChangeTitle;
+
+  /// No description provided for @folderChangeBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Las copias se escribirán en la carpeta nueva y se comprobará cada una por su SHA-256. Al mover, la carpeta anterior solo se vacía de las copias ya verificadas.'**
+  String get folderChangeBody;
+
+  /// No description provided for @folderMove.
+  ///
+  /// In es, this message translates to:
+  /// **'Mover'**
+  String get folderMove;
+
+  /// No description provided for @folderCopy.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiar y conservar la anterior'**
+  String get folderCopy;
+
+  /// No description provided for @folderChangeDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Arca en la carpeta nueva: {copied} copiadas, {skipped} ya estaban.'**
+  String folderChangeDone(int copied, int skipped);
+
+  /// No description provided for @folderLeftBehind.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 archivo suelto se quedó en la carpeta anterior.} other{{count} archivos sueltos se quedaron en la carpeta anterior.}}'**
+  String folderLeftBehind(int count);
+
+  /// No description provided for @reindexNever.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no se ha revisado la carpeta en esta sesión.'**
+  String get reindexNever;
+
+  /// No description provided for @reindexLast.
+  ///
+  /// In es, this message translates to:
+  /// **'Última revisión: {time}'**
+  String reindexLast(String time);
+
+  /// No description provided for @reindexResult.
+  ///
+  /// In es, this message translates to:
+  /// **'Reindexado: {added} nuevas, {removed} quitadas, {dups} duplicadas.'**
+  String reindexResult(int added, int removed, int dups);
+
+  /// No description provided for @statBackups.
+  ///
+  /// In es, this message translates to:
+  /// **'copias'**
+  String get statBackups;
+
+  /// No description provided for @statIssues.
+  ///
+  /// In es, this message translates to:
+  /// **'problemas'**
+  String get statIssues;
+
+  /// No description provided for @statLoose.
+  ///
+  /// In es, this message translates to:
+  /// **'sueltos'**
+  String get statLoose;
+
+  /// No description provided for @statIgnored.
+  ///
+  /// In es, this message translates to:
+  /// **'ignorados'**
+  String get statIgnored;
+
+  /// No description provided for @issuesTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Problemas'**
+  String get issuesTitle;
+
+  /// No description provided for @issueMissingSave.
+  ///
+  /// In es, this message translates to:
+  /// **'Falta el save de este .json (puede estar sincronizándose)'**
+  String get issueMissingSave;
+
+  /// No description provided for @issueMissingSidecar.
+  ///
+  /// In es, this message translates to:
+  /// **'Falta el .json de este save (puede estar sincronizándose)'**
+  String get issueMissingSidecar;
+
+  /// No description provided for @issueCorruptSidecar.
+  ///
+  /// In es, this message translates to:
+  /// **'.json dañado o ilegible'**
+  String get issueCorruptSidecar;
+
+  /// No description provided for @issueSizeMismatch.
+  ///
+  /// In es, this message translates to:
+  /// **'El tamaño no coincide con el .json'**
+  String get issueSizeMismatch;
+
+  /// No description provided for @issueHashMismatch.
+  ///
+  /// In es, this message translates to:
+  /// **'El contenido no coincide con su SHA-256'**
+  String get issueHashMismatch;
+
+  /// No description provided for @issueUnreadable.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo leer'**
+  String get issueUnreadable;
+
+  /// No description provided for @looseTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Saves sueltos'**
+  String get looseTitle;
+
+  /// No description provided for @looseDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Archivos copiados a mano en la carpeta. Al adoptarlos se identifica su juego y se colocan en su sitio con su .json.'**
+  String get looseDesc;
+
+  /// No description provided for @adopt.
+  ///
+  /// In es, this message translates to:
+  /// **'Adoptar'**
+  String get adopt;
+
+  /// No description provided for @adoptAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Adoptar todos'**
+  String get adoptAll;
+
+  /// No description provided for @adoptDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Adoptado: {game}'**
+  String adoptDone(String game);
+
+  /// No description provided for @ignoredFiles.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 archivo ignorado (temporal, parcial o copia de conflicto de la nube).} other{{count} archivos ignorados (temporales, parciales o copias de conflicto de la nube).}}'**
+  String ignoredFiles(int count);
+
+  /// No description provided for @snapshotDamaged.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta copia está dañada en la carpeta del Arca.'**
+  String get snapshotDamaged;
+
+  /// No description provided for @dexSearchShort.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre o número'**
+  String get dexSearchShort;
+
+  /// No description provided for @dexDetailHintTouch.
+  ///
+  /// In es, this message translates to:
+  /// **'Mantén pulsada una especie para editar géneros y formas.'**
+  String get dexDetailHintTouch;
+
+  /// No description provided for @dexFilterLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar Pokédex'**
+  String get dexFilterLabel;
+
+  /// No description provided for @onbSuggestGoogleDrive.
+  ///
+  /// In es, this message translates to:
+  /// **'Sugerencia: elige una carpeta dentro de Google Drive para compartir el Arca con tus otros dispositivos, o en Documentos para tenerla solo en este teléfono.'**
+  String get onbSuggestGoogleDrive;
+
+  /// No description provided for @onbSuggestOneDrive.
+  ///
+  /// In es, this message translates to:
+  /// **'Sugerencia: crea una carpeta en OneDrive y tendrás el mismo Arca en todos tus PC.'**
+  String get onbSuggestOneDrive;
+
+  /// No description provided for @onbSuggestSyncthing.
+  ///
+  /// In es, this message translates to:
+  /// **'Sugerencia: una carpeta sincronizada con Syncthing te da el mismo Arca en todos tus equipos, sin cuentas.'**
+  String get onbSuggestSyncthing;
+
+  /// No description provided for @boxPrevious.
+  ///
+  /// In es, this message translates to:
+  /// **'Caja anterior'**
+  String get boxPrevious;
+
+  /// No description provided for @boxNext.
+  ///
+  /// In es, this message translates to:
+  /// **'Caja siguiente'**
+  String get boxNext;
+
+  /// No description provided for @pouchSwipeHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Desliza un objeto hacia la izquierda para quitarlo.'**
+  String get pouchSwipeHint;
+
+  /// No description provided for @cardNoParty.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin equipo en esta copia'**
+  String get cardNoParty;
+
+  /// No description provided for @checksumMinor.
+  ///
+  /// In es, this message translates to:
+  /// **'Verificación: aviso leve'**
+  String get checksumMinor;
+
+  /// No description provided for @checksumMajor.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos dañados'**
+  String get checksumMajor;
+
+  /// No description provided for @damageMinorTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Se lee entero, pero una verificación no coincide'**
+  String get damageMinorTitle;
+
+  /// No description provided for @damageMajorTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Parte de este save no se puede leer'**
+  String get damageMajorTitle;
+
+  /// No description provided for @damagePartWhole.
+  ///
+  /// In es, this message translates to:
+  /// **'Las sumas de verificación del archivo no coinciden con sus datos.'**
+  String get damagePartWhole;
+
+  /// No description provided for @damagePartTrainer.
+  ///
+  /// In es, this message translates to:
+  /// **'El bloque del entrenador no coincide con su verificación.'**
+  String get damagePartTrainer;
+
+  /// No description provided for @damagePartParty.
+  ///
+  /// In es, this message translates to:
+  /// **'El bloque del equipo no coincide con su verificación.'**
+  String get damagePartParty;
+
+  /// No description provided for @damagePartBoxes.
+  ///
+  /// In es, this message translates to:
+  /// **'El bloque de cajas no coincide con su verificación.'**
+  String get damagePartBoxes;
+
+  /// No description provided for @damagePartOther.
+  ///
+  /// In es, this message translates to:
+  /// **'Un bloque de otros datos de la partida (objetos, Pokédex, eventos…) no coincide con su verificación.'**
+  String get damagePartOther;
+
+  /// No description provided for @damagePartSignature.
+  ///
+  /// In es, this message translates to:
+  /// **'La firma digital del save no corresponde a sus datos.'**
+  String get damagePartSignature;
+
+  /// No description provided for @damagePartFileHash.
+  ///
+  /// In es, this message translates to:
+  /// **'El hash de verificación del archivo completo no coincide.'**
+  String get damagePartFileHash;
+
+  /// No description provided for @damagePartUnreadable.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay datos que no se pueden leer (Pokémon o valores imposibles).'**
+  String get damagePartUnreadable;
+
+  /// No description provided for @damageMinorMeaning.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos los datos se leen bien y puedes verlos. Se abrió en solo lectura porque el juego comprueba estas verificaciones: con una que no coincide, podría no cargar el save o darlo por dañado.'**
+  String get damageMinorMeaning;
+
+  /// No description provided for @damageMajorMeaning.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo que ves puede estar incompleto o ser incorrecto. Se abrió en solo lectura: no es seguro editarlo.'**
+  String get damageMajorMeaning;
+
+  /// No description provided for @damageWhy.
+  ///
+  /// In es, this message translates to:
+  /// **'Suele pasar cuando el archivo se copió a medias, cuando es un save de otra versión o formato, o cuando otra herramienta lo editó sin recalcular sus verificaciones.'**
+  String get damageWhy;
+
+  /// No description provided for @damageMinorTodo.
+  ///
+  /// In es, this message translates to:
+  /// **'Si el juego carga este save sin problemas, usa «Reparar checksums y exportar» para obtener una copia con las verificaciones recalculadas (la copia del Arca no se toca). Si no, vuelve a copiar el save desde la consola o el emulador.'**
+  String get damageMinorTodo;
+
+  /// No description provided for @damageMajorTodo.
+  ///
+  /// In es, this message translates to:
+  /// **'Vuelve a copiar el save original desde la consola o el emulador e impórtalo de nuevo. Puedes exportar esta copia tal cual con «Exportar».'**
+  String get damageMajorTodo;
+
+  /// No description provided for @damageRepairExport.
+  ///
+  /// In es, this message translates to:
+  /// **'Reparar checksums y exportar'**
+  String get damageRepairExport;
+
+  /// No description provided for @damageTechnical.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle técnico'**
+  String get damageTechnical;
+
+  /// No description provided for @repairedSuffix.
+  ///
+  /// In es, this message translates to:
+  /// **'reparado'**
+  String get repairedSuffix;
+
+  /// No description provided for @exportRepaired.
+  ///
+  /// In es, this message translates to:
+  /// **'Copia reparada, verificada y exportada: {path}'**
+  String exportRepaired(String path);
+
+  /// No description provided for @versionPickMenu.
+  ///
+  /// In es, this message translates to:
+  /// **'Fijar versión del juego…'**
+  String get versionPickMenu;
+
+  /// No description provided for @versionPickTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Versión del juego'**
+  String get versionPickTitle;
+
+  /// No description provided for @versionPickBody.
+  ///
+  /// In es, this message translates to:
+  /// **'El save no indica qué cartucho es. Elige uno para el color y el título; se guarda en el .json de cada copia.'**
+  String get versionPickBody;
+
+  /// No description provided for @versionUnspecified.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin especificar (pareja)'**
+  String get versionUnspecified;
+
+  /// No description provided for @versionFromSave.
+  ///
+  /// In es, this message translates to:
+  /// **'Este save ya indica la versión: {name}.'**
+  String versionFromSave(String name);
+
+  /// No description provided for @spritesSection.
+  ///
+  /// In es, this message translates to:
+  /// **'Iconos'**
+  String get spritesSection;
+
+  /// No description provided for @spritesSectionDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Los sprites de Pokémon, objetos, Balls, tipos y cintas no vienen con la app: se descargan la primera vez que se ven y se guardan en la caché de la app (nunca en la carpeta del Arca). Sin conexión se muestran las iniciales.'**
+  String get spritesSectionDesc;
+
+  /// No description provided for @spritesCacheSize.
+  ///
+  /// In es, this message translates to:
+  /// **'En caché: {size} · descarga completa: {total} ({count} iconos)'**
+  String spritesCacheSize(int count, String size, String total);
+
+  /// No description provided for @spritesDownloadAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar todos los iconos ({size})'**
+  String spritesDownloadAll(String size);
+
+  /// No description provided for @spritesClear.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar caché de iconos'**
+  String get spritesClear;
+
+  /// No description provided for @spritesProgress.
+  ///
+  /// In es, this message translates to:
+  /// **'{done} de {total} iconos'**
+  String spritesProgress(int done, int total);
+
+  /// No description provided for @spritesDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos los iconos están descargados.'**
+  String get spritesDone;
+
+  /// No description provided for @spritesFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudieron descargar {count} iconos; vuelve a intentarlo con conexión.'**
+  String spritesFailed(int count);
+
+  /// No description provided for @spritesCancelled.
+  ///
+  /// In es, this message translates to:
+  /// **'Descarga cancelada.'**
+  String get spritesCancelled;
+
+  /// No description provided for @spritesProgressBytes.
+  ///
+  /// In es, this message translates to:
+  /// **'{done} de {total} iconos · {size} de {totalSize}'**
+  String spritesProgressBytes(
+    int done,
+    int total,
+    String size,
+    String totalSize,
+  );
+
+  /// No description provided for @spritesOffline.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin conexión a Internet: no se pudo contactar con GitHub. Lo ya descargado se conserva; vuelve a intentarlo con conexión.'**
+  String get spritesOffline;
+
+  /// No description provided for @spritesCleared.
+  ///
+  /// In es, this message translates to:
+  /// **'Caché de iconos borrada.'**
+  String get spritesCleared;
+
+  /// No description provided for @spritesCredits.
+  ///
+  /// In es, this message translates to:
+  /// **'Iconos: recursos de PKHeX (github.com/kwsch/PKHeX, commit {commit}), descargados bajo demanda. Los sprites son © Nintendo / Game Freak / The Pokémon Company.'**
+  String spritesCredits(String commit);
+
+  /// No description provided for @sectionOrigin.
+  ///
+  /// In es, this message translates to:
+  /// **'Origen'**
+  String get sectionOrigin;
+
+  /// No description provided for @sectionRibbons.
+  ///
+  /// In es, this message translates to:
+  /// **'Cintas y marcas'**
+  String get sectionRibbons;
+
+  /// No description provided for @originGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Juego de origen'**
+  String get originGame;
+
+  /// No description provided for @originPlace.
+  ///
+  /// In es, this message translates to:
+  /// **'Lugar de captura'**
+  String get originPlace;
+
+  /// No description provided for @originHatchPlace.
+  ///
+  /// In es, this message translates to:
+  /// **'Lugar de eclosión'**
+  String get originHatchPlace;
+
+  /// No description provided for @originLevel.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel de encuentro'**
+  String get originLevel;
+
+  /// No description provided for @originDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha'**
+  String get originDate;
+
+  /// No description provided for @originEggDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Huevo recibido'**
+  String get originEggDate;
+
+  /// No description provided for @originEncounterHere.
+  ///
+  /// In es, this message translates to:
+  /// **'aparece aquí'**
+  String get originEncounterHere;
+
+  /// No description provided for @originShowAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar todos los lugares del juego'**
+  String get originShowAll;
+
+  /// No description provided for @originOnlyValid.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo lugares donde aparece'**
+  String get originOnlyValid;
+
+  /// No description provided for @originFateful.
+  ///
+  /// In es, this message translates to:
+  /// **'Encuentro fatídico (evento)'**
+  String get originFateful;
+
+  /// No description provided for @originEggReceived.
+  ///
+  /// In es, this message translates to:
+  /// **'Huevo recibido en {place} el {date}'**
+  String originEggReceived(String date, String place);
+
+  /// No description provided for @originHatched.
+  ///
+  /// In es, this message translates to:
+  /// **'Eclosionó en {place} el {date}'**
+  String originHatched(String date, String place);
+
+  /// No description provided for @originMet.
+  ///
+  /// In es, this message translates to:
+  /// **'Capturado en {place}, nivel {nLevel}, {date}'**
+  String originMet(String date, int nLevel, String place);
+
+  /// No description provided for @originNoDate.
+  ///
+  /// In es, this message translates to:
+  /// **'sin fecha (Gen 3)'**
+  String get originNoDate;
+
+  /// No description provided for @originTrainer.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrenador original: {name} (ID {tid})'**
+  String originTrainer(String name, String tid);
+
+  /// No description provided for @originHomeTracker.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasó por Pokémon HOME (rastreador {tracker})'**
+  String originHomeTracker(String tracker);
+
+  /// No description provided for @originNotInGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta especie no aparece en las tablas de encuentros de su juego de origen (¿evento, intercambio o huevo?).'**
+  String get originNotInGame;
+
+  /// No description provided for @originValidPlaces.
+  ///
+  /// In es, this message translates to:
+  /// **'El lugar o el nivel no cuadran con su juego. Lugares válidos: {places}'**
+  String originValidPlaces(String places);
+
+  /// No description provided for @transferPalPark.
+  ///
+  /// In es, this message translates to:
+  /// **'Parque Compi'**
+  String get transferPalPark;
+
+  /// No description provided for @transferPokeTransfer.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokétransfer'**
+  String get transferPokeTransfer;
+
+  /// No description provided for @transferTransporter.
+  ///
+  /// In es, this message translates to:
+  /// **'Poké Transporter / Banco'**
+  String get transferTransporter;
+
+  /// No description provided for @transferVirtualConsole.
+  ///
+  /// In es, this message translates to:
+  /// **'Consola Virtual → Poké Transporter'**
+  String get transferVirtualConsole;
+
+  /// No description provided for @transferBank.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon Banco'**
+  String get transferBank;
+
+  /// No description provided for @ribbonsContest.
+  ///
+  /// In es, this message translates to:
+  /// **'Concursos'**
+  String get ribbonsContest;
+
+  /// No description provided for @ribbonsBattle.
+  ///
+  /// In es, this message translates to:
+  /// **'Batalla'**
+  String get ribbonsBattle;
+
+  /// No description provided for @ribbonsCommemorative.
+  ///
+  /// In es, this message translates to:
+  /// **'Conmemorativas'**
+  String get ribbonsCommemorative;
+
+  /// No description provided for @ribbonsEvent.
+  ///
+  /// In es, this message translates to:
+  /// **'Eventos'**
+  String get ribbonsEvent;
+
+  /// No description provided for @ribbonsMarks.
+  ///
+  /// In es, this message translates to:
+  /// **'Marcas'**
+  String get ribbonsMarks;
+
+  /// No description provided for @ribbonsOwned.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} de {nTotal}'**
+  String ribbonsOwned(int count, int nTotal);
+
+  /// No description provided for @ribbonsOnlyOwned.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo las que tiene'**
+  String get ribbonsOnlyOwned;
+
+  /// No description provided for @ribbonsGiveAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Dar todas las válidas'**
+  String get ribbonsGiveAll;
+
+  /// No description provided for @ribbonsRemoveAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar todas'**
+  String get ribbonsRemoveAll;
+
+  /// No description provided for @ribbonsGiven.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} cintas añadidas.'**
+  String ribbonsGiven(int count);
+
+  /// No description provided for @ribbonsNone.
+  ///
+  /// In es, this message translates to:
+  /// **'No tiene cintas ni marcas.'**
+  String get ribbonsNone;
+
+  /// No description provided for @ribbonHas.
+  ///
+  /// In es, this message translates to:
+  /// **'La tiene'**
+  String get ribbonHas;
+
+  /// No description provided for @ribbonAffixed.
+  ///
+  /// In es, this message translates to:
+  /// **'Cinta mostrada'**
+  String get ribbonAffixed;
+
+  /// No description provided for @ribbonAffixedHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Se muestra junto a su nombre (título).'**
+  String get ribbonAffixedHint;
+
+  /// No description provided for @ribbonAffixedNow.
+  ///
+  /// In es, this message translates to:
+  /// **'Muestra: {name}'**
+  String ribbonAffixedNow(String name);
+
+  /// No description provided for @ribbonEventOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo se repartió en eventos.'**
+  String get ribbonEventOnly;
+
+  /// No description provided for @ribbonEncounterMark.
+  ///
+  /// In es, this message translates to:
+  /// **'Marca de encuentro: la pone el juego al capturarlo.'**
+  String get ribbonEncounterMark;
+
+  /// No description provided for @ribbonObtainable.
+  ///
+  /// In es, this message translates to:
+  /// **'Se puede conseguir en los juegos por los que pudo pasar.'**
+  String get ribbonObtainable;
+
+  /// No description provided for @ribbonNotObtainable.
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede conseguir en los juegos por los que pudo pasar.'**
+  String get ribbonNotObtainable;
+
+  /// No description provided for @originDateUnknown.
+  ///
+  /// In es, this message translates to:
+  /// **'sin fecha'**
+  String get originDateUnknown;
+
+  /// No description provided for @filtersAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtros'**
+  String get filtersAction;
+
+  /// No description provided for @filtersTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtros'**
+  String get filtersTitle;
+
+  /// No description provided for @filtersClear.
+  ///
+  /// In es, this message translates to:
+  /// **'Limpiar'**
+  String get filtersClear;
+
+  /// No description provided for @filtersClearAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Limpiar filtros'**
+  String get filtersClearAll;
+
+  /// No description provided for @filtersShow.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =0{Ninguna partida} =1{Ver 1 partida} other{Ver {count} partidas}}'**
+  String filtersShow(int count);
+
+  /// No description provided for @filtersResults.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 partida de {nTotal}} other{{count} partidas de {nTotal}}}'**
+  String filtersResults(int count, int nTotal);
+
+  /// No description provided for @filtersNoMatchTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguna partida coincide'**
+  String get filtersNoMatchTitle;
+
+  /// No description provided for @filtersNoMatchBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Prueba a quitar algún filtro o cambia la búsqueda.'**
+  String get filtersNoMatchBody;
+
+  /// No description provided for @filtersRemove.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar filtro {label}'**
+  String filtersRemove(String label);
+
+  /// No description provided for @sortLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Ordenar'**
+  String get sortLabel;
+
+  /// No description provided for @sortRecent.
+  ///
+  /// In es, this message translates to:
+  /// **'Más reciente'**
+  String get sortRecent;
+
+  /// No description provided for @sortTrainer.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrenador'**
+  String get sortTrainer;
+
+  /// No description provided for @sortGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Juego / generación'**
+  String get sortGame;
+
+  /// No description provided for @sortPlayTime.
+  ///
+  /// In es, this message translates to:
+  /// **'Horas de juego'**
+  String get sortPlayTime;
+
+  /// No description provided for @sortCopies.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de copias'**
+  String get sortCopies;
+
+  /// No description provided for @filterGeneration.
+  ///
+  /// In es, this message translates to:
+  /// **'Generación'**
+  String get filterGeneration;
+
+  /// No description provided for @filterGenShort.
+  ///
+  /// In es, this message translates to:
+  /// **'Gen {gen}'**
+  String filterGenShort(int gen);
+
+  /// No description provided for @filterPlatform.
+  ///
+  /// In es, this message translates to:
+  /// **'Consola'**
+  String get filterPlatform;
+
+  /// No description provided for @filterSource.
+  ///
+  /// In es, this message translates to:
+  /// **'Origen'**
+  String get filterSource;
+
+  /// No description provided for @sourceEmulator.
+  ///
+  /// In es, this message translates to:
+  /// **'Emulador'**
+  String get sourceEmulator;
+
+  /// No description provided for @sourceMobile.
+  ///
+  /// In es, this message translates to:
+  /// **'Port Android/iOS'**
+  String get sourceMobile;
+
+  /// No description provided for @sourceCheckpoint.
+  ///
+  /// In es, this message translates to:
+  /// **'Checkpoint/JKSM'**
+  String get sourceCheckpoint;
+
+  /// No description provided for @sourceCartridge.
+  ///
+  /// In es, this message translates to:
+  /// **'Cartucho'**
+  String get sourceCartridge;
+
+  /// No description provided for @sourceOther.
+  ///
+  /// In es, this message translates to:
+  /// **'Otro / desconocido'**
+  String get sourceOther;
+
+  /// No description provided for @filterGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Juego'**
+  String get filterGame;
+
+  /// No description provided for @filterStatus.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado'**
+  String get filterStatus;
+
+  /// No description provided for @statusDamaged.
+  ///
+  /// In es, this message translates to:
+  /// **'Con avisos de daño'**
+  String get statusDamaged;
+
+  /// No description provided for @statusLegality.
+  ///
+  /// In es, this message translates to:
+  /// **'Con avisos de legalidad'**
+  String get statusLegality;
+
+  /// No description provided for @statusEdited.
+  ///
+  /// In es, this message translates to:
+  /// **'Editadas por mí'**
+  String get statusEdited;
+
+  /// No description provided for @statusMultiple.
+  ///
+  /// In es, this message translates to:
+  /// **'Con varias copias'**
+  String get statusMultiple;
+
+  /// No description provided for @legalityScanning.
+  ///
+  /// In es, this message translates to:
+  /// **'Revisando legalidad… {done} de {nTotal}'**
+  String legalityScanning(int done, int nTotal);
+
+  /// No description provided for @filterDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Última copia'**
+  String get filterDate;
+
+  /// No description provided for @datePresetWeek.
+  ///
+  /// In es, this message translates to:
+  /// **'Última semana'**
+  String get datePresetWeek;
+
+  /// No description provided for @datePresetMonth.
+  ///
+  /// In es, this message translates to:
+  /// **'Último mes'**
+  String get datePresetMonth;
+
+  /// No description provided for @datePresetYear.
+  ///
+  /// In es, this message translates to:
+  /// **'Último año'**
+  String get datePresetYear;
+
+  /// No description provided for @dateCustom.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegir fechas…'**
+  String get dateCustom;
+
+  /// No description provided for @dateRange.
+  ///
+  /// In es, this message translates to:
+  /// **'{from} – {to}'**
+  String dateRange(String from, String to);
+
+  /// No description provided for @spritesOnDisk.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardados y válidos: {nValid} de {nTotal} iconos.'**
+  String spritesOnDisk(int nTotal, int nValid);
+
+  /// No description provided for @spritesMissing.
+  ///
+  /// In es, this message translates to:
+  /// **'Faltan {count} iconos o están dañados (vacíos o cortados): «Reparar iconos» descarga solo esos.'**
+  String spritesMissing(int count);
+
+  /// No description provided for @spritesRepair.
+  ///
+  /// In es, this message translates to:
+  /// **'Reparar iconos ({count})'**
+  String spritesRepair(int count);
+
+  /// No description provided for @spritesIncomplete.
+  ///
+  /// In es, this message translates to:
+  /// **'La descarga terminó, pero faltan {count} iconos. Pulsa «Reparar iconos» con conexión.'**
+  String spritesIncomplete(int count);
+}
+
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
+  const _AppLocalizationsDelegate();
+
+  @override
+  Future<AppLocalizations> load(Locale locale) {
+    return SynchronousFuture<AppLocalizations>(lookupAppLocalizations(locale));
+  }
+
+  @override
+  bool isSupported(Locale locale) =>
+      <String>['en', 'es'].contains(locale.languageCode);
+
+  @override
+  bool shouldReload(_AppLocalizationsDelegate old) => false;
+}
+
+AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'en':
+      return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+  }
+
+  throw FlutterError(
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
+}

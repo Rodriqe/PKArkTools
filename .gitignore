@@ -1,0 +1,30 @@
+# Herramientas / temporales locales
+.ref/
+.scratch/
+.pub-cache/
+.claude/settings.local.json
+
+# Dart / Flutter
+.dart_tool/
+.packages
+build/
+pubspec_overrides.yaml
+*.iml
+.idea/
+.vscode/
+.DS_Store
+coverage/
+
+# Oráculo PKHeX (tools/pkhex_oracle)
+tools/pkhex_oracle/bin/
+tools/pkhex_oracle/obj/
+
+# Claves y secretos: nunca en el repo (la firma de release usa los secretos de GitHub)
+.firma/
+*.jks
+*.keystore
+*.p12
+key.properties
+*.pem
+*CLAVE*.txt
+.env*

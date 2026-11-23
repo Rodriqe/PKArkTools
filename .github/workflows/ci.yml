@@ -1,0 +1,228 @@
+name: CI
+
+# Pushes a main y pull requests: análisis, tests y compilación de Android,
+# Windows y Linux (comprobación; los binarios quedan como artifacts unos días).
+# Tags v*: además macOS y un borrador de GitHub Release con todos los binarios
+# y las notas sacadas de CHANGELOG.md (ver docs/desarrollo.md#cómo-publicar-un-release).
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: '3.47.2'
+  IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
+
+jobs:
+  test:
+    name: Analyze and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Release tag matches pubspec and CHANGELOG
+        if: env.IS_RELEASE == 'true'
+        run: python3 tool/release_notes.py "$GITHUB_REF_NAME" > /dev/null
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - name: System libraries (SQLite for drift tests)
+        run: sudo apt-get update && sudo apt-get install -y libsqlite3-dev
+      - run: flutter pub get
+      - name: pkcore — dart analyze
+        working-directory: packages/pkcore
+        run: dart analyze --fatal-infos
+      - name: pkcore — dart test
+        working-directory: packages/pkcore
+        run: dart test
+      - name: app — flutter analyze
+        working-directory: apps/pkarktools
+        run: flutter analyze --fatal-infos
+      - name: app — flutter test
+        working-directory: apps/pkarktools
+        run: flutter test
+      - name: docs — links
+        run: python3 tool/check_links.py
+
+  android:
+    name: Android APK (release)
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      # Opcionales: sin ellos el APK se firma con la clave debug.
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - name: Release keystore from secrets (optional)
+        # El keystore (PKCS12) va a un temporal del runner, fuera del checkout, y
+        # key.properties (ignorado por git) apunta a él. Nada se sube ni se imprime.
+        run: |
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            umask 077
+            printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.p12"
+            {
+              echo "storeFile=$RUNNER_TEMP/release.p12"
+              echo "storeType=PKCS12"
+              echo "storePassword=$ANDROID_STORE_PASSWORD"
+              echo "keyAlias=$ANDROID_KEY_ALIAS"
+              echo "keyPassword=$ANDROID_KEY_PASSWORD"
+            } > apps/pkarktools/android/key.properties
+            echo "Signing with the release keystore."
+          else
+            echo "::warning::No ANDROID_KEYSTORE_BASE64 secret: the APK is signed with the debug key."
+          fi
+      - run: flutter pub get
+      - name: flutter build apk --release
+        working-directory: apps/pkarktools
+        run: flutter build apk --release
+      - name: Remove signing files
+        if: always()
+        run: rm -f apps/pkarktools/android/key.properties "$RUNNER_TEMP/release.p12"
+      - name: Name artifact
+        run: |
+          label="${GITHUB_REF_NAME//\//-}"
+          cp apps/pkarktools/build/app/outputs/flutter-apk/app-release.apk "PKArkTools-${label}.apk"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: PKArkTools-*.apk
+          retention-days: ${{ env.IS_RELEASE == 'true' && 30 || 7 }}
+
+  windows:
+    name: Windows (release)
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - name: flutter build windows --release
+        working-directory: apps/pkarktools
+        run: flutter build windows --release
+      - name: Zip and installer
+        shell: pwsh
+        run: |
+          $label = $env:GITHUB_REF_NAME -replace '/', '-'
+          $release = "apps/pkarktools/build/windows/x64/runner/Release"
+          if (-not (Test-Path "$release/PKArkTools.exe")) { throw "PKArkTools.exe not found in $release" }
+          # Zip portátil: carpeta PKArkTools con el .exe, las DLL y data/.
+          New-Item -ItemType Directory -Force dist/PKArkTools | Out-Null
+          Copy-Item -Recurse "$release/*" dist/PKArkTools
+          Compress-Archive -Path dist/PKArkTools -DestinationPath "PKArkTools-$label-windows-x64.zip"
+          # Instalador (Inno Setup 6 viene en la imagen windows-latest).
+          $version = (Select-String -Path apps/pkarktools/pubspec.yaml -Pattern '^version:\s*([0-9.]+)').Matches[0].Groups[1].Value
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress }
+          & $iscc "/DAppVersion=$version" "/DSourceDir=$((Resolve-Path $release).Path)" "/DOutputDir=$PWD" "/DOutputBase=PKArkTools-$label-windows-x64-setup" apps/pkarktools/windows/packaging/PKArkTools.iss
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed" }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: |
+            PKArkTools-*-windows-x64.zip
+            PKArkTools-*-windows-x64-setup.exe
+          retention-days: ${{ env.IS_RELEASE == 'true' && 30 || 7 }}
+
+  linux:
+    name: Linux (release)
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build dependencies
+        run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - name: flutter build linux --release
+        working-directory: apps/pkarktools
+        run: flutter build linux --release
+      - name: tar.gz
+        run: |
+          label="${GITHUB_REF_NAME//\//-}"
+          mkdir -p dist
+          cp -r apps/pkarktools/build/linux/x64/release/bundle dist/PKArkTools
+          tar -czf "PKArkTools-${label}-linux-x64.tar.gz" -C dist PKArkTools
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: PKArkTools-*-linux-x64.tar.gz
+          retention-days: ${{ env.IS_RELEASE == 'true' && 30 || 7 }}
+
+  macos:
+    name: macOS app
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - name: flutter build macos --release
+        working-directory: apps/pkarktools
+        run: flutter build macos --release
+      - name: Zip PKArkTools.app
+        run: |
+          label="${GITHUB_REF_NAME//\//-}"
+          ditto -c -k --sequesterRsrc --keepParent \
+            apps/pkarktools/build/macos/Build/Products/Release/PKArkTools.app \
+            "PKArkTools-${label}-macos.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-app
+          path: PKArkTools-*-macos.zip
+
+  release:
+    name: GitHub Release (draft)
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [android, windows, linux, macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Release notes from CHANGELOG.md
+        run: python3 tool/release_notes.py "$GITHUB_REF_NAME" release-notes.md
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          name: PKArkTools ${{ github.ref_name }}
+          body_path: release-notes.md
+          files: dist/*

@@ -1,0 +1,1379 @@
+{
+  "@@locale": "es",
+  "appTitle": "PKArkTools",
+  "navArca": "Arca",
+  "navActivity": "Actividad",
+  "navSettings": "Ajustes",
+  "arcaTitle": "Tu Arca",
+  "arcaSubtitle": "{count, plural, =0{Aún no hay partidas} =1{1 partida a salvo} other{{count} partidas a salvo}}",
+  "@arcaSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importAction": "Importar",
+  "importFile": "Importar archivo",
+  "importFolder": "Importar carpeta",
+  "importSheetTitle": "Añadir al Arca",
+  "importFileDesc": "Saves de cartucho o exportados: .sav, .srm, .dsv, main…",
+  "importFolderDesc": "Carpetas de Checkpoint, JKSM o de emuladores de Switch. Se buscan saves dentro.",
+  "emptyTitle": "Tu Arca está vacía",
+  "emptyBody": "Importa un save para guardar una copia segura con su historial. Nada sale de este dispositivo.",
+  "loadDemo": "Probar con partidas de ejemplo",
+  "demoLoaded": "{count, plural, =1{Se añadió 1 partida de ejemplo} other{Se añadieron {count} partidas de ejemplo}}",
+  "@demoLoaded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursShort": "{hours} h",
+  "@hoursShort": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "playTime": "Tiempo de juego",
+  "trainerId": "ID",
+  "secretId": "ID secreta",
+  "inBoxes": "En cajas",
+  "copies": "Copias",
+  "lastCopy": "Última copia: {date}",
+  "@lastCopy": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "team": "Equipo",
+  "boxes": "Cajas",
+  "history": "Historial",
+  "emptyTeam": "Sin Pokémon en el equipo",
+  "notSupportedStorage": "Este juego todavía no muestra equipo ni cajas; llegará en una próxima fase. El entrenador y el historial ya funcionan.",
+  "shiny": "Variocolor",
+  "egg": "Huevo",
+  "level": "Nv. {level}",
+  "@level": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "export": "Exportar",
+  "restore": "Restaurar",
+  "viewing": "En pantalla",
+  "view": "Ver",
+  "latest": "Más reciente",
+  "exportDone": "Exportado a {path}",
+  "@exportDone": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFailed": "No se pudo exportar: {error}",
+  "@exportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "restoreTitle": "¿Restaurar esta copia?",
+  "restoreBody": "Se reemplazará el archivo original:\n{path}\n\nAntes, el Arca guardará una copia del archivo actual para que puedas volver atrás.",
+  "@restoreBody": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Cancelar",
+  "restoreDone": "Copia restaurada en su ubicación original",
+  "restoreFailed": "No se pudo restaurar: {error}",
+  "@restoreFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "restoreUnavailable": "Esta copia no tiene un archivo original accesible. Usa Exportar para guardarla donde quieras.",
+  "importResultTitle": "Importación terminada",
+  "importAdded": "{count, plural, =1{1 copia nueva} other{{count} copias nuevas}}",
+  "@importAdded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importDuplicates": "{count, plural, =1{1 ya estaba en el Arca} other{{count} ya estaban en el Arca}}",
+  "@importDuplicates": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importFailedCount": "{count, plural, =1{1 archivo no reconocido} other{{count} archivos no reconocidos}}",
+  "@importFailedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "done": "Listo",
+  "openSave": "Abrir partida",
+  "folderScanning": "Buscando saves… {count} archivos revisados",
+  "@folderScanning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderFound": "{count, plural, =0{No se encontraron saves} =1{1 save encontrado} other{{count} saves encontrados}}",
+  "@folderFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderNoneHint": "Revisa que la carpeta tenga archivos de save (no ROMs). En emuladores de Switch elige la carpeta nand/user/save.",
+  "importSelected": "{count, plural, =1{Importar 1 save} other{Importar {count} saves}}",
+  "@importSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteSave": "Eliminar del Arca",
+  "deleteTitle": "¿Eliminar esta partida del Arca?",
+  "deleteBody": "{count, plural, =1{Se borrará su copia guardada.} other{Se borrarán sus {count} copias guardadas.}} Los archivos originales no se tocan.",
+  "@deleteBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "delete": "Eliminar",
+  "checksumValid": "Checksum correcto",
+  "activityEmpty": "Aquí verás cada copia que entre al Arca, en orden.",
+  "theme": "Tema",
+  "themeDark": "Oscuro",
+  "themeLight": "Claro",
+  "themeSystem": "Sistema",
+  "language": "Idioma",
+  "languageSystem": "Sistema",
+  "about": "Acerca de",
+  "aboutBody": "PKArkTools guarda copias versionadas de tus partidas de Pokémon de todas las generaciones. Es software libre (GPL-3.0) y porta lógica de PKHeX.Core. No incluye ROMs, claves ni contenido de los juegos.",
+  "licenses": "Licencias de código abierto",
+  "sampleData": "Datos de ejemplo",
+  "sampleDataDesc": "Añade partidas sintéticas para explorar la app.",
+  "originFile": "Archivo",
+  "originFolder": "Carpeta",
+  "originSaf": "Carpeta del emulador",
+  "originDemo": "Ejemplo",
+  "originRestore": "Respaldo antes de restaurar",
+  "genLabel": "Gen {gen}",
+  "@genLabel": {
+    "placeholders": {
+      "gen": {
+        "type": "int"
+      }
+    }
+  },
+  "boxEmpty": "Caja vacía",
+  "loadError": "No se pudo leer esta copia: {error}",
+  "@loadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "moreActions": "Más acciones",
+  "pokemonCount": "{count, plural, =1{1 Pokémon} other{{count} Pokémon}}",
+  "@pokemonCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "snapshotOf": "Copia del {date}",
+  "@snapshotOf": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "searchHint": "Buscar por entrenador o juego",
+  "noResults": "Nada coincide con «{query}»",
+  "@noResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "ability": "Habilidad",
+  "addItem": "Añadir objeto",
+  "addToSlot": "Añadir al hueco",
+  "addToTeam": "Añadir al equipo",
+  "andMore": "…y {count} cambios más",
+  "@andMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "applyChanges": "Aplicar cambios",
+  "avs": "Valores de despertar (AV)",
+  "ball": "Poké Ball",
+  "baseTotal": "Total base",
+  "boxFull": "Esa caja está llena",
+  "boxesFull": "Todas las cajas están llenas",
+  "changeNote": "Descripción de los cambios",
+  "changesStayInDraft": "Los cambios van al borrador; el archivo original no se toca.",
+  "clonePokemon": "Clonar en la primera caja libre",
+  "clonedTo": "Clon colocado en {slot}",
+  "@clonedTo": {
+    "placeholders": {
+      "slot": {
+        "type": "String"
+      }
+    }
+  },
+  "createPokemon": "Crear Pokémon",
+  "createPokemonDesc": "Con tu nombre de entrenador, tu ID y movimientos de su nivel",
+  "deletePokemon": "Borrar del save",
+  "discard": "Descartar",
+  "discardDraftBody": "Se perderán todas las ediciones que no hayas guardado en el Arca.",
+  "discardDraftTitle": "¿Descartar los cambios?",
+  "discardPokemonBody": "Los cambios de este Pokémon no se aplicarán al borrador.",
+  "discardPokemonTitle": "¿Salir sin aplicar?",
+  "dragHint": "Arrastra un Pokémon para moverlo o intercambiarlo; suéltalo en el nombre de una caja para enviarlo allí.",
+  "dragHintGb": "En Game Boy las cajas son listas: al mover o borrar, los Pokémon se reordenan sin huecos.",
+  "dragHintTouch": "Mantén pulsado un Pokémon para arrastrarlo; suéltalo en otro hueco o en el nombre de una caja.",
+  "dvs": "DVs (valores determinantes)",
+  "editBoxName": "Caja {box} renombrada a «{name}»",
+  "@editBoxName": {
+    "placeholders": {
+      "box": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "editClear": "{species} borrado de {slot}",
+  "@editClear": {
+    "placeholders": {
+      "species": {
+        "type": "String"
+      },
+      "slot": {
+        "type": "String"
+      }
+    }
+  },
+  "editInventory": "Inventario actualizado",
+  "editMove": "Movido de {from} a {to}",
+  "@editMove": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "editPokemon": "Editar Pokémon",
+  "editSet": "{species} en {slot}",
+  "@editSet": {
+    "placeholders": {
+      "species": {
+        "type": "String"
+      },
+      "slot": {
+        "type": "String"
+      }
+    }
+  },
+  "editTrainer": "Datos del entrenador actualizados",
+  "editedSuffix": "editado",
+  "evTotal": "{total} / {max}",
+  "@evTotal": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "evs": "EVs (puntos de esfuerzo)",
+  "experience": "Experiencia",
+  "exportFile": "Exportar archivo",
+  "exportPokemon": "Exportar como .{ext}",
+  "@exportPokemon": {
+    "placeholders": {
+      "ext": {
+        "type": "String"
+      }
+    }
+  },
+  "exportReady": "Archivo listo para el juego en {path}",
+  "@exportReady": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "female": "Chica",
+  "form": "Forma",
+  "formBase": "Normal",
+  "formN": "Forma {n}",
+  "@formN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "friendship": "Amistad",
+  "gender": "Género",
+  "gvs": "Niveles de esfuerzo (GV)",
+  "heldItem": "Objeto equipado",
+  "hiddenAbility": "oculta",
+  "hours": "Horas",
+  "hpDerived": "El DV de PS se deriva del resto",
+  "importInvalidPokemon": "El archivo no contiene un Pokémon válido (checksum incorrecto).",
+  "importPokemon": "Importar .{ext}",
+  "@importPokemon": {
+    "placeholders": {
+      "ext": {
+        "type": "String"
+      }
+    }
+  },
+  "importPokemonDesc": "Un Pokémon exportado de este mismo formato",
+  "importWrongFormat": "Un .{got} no es compatible con este juego; necesita .{want}.",
+  "@importWrongFormat": {
+    "placeholders": {
+      "got": {
+        "type": "String"
+      },
+      "want": {
+        "type": "String"
+      }
+    }
+  },
+  "importedPokemon": "{species} importado al borrador",
+  "@importedPokemon": {
+    "placeholders": {
+      "species": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryApplied": "Inventario aplicado al borrador",
+  "inventoryUnsupported": "El inventario de este juego todavía no se puede editar.",
+  "itemWrongPouch": "Este objeto no suele ir en este bolsillo",
+  "ivs": "IVs (valores individuales)",
+  "keepEditing": "Seguir editando",
+  "leaveDraftBody": "{count, plural, =1{Hay 1 cambio sin guardar en el Arca.} other{Hay {count} cambios sin guardar en el Arca.}} Si sales, se descartan.",
+  "@leaveDraftBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leaveDraftTitle": "¿Salir sin guardar?",
+  "legalityClean": "Sin avisos de legalidad básicos.",
+  "legalityHint": "Son solo avisos: puedes guardar igualmente.",
+  "legalityTitle": "{count, plural, =1{1 aviso} other{{count} avisos}}",
+  "@legalityTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendBase": "Base",
+  "levelLabel": "Nivel",
+  "male": "Chico",
+  "maxPpUps": "Más PP al máximo",
+  "mint": "Menta (naturaleza de stats)",
+  "minutes": "Minutos",
+  "money": "Dinero",
+  "moneyMax": "Máximo {max}",
+  "@moneyMax": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "moveN": "Movimiento {n}",
+  "@moveN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "nature": "Naturaleza",
+  "neutral": "neutra",
+  "newPokemon": "Nuevo Pokémon",
+  "nickname": "Apodo",
+  "no": "No",
+  "noChanges": "Sin cambios: el borrador coincide con esta copia",
+  "noMatches": "Sin resultados",
+  "none": "Ninguno",
+  "originEdit": "Edición",
+  "otGender": "Género del entrenador",
+  "otName": "Entrenador original",
+  "pokemon": "Pokémon",
+  "pouchBalls": "Poké Balls",
+  "pouchBattle": "Combate",
+  "pouchBerries": "Bayas",
+  "pouchCandy": "Caramelos y materiales",
+  "pouchEmpty": "Este bolsillo está vacío. Añade objetos con el buscador.",
+  "pouchFull": "Bolsillo lleno",
+  "pouchIngredients": "Ingredientes",
+  "pouchItems": "Objetos",
+  "pouchKey": "Objetos clave",
+  "pouchMail": "Cartas",
+  "pouchMedicine": "Botiquín",
+  "pouchPc": "PC",
+  "pouchTms": "MT y MO",
+  "pouchTreasure": "Tesoros",
+  "pouchUsage": "{used} / {capacity}",
+  "@pouchUsage": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "pouchZ": "Cristales Z / mejoras",
+  "ppUps": "Más PP",
+  "presetClear": "Limpiar",
+  "presetMaxAvs": "Todos a 200",
+  "presetMaxGvs": "Todos a 10",
+  "presetMaxStatExp": "Todo al máximo",
+  "presetPerfectIvs": "IVs perfectos",
+  "presetPhysWall": "Muro físico",
+  "presetPhysical": "Atacante físico",
+  "presetSpecWall": "Muro especial",
+  "presetSpecial": "Atacante especial",
+  "presetZeroAttack": "0 en Ataque",
+  "presetZeroSpeed": "0 en Velocidad",
+  "redo": "Rehacer",
+  "removeItem": "Quitar",
+  "restorePp": "Rellenar PP",
+  "revert": "Revertir",
+  "saveDraftBody": "Se crea una copia nueva en el Arca con estos cambios. La copia actual y el archivo original quedan intactos.",
+  "saveDraftTitle": "Guardar en el Arca",
+  "saveFailed": "No se pudo guardar: {error}",
+  "@saveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "saveToArca": "Guardar en el Arca",
+  "savedToArca": "Guardado como copia nueva en el Arca",
+  "seconds": "Segundos",
+  "sectionIdentity": "Identidad",
+  "sectionInventory": "Inventario",
+  "sectionMoves": "Movimientos",
+  "sectionPokemon": "Pokémon",
+  "sectionStats": "Estadísticas",
+  "sectionTrainer": "Entrenador original",
+  "sectionTrainerTab": "Entrenador",
+  "sectionTraits": "Nivel y rasgos",
+  "shinySquare": "Cuadrado",
+  "shinyStar": "Estrella",
+  "slotBox": "{box}, hueco {n}",
+  "@slotBox": {
+    "placeholders": {
+      "box": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "slotParty": "Equipo, hueco {n}",
+  "@slotParty": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "special": "Especial",
+  "species": "Especie",
+  "statExp": "Stat exp",
+  "statsAtLevel": "Estadísticas a nivel {level}",
+  "@statsAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "teraOriginal": "Teratipo original",
+  "teraType": "Teratipo",
+  "trainerApplied": "Datos del entrenador aplicados al borrador",
+  "trainerGender": "Personaje",
+  "trainerIdLong": "ID de entrenador (16 bits)",
+  "trainerIdNote": "Cambiar el ID no cambia el de tus Pokémon: los que capturaste dejarían de ser \"tuyos\".",
+  "trainerName": "Nombre",
+  "trainerNotEditable": "Los datos del entrenador de este save no se pueden editar.",
+  "undo": "Deshacer",
+  "unsavedChanges": "{count, plural, =1{1 cambio sin guardar} other{{count} cambios sin guardar}}",
+  "@unsavedChanges": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "useSpeciesName": "Usar el nombre de la especie",
+  "visibleId": "En el juego: {id}",
+  "@visibleId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "pouchMega": "Megapiedras",
+  "pouchRecipes": "Recetas",
+  "pouchSatchel": "Bolsa",
+  "pouchStorage": "Almacén",
+  "sectionPokedex": "Pokédex",
+  "sectionEvents": "Eventos",
+  "legalityAreaOrigin": "Origen y encuentro",
+  "legalityAreaMoves": "Movimientos",
+  "legalityAreaStats": "Estadísticas",
+  "legalityAreaMisc": "Otros datos",
+  "legalityFix": "Intentar corregir",
+  "legalityFixAll": "Corregir lo seguro ({n})",
+  "@legalityFixAll": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "legalityManual": "Sin corrección automática: revísalo a mano.",
+  "legalityScope": "Se comprueban reglas de origen, ball, habilidad, variocolor y aprendizaje, y el encuentro (lugar, nivel y especie) contra las tablas de PKHeX. Incluye las incursiones Dinamax de Espada/Escudo; eventos y teraincursiones aún no se verifican.",
+  "legalityFixedSnack": "Corrección aplicada. Revisa el resultado antes de guardar.",
+  "dexSeen": "Vistos",
+  "dexCaught": "Capturados",
+  "dexShiny": "Variocolor vistos",
+  "dexFilterAll": "Todas",
+  "dexFilterMissing": "Por capturar",
+  "dexFilterSeen": "Solo vistas",
+  "dexFilterCaught": "Capturadas",
+  "dexSearch": "Buscar por nombre o número",
+  "dexComplete": "Completar",
+  "dexCompleteShiny": "Completar con variocolor",
+  "dexClear": "Limpiar",
+  "dexConfirmCompleteTitle": "¿Completar la Pokédex?",
+  "dexConfirmCompleteBody": "Las {n} especies quedarán vistas y capturadas. Algunos juegos dan premios o activan eventos al completarla, así que cambia tu progreso. Puedes deshacerlo antes de guardar.",
+  "@dexConfirmCompleteBody": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "dexConfirmClearTitle": "¿Limpiar la Pokédex?",
+  "dexConfirmClearBody": "Se borrarán todos los registros de vistos y capturados. Puedes deshacerlo antes de guardar.",
+  "dexUnsupported": "La Pokédex de este juego todavía no se puede editar.",
+  "dexNoMatch": "Ninguna especie coincide con el filtro.",
+  "dexToggleSeen": "Visto",
+  "dexToggleCaught": "Capturado",
+  "dexToggleShiny": "Variocolor",
+  "eventsWarningTitle": "Cambiar eventos puede romper la partida",
+  "eventsWarningBody": "Flags y constantes controlan la historia, los objetos recogidos y los combates. Un valor equivocado puede bloquear el avance o hacer desaparecer personajes. Cambia solo lo que entiendas: el original queda a salvo en el Arca.",
+  "eventsFlags": "Flags ({n})",
+  "@eventsFlags": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "eventsWork": "Constantes ({n})",
+  "@eventsWork": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "eventsNamed": "Con nombre",
+  "eventsRaw": "Lista completa",
+  "eventsSearch": "Buscar por nombre o número",
+  "eventsUnsupported": "Este juego todavía no tiene editor de eventos.",
+  "eventsNoMatch": "Nada coincide con la búsqueda.",
+  "eventsUnnamed": "Sin nombre conocido",
+  "eventsNoNames": "Para este juego no hay tabla de nombres fiable: se muestra la lista cruda.",
+  "eventsShowing": "Mostrando {shown} de {n}",
+  "@eventsShowing": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "shown": {
+        "type": "String"
+      }
+    }
+  },
+  "bulkTitle": "Importación en bloque",
+  "bulkDetected": "Detectados ({n})",
+  "@bulkDetected": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "bulkDuplicates": "Ya en el Arca ({n})",
+  "@bulkDuplicates": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "bulkRepeated": "Repetidos en la selección ({n})",
+  "@bulkRepeated": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "bulkUnrecognized": "No reconocidos ({n})",
+  "@bulkUnrecognized": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "bulkIgnored": "{n} archivos ignorados por tamaño o tipo (ROMs, claves, imágenes…).",
+  "@bulkIgnored": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "bulkImportNew": "Importar {n} nuevos",
+  "@bulkImportNew": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "bulkNothingNew": "No hay nada nuevo que importar.",
+  "bulkSubfolders": "{n} archivos revisados en la carpeta y sus subcarpetas.",
+  "@bulkSubfolders": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "archiveExport": "Exportar el Arca (zip)",
+  "archiveExportDesc": "Todas las copias con su estructura por juego y un manifiesto JSON.",
+  "archiveRestore": "Restaurar desde zip",
+  "archiveRestoreDesc": "Recupera un zip exportado: añade lo que falte y salta los duplicados.",
+  "archiveExported": "Arca exportada: {n} copias.",
+  "@archiveExported": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "archiveEmpty": "El Arca está vacía: no hay nada que exportar.",
+  "archiveInvalid": "Ese zip no es una exportación del Arca (falta manifest.json).",
+  "compareAction": "Comparar con…",
+  "compareTitle": "Comparar copias",
+  "compareBefore": "Antes",
+  "compareAfter": "Después",
+  "comparePick": "Elige la otra copia",
+  "compareTrainer": "Entrenador",
+  "compareParty": "Equipo",
+  "compareBoxes": "Cajas",
+  "compareInventory": "Inventario",
+  "comparePokedex": "Pokédex",
+  "compareAdded": "Entró",
+  "compareRemoved": "Salió",
+  "compareChanged": "Cambió",
+  "compareMoved": "Se movió",
+  "compareIdentical": "Las dos copias tienen el mismo contenido.",
+  "compareSummary": "{n} diferencias",
+  "@compareSummary": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "compareDexGained": "{n} especies nuevas en la Pokédex",
+  "@compareDexGained": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "compareDexLost": "{n} especies quitadas de la Pokédex",
+  "@compareDexLost": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "compareSwap": "Intercambiar",
+  "fieldName": "Nombre",
+  "fieldTid": "ID",
+  "fieldSid": "ID secreto",
+  "fieldMoney": "Dinero",
+  "fieldPlayTime": "Tiempo de juego",
+  "fieldGender": "Género",
+  "fieldSpecies": "Especie",
+  "fieldForm": "Forma",
+  "fieldNickname": "Mote",
+  "fieldLevel": "Nivel",
+  "fieldExp": "Experiencia",
+  "fieldMoves": "Movimientos",
+  "fieldItem": "Objeto",
+  "fieldAbility": "Habilidad",
+  "fieldNature": "Naturaleza",
+  "fieldIvs": "IVs",
+  "fieldEvs": "EVs",
+  "fieldShiny": "Variocolor",
+  "fieldBall": "Ball",
+  "fieldFriendship": "Amistad",
+  "showMore": "Mostrar más",
+  "editPokedex": "Pokédex actualizada",
+  "editEvents": "Eventos modificados",
+  "dexRegionAll": "Todas",
+  "dexRegionNational": "Nacional",
+  "dexRegion_galar": "Galar",
+  "dexRegion_armor": "Isla de la Armadura",
+  "dexRegion_crown": "Corona Nieve",
+  "dexRegion_hisui": "Hisui",
+  "dexRegion_paldea": "Paldea",
+  "dexRegion_kitakami": "Kitakami",
+  "dexRegion_blueberry": "Arándano",
+  "dexRegion_lumiose": "Luminalia",
+  "dexRegion_hyperspace": "Hiperespacio",
+  "dexDetailHint": "Mantén pulsada una especie (o clic derecho) para editar géneros y formas.",
+  "dexDetailTitle": "Registro de la Pokédex",
+  "dexDetailSeen": "Visto",
+  "dexDetailCaught": "Capturado",
+  "dexDetailShiny": "Visto variocolor",
+  "dexDetailGenders": "Géneros vistos",
+  "dexDetailMale": "Macho",
+  "dexDetailFemale": "Hembra",
+  "dexDetailGenderless": "Sin género",
+  "dexDetailForms": "Formas vistas",
+  "dexDetailForm": "Forma {form}",
+  "@dexDetailForm": {
+    "placeholders": {
+      "form": {
+        "type": "String"
+      }
+    }
+  },
+  "dexDetailFormBase": "Base",
+  "dexDetailFormUnavailable": "No está en este juego",
+  "dexResearch": "Investigación",
+  "dexResearchNote": "El nivel de investigación se calcula a partir de las tareas del juego; aquí solo se muestra. Completar la Pokédex no lo modifica.",
+  "dexDetailApply": "Aplicar",
+  "dexRegionalNumber": "{region} n.º {number}",
+  "@dexRegionalNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      },
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "exportVerified": "Exportado y verificado (checksums y contenido releídos): {path}",
+  "@exportVerified": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "exportVerifyFailed": "No se exportó: al releer el archivo generado no coincidía con el borrador ({detail}). Tu save original no se ha tocado.",
+  "@exportVerifyFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "legalityAreaEncounter": "Encuentro según las tablas del juego (lugar, nivel y especie)",
+  "originAdopted": "Adoptado de la carpeta",
+  "originMigrated": "Migrado del Arca anterior",
+  "onbEyebrow": "Bienvenido a PKArkTools",
+  "onbTitle": "Tu Arca, en tu carpeta",
+  "onbBody": "Elige una carpeta y todas tus copias vivirán ahí. Si la carpeta está en una nube que sincroniza, tus dispositivos compartirán el Arca sin hacer nada más.",
+  "onbSuggestICloud": "Sugerencia: crea una carpeta en iCloud Drive y tendrás el mismo Arca en el iPhone, el iPad y el Mac.",
+  "onbSuggestDocuments": "Sugerencia: una carpeta en Documentos, o dentro de Google Drive, OneDrive, Dropbox o Syncthing para compartirla entre dispositivos.",
+  "onbChoose": "Elegir carpeta",
+  "onbUseLocal": "Usar carpeta local de la app",
+  "onbLater": "Puedes cambiarla cuando quieras en Ajustes.",
+  "onbPointNoAccount": "Sin cuentas ni inicio de sesión",
+  "onbPointReadable": "Archivos legibles: Juego / Entrenador / fecha",
+  "onbPointSafe": "Nada se sobrescribe nunca",
+  "onbLegacy": "{count, plural, =1{Tu copia actual se copiará a la carpeta elegida y se comprobará.} other{Tus {count} copias actuales se copiarán a la carpeta elegida y se comprobarán una a una.}}",
+  "@onbLegacy": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderPreparing": "Preparando el Arca…",
+  "folderProgress": "Copiando y verificando {done} de {total}",
+  "@folderProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "migrationFailures": "{count, plural, =1{1 copia no se pudo migrar.} other{{count} copias no se pudieron migrar.}} El Arca anterior se conserva intacta para no perder nada.",
+  "@migrationFailures": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderPickFailed": "No se pudo usar esa carpeta: {error}",
+  "@folderPickFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "accessLostTitle": "No podemos abrir tu Arca",
+  "accessLostBody": "La app perdió el permiso sobre la carpeta o ya no está disponible (unidad desconectada, carpeta movida o permiso revocado). Tus copias siguen en la carpeta: vuelve a elegirla para continuar.",
+  "accessRetry": "Reintentar",
+  "accessChooseAgain": "Volver a elegir la carpeta",
+  "folderSection": "Carpeta del Arca",
+  "folderSectionDesc": "Todas las copias viven en esta carpeta. La base de datos de la app es solo un índice de este dispositivo y se reconstruye desde aquí.",
+  "folderSynced": "Sincronizada con {provider}",
+  "@folderSynced": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "folderLocalOnly": "Solo en este dispositivo",
+  "folderAppLocal": "Carpeta local de la app",
+  "folderReindex": "Reindexar",
+  "folderChange": "Cambiar carpeta…",
+  "folderChangeTitle": "¿Mover o copiar el Arca?",
+  "folderChangeBody": "Las copias se escribirán en la carpeta nueva y se comprobará cada una por su SHA-256. Al mover, la carpeta anterior solo se vacía de las copias ya verificadas.",
+  "folderMove": "Mover",
+  "folderCopy": "Copiar y conservar la anterior",
+  "folderChangeDone": "Arca en la carpeta nueva: {copied} copiadas, {skipped} ya estaban.",
+  "@folderChangeDone": {
+    "placeholders": {
+      "copied": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "folderLeftBehind": "{count, plural, =1{1 archivo suelto se quedó en la carpeta anterior.} other{{count} archivos sueltos se quedaron en la carpeta anterior.}}",
+  "@folderLeftBehind": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reindexNever": "Aún no se ha revisado la carpeta en esta sesión.",
+  "reindexLast": "Última revisión: {time}",
+  "@reindexLast": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "reindexResult": "Reindexado: {added} nuevas, {removed} quitadas, {dups} duplicadas.",
+  "@reindexResult": {
+    "placeholders": {
+      "added": {
+        "type": "int"
+      },
+      "removed": {
+        "type": "int"
+      },
+      "dups": {
+        "type": "int"
+      }
+    }
+  },
+  "statBackups": "copias",
+  "statIssues": "problemas",
+  "statLoose": "sueltos",
+  "statIgnored": "ignorados",
+  "issuesTitle": "Problemas",
+  "issueMissingSave": "Falta el save de este .json (puede estar sincronizándose)",
+  "issueMissingSidecar": "Falta el .json de este save (puede estar sincronizándose)",
+  "issueCorruptSidecar": ".json dañado o ilegible",
+  "issueSizeMismatch": "El tamaño no coincide con el .json",
+  "issueHashMismatch": "El contenido no coincide con su SHA-256",
+  "issueUnreadable": "No se pudo leer",
+  "looseTitle": "Saves sueltos",
+  "looseDesc": "Archivos copiados a mano en la carpeta. Al adoptarlos se identifica su juego y se colocan en su sitio con su .json.",
+  "adopt": "Adoptar",
+  "adoptAll": "Adoptar todos",
+  "adoptDone": "Adoptado: {game}",
+  "@adoptDone": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      }
+    }
+  },
+  "ignoredFiles": "{count, plural, =1{1 archivo ignorado (temporal, parcial o copia de conflicto de la nube).} other{{count} archivos ignorados (temporales, parciales o copias de conflicto de la nube).}}",
+  "@ignoredFiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "snapshotDamaged": "Esta copia está dañada en la carpeta del Arca.",
+  "dexSearchShort": "Nombre o número",
+  "dexDetailHintTouch": "Mantén pulsada una especie para editar géneros y formas.",
+  "dexFilterLabel": "Filtrar Pokédex",
+  "onbSuggestGoogleDrive": "Sugerencia: elige una carpeta dentro de Google Drive para compartir el Arca con tus otros dispositivos, o en Documentos para tenerla solo en este teléfono.",
+  "onbSuggestOneDrive": "Sugerencia: crea una carpeta en OneDrive y tendrás el mismo Arca en todos tus PC.",
+  "onbSuggestSyncthing": "Sugerencia: una carpeta sincronizada con Syncthing te da el mismo Arca en todos tus equipos, sin cuentas.",
+  "boxPrevious": "Caja anterior",
+  "boxNext": "Caja siguiente",
+  "pouchSwipeHint": "Desliza un objeto hacia la izquierda para quitarlo.",
+  "cardNoParty": "Sin equipo en esta copia",
+  "checksumMinor": "Verificación: aviso leve",
+  "checksumMajor": "Datos dañados",
+  "damageMinorTitle": "Se lee entero, pero una verificación no coincide",
+  "damageMajorTitle": "Parte de este save no se puede leer",
+  "damagePartWhole": "Las sumas de verificación del archivo no coinciden con sus datos.",
+  "damagePartTrainer": "El bloque del entrenador no coincide con su verificación.",
+  "damagePartParty": "El bloque del equipo no coincide con su verificación.",
+  "damagePartBoxes": "El bloque de cajas no coincide con su verificación.",
+  "damagePartOther": "Un bloque de otros datos de la partida (objetos, Pokédex, eventos…) no coincide con su verificación.",
+  "damagePartSignature": "La firma digital del save no corresponde a sus datos.",
+  "damagePartFileHash": "El hash de verificación del archivo completo no coincide.",
+  "damagePartUnreadable": "Hay datos que no se pueden leer (Pokémon o valores imposibles).",
+  "damageMinorMeaning": "Todos los datos se leen bien y puedes verlos. Se abrió en solo lectura porque el juego comprueba estas verificaciones: con una que no coincide, podría no cargar el save o darlo por dañado.",
+  "damageMajorMeaning": "Lo que ves puede estar incompleto o ser incorrecto. Se abrió en solo lectura: no es seguro editarlo.",
+  "damageWhy": "Suele pasar cuando el archivo se copió a medias, cuando es un save de otra versión o formato, o cuando otra herramienta lo editó sin recalcular sus verificaciones.",
+  "damageMinorTodo": "Si el juego carga este save sin problemas, usa «Reparar checksums y exportar» para obtener una copia con las verificaciones recalculadas (la copia del Arca no se toca). Si no, vuelve a copiar el save desde la consola o el emulador.",
+  "damageMajorTodo": "Vuelve a copiar el save original desde la consola o el emulador e impórtalo de nuevo. Puedes exportar esta copia tal cual con «Exportar».",
+  "damageRepairExport": "Reparar checksums y exportar",
+  "damageTechnical": "Detalle técnico",
+  "repairedSuffix": "reparado",
+  "exportRepaired": "Copia reparada, verificada y exportada: {path}",
+  "@exportRepaired": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "versionPickMenu": "Fijar versión del juego…",
+  "versionPickTitle": "Versión del juego",
+  "versionPickBody": "El save no indica qué cartucho es. Elige uno para el color y el título; se guarda en el .json de cada copia.",
+  "versionUnspecified": "Sin especificar (pareja)",
+  "versionFromSave": "Este save ya indica la versión: {name}.",
+  "@versionFromSave": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spritesSection": "Iconos",
+  "spritesSectionDesc": "Los sprites de Pokémon, objetos, Balls, tipos y cintas no vienen con la app: se descargan la primera vez que se ven y se guardan en la caché de la app (nunca en la carpeta del Arca). Sin conexión se muestran las iniciales.",
+  "spritesCacheSize": "En caché: {size} · descarga completa: {total} ({count} iconos)",
+  "@spritesCacheSize": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "spritesDownloadAll": "Descargar todos los iconos ({size})",
+  "@spritesDownloadAll": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "spritesClear": "Borrar caché de iconos",
+  "spritesProgress": "{done} de {total} iconos",
+  "@spritesProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "spritesDone": "Todos los iconos están descargados.",
+  "spritesFailed": "No se pudieron descargar {count} iconos; vuelve a intentarlo con conexión.",
+  "@spritesFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spritesCancelled": "Descarga cancelada.",
+  "spritesProgressBytes": "{done} de {total} iconos · {size} de {totalSize}",
+  "@spritesProgressBytes": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      },
+      "totalSize": {
+        "type": "String"
+      }
+    }
+  },
+  "spritesOffline": "Sin conexión a Internet: no se pudo contactar con GitHub. Lo ya descargado se conserva; vuelve a intentarlo con conexión.",
+  "spritesCleared": "Caché de iconos borrada.",
+  "spritesCredits": "Iconos: recursos de PKHeX (github.com/kwsch/PKHeX, commit {commit}), descargados bajo demanda. Los sprites son © Nintendo / Game Freak / The Pokémon Company.",
+  "@spritesCredits": {
+    "placeholders": {
+      "commit": {
+        "type": "String"
+      }
+    }
+  },
+  "sectionOrigin": "Origen",
+  "sectionRibbons": "Cintas y marcas",
+  "originGame": "Juego de origen",
+  "originPlace": "Lugar de captura",
+  "originHatchPlace": "Lugar de eclosión",
+  "originLevel": "Nivel de encuentro",
+  "originDate": "Fecha",
+  "originEggDate": "Huevo recibido",
+  "originEncounterHere": "aparece aquí",
+  "originShowAll": "Mostrar todos los lugares del juego",
+  "originOnlyValid": "Solo lugares donde aparece",
+  "originFateful": "Encuentro fatídico (evento)",
+  "originEggReceived": "Huevo recibido en {place} el {date}",
+  "@originEggReceived": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "originHatched": "Eclosionó en {place} el {date}",
+  "@originHatched": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "originMet": "Capturado en {place}, nivel {nLevel}, {date}",
+  "@originMet": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "nLevel": {
+        "type": "int"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "originNoDate": "sin fecha (Gen 3)",
+  "originTrainer": "Entrenador original: {name} (ID {tid})",
+  "@originTrainer": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "tid": {
+        "type": "String"
+      }
+    }
+  },
+  "originHomeTracker": "Pasó por Pokémon HOME (rastreador {tracker})",
+  "@originHomeTracker": {
+    "placeholders": {
+      "tracker": {
+        "type": "String"
+      }
+    }
+  },
+  "originNotInGame": "Esta especie no aparece en las tablas de encuentros de su juego de origen (¿evento, intercambio o huevo?).",
+  "originValidPlaces": "El lugar o el nivel no cuadran con su juego. Lugares válidos: {places}",
+  "@originValidPlaces": {
+    "placeholders": {
+      "places": {
+        "type": "String"
+      }
+    }
+  },
+  "transferPalPark": "Parque Compi",
+  "transferPokeTransfer": "Pokétransfer",
+  "transferTransporter": "Poké Transporter / Banco",
+  "transferVirtualConsole": "Consola Virtual → Poké Transporter",
+  "transferBank": "Pokémon Banco",
+  "ribbonsContest": "Concursos",
+  "ribbonsBattle": "Batalla",
+  "ribbonsCommemorative": "Conmemorativas",
+  "ribbonsEvent": "Eventos",
+  "ribbonsMarks": "Marcas",
+  "ribbonsOwned": "{count} de {nTotal}",
+  "@ribbonsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "nTotal": {
+        "type": "int"
+      }
+    }
+  },
+  "ribbonsOnlyOwned": "Solo las que tiene",
+  "ribbonsGiveAll": "Dar todas las válidas",
+  "ribbonsRemoveAll": "Quitar todas",
+  "ribbonsGiven": "{count} cintas añadidas.",
+  "@ribbonsGiven": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ribbonsNone": "No tiene cintas ni marcas.",
+  "ribbonHas": "La tiene",
+  "ribbonAffixed": "Cinta mostrada",
+  "ribbonAffixedHint": "Se muestra junto a su nombre (título).",
+  "ribbonAffixedNow": "Muestra: {name}",
+  "@ribbonAffixedNow": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ribbonEventOnly": "Solo se repartió en eventos.",
+  "ribbonEncounterMark": "Marca de encuentro: la pone el juego al capturarlo.",
+  "ribbonObtainable": "Se puede conseguir en los juegos por los que pudo pasar.",
+  "ribbonNotObtainable": "No se puede conseguir en los juegos por los que pudo pasar.",
+  "originDateUnknown": "sin fecha",
+  "filtersAction": "Filtros",
+  "filtersTitle": "Filtros",
+  "filtersClear": "Limpiar",
+  "filtersClearAll": "Limpiar filtros",
+  "filtersShow": "{count, plural, =0{Ninguna partida} =1{Ver 1 partida} other{Ver {count} partidas}}",
+  "@filtersShow": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filtersResults": "{count, plural, =1{1 partida de {nTotal}} other{{count} partidas de {nTotal}}}",
+  "@filtersResults": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "nTotal": {
+        "type": "int"
+      }
+    }
+  },
+  "filtersNoMatchTitle": "Ninguna partida coincide",
+  "filtersNoMatchBody": "Prueba a quitar algún filtro o cambia la búsqueda.",
+  "filtersRemove": "Quitar filtro {label}",
+  "@filtersRemove": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "sortLabel": "Ordenar",
+  "sortRecent": "Más reciente",
+  "sortTrainer": "Entrenador",
+  "sortGame": "Juego / generación",
+  "sortPlayTime": "Horas de juego",
+  "sortCopies": "Número de copias",
+  "filterGeneration": "Generación",
+  "filterGenShort": "Gen {gen}",
+  "@filterGenShort": {
+    "placeholders": {
+      "gen": {
+        "type": "int"
+      }
+    }
+  },
+  "filterPlatform": "Consola",
+  "filterSource": "Origen",
+  "sourceEmulator": "Emulador",
+  "sourceMobile": "Port Android/iOS",
+  "sourceCheckpoint": "Checkpoint/JKSM",
+  "sourceCartridge": "Cartucho",
+  "sourceOther": "Otro / desconocido",
+  "filterGame": "Juego",
+  "filterStatus": "Estado",
+  "statusDamaged": "Con avisos de daño",
+  "statusLegality": "Con avisos de legalidad",
+  "statusEdited": "Editadas por mí",
+  "statusMultiple": "Con varias copias",
+  "legalityScanning": "Revisando legalidad… {done} de {nTotal}",
+  "@legalityScanning": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "nTotal": {
+        "type": "int"
+      }
+    }
+  },
+  "filterDate": "Última copia",
+  "datePresetWeek": "Última semana",
+  "datePresetMonth": "Último mes",
+  "datePresetYear": "Último año",
+  "dateCustom": "Elegir fechas…",
+  "dateRange": "{from} – {to}",
+  "@dateRange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "spritesOnDisk": "Guardados y válidos: {nValid} de {nTotal} iconos.",
+  "@spritesOnDisk": {
+    "placeholders": {
+      "nTotal": {
+        "type": "int"
+      },
+      "nValid": {
+        "type": "int"
+      }
+    }
+  },
+  "spritesMissing": "Faltan {count} iconos o están dañados (vacíos o cortados): «Reparar iconos» descarga solo esos.",
+  "@spritesMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spritesRepair": "Reparar iconos ({count})",
+  "@spritesRepair": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spritesIncomplete": "La descarga terminó, pero faltan {count} iconos. Pulsa «Reparar iconos» con conexión.",
+  "@spritesIncomplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}

@@ -1,0 +1,417 @@
+import 'dart:convert';
+
+import 'package:pkcore/pkcore.dart' hide Platform;
+
+/// Estructura de la carpeta del Arca.
+///
+/// ```
+/// PKArkTools/
+///   README.txt
+///   <Juego>/<Entrenador (TID)>/<AAAA-MM-DD_HHMMSS>_<hash8>.<ext>
+///   <Juego>/<Entrenador (TID)>/<AAAA-MM-DD_HHMMSS>_<hash8>.<ext>.json
+/// ```
+/// Los archivos son inmutables y su nombre es único (fecha + hash), así que
+/// varios dispositivos pueden escribir en la misma carpeta sincronizada sin
+/// pisarse.
+abstract final class ArcaLayout {
+  static const rootDir = 'PKArkTools';
+  static const readmeName = 'README.txt';
+  static const readmeMarker = 'PKArkTools · Arca';
+  static const sidecarExt = '.json';
+  static const schema = 'pkarktools-snapshot';
+
+  static const schemaVersion = 1;
+  static const maxSegment = 64;
+
+  static const _windowsReserved = {
+    'CON', 'PRN', 'AUX', 'NUL', //
+    'COM1', 'COM2', 'COM3', 'COM4', 'COM5', 'COM6', 'COM7', 'COM8', 'COM9',
+    'LPT1', 'LPT2', 'LPT3', 'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9',
+  };
+
+  /// Sanea un segmento de ruta para Windows, macOS, Linux, Android (FAT/exFAT)
+  /// y los proveedores de nube: sin separadores ni caracteres reservados, sin
+  /// puntos o espacios al final, sin nombres reservados de Windows y con
+  /// longitud acotada.
+  static String safeSegment(String s) {
+    var out = s
+        .replaceAll(RegExp(r'\s*[/\\:]\s*'), ' - ')
+        .replaceAll(RegExp(r'[*?"<>|\x00-\x1F\x7F]'), '_')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+    // Sin punto inicial (archivo oculto) ni puntos/espacios finales (Windows).
+    out = out.replaceFirst(RegExp(r'^[.\s]+'), '').replaceFirst(RegExp(r'[.\s]+$'), '');
+    if (out.isEmpty) out = '_';
+    final runes = out.runes.toList();
+    if (runes.length > maxSegment) out = String.fromCharCodes(runes.take(maxSegment)).trimRight();
+    final stem = out.split('.').first.toUpperCase();
+    if (_windowsReserved.contains(stem)) out = '_$out';
+    return out;
+  }
+
+  static String _two(int v) => v.toString().padLeft(2, '0');
+
+  /// `AAAA-MM-DD_HHMMSS` en hora local.
+  static String stamp(DateTime d) {
+    final l = d.toLocal();
+    return '${l.year.toString().padLeft(4, '0')}-${_two(l.month)}-${_two(l.day)}_${_two(l.hour)}${_two(l.minute)}${_two(l.second)}';
+  }
+
+  /// Extensión del archivo original, en minúsculas; `.sav` si no tiene una
+  /// razonable (p. ej. el `main` de Switch).
+  static String extensionFor(String originalName) {
+    final dot = originalName.lastIndexOf('.');
+    if (dot <= 0 || dot == originalName.length - 1) return '.sav';
+    final ext = originalName.substring(dot).toLowerCase();
+    if (!RegExp(r'^\.[a-z0-9]{1,8}$').hasMatch(ext)) return '.sav';
+    if (const {'.json', '.tmp', '.txt', '.icloud', '.part', '.partial'}.contains(ext)) return '.sav';
+    return ext;
+  }
+
+  static String gameDir(String gameCode) => safeSegment(GameVersion.fromCode(gameCode)?.nameEs ?? gameCode);
+
+  static String trainerDir(String trainerName, String displayTid) =>
+      safeSegment('${trainerName.trim().isEmpty ? '_' : trainerName} ($displayTid)');
+
+  /// Ruta relativa (a `PKArkTools/`) del save de un snapshot.
+  static String savePath({
+    required String gameCode,
+    required String trainerName,
+    required String displayTid,
+    required DateTime importedAt,
+    required String sha256,
+    required String originalName,
+    int attempt = 0,
+  }) {
+    final base = '${stamp(importedAt)}_${sha256.substring(0, 8)}${attempt > 0 ? '-${attempt + 1}' : ''}';
+    return '${gameDir(gameCode)}/${trainerDir(trainerName, displayTid)}/$base${extensionFor(originalName)}';
+  }
+
+  static String sidecarFor(String savePath) => '$savePath$sidecarExt';
+
+  /// Nombre de un save gestionado por el Arca.
+  static final managedSave = RegExp(r'^\d{4}-\d{2}-\d{2}_\d{6}_[0-9a-f]{8}(-\d+)?\.[a-z0-9]{1,8}$');
+
+  /// Nombre de un sidecar gestionado.
+  static final managedSidecar = RegExp(r'^\d{4}-\d{2}-\d{2}_\d{6}_[0-9a-f]{8}(-\d+)?\.[a-z0-9]{1,8}\.json$');
+
+  static final _managedPrefix = RegExp(r'^\d{4}-\d{2}-\d{2}_\d{6}_[0-9a-f]{8}');
+
+  static final _conflict = RegExp(
+    r'(conflicted copy|copia en conflicto|\bconflict\b|\.sync-conflict-|\s\(\d+\)$)',
+    caseSensitive: false,
+  );
+
+  /// Archivos que se ignoran sin error: temporales y parciales de la nube,
+  /// copias de conflicto, ocultos y metadatos del sistema.
+  static IgnoreReason? ignoreReason(String relPath) {
+    final segments = relPath.split('/');
+    for (final s in segments.take(segments.length - 1)) {
+      if (s.startsWith('.') || s.startsWith('~')) return IgnoreReason.hidden;
+    }
+    final name = segments.last;
+    final lower = name.toLowerCase();
+    if (lower.endsWith('.icloud')) return IgnoreReason.cloudPlaceholder;
+    if (lower.endsWith('.tmp') ||
+        lower.endsWith('.part') ||
+        lower.endsWith('.partial') ||
+        lower.endsWith('.crdownload') ||
+        lower.endsWith('.download') ||
+        lower.endsWith('.gdoc') ||
+        lower.startsWith('~\$') ||
+        lower.startsWith('.~')) {
+      return IgnoreReason.partial;
+    }
+    if (name.startsWith('.') || lower == 'desktop.ini' || lower == 'thumbs.db') return IgnoreReason.hidden;
+    if (managedSave.hasMatch(name) || managedSidecar.hasMatch(name)) return null;
+    // Un nombre del Arca con algo añadido es una copia de conflicto de la nube
+    // ("… 2.sav" de iCloud, "…-PORTATIL.sav" de OneDrive, "… (1).sav"…).
+    if (_managedPrefix.hasMatch(name)) return IgnoreReason.conflictCopy;
+    final stem = name.contains('.') ? name.substring(0, name.lastIndexOf('.')) : name;
+    if (_conflict.hasMatch(stem)) return IgnoreReason.conflictCopy;
+    return null;
+  }
+
+  static String readme() => '''
+$readmeMarker
+====================
+
+Esta carpeta contiene las copias de tus partidas guardadas por PKArkTools.
+Puedes ponerla en iCloud Drive, Google Drive, OneDrive, Dropbox o Syncthing
+y todos tus dispositivos verán las mismas copias.
+
+Estructura
+----------
+  PKArkTools/
+    README.txt                       (este archivo)
+    <Juego>/<Entrenador (TID)>/
+      AAAA-MM-DD_HHMMSS_<hash8>.<ext>         la copia del save, tal cual
+      AAAA-MM-DD_HHMMSS_<hash8>.<ext>.json    sus datos: SHA-256 completo, juego,
+                                              entrenador, TID/SID, horas, origen,
+                                              notas, dispositivo y versión.
+
+Reglas
+------
+* Los archivos nunca se modifican ni se sobrescriben: cada copia nueva es un
+  archivo nuevo con nombre único (fecha + hash). Por eso varios dispositivos
+  pueden usar la misma carpeta a la vez.
+* Si copias un save suelto en cualquier subcarpeta, PKArkTools lo detecta y
+  te ofrece "adoptarlo" (lo identifica y lo coloca en su sitio).
+* Las copias de conflicto de la nube ("conflicted copy", "(1)", .icloud,
+  .tmp…) se ignoran sin borrar nada.
+* La base de datos de la app es solo un índice local de cada dispositivo y
+  nunca se guarda aquí: se puede reconstruir en cualquier momento desde
+  Ajustes → Reindexar.
+''';
+}
+
+enum IgnoreReason { hidden, cloudPlaceholder, partial, conflictCopy }
+
+/// Metadatos de un snapshot tal como se guardan en su `.json`.
+class SnapshotMeta {
+  const SnapshotMeta({
+    required this.sha256,
+    required this.sizeBytes,
+    required this.importedAt,
+    required this.originalFileName,
+    required this.origin,
+    required this.gameCode,
+    required this.generation,
+    required this.versionId,
+    required this.format,
+    required this.checksum,
+    required this.trainerName,
+    required this.tid,
+    required this.sid,
+    required this.displayTid,
+    required this.displaySid,
+    required this.playTimeSeconds,
+    required this.partySummary,
+    required this.boxedCount,
+    required this.slot,
+    this.sourcePath,
+    this.note,
+    this.deviceId,
+    this.deviceName,
+    this.schemaVersion = ArcaLayout.schemaVersion,
+  });
+
+  final String sha256;
+  final int sizeBytes;
+  final DateTime importedAt;
+  final String originalFileName;
+  final String origin;
+  final String? sourcePath;
+  final String? note;
+  final String gameCode;
+  final int generation;
+  final int? versionId;
+  final String format;
+  final String checksum;
+  final String trainerName;
+  final int tid;
+  final int? sid;
+  final String displayTid;
+  final String? displaySid;
+  final int playTimeSeconds;
+  final String partySummary;
+  final int boxedCount;
+  final String? deviceId;
+  final String? deviceName;
+  final int schemaVersion;
+
+  /// Partida a la que pertenece (para una edición puede diferir del
+  /// entrenador del propio save, p. ej. si se cambió el nombre).
+  final SlotMeta slot;
+
+  /// Copia con la versión de la partida fijada a mano (null = sin fijar).
+  SnapshotMeta withSlotVersion(int? v) => SnapshotMeta(
+        sha256: sha256,
+        sizeBytes: sizeBytes,
+        importedAt: importedAt,
+        originalFileName: originalFileName,
+        origin: origin,
+        gameCode: gameCode,
+        generation: generation,
+        versionId: versionId,
+        format: format,
+        checksum: checksum,
+        trainerName: trainerName,
+        tid: tid,
+        sid: sid,
+        displayTid: displayTid,
+        displaySid: displaySid,
+        playTimeSeconds: playTimeSeconds,
+        partySummary: partySummary,
+        boxedCount: boxedCount,
+        sourcePath: sourcePath,
+        note: note,
+        deviceId: deviceId,
+        deviceName: deviceName,
+        schemaVersion: schemaVersion,
+        slot: SlotMeta(
+          identityKey: slot.identityKey,
+          gameCode: slot.gameCode,
+          generation: slot.generation,
+          versionId: v ?? versionId,
+          trainerName: slot.trainerName,
+          tid: slot.tid,
+          sid: slot.sid,
+          displayTid: slot.displayTid,
+          displaySid: slot.displaySid,
+          versionManual: v != null,
+        ),
+      );
+
+  Map<String, Object?> toJson() => {
+        'schema': ArcaLayout.schema,
+        'schemaVersion': schemaVersion,
+        'sha256': sha256,
+        'sizeBytes': sizeBytes,
+        'importedAt': importedAt.toUtc().toIso8601String(),
+        'originalFileName': originalFileName,
+        'origin': origin,
+        'sourcePath': sourcePath,
+        'note': note,
+        'device': {'id': deviceId, 'name': deviceName},
+        'game': {
+          'code': gameCode,
+          'name': GameVersion.fromCode(gameCode)?.nameEs,
+          'generation': generation,
+          'versionId': versionId,
+          'format': format,
+          'checksum': checksum,
+        },
+        'trainer': {
+          'name': trainerName,
+          'tid': tid,
+          'sid': sid,
+          'displayTid': displayTid,
+          'displaySid': displaySid,
+          'playTimeSeconds': playTimeSeconds,
+        },
+        'summary': {'party': partySummary, 'boxedCount': boxedCount},
+        'slot': slot.toJson(),
+      };
+
+  String encode() => '${const JsonEncoder.withIndent('  ').convert(toJson())}\n';
+
+  /// Lanza [FormatException] si el JSON no es un sidecar válido.
+  static SnapshotMeta decode(String text) {
+    final Object? raw;
+    try {
+      raw = jsonDecode(text);
+    } catch (_) {
+      throw const FormatException('JSON ilegible');
+    }
+    if (raw is! Map<String, Object?> || raw['schema'] != ArcaLayout.schema) {
+      throw const FormatException('No es un sidecar de PKArkTools');
+    }
+    T req<T>(Map<String, Object?> m, String k) {
+      final v = m[k];
+      if (v is T) return v;
+      throw FormatException('Falta "$k"');
+    }
+
+    Map<String, Object?> obj(Map<String, Object?> m, String k) => req<Map<String, Object?>>(m, k);
+    final sha = req<String>(raw, 'sha256');
+    if (!RegExp(r'^[0-9a-f]{64}$').hasMatch(sha)) throw const FormatException('SHA-256 no válido');
+    final game = obj(raw, 'game');
+    final trainer = obj(raw, 'trainer');
+    final summary = obj(raw, 'summary');
+    final device = raw['device'] is Map<String, Object?> ? raw['device'] as Map<String, Object?> : const <String, Object?>{};
+    final importedAt = DateTime.tryParse(req<String>(raw, 'importedAt'));
+    if (importedAt == null) throw const FormatException('Fecha no válida');
+    return SnapshotMeta(
+      schemaVersion: (raw['schemaVersion'] as num?)?.toInt() ?? 1,
+      sha256: sha,
+      sizeBytes: req<num>(raw, 'sizeBytes').toInt(),
+      importedAt: importedAt.toLocal(),
+      originalFileName: req<String>(raw, 'originalFileName'),
+      origin: req<String>(raw, 'origin'),
+      sourcePath: raw['sourcePath'] as String?,
+      note: raw['note'] as String?,
+      deviceId: device['id'] as String?,
+      deviceName: device['name'] as String?,
+      gameCode: req<String>(game, 'code'),
+      generation: req<num>(game, 'generation').toInt(),
+      versionId: (game['versionId'] as num?)?.toInt(),
+      format: (game['format'] as String?) ?? '',
+      checksum: (game['checksum'] as String?) ?? 'notChecked',
+      trainerName: req<String>(trainer, 'name'),
+      tid: req<num>(trainer, 'tid').toInt(),
+      sid: (trainer['sid'] as num?)?.toInt(),
+      displayTid: req<String>(trainer, 'displayTid'),
+      displaySid: trainer['displaySid'] as String?,
+      playTimeSeconds: (trainer['playTimeSeconds'] as num?)?.toInt() ?? 0,
+      partySummary: (summary['party'] as String?) ?? '',
+      boxedCount: (summary['boxedCount'] as num?)?.toInt() ?? 0,
+      slot: SlotMeta.fromJson(obj(raw, 'slot')),
+    );
+  }
+}
+
+/// Identidad de la partida (agrupa snapshots).
+class SlotMeta {
+  const SlotMeta({
+    required this.identityKey,
+    required this.gameCode,
+    required this.generation,
+    required this.versionId,
+    required this.trainerName,
+    required this.tid,
+    required this.sid,
+    required this.displayTid,
+    required this.displaySid,
+    this.versionManual = false,
+  });
+
+  final String identityKey;
+
+  /// `true` si [versionId] lo fijó el usuario (el save no la guarda).
+  final bool versionManual;
+  final String gameCode;
+  final int generation;
+  final int? versionId;
+  final String trainerName;
+  final int tid;
+  final int? sid;
+  final String displayTid;
+  final String? displaySid;
+
+  Map<String, Object?> toJson() => {
+        'identityKey': identityKey,
+        'gameCode': gameCode,
+        'generation': generation,
+        'versionId': versionId,
+        if (versionManual) 'versionManual': true,
+        'trainerName': trainerName,
+        'tid': tid,
+        'sid': sid,
+        'displayTid': displayTid,
+        'displaySid': displaySid,
+      };
+
+  static SlotMeta fromJson(Map<String, Object?> m) {
+    final key = m['identityKey'];
+    final game = m['gameCode'];
+    final name = m['trainerName'];
+    final tid = m['tid'];
+    final dtid = m['displayTid'];
+    if (key is! String || game is! String || name is! String || tid is! num || dtid is! String) {
+      throw const FormatException('Bloque "slot" incompleto');
+    }
+    return SlotMeta(
+      identityKey: key,
+      gameCode: game,
+      generation: (m['generation'] as num?)?.toInt() ?? 0,
+      versionId: (m['versionId'] as num?)?.toInt(),
+      trainerName: name,
+      tid: tid.toInt(),
+      sid: (m['sid'] as num?)?.toInt(),
+      displayTid: dtid,
+      displaySid: m['displaySid'] as String?,
+      versionManual: m['versionManual'] == true,
+    );
+  }
+}

@@ -1,0 +1,28 @@
+name: Feature request / Petición de función
+description: Suggest an idea or a game/format to support. / Propón una idea o un juego/formato a soportar.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would it solve? / ¿Qué problema resolvería?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal / Propuesta
+      description: How you imagine it working; games and platforms involved. / Cómo te lo imaginas; juegos y plataformas afectados.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives / Alternativas
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope / Alcance
+      options:
+        - label: It doesn't require shipping ROMs, keys, sprites or other copyrighted assets. / No requiere incluir ROMs, claves, sprites ni otro material con copyright.
+          required: true

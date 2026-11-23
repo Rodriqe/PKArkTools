@@ -1,0 +1,65 @@
+name: Bug report / Informe de error
+description: Something doesn't work with a save or in the app. / Algo no funciona con un save o en la app.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! / ¡Gracias por avisar!
+
+        **Privacy:** a save contains your trainer name and IDs. Don't attach it here unless you're OK with it being public; say so below and we'll arrange a private way.
+        **Privacidad:** un save contiene tu nombre de entrenador e IDs. No lo adjuntes aquí salvo que no te importe que sea público; indícalo abajo y buscaremos una vía privada.
+
+        Never attach ROMs, BIOS, keys or copyrighted files. / Nunca adjuntes ROMs, BIOS, claves ni archivos con copyright.
+  - type: input
+    id: game
+    attributes:
+      label: Game and language / Juego e idioma
+      placeholder: "Pokémon Emerald (ES), Pokémon Sword 1.3.2…"
+    validations:
+      required: true
+  - type: dropdown
+    id: format
+    attributes:
+      label: Save format and source / Formato y origen del save
+      options:
+        - ".sav from an emulator (mGBA, melonDS, Citra/Azahar…)"
+        - ".dsv / .sav with footer (DeSmuME, flashcart)"
+        - "Switch `main` (Checkpoint, JKSV, Yuzu/Ryujinx/Eden…)"
+        - "3DS (Checkpoint, JKSV, Citra/Azahar)"
+        - "Cartridge dump (GB Operator, retrode…)"
+        - "GameCube / Wii (.gci, .bin)"
+        - "Other / Otro (describe below)"
+    validations:
+      required: true
+  - type: input
+    id: size
+    attributes:
+      label: File name and size in bytes / Nombre y tamaño en bytes
+      placeholder: "Pokemon Esmeralda.sav — 131072"
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform / Plataforma
+      multiple: true
+      options: [Android, iOS / iPadOS, macOS, Windows, Linux]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: App version / Versión de la app
+      description: Settings → About / Ajustes → Acerca de
+      placeholder: "0.1.0+1"
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened and what did you expect? / ¿Qué pasó y qué esperabas?
+      description: Steps to reproduce, messages, screenshots (hide your trainer name/ID if you like). / Pasos, mensajes, capturas (oculta tu nombre/ID si quieres).
+    validations:
+      required: true
+  - type: dropdown
+    id: share
+    attributes:
+      label: Can you share the save privately? / ¿Puedes compartir el save en privado?
+      options: ["Yes / Sí", "No"]

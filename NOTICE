@@ -1,0 +1,78 @@
+PKArkTools
+Copyright (C) 2026 Los autores de PKArkTools
+
+Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo
+los términos de la GNU General Public License versión 3 (ver LICENSE).
+
+Código de terceros portado o incluido
+-------------------------------------
+
+* PKHeX.Core — https://github.com/kwsch/PKHeX — (c) Kaphotics y colaboradores, GPL-3.0.
+  Lógica portada a Dart en packages/pkcore:
+    - SwishCrypto, SCBlock y SCXorShift32 (saves de Switch).
+    - PokeCrypto (cifrado y barajado de entidades PK3–PK9).
+    - SpeciesConverter (índices internos Gen 1 / Gen 3 / Gen 9).
+    - Tablas de caracteres Gen 1–4 (StringConverter*), generadas con tool/gen_charsets.py.
+    - Offsets y reglas de detección de SaveUtil, SAV1–SAV9 y sus bloques.
+    - Algoritmos de checksum (Checksums.cs).
+    - Estructuras PK1–PK9, PB7, PB8, PA8 y PA9 (offsets de campos, cálculo de
+      estadísticas, PID/EC variocolor) y escritura de SAV1–SAV9 (bloques,
+      bolsillos de inventario, datos de entrenador).
+    - Reglas de legalidad inspiradas en PKHeX.Core/Legality (orígenes por
+      versión, Balls por generación, habilidad oculta, variocolor bloqueado
+      en encuentros estáticos, encuentro fatídico y movimientos recordables).
+    - Inventario de Leyendas Arceus y Leyendas Z-A (PlayerBag8a, MyItem9a,
+      InventoryPouch8a/9a, ItemStorage8LA/9ZA).
+    - Escritura de Oro/Plata coreano: StringConverter2KOR (tablas generadas
+      con tool/gen_charsets.py) y checksum coreano de SAV2.
+    - Pokédex de SAV1/SAV2/SAV3, Zukan4 y Zukan5 (bits de visto, capturado,
+      género y variocolor).
+    - Offsets de flags y constantes de eventos (SAV1–SAV5) y etiquetas de
+      Resources/text/script (flags_*/const_*), más los nombres de bloque de
+      SaveBlockAccessor8SWSH/8LA/9SV/9ZA, generados con tool/gen_event_labels.py.
+    - Tablas de juego generadas con tool/gen_game_data.py desde
+      PKHeX.Core/Resources: nombres es/en de movimientos, objetos, habilidades,
+      naturalezas y tipos; datos personales (stats base, formas, habilidades,
+      MT), learnsets, movimientos huevo, PP y listas de objetos por bolsillo.
+    - Fase 4: Pokédex Zukan6XY/6AO, Zukan7/7b, Zukan8 (SwSh), Zukan8b (BDSP),
+      PokedexSave8a (Leyendas Arceus), Zukan9Paldea/Zukan9Kitakami y Zukan9a,
+      con DexFormUtil, índices regionales de PersonalInfo y
+      PokedexConstants8a (tool/gen_dex_data.py).
+    - Cintas y marcas: propiedades Ribbon* de PK3–PA9, RibbonIndex, nombres
+      text_Ribbons_es/en y reglas de RibbonVerifier/MarkRules (simplificadas),
+      generadas con tool/gen_ribbon_data.py. ItemConverter (objetos Gen 2/3).
+    - SpriteName (nombres de los iconos).
+
+Iconos (sprites)
+----------------
+
+Los sprites de Pokémon, objetos, Balls, tipos y cintas NO se distribuyen con
+PKArkTools: la app los descarga bajo demanda de los recursos del repositorio
+de PKHeX en GitHub (commit fijo, ver lib/data/sprites/sprite_manifest.g.dart) y
+los guarda en su caché. Son © Nintendo / Game Freak / The Pokémon Company.
+
+Logo
+----
+
+El logo (assets/branding/ y los iconos de la app) es propiedad del autor del
+proyecto; los derivados se generan con tool/gen_branding.py.
+    - Eventos EventWork6, EventWork7SM/USUM, EventWork7b y FlagWork8b, con
+      las etiquetas de Resources/text/script de Gen 6–8.
+    - BallUseLegality (Balls por juego) y nombres de las Balls de Hisui.
+    - Tablas de encuentros (Resources/legality/wild y Legality/Encounters/Data:
+      EncounterArea3–9a, EncounterStatic*, EncounterTrade*) y nombres de
+      lugares (Resources/text/locations), generadas con tool/gen_encounter_data.py.
+
+* PokeAPI — https://github.com/PokeAPI/pokeapi — BSD-3-Clause.
+  Nombres de especies (es/en/ja), tipos y tablas de experiencia, generados con
+  tool/gen_species_data.py; cadenas evolutivas (evolves_from_species_id) en
+  tool/gen_encounter_data.py.
+
+* archive (Dart) — https://pub.dev/packages/archive — MIT. Zip de exportación del Arca.
+
+* Fuentes Manrope y Bricolage Grotesque — SIL Open Font License 1.1
+  (apps/pkarktools/assets/fonts/OFL-*.txt).
+
+Pokémon y los nombres de personajes son marcas de Nintendo, Creatures Inc. y
+GAME FREAK inc. Este proyecto no está afiliado a ellos y no distribuye ROMs,
+claves, sprites ni otro contenido de los juegos.

@@ -1,0 +1,9 @@
+name: pkarktools_workspace
+publish_to: none
+environment:
+  sdk: ^3.10.0
+workspace:
+  - packages/pkcore
+  - apps/pkarktools
+dev_dependencies:
+  lints: ^6.0.0
