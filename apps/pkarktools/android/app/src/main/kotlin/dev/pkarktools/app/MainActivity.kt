@@ -8,6 +8,7 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import java.text.Normalizer
 import java.util.concurrent.Executors
 import kotlin.random.Random
 
@@ -194,12 +195,21 @@ class MainActivity : FlutterActivity() {
             DocumentsContract.Document.COLUMN_DISPLAY_NAME,
             DocumentsContract.Document.COLUMN_MIME_TYPE,
         )
+        // Coincidencia exacta; si no, sin distinguir NFC/NFD ni mayúsculas
+        // (un NAS por SMB no las distingue: crear "Rojo" junto a "rojo" daría
+        // error o una copia "Rojo (1)").
+        val wanted = Normalizer.normalize(name, Normalizer.Form.NFC).lowercase()
+        var loose: Pair<String, String>? = null
         contentResolver.query(children, projection, null, null, null)?.use { c ->
             while (c.moveToNext()) {
-                if (c.getString(1) == name) return Pair(c.getString(0), c.getString(2) ?: "")
+                val n = c.getString(1) ?: continue
+                if (n == name) return Pair(c.getString(0), c.getString(2) ?: "")
+                if (loose == null && Normalizer.normalize(n, Normalizer.Form.NFC).lowercase() == wanted) {
+                    loose = Pair(c.getString(0), c.getString(2) ?: "")
+                }
             }
         }
-        return null
+        return loose
     }
 
     /** Recorre [path] por nombre desde la raíz; crea las carpetas si [createDirs]. */
@@ -223,6 +233,15 @@ class MainActivity : FlutterActivity() {
         return id
     }
 
+    private companion object {
+        /** Igual que `SystemJunk` en Dart (`folder_fs.dart`). */
+        val SYSTEM_DIRS = setOf(
+            "@eadir", "#recycle", "@recycle", "#snapshot", ".snapshot", ".snapshots", "@recently-snapshot",
+            "\$recycle.bin", "system volume information", ".@__thumb", ".trashes", ".trash", ".fseventsd",
+            ".spotlight-v100", ".temporaryitems", ".documentrevisions-v100", "lost+found", ".recycle", "@sharebin",
+        )
+    }
+
     private fun treeList(tree: Uri, dir: String): List<Map<String, Any?>> {
         val startId = resolve(tree, dir) ?: return emptyList()
         val out = mutableListOf<Map<String, Any?>>()
@@ -244,7 +263,10 @@ class MainActivity : FlutterActivity() {
                     val name = c.getString(1) ?: id
                     val path = if (prefix.isEmpty()) name else "$prefix/$name"
                     if (c.getString(2) == DocumentsContract.Document.MIME_TYPE_DIR) {
-                        if (depth < 8) stack.add(Triple(id, path, depth + 1))
+                        // Papeleras e índices de los NAS (proveedores SMB): no se recorren.
+                        if (depth < 8 && name.lowercase() !in SYSTEM_DIRS) stack.add(Triple(id, path, depth + 1))
+                    } else if (name.startsWith("._") || name.equals(".DS_Store", ignoreCase = true)) {
+                        // AppleDouble y metadatos de macOS en el recurso compartido.
                     } else {
                         out.add(
                             mapOf(

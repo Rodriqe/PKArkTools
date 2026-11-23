@@ -52,7 +52,7 @@ class ArcaFolderPlugin: NSObject, FlutterPlugin {
     panel.canCreateDirectories = true
     panel.allowsMultipleSelection = false
     panel.prompt = "Usar esta carpeta"
-    panel.message = "Elige la carpeta del Arca. En iCloud Drive se compartirá con tus otros dispositivos."
+    panel.message = "Elige la carpeta del Arca: en iCloud Drive o en un NAS (Finder → Ir → Conectarse al servidor) se compartirá con tus otros dispositivos."
     if let icloud = iCloudDrive() { panel.directoryURL = icloud }
     panel.begin { response in
       guard response == .OK, let url = panel.url else {
@@ -63,34 +63,59 @@ class ArcaFolderPlugin: NSObject, FlutterPlugin {
         let data = try url.bookmarkData(
           options: [.withSecurityScope], includingResourceValuesForKeys: nil, relativeTo: nil)
         if url.startAccessingSecurityScopedResource() { self.accessed.append(url) }
-        result(["path": url.path, "bookmark": data.base64EncodedString()])
+        var out: [String: Any] = ["path": url.path, "bookmark": data.base64EncodedString()]
+        out.merge(Self.volumeInfo(url)) { a, _ in a }
+        result(out)
       } catch {
         result(FlutterError(code: "bookmark", message: error.localizedDescription, details: nil))
       }
     }
   }
 
+  /// Datos del volumen de [url]: si es local y el nombre del volumen/recurso.
+  /// Solo lee valores en caché del sistema (no espera a un NAS que no responde).
+  static func volumeInfo(_ url: URL) -> [String: Any] {
+    var out: [String: Any] = [:]
+    if let v = try? url.resourceValues(forKeys: [.volumeIsLocalKey, .volumeNameKey, .volumeURLForRemountingKey]) {
+      if let local = v.volumeIsLocal { out["volumeIsLocal"] = local }
+      if let name = v.volumeName { out["volumeName"] = name }
+      if let remote = v.volumeURLForRemounting { out["volumeRemoteURL"] = remote.absoluteString }
+    }
+    return out
+  }
+
+  /// Resuelve el bookmark fuera del hilo principal: si la carpeta está en un
+  /// NAS no montado, macOS puede intentar montarlo (sin diálogos: .withoutUI)
+  /// y eso puede tardar. Dart pone además un tiempo máximo.
   private func resolve(_ b64: String, _ result: @escaping FlutterResult) {
     guard let data = Data(base64Encoded: b64) else {
       result(FlutterError(code: "access", message: "Bookmark no válido", details: nil))
       return
     }
-    do {
-      var stale = false
-      let url = try URL(
-        resolvingBookmarkData: data, options: [.withSecurityScope], relativeTo: nil,
-        bookmarkDataIsStale: &stale)
-      if url.startAccessingSecurityScopedResource() { accessed.append(url) }
-      var out: [String: Any] = ["path": url.path, "stale": stale]
-      if stale,
-        let fresh = try? url.bookmarkData(
-          options: [.withSecurityScope], includingResourceValuesForKeys: nil, relativeTo: nil)
-      {
-        out["bookmark"] = fresh.base64EncodedString()
+    DispatchQueue.global(qos: .userInitiated).async {
+      do {
+        var stale = false
+        let url = try URL(
+          resolvingBookmarkData: data, options: [.withSecurityScope, .withoutUI], relativeTo: nil,
+          bookmarkDataIsStale: &stale)
+        let started = url.startAccessingSecurityScopedResource()
+        var out: [String: Any] = ["path": url.path, "stale": stale]
+        out.merge(Self.volumeInfo(url)) { a, _ in a }
+        if stale,
+          let fresh = try? url.bookmarkData(
+            options: [.withSecurityScope], includingResourceValuesForKeys: nil, relativeTo: nil)
+        {
+          out["bookmark"] = fresh.base64EncodedString()
+        }
+        DispatchQueue.main.async {
+          if started { self.accessed.append(url) }
+          result(out)
+        }
+      } catch {
+        DispatchQueue.main.async {
+          result(FlutterError(code: "access", message: error.localizedDescription, details: nil))
+        }
       }
-      result(out)
-    } catch {
-      result(FlutterError(code: "access", message: error.localizedDescription, details: nil))
     }
   }
 
