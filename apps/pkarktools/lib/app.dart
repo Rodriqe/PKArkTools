@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pkcore/pkcore.dart';
 
 import 'data/arca_session.dart';
 import 'l10n/app_localizations.dart';
@@ -10,6 +11,9 @@ import 'theme/app_theme.dart';
 import 'ui/activity/activity_screen.dart';
 import 'ui/arca/arca_screen.dart';
 import 'ui/detail/save_detail_screen.dart';
+import 'ui/dex/dex_progress_screen.dart';
+import 'ui/dex/dex_screen.dart';
+import 'ui/dex/dex_species_screen.dart';
 import 'ui/onboarding/onboarding_screen.dart';
 import 'ui/settings/settings_screen.dart';
 import 'ui/shell.dart';
@@ -38,7 +42,30 @@ GoRouter buildRouter({String initialLocation = '/arca', ValueNotifier<ArcaSetup>
                 routes: [
                   GoRoute(
                     path: 'save/:id',
-                    builder: (_, state) => SaveDetailScreen(slotId: int.parse(state.pathParameters['id']!)),
+                    builder: (_, state) {
+                      final q = state.uri.queryParameters;
+                      final box = int.tryParse(q['box'] ?? ''), slot = int.tryParse(q['slot'] ?? '');
+                      return SaveDetailScreen(
+                        key: ValueKey(state.uri.toString()),
+                        slotId: int.parse(state.pathParameters['id']!),
+                        focus: box != null && slot != null ? (box: box, slot: slot) : null,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ]),
+            StatefulShellBranch(routes: [
+              GoRoute(
+                path: '/dex',
+                builder: (_, _) => const DexScreen(),
+                routes: [
+                  GoRoute(path: 'progreso', builder: (_, _) => const DexProgressScreen()),
+                  GoRoute(
+                    path: 'especie/:species',
+                    builder: (_, state) => DexSpeciesScreen(
+                      species: (int.tryParse(state.pathParameters['species']!) ?? 1).clamp(1, GlobalDex.maxSpecies),
+                    ),
                   ),
                 ],
               ),

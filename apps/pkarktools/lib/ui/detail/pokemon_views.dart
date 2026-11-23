@@ -192,11 +192,41 @@ int _warnings(Pkm pk, GameVersion game) =>
 // =================================================================== equipo
 
 /// Equipo: tarjetas con avatar, nombre, apodo y nivel. Tocar = editar; arrastrar = mover.
-class PartyGrid extends StatelessWidget {
-  const PartyGrid({super.key, required this.party, required this.actions, required this.capacity});
+/// Hueco al que saltar al abrir la partida (desde la Dex): caja (-1 = equipo) y hueco.
+typedef SlotFocus = ({int box, int slot});
+
+/// Lleva a la vista el widget de [context] tras el primer frame.
+void ensureVisibleSoon(BuildContext context) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (context.mounted) {
+      Scrollable.ensureVisible(context, alignment: 0.2, duration: const Duration(milliseconds: 300), curve: Curves.easeOutCubic);
+    }
+  });
+}
+
+class PartyGrid extends StatefulWidget {
+  const PartyGrid({super.key, required this.party, required this.actions, required this.capacity, this.focusSlot});
   final List<Pkm> party;
   final StorageActions actions;
   final int capacity;
+
+  /// Hueco resaltado (salto desde la Dex).
+  final int? focusSlot;
+
+  @override
+  State<PartyGrid> createState() => _PartyGridState();
+}
+
+class _PartyGridState extends State<PartyGrid> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.focusSlot != null) ensureVisibleSoon(context);
+  }
+
+  List<Pkm> get party => widget.party;
+  StorageActions get actions => widget.actions;
+  int get capacity => widget.capacity;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -218,7 +248,7 @@ class PartyGrid extends StatelessWidget {
                     locked: false,
                     builder: (context, hover) => _PartyTile(
                       p: party[i],
-                      hover: hover,
+                      hover: hover || widget.focusSlot == i,
                       warnings: _warnings(party[i], actions.game),
                       onTap: () => actions.edit(SlotRef.party(i), party[i]),
                     ),
@@ -334,19 +364,35 @@ class _AddTile extends StatelessWidget {
 /// Navegador de cajas: selector horizontal + cuadrícula. Soltar en una caja
 /// del selector manda el Pokémon a su primer hueco libre.
 class BoxBrowser extends StatefulWidget {
-  const BoxBrowser({super.key, required this.editor, required this.actions, required this.accent, required this.revision});
+  const BoxBrowser({
+    super.key,
+    required this.editor,
+    required this.actions,
+    required this.accent,
+    required this.revision,
+    this.focus,
+  });
   final SaveEditor editor;
   final StorageActions actions;
   final Color accent;
   final int revision;
+
+  /// Hueco resaltado al abrir (salto desde la Dex).
+  final SlotFocus? focus;
 
   @override
   State<BoxBrowser> createState() => _BoxBrowserState();
 }
 
 class _BoxBrowserState extends State<BoxBrowser> {
-  int _index = 0;
+  late int _index = widget.focus != null && widget.focus!.box >= 0 ? widget.focus!.box : 0;
   bool _forward = true;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.focus != null && widget.focus!.box >= 0) ensureVisibleSoon(context);
+  }
 
   void _go(int i) {
     if (i == _index || i < 0 || i >= widget.editor.boxCount) return;
@@ -450,7 +496,7 @@ class _BoxBrowserState extends State<BoxBrowser> {
                 locked: locked,
                 builder: (context, hover) => _BoxSlot(
                   p: pk,
-                  hover: hover,
+                  hover: hover || (widget.focus?.box == box && widget.focus?.slot == i && pk != null),
                   locked: locked,
                   warnings: pk == null ? 0 : _warnings(pk, widget.actions.game),
                   onTap: () => pk == null ? widget.actions.emptySlot(ref) : widget.actions.edit(ref, pk),

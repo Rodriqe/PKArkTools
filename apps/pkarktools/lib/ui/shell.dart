@@ -22,9 +22,10 @@ class AppShell extends ConsumerWidget {
     final l10n = context.l10n;
     // Punto en Ajustes cuando hay una versión nueva de la que avisar.
     final update = ref.watch(updateNoticeProvider.select((n) => n.available != null));
-    Widget dot(int i, IconData icon) => i == 2 && update ? Badge(smallSize: 8, child: Icon(icon)) : Icon(icon);
+    Widget dot(int i, IconData icon) => i == 3 && update ? Badge(smallSize: 8, child: Icon(icon)) : Icon(icon);
     final destinations = [
       (Icons.inventory_2_outlined, Icons.inventory_2_rounded, l10n.navArca),
+      (Icons.catching_pokemon_outlined, Icons.catching_pokemon_rounded, l10n.navDex),
       (Icons.history_rounded, Icons.history_rounded, l10n.navActivity),
       (Icons.tune_outlined, Icons.tune_rounded, l10n.navSettings),
     ];

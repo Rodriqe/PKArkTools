@@ -24,8 +24,12 @@ import 'damage_notice.dart';
 import 'snapshot_history.dart';
 
 class SaveDetailScreen extends ConsumerStatefulWidget {
-  const SaveDetailScreen({super.key, required this.slotId});
+  const SaveDetailScreen({super.key, required this.slotId, this.focus});
   final int slotId;
+
+  /// Pokémon que resaltar en el equipo o las cajas de la copia más reciente
+  /// (salto desde la Dex).
+  final SlotFocus? focus;
 
   @override
   ConsumerState<SaveDetailScreen> createState() => _SaveDetailScreenState();
@@ -97,6 +101,7 @@ class _SaveDetailScreenState extends ConsumerState<SaveDetailScreen> {
             game: game,
             slot: slot,
             isLatest: current.id == snaps.first.id,
+            focus: current.id == snaps.first.id ? widget.focus : null,
             onSaved: (id) => setState(() => _selectedSnapshot = id),
           );
 
@@ -222,7 +227,9 @@ class _SnapshotContent extends ConsumerStatefulWidget {
     required this.slot,
     required this.isLatest,
     required this.onSaved,
+    this.focus,
   });
+  final SlotFocus? focus;
   final Snapshot snapshot;
   final GameVersion game;
   final SaveSlot slot;
@@ -324,11 +331,16 @@ class _SnapshotContentState extends ConsumerState<_SnapshotContent> {
           _Section.pokemon => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               _SectionTitle(l10n.team),
               const SizedBox(height: 14),
-              PartyGrid(party: editor.party, actions: actions, capacity: editor.partyCapacity),
+              PartyGrid(
+                party: editor.party,
+                actions: actions,
+                capacity: editor.partyCapacity,
+                focusSlot: widget.focus?.box == -1 ? widget.focus!.slot : null,
+              ),
               const SizedBox(height: 36),
               _SectionTitle(l10n.boxes),
               const SizedBox(height: 14),
-              BoxBrowser(editor: editor, actions: actions, accent: accent, revision: draft.revision),
+              BoxBrowser(editor: editor, actions: actions, accent: accent, revision: draft.revision, focus: widget.focus),
             ]),
           _Section.trainer => TrainerPanel(snapshotId: snapshot.id, editor: editor),
           _Section.inventory => InventoryPanel(snapshotId: snapshot.id, editor: editor),

@@ -67,9 +67,9 @@ String specialFormHowTo(BuildContext context, SpecialForm f) {
       if (f.baseForms != null && f.baseForms!.length == 1) {
         final g = f.games.last;
         final formName = SpeciesForms.formName(f.species, f.baseForms!.first, g, context.dexLang);
-        if (formName.isNotEmpty) return l10n.dexHowMegaForm(speciesName(context, f.species), formName, games);
+        if (formName.isNotEmpty) return l10n.dexHowMegaForm(formName, games, speciesName(context, f.species));
       }
-      return l10n.dexHowMega(speciesName(context, f.species), games);
+      return l10n.dexHowMega(games, speciesName(context, f.species));
   }
 }
 
