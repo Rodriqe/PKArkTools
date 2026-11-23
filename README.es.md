@@ -172,7 +172,7 @@ Todas las capturas usan saves sintéticos.
 La versión actual es la **v0.1.1**. Descárgala desde el
 [último release](https://github.com/Rodriqe/PKArkTools/releases/latest)
 ([todos los releases](https://github.com/Rodriqe/PKArkTools/releases),
-[CHANGELOG](CHANGELOG.md)).
+[CHANGELOG](CHANGELOG.es.md)).
 
 | Plataforma | Cómo |
 |---|---|
@@ -221,7 +221,7 @@ Toda la documentación está en [`docs/`](docs/README.md):
 [desarrollo](docs/desarrollo.md) ·
 [publicación en tiendas](docs/publicacion.md) ·
 [licencias](docs/licencias.md) ·
-[CHANGELOG](CHANGELOG.md).
+[CHANGELOG](CHANGELOG.es.md).
 
 ## Contribuir
 

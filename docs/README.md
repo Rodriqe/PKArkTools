@@ -32,7 +32,7 @@ macOS, Windows y Linux, sin cuentas ni telemetría.
 | [Desarrollo](desarrollo.md) | Entorno, CI, generadores, oráculo PKHeX, capturas, añadir un formato, commits |
 | [Publicación en tiendas](publicacion.md) | Auditoría técnica para App Store, Mac App Store y Google Play |
 | [Licencias](licencias.md) | GPL-3.0, código portado de PKHeX.Core, PokeAPI, sprites y logo |
-| [CHANGELOG](../CHANGELOG.md) | Fases y versiones |
+| [CHANGELOG](../CHANGELOG.es.md) | Fases y versiones (en inglés: [CHANGELOG.md](../CHANGELOG.md)) |
 
 Las capturas viven en [`screenshots/`](screenshots/) y se generan siempre con
 **datos sintéticos** (nunca con saves reales): escritorio en `screenshots/` y

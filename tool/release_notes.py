@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
-"""Notas de un release a partir de CHANGELOG.md.
+"""Release notes (in English) from CHANGELOG.md.
 
-Uso: python3 tool/release_notes.py v0.1.0 [salida.md]
+Usage: python3 tool/release_notes.py [--any-version] vX.Y.Z [output.md]
 
-Copia la sección «## [0.1.0] …» del CHANGELOG (hasta la siguiente «## ») y
-añade el aviso de builds y de proyecto de fans. Falla si la versión del tag
-no coincide con `version:` de apps/pkarktools/pubspec.yaml o si el CHANGELOG
-no tiene su sección, para no publicar un release a medias.
+Copies the "## [X.Y.Z] …" section of the English CHANGELOG.md (up to the next
+"## ") under a "PKArkTools X.Y.Z" heading and appends the Downloads section and
+the fan-project disclaimer. Fails if the tag does not match `version:` in
+apps/pkarktools/pubspec.yaml or the CHANGELOG has no section for it, so a
+half-done release is never published. `--any-version` skips the pubspec check,
+to regenerate the notes of an already published release.
 """
 import os
 import re
 import sys
 
+REPO = 'https://github.com/Rodriqe/PKArkTools'
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
 FOOTER = """
 ---
 
-**Downloads**
+### Downloads
 
 * **Android**: `PKArkTools-{tag}.apk`. Install it from the file (allow
   installing from that source when Android asks).
@@ -31,32 +34,39 @@ FOOTER = """
 * **Linux**: `PKArkTools-{tag}-linux-x64.tar.gz`. Extract it and run
   `PKArkTools/pkarktools` (needs GTK 3; the folder picker uses `zenity` or
   `kdialog`). Built by CI only; not yet tested on a desktop.
-* **iPhone / iPad**: no build yet; compile it from source (see the README).
+* **iPhone / iPad**: no build yet; build it from source (see the README).
 
-Fan project, not affiliated with Nintendo, Game Freak, Creatures or The
-Pokémon Company. Use it only with your own saves and keep backups.
+Fan project, not affiliated with or endorsed by Nintendo, Game Freak,
+Creatures or The Pokémon Company. No ROMs, game files or sprites are
+included (icons are downloaded on demand). Use it only with your own saves
+and keep backups.
 """
 
 
 def main() -> int:
-    if len(sys.argv) < 2:
+    args = sys.argv[1:]
+    any_version = '--any-version' in args
+    args = [a for a in args if a != '--any-version']
+    if not args:
         print(__doc__)
         return 2
-    tag = sys.argv[1]
+    tag = args[0]
     version = tag[1:] if tag.startswith('v') else tag
     pubspec = open(os.path.join(ROOT, 'apps', 'pkarktools', 'pubspec.yaml'), encoding='utf-8').read()
     m = re.search(r'^version:\s*([0-9A-Za-z.\-]+)(\+\d+)?\s*$', pubspec, re.M)
-    if not m or m.group(1) != version:
-        print(f'error: el tag {tag} no coincide con pubspec.yaml ({m.group(1) if m else "sin versión"})', file=sys.stderr)
+    if not any_version and (not m or m.group(1) != version):
+        print(f'error: tag {tag} does not match pubspec.yaml ({m.group(1) if m else "no version"})', file=sys.stderr)
         return 1
     changelog = open(os.path.join(ROOT, 'CHANGELOG.md'), encoding='utf-8').read()
     sec = re.search(rf'^## \[{re.escape(version)}\][^\n]*\n(.*?)(?=^## |\Z)', changelog, re.M | re.S)
     if not sec or not sec.group(1).strip():
-        print(f'error: CHANGELOG.md no tiene la sección [{version}]', file=sys.stderr)
+        print(f'error: CHANGELOG.md has no [{version}] section', file=sys.stderr)
         return 1
-    notes = f'## PKArkTools {version}\n\n' + sec.group(1).strip() + '\n' + FOOTER.format(tag=tag)
-    if len(sys.argv) > 2:
-        open(sys.argv[2], 'w', encoding='utf-8').write(notes)
+    # Relative links (docs/…) do not resolve in a Release body: point them at the tag.
+    body = re.sub(r'\]\((?!https?:|#|mailto:)([^)]+)\)', lambda l: f']({REPO}/blob/{tag}/{l.group(1)})', sec.group(1).strip())
+    notes = f'## PKArkTools {version}\n\n' + body + '\n' + FOOTER.format(tag=tag)
+    if len(args) > 1:
+        open(args[1], 'w', encoding='utf-8').write(notes)
     else:
         sys.stdout.write(notes)
     return 0

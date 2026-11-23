@@ -132,26 +132,34 @@ requests de forks) el APK sale con la clave debug y el job lo avisa.
 1. **Versión**: sube `version:` en `apps/pkarktools/pubspec.yaml`
    (`X.Y.Z+N`; el `+N` es el `versionCode` de Android y el build de iOS/macOS
    y debe crecer siempre). La primera es `0.1.0+1`.
-2. **CHANGELOG**: añade `## [X.Y.Z] — AAAA-MM-DD` arriba con lo que incluye.
-   Esa sección es el texto del Release.
+2. **CHANGELOG**: añade `## [X.Y.Z] — AAAA-MM-DD` arriba con lo que incluye,
+   **en inglés**, en `CHANGELOG.md`. Esa sección es el texto del Release
+   (`tool/release_notes.py` le añade *Downloads* y el descargo). Añade la
+   misma sección traducida en `CHANGELOG.es.md`: se actualizan a la par.
 3. **README**: actualiza la versión de la sección *Install* / *Instalar* (y los
    nombres de archivo) en `README.md` y `README.es.md`.
 4. Comprueba en local: `tool/ci.sh` en verde y
    `python3 tool/release_notes.py vX.Y.Z` (falla si el tag no coincide con el
-   `pubspec.yaml` o falta la sección del CHANGELOG).
+   `pubspec.yaml` o falta la sección del CHANGELOG). Para regenerar las notas
+   de un release ya publicado: `--any-version vX.Y.Z salida.md`.
 5. Commit en `main` y **tag**: `git tag -a vX.Y.Z -m "PKArkTools X.Y.Z"` y
    `git push origin main vX.Y.Z`.
 6. El workflow compila Android, Windows, Linux y macOS y crea un **borrador**
-   de Release `PKArkTools vX.Y.Z` con los binarios:
+   de Release `PKArkTools vX.Y.Z` con las notas en inglés y los binarios:
    `PKArkTools-vX.Y.Z.apk`, `…-macos.zip`, `…-windows-x64-setup.exe`,
    `…-windows-x64.zip` y `…-linux-x64.tar.gz`.
 7. Revisa el borrador en GitHub (*Releases*), descarga al menos el APK y la app
    de macOS para probarlos y pulsa **Publish release**.
 
+Idioma: las notas del Release, `CHANGELOG.md` y los mensajes de commit van
+en **inglés**; `CHANGELOG.es.md` es su traducción y se actualiza en el mismo
+commit. La documentación de `docs/` sigue en español.
+
 Checklist antes de publicar:
 
 - [ ] `version:` del `pubspec.yaml` = tag sin la `v`; `+N` mayor que el anterior.
-- [ ] Sección del CHANGELOG con fecha y contenido; README con la versión nueva.
+- [ ] Sección en `CHANGELOG.md` (inglés) y `CHANGELOG.es.md` con fecha y
+      contenido; README con la versión nueva.
 - [ ] `tool/ci.sh` en verde; todos los jobs del tag en verde.
 - [ ] APK firmado con el keystore de release (el log de `android` no avisa de
       la clave debug) si el release es para usuarios.
@@ -282,7 +290,7 @@ Necesita un ffmpeg estático con libx264, libfreetype y libwebp en
    comparación con el oráculo PKHeX.
 9. **App**: color de versión (`ui/common/cartridge.dart`/`version_chip.dart`),
    textos en los `.arb`, y documentación en [Formatos](formatos.md) y el
-   [CHANGELOG](../CHANGELOG.md).
+   [CHANGELOG](../CHANGELOG.md) (y [CHANGELOG.es.md](../CHANGELOG.es.md)).
 10. **Créditos**: si portas código de PKHeX.Core, añádelo a `NOTICE` y a
     [Licencias](licencias.md).
 

@@ -3,7 +3,7 @@ name: CI
 # Pushes a main y pull requests: análisis, tests y compilación de Android,
 # Windows y Linux (comprobación; los binarios quedan como artifacts unos días).
 # Tags v*: además macOS y un borrador de GitHub Release con todos los binarios
-# y las notas sacadas de CHANGELOG.md (ver docs/desarrollo.md#cómo-publicar-un-release).
+# y las notas en inglés sacadas de CHANGELOG.md (ver docs/desarrollo.md#cómo-publicar-un-release).
 on:
   push:
     branches: [main]
@@ -214,7 +214,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Release notes from CHANGELOG.md
+      - name: Release notes (English) from CHANGELOG.md
         run: python3 tool/release_notes.py "$GITHUB_REF_NAME" release-notes.md
       - uses: actions/download-artifact@v4
         with:
