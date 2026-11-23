@@ -61,15 +61,30 @@ origen, cintas).
   <img src="../screenshots/ios/v2_pro_05_ficha_iconos.png" width="160" alt="Ficha en iPhone">
 </p>
 
-## Historial
+## Versión actual e historial
 
-Cada importación, edición guardada o restauración crea una **copia nueva e
-inmutable** con fecha, origen (importación, edición, restauración) y una nota
-opcional. Desde el historial puedes, para cada copia:
+En la ficha de la partida, arriba (en el teléfono, antes del equipo; en
+escritorio, en la columna derecha) está la **versión actual**: «Versión actual
+· <fecha>», con el nombre del archivo que la contiene en la carpeta y dos
+botones:
 
-* **Exportar archivo**: escribe un archivo listo para el juego o el emulador
-  conservando su contenedor. Antes de entregarlo se relee y se compara
+* **Exportar** escribe ese archivo con el nombre que espera el juego (`main`,
+  `Pokémon Esmeralda.sav`…). Antes de entregarlo se relee y se compara
   (checksums, entrenador, equipo, cajas, inventario, Pokédex y eventos).
+* **Abrir carpeta** abre la carpeta de la partida en el explorador (escritorio)
+  o muestra su ruta dentro del Arca para copiarla (Android, iPhone).
+
+<p>
+  <img src="../screenshots/v2/mac_42_version_actual.png" width="560" alt="Versión actual destacada y historial plegado">
+  <img src="../screenshots/android/v2_42_version_actual.png" width="180" alt="Versión actual en Android">
+</p>
+
+Debajo, **plegado**, el **Historial (N)**: cada importación, edición guardada
+o restauración es una **copia nueva e inmutable** con fecha, origen
+(importación, edición, bandeja de entrada, restaurada…) y una nota opcional.
+Para cada copia:
+
+* **Exportar**: el archivo de esa copia, con su fecha en el nombre.
 * **Restaurar**: ver más abajo.
 * **Comparar con…**: ver más abajo.
 
@@ -91,10 +106,77 @@ después) o se movieron de hueco, inventario y Pokédex.
 
 ## Restaurar
 
-**Restaurar** escribe la copia elegida en la **ubicación original** del save
-(la carpeta de la que se importó, si la app conserva el permiso). Antes de
-escribir, el archivo que hay en ese sitio **se guarda primero en el Arca**, así
-que restaurar nunca pierde datos.
+**Restaurar** convierte una copia antigua en la versión actual: crea una
+**entrada nueva** en el historial con su contenido (origen «Restaurada» y una
+nota con la fecha de la copia original) y actualiza el archivo de la última
+versión. El historial nunca se reescribe: puedes volver a cualquier punto.
+
+Si la copia se importó de un sitio al que la app aún tiene acceso, el diálogo
+ofrece además **Restaurar y escribir en el original**: antes de escribir ahí,
+lo que haya en ese sitio **se guarda primero en el Arca**, así que nunca se
+pierde nada.
+
+## La carpeta por dentro
+
+```
+PKArkTools/<Juego>/<Entrenador (TID)>/
+  main                      ← ÚLTIMA versión, con el nombre que usa el juego
+  ultima.json               ← qué copia del historial es la última (derivado)
+  historial/
+    2026-11-22_175258_a1fa22cf.sav   (+ .json)   ← todas las copias, inmutables
+```
+
+* **El historial es la fuente de verdad.** El archivo de la última versión es
+  una copia derivada: se escribe de forma atómica (temporal + renombrar) cada
+  vez que entra una copia más nueva, y si falta o se queda atrás se regenera
+  desde el historial al reindexar.
+* **Nombre por juego.** Es el nombre con el que Checkpoint/JKSM y los
+  emuladores esperan el save:
+
+  | Juego | Archivo de la última versión |
+  |---|---|
+  | Espada/Escudo, Leyendas Arceus, Escarlata/Púrpura, Leyendas Z-A | `main` |
+  | Diamante Brillante / Perla Reluciente | `SaveData.bin` |
+  | Let's Go, Pikachu! / Eevee! | `savedata.bin` |
+  | X/Y, Rubí Omega/Zafiro Alfa, Sol/Luna, Ultrasol/Ultraluna (3DS) | `main` |
+  | Game Boy, GBA y DS | `<Juego>.<ext>`: `.sav`, o el contenedor original si es `.dsv` (DeSmuME/DraStic), `.srm` (RetroArch), `.sa1`, `.fla`, `.dat` o `.bin` |
+
+  Si un mismo entrenador tiene copias de contenedores distintos (por ejemplo
+  `.sav` de melonDS y `.dsv` de DeSmuME), cada uno tiene su archivo.
+* **Si reemplazas el archivo a mano** (por ejemplo, copias encima el `main`
+  recién sacado de la consola), la app lo detecta al reindexar porque su
+  SHA-256 no está en el historial: la ficha muestra «El archivo principal
+  cambió fuera de la app» con **Guardar como nueva copia**, que lo pasa al
+  historial como versión actual. Hasta entonces la app no lo toca; nunca lo
+  borra. La lista también está en **Ajustes › Carpeta del Arca**.
+* **Varios dispositivos.** El historial no choca (nombres únicos). La última
+  versión se recalcula desde la copia más nueva; si otro dispositivo ya
+  escribió una más nueva cuyo historial aún no ha llegado, se espera sin tocar
+  nada. Las «copias en conflicto» del archivo (`main (1)`, `conflicted copy`,
+  `.icloud`) se retiran solas si su contenido está en el historial; si no, se
+  ofrecen para adoptar.
+
+## Bandeja de entrada
+
+Cada carpeta de juego (`PKArkTools/<Juego>/`, creada por la app o a mano con
+el mismo nombre) es una bandeja de entrada. Deja ahí un save suelto, sin
+renombrarlo, y al abrir la app, al volver a ella, al reindexar o (en
+escritorio) en cuanto aparece:
+
+1. Se comprueba que es un save de **ese juego**.
+2. Se guarda como **copia nueva** en `<Entrenador (TID)>/historial/` (origen
+   «Bandeja de entrada») y pasa a ser la **última versión**.
+3. Con la copia verificada por su SHA-256, el archivo suelto **se retira** de
+   la bandeja (se mueve, no se copia). Si ese contenido ya estaba en el
+   historial, la bandeja se vacía sin crear otra copia.
+
+Un archivo que aún se está copiando o sincronizando espera unos segundos; los
+temporales y marcadores de la nube (`.tmp`, `.icloud`…) se ignoran. Si el save
+**no se puede leer**, o es **de otro juego**, se queda donde está y la app lo
+avisa (y en **Ajustes › Carpeta del Arca › Bandeja de entrada**, con **Mover a
+<juego>** para el segundo caso).
+
+<img src="../screenshots/v2/mac_43_ajustes_arca.png" width="560" alt="Ajustes del Arca: estructura, bandeja y principales cambiados">
 
 ## Exportar y restaurar el Arca completa (zip)
 
@@ -115,8 +197,8 @@ emulador no se tocan. Si quieres conservarlas, exporta antes el zip del Arca.
 
 ## Saves sueltos en la carpeta
 
-Si copias un save a mano en cualquier subcarpeta del Arca, Ajustes lo ofrece
-para **Adoptar**: se detecta el juego, se coloca en su sitio con su `.json`, se
+Si copias un save a mano en otra subcarpeta del Arca (fuera de la bandeja de
+un juego), Ajustes lo ofrece para **Adoptar**: se detecta el juego, se coloca en su sitio con su `.json`, se
 verifica y solo entonces se retira el suelto. **Adoptar todos** hace lo mismo
 con todos.
 

@@ -7,8 +7,12 @@
    por iniciativa tuya es **Restaurar**, y antes de escribir guarda en el Arca
    lo que hubiera en ese sitio. **Exportar** siempre escribe un archivo nuevo
    donde tú elijas.
-2. **Copias inmutables.** Cada copia es un archivo con nombre único
-   (`<fecha>_<hora>_<8 hex del SHA-256>.<ext>`) más su `.json` de metadatos.
+2. **Copias inmutables.** Cada copia del `historial/` es un archivo con nombre
+   único (`<fecha>_<hora>_<8 hex del SHA-256>.<ext>`) más su `.json` de
+   metadatos. El archivo de la última versión (`main`, `<Juego>.sav`…) y
+   `ultima.json` son derivados: se regeneran desde el historial y la app solo
+   los reescribe si su contenido ya está en el historial (uno cambiado a mano
+   se conserva hasta que lo guardes como copia nueva).
    Nada se sobrescribe: si el nombre está ocupado por otro contenido se añade
    un sufijo. Editar y guardar crea otra copia; la anterior queda en el
    historial. Lo único que borra copias es **Eliminar del Arca**, siempre con
@@ -19,7 +23,8 @@
    medias nunca parece completa.
 4. **Integridad comprobada.** El `.json` guarda el SHA-256 completo y se
    comprueba cada vez que se lee la copia. Mover o copiar el Arca, migrar la
-   versión antigua, adoptar saves sueltos y restaurar un zip verifican el
+   versión antigua, pasar al diseño con `historial/`, recoger la bandeja de
+   entrada, adoptar saves sueltos y restaurar un zip verifican el
    SHA-256 en el destino antes de dar nada por hecho (y, al mover, antes de
    retirar el origen).
 5. **Verificación post-exportación.** Al exportar o guardar en el Arca, el

@@ -9,6 +9,27 @@ que la siguen son los hitos internos de desarrollo que llevaron a ella.
 ## [Unreleased]
 
 ### Añadido
+- **Última versión a la vista**: cada carpeta de entrenador del Arca tiene el
+  archivo de la última versión con el nombre que usa el juego (`main` en
+  Switch y 3DS, `SaveData.bin` en DBPR, `savedata.bin` en Let's Go,
+  `<Juego>.sav`/`.dsv`/`.srm`… en GB, GBA y DS), un `ultima.json` derivado y
+  las copias inmutables en `historial/`. El historial es la fuente de verdad:
+  el principal se escribe de forma atómica (también por SAF) y se regenera
+  desde él. Ver [El Arca › La carpeta por dentro](docs/usuario/arca.md#la-carpeta-por-dentro).
+- **Principal cambiado a mano**: se detecta al reindexar (SHA-256 fuera del
+  historial), nunca se pisa ni se borra y se ofrece **Guardar como nueva
+  copia**.
+- **Ficha de la partida**: «Versión actual · fecha» destacada con
+  **Exportar** (con el nombre del juego) y **Abrir carpeta**; el historial
+  queda plegado debajo. Ajustes del Arca explica la estructura.
+- **Carpetas por juego (opcional)**: tras elegir la carpeta se pregunta una
+  vez si crearlas (todos, elegir o ahora no); también en **Ajustes › Crear
+  carpetas de juegos**, con selector por generación, plataforma o los juegos
+  que ya tienes. Cada una lleva un `LEEME.txt` con qué save dejar.
+- **Bandeja de entrada**: un save suelto en `PKArkTools/<Juego>/` se valida, se
+  guarda como copia nueva de su entrenador (pasa a ser la última versión) y se
+  retira tras verificar el hash; lo ilegible o de otro juego se queda con
+  aviso y **Mover a <juego>**.
 - **Demo video**: vídeo de demostración de 40 s
   ([`docs/media/pkarktools-demo.mp4`](docs/media/pkarktools-demo.mp4)) con
   vista previa animada al principio del README. Se graba en el emulador
@@ -16,6 +37,19 @@ que la siguen son los hitos internos de desarrollo que llevaron a ella.
   (`integration_test/demo_video_test.dart`, `tool/record_demo_video.sh`) y se
   monta con ffmpeg (`tool/make_demo_video.sh`), también en versiones vertical
   y cuadrada en español para redes.
+
+### Cambiado
+- **Restaurar** crea una entrada nueva «Restaurada» en el historial y
+  actualiza la última versión (el historial nunca se reescribe); escribir
+  también en el archivo original es una opción del mismo diálogo.
+- **Migración automática** de las carpetas de 0.1.0: las copias sueltas
+  `fecha_hash.*` pasan a `historial/` verificando cada SHA-256 antes de retirar
+  la original; idempotente y segura ante cortes. El `README.txt` de la raíz se
+  actualiza.
+- Las copias de conflicto de la nube del archivo principal (`main (1)`,
+  `conflicted copy`) se retiran si su contenido ya está en el historial.
+- Índice local (drift) a esquema 4: sin la restricción única
+  `(partida, sha256)`.
 
 ## [0.1.0] — 2026-11-23
 

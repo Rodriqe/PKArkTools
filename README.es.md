@@ -54,8 +54,13 @@ comparten.
 ## Funcionalidades
 
 **Arca y copias versionadas**
-* Copias inmutables con nombre `Juego/Entrenador (ID)/fecha_hora_hash.sav`,
-  sin duplicados (SHA-256) y verificadas en cada lectura.
+* Una carpeta por partida con la **última versión a la vista**, con el nombre
+  que espera el juego (`main`, `SaveData.bin`, `Pokémon Esmeralda.sav`…) y
+  lista para copiar, más un `historial/` de copias inmutables
+  (`fecha_hora_hash.sav`), sin duplicados (SHA-256) y verificadas en cada
+  lectura.
+* **Carpetas por juego** opcionales que hacen de bandeja de entrada: deja un
+  save en `PKArkTools/<Juego>/` y se archiva solo con su entrenador.
 * Historial por partida con origen (archivo, carpeta, editor, ejemplo), notas
   y marca de «más reciente»; restaurar o exportar cualquier copia; actividad.
 * **Comparar copias**: qué cambió entre dos copias — entrenador, Pokémon que

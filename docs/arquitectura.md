@@ -84,16 +84,27 @@ reconstruir.
 
 | Clase (`lib/data/folder/`) | Papel |
 |---|---|
-| `ArcaLayout` | Nombres y rutas: `<Juego>/<Entrenador (TID)>/<fecha>_<hora>_<sha8>.<ext>` + `.json`, patrones de copias gestionadas, conflictos de nube e ignorados. |
-| `ArcaFolder` | Escribe copias (temporal + rename, `.json` después), lista, verifica SHA-256, detecta problemas y saves sueltos. |
-| `FolderFs` | Abstracción de sistema de archivos: `IoFolderFs` (`dart:io`), `SafFolderFs` (Android, por *method channel*) y `MemoryFolderFs` (tests y capturas). |
+| `ArcaLayout` | Nombres y rutas: `<Juego>/<Entrenador (TID)>/historial/<fecha>_<hora>_<sha8>.<ext>` + `.json`; nombre del archivo principal por juego (`mainFileName`); patrones de copias gestionadas, conflictos de nube e ignorados. |
+| `ArcaFolder` | Escribe copias (temporal + rename, `.json` después), lista, verifica SHA-256, detecta problemas, saves sueltos, `ultima.json` y conflictos. |
+| `ArcaMainFiles` | Mantiene el archivo principal de cada carpeta de entrenador como copia derivada de la entrada más reciente del historial: lo escribe con `writeReplace` (atómico), detecta el reemplazado a mano (SHA-256 fuera del historial), espera si otro dispositivo va por delante (`ultima.json` más nuevo) y retira copias de conflicto con contenido conocido. |
+| `ArcaGameFolders` | Carpetas por juego opcionales con `LEEME.txt`; también identifican la bandeja de entrada. |
+| `FolderFs` | Abstracción de sistema de archivos: `IoFolderFs` (`dart:io`), `SafFolderFs` (Android, por *method channel*; `treeReplace` en `MainActivity.kt` para los derivados) y `MemoryFolderFs` (tests y capturas). `writeNew` nunca sobrescribe (historial); `writeReplace` reemplaza de forma atómica (principal, `ultima.json`, README). |
 | `FolderAccess` | Elegir/abrir la carpeta y conservar el permiso: bookmarks con *security scope* (iOS/macOS, en `AppDelegate.swift` / `MainFlutterWindow.swift`), SAF con `takePersistableUriPermission` (Android, `MainActivity.kt`), ruta directa (Windows/Linux). |
-| `ArcaMigration` | Migra el Arca interna antigua y mueve/copia entre carpetas con verificación. |
+| `ArcaMigration` | Migra el Arca interna antigua, pasa las copias sueltas de 0.1.0 a `historial/` (idempotente, verificando cada una antes de retirar la original) y mueve/copia entre carpetas con verificación. |
 
 `ArcaRepository` (`lib/data/arca_repository.dart`) une todo: importar,
 reindexar (incremental, con *watcher* en escritorio y al volver a primer
-plano), adoptar, guardar ediciones, fijar versión, eliminar y exportar/restaurar
-el zip (`arca_archive.dart`).
+plano), migrar al diseño con `historial/`, recalcular los archivos
+principales, recoger la bandeja de entrada, adoptar, guardar ediciones,
+restaurar como versión actual, fijar versión, eliminar y exportar/restaurar el
+zip (`arca_archive.dart`).
+
+Orden de un reindexado: listar → (migrar a `historial/` si hace falta, sin
+cambiar los ids del índice) → indexar copias nuevas y quitar las que faltan →
+`ArcaMainFiles.sync` → bandeja de entrada (lo recogido provoca otra pasada).
+El índice local (drift, esquema 4) ya no exige `(partida, sha256)` único: una
+restauración es una entrada propia aunque repita contenido; la deduplicación
+de importaciones la hace el repositorio.
 
 ### Acceso a archivos por plataforma
 

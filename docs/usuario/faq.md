@@ -21,7 +21,7 @@ No. La app solo lee saves; los sprites se descargan bajo demanda
 
 **¿Puedo usar el Arca en el móvil y en el ordenador a la vez?**
 Sí, si la carpeta está en un servicio que sincroniza. Ver
-[Primeros pasos](primeros-pasos.md#2-varios-dispositivos).
+[Primeros pasos](primeros-pasos.md#3-varios-dispositivos).
 
 **¿Un Pokémon sin avisos es legal?**
 No necesariamente; la legalidad es una ayuda. Ver

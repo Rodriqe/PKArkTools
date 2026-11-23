@@ -52,8 +52,12 @@ Drive, OneDrive, Dropbox or Syncthing and all your devices share it.
 ## Features
 
 **Ark and versioned backups**
-* Immutable copies named `Game/Trainer (ID)/date_time_hash.sav`, deduplicated
-  by SHA-256 and verified on every read.
+* One folder per playthrough with the **latest version on top**, named the way
+  the game expects (`main`, `SaveData.bin`, `Emerald.sav`…) and ready to copy
+  back, plus a `historial/` of immutable copies (`date_time_hash.sav`),
+  deduplicated by SHA-256 and verified on every read.
+* Optional **game folders** that double as an inbox: drop a save in
+  `PKArkTools/<Game>/` and it is filed under its trainer automatically.
 * History per playthrough with origin (file, folder, editor, demo), notes and
   a "latest" marker; restore or export any copy; activity log.
 * **Compare copies**: what changed between two snapshots — trainer, Pokémon
