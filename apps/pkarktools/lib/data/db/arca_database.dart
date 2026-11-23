@@ -66,6 +66,19 @@ class Snapshots extends Table {
   // historial. La deduplicación de importaciones la hace el repositorio.
 }
 
+/// Caché de la Dex global: lo que la Dex necesita de cada copia (Pokédex,
+/// ejemplares, activadores), por SHA-256 del archivo. Se calcula en segundo
+/// plano al reindexar; si cambia el formato ([version]) se recalcula.
+@DataClassName('DexScanRow')
+class DexScans extends Table {
+  TextColumn get sha256 => text()();
+  IntColumn get version => integer()();
+  TextColumn get data => text()();
+
+  @override
+  Set<Column> get primaryKey => {sha256};
+}
+
 /// Preferencias clave/valor.
 class Settings extends Table {
   TextColumn get key => text()();
@@ -75,12 +88,12 @@ class Settings extends Table {
   Set<Column> get primaryKey => {key};
 }
 
-@DriftDatabase(tables: [SaveSlots, Snapshots, Settings])
+@DriftDatabase(tables: [SaveSlots, Snapshots, Settings, DexScans])
 class ArcaDatabase extends _$ArcaDatabase {
   ArcaDatabase(super.e);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -94,6 +107,7 @@ class ArcaDatabase extends _$ArcaDatabase {
           }
           // Sin la restricción única (partida, sha256): se recrea la tabla.
           if (from < 4) await m.alterTable(TableMigration(snapshots));
+          if (from < 5) await m.createTable(dexScans);
         },
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON');

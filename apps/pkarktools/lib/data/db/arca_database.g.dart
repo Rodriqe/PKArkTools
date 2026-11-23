@@ -2032,12 +2032,275 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   }
 }
 
+class $DexScansTable extends DexScans
+    with TableInfo<$DexScansTable, DexScanRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DexScansTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _sha256Meta = const VerificationMeta('sha256');
+  @override
+  late final GeneratedColumn<String> sha256 = GeneratedColumn<String>(
+    'sha256',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dataMeta = const VerificationMeta('data');
+  @override
+  late final GeneratedColumn<String> data = GeneratedColumn<String>(
+    'data',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [sha256, version, data];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'dex_scans';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DexScanRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('sha256')) {
+      context.handle(
+        _sha256Meta,
+        sha256.isAcceptableOrUnknown(data['sha256']!, _sha256Meta),
+      );
+    } else if (isInserting) {
+      context.missing(_sha256Meta);
+    }
+    if (data.containsKey('version')) {
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_versionMeta);
+    }
+    if (data.containsKey('data')) {
+      context.handle(
+        _dataMeta,
+        this.data.isAcceptableOrUnknown(data['data']!, _dataMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dataMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {sha256};
+  @override
+  DexScanRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DexScanRow(
+      sha256: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sha256'],
+      )!,
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
+      data: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}data'],
+      )!,
+    );
+  }
+
+  @override
+  $DexScansTable createAlias(String alias) {
+    return $DexScansTable(attachedDatabase, alias);
+  }
+}
+
+class DexScanRow extends DataClass implements Insertable<DexScanRow> {
+  final String sha256;
+  final int version;
+  final String data;
+  const DexScanRow({
+    required this.sha256,
+    required this.version,
+    required this.data,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['sha256'] = Variable<String>(sha256);
+    map['version'] = Variable<int>(version);
+    map['data'] = Variable<String>(data);
+    return map;
+  }
+
+  DexScansCompanion toCompanion(bool nullToAbsent) {
+    return DexScansCompanion(
+      sha256: Value(sha256),
+      version: Value(version),
+      data: Value(data),
+    );
+  }
+
+  factory DexScanRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DexScanRow(
+      sha256: serializer.fromJson<String>(json['sha256']),
+      version: serializer.fromJson<int>(json['version']),
+      data: serializer.fromJson<String>(json['data']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'sha256': serializer.toJson<String>(sha256),
+      'version': serializer.toJson<int>(version),
+      'data': serializer.toJson<String>(data),
+    };
+  }
+
+  DexScanRow copyWith({String? sha256, int? version, String? data}) =>
+      DexScanRow(
+        sha256: sha256 ?? this.sha256,
+        version: version ?? this.version,
+        data: data ?? this.data,
+      );
+  DexScanRow copyWithCompanion(DexScansCompanion data) {
+    return DexScanRow(
+      sha256: data.sha256.present ? data.sha256.value : this.sha256,
+      version: data.version.present ? data.version.value : this.version,
+      data: data.data.present ? data.data.value : this.data,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DexScanRow(')
+          ..write('sha256: $sha256, ')
+          ..write('version: $version, ')
+          ..write('data: $data')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(sha256, version, data);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DexScanRow &&
+          other.sha256 == this.sha256 &&
+          other.version == this.version &&
+          other.data == this.data);
+}
+
+class DexScansCompanion extends UpdateCompanion<DexScanRow> {
+  final Value<String> sha256;
+  final Value<int> version;
+  final Value<String> data;
+  final Value<int> rowid;
+  const DexScansCompanion({
+    this.sha256 = const Value.absent(),
+    this.version = const Value.absent(),
+    this.data = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DexScansCompanion.insert({
+    required String sha256,
+    required int version,
+    required String data,
+    this.rowid = const Value.absent(),
+  }) : sha256 = Value(sha256),
+       version = Value(version),
+       data = Value(data);
+  static Insertable<DexScanRow> custom({
+    Expression<String>? sha256,
+    Expression<int>? version,
+    Expression<String>? data,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (sha256 != null) 'sha256': sha256,
+      if (version != null) 'version': version,
+      if (data != null) 'data': data,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DexScansCompanion copyWith({
+    Value<String>? sha256,
+    Value<int>? version,
+    Value<String>? data,
+    Value<int>? rowid,
+  }) {
+    return DexScansCompanion(
+      sha256: sha256 ?? this.sha256,
+      version: version ?? this.version,
+      data: data ?? this.data,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (sha256.present) {
+      map['sha256'] = Variable<String>(sha256.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (data.present) {
+      map['data'] = Variable<String>(data.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DexScansCompanion(')
+          ..write('sha256: $sha256, ')
+          ..write('version: $version, ')
+          ..write('data: $data, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$ArcaDatabase extends GeneratedDatabase {
   _$ArcaDatabase(QueryExecutor e) : super(e);
   $ArcaDatabaseManager get managers => $ArcaDatabaseManager(this);
   late final $SaveSlotsTable saveSlots = $SaveSlotsTable(this);
   late final $SnapshotsTable snapshots = $SnapshotsTable(this);
   late final $SettingsTable settings = $SettingsTable(this);
+  late final $DexScansTable dexScans = $DexScansTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2046,6 +2309,7 @@ abstract class _$ArcaDatabase extends GeneratedDatabase {
     saveSlots,
     snapshots,
     settings,
+    dexScans,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -3252,6 +3516,174 @@ typedef $$SettingsTableProcessedTableManager =
       Setting,
       PrefetchHooks Function()
     >;
+typedef $$DexScansTableCreateCompanionBuilder =
+    DexScansCompanion Function({
+      required String sha256,
+      required int version,
+      required String data,
+      Value<int> rowid,
+    });
+typedef $$DexScansTableUpdateCompanionBuilder =
+    DexScansCompanion Function({
+      Value<String> sha256,
+      Value<int> version,
+      Value<String> data,
+      Value<int> rowid,
+    });
+
+class $$DexScansTableFilterComposer
+    extends Composer<_$ArcaDatabase, $DexScansTable> {
+  $$DexScansTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get sha256 => $composableBuilder(
+    column: $table.sha256,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get data => $composableBuilder(
+    column: $table.data,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DexScansTableOrderingComposer
+    extends Composer<_$ArcaDatabase, $DexScansTable> {
+  $$DexScansTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get sha256 => $composableBuilder(
+    column: $table.sha256,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get data => $composableBuilder(
+    column: $table.data,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DexScansTableAnnotationComposer
+    extends Composer<_$ArcaDatabase, $DexScansTable> {
+  $$DexScansTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get sha256 =>
+      $composableBuilder(column: $table.sha256, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<String> get data =>
+      $composableBuilder(column: $table.data, builder: (column) => column);
+}
+
+class $$DexScansTableTableManager
+    extends
+        RootTableManager<
+          _$ArcaDatabase,
+          $DexScansTable,
+          DexScanRow,
+          $$DexScansTableFilterComposer,
+          $$DexScansTableOrderingComposer,
+          $$DexScansTableAnnotationComposer,
+          $$DexScansTableCreateCompanionBuilder,
+          $$DexScansTableUpdateCompanionBuilder,
+          (
+            DexScanRow,
+            BaseReferences<_$ArcaDatabase, $DexScansTable, DexScanRow>,
+          ),
+          DexScanRow,
+          PrefetchHooks Function()
+        > {
+  $$DexScansTableTableManager(_$ArcaDatabase db, $DexScansTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DexScansTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DexScansTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DexScansTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> sha256 = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<String> data = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DexScansCompanion(
+                sha256: sha256,
+                version: version,
+                data: data,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String sha256,
+                required int version,
+                required String data,
+                Value<int> rowid = const Value.absent(),
+              }) => DexScansCompanion.insert(
+                sha256: sha256,
+                version: version,
+                data: data,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$DexScansTable, DexScanRow>(table),
+                  BaseReferences<_$ArcaDatabase, $DexScansTable, DexScanRow>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DexScansTableProcessedTableManager =
+    ProcessedTableManager<
+      _$ArcaDatabase,
+      $DexScansTable,
+      DexScanRow,
+      $$DexScansTableFilterComposer,
+      $$DexScansTableOrderingComposer,
+      $$DexScansTableAnnotationComposer,
+      $$DexScansTableCreateCompanionBuilder,
+      $$DexScansTableUpdateCompanionBuilder,
+      (DexScanRow, BaseReferences<_$ArcaDatabase, $DexScansTable, DexScanRow>),
+      DexScanRow,
+      PrefetchHooks Function()
+    >;
 
 class $ArcaDatabaseManager {
   final _$ArcaDatabase _db;
@@ -3262,4 +3694,6 @@ class $ArcaDatabaseManager {
       $$SnapshotsTableTableManager(_db, _db.snapshots);
   $$SettingsTableTableManager get settings =>
       $$SettingsTableTableManager(_db, _db.settings);
+  $$DexScansTableTableManager get dexScans =>
+      $$DexScansTableTableManager(_db, _db.dexScans);
 }

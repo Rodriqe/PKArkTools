@@ -9,6 +9,7 @@ import 'package:drift/drift.dart';
 import 'package:pkcore/pkcore.dart';
 
 import 'db/arca_database.dart';
+import 'dex/dex_index.dart';
 import 'folder/arca_folder.dart';
 import 'folder/arca_game_folders.dart';
 import 'folder/arca_layout.dart';
@@ -256,6 +257,23 @@ class ArcaRepository {
   bool _rerun = false;
 
   bool get hasFolder => _folder != null;
+
+  /// Índice de la Dex global (escaneos cacheados en drift).
+  late final DexIndex dex = DexIndex(this);
+
+  /// Escanea para la Dex la copia más reciente de cada partida que aún no
+  /// esté en la caché. Nunca lanza.
+  Future<void> warmDex() async {
+    try {
+      final snaps = await db.select(db.snapshots).get();
+      final latest = <int, Snapshot>{};
+      for (final s in snaps) {
+        final cur = latest[s.slotId];
+        if (cur == null || _newer(s, cur)) latest[s.slotId] = s;
+      }
+      await dex.refresh(latest.values.toList());
+    } catch (_) {}
+  }
 
   ArcaFolder get folder => _folder ?? (throw StateError('El Arca no tiene carpeta configurada'));
 
@@ -542,6 +560,8 @@ class ArcaRepository {
     r.inboxAdopted = adopted;
     _lastReport = r;
     _reports.add(r);
+    // Dex global: escanea en segundo plano las copias nuevas (incremental).
+    unawaited(warmDex());
     return r;
   }
 

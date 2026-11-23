@@ -49,6 +49,49 @@ final activityProvider = StreamProvider<List<ActivityItem>>((ref) => ref.watch(a
 final parsedSnapshotProvider =
     FutureProvider.family<SaveFile, int>((ref, snapshotId) => ref.watch(arcaRepositoryProvider).parseSnapshot(snapshotId));
 
+// ---------------------------------------------------------------- Dex global
+
+/// Dex global: cruza la copia más reciente de cada partida. Se recalcula
+/// cuando cambia el Arca (desde la caché de escaneos: milisegundos).
+final globalDexProvider = FutureProvider<GlobalDex>((ref) async {
+  final entries = await ref.watch(arcaEntriesProvider.future);
+  return ref.watch(arcaRepositoryProvider).dex.build(entries);
+});
+
+/// Modo living dex (Ajustes de la Dex): «capturado» solo si hay ejemplar en
+/// cajas o equipo. Se guarda en las preferencias de este dispositivo.
+class DexLivingNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    _load();
+    return false;
+  }
+
+  Future<void> _load() async {
+    final v = await ref.read(arcaRepositoryProvider).getSetting('dexLiving');
+    if (v == '1' && !state) state = true;
+  }
+
+  Future<void> set(bool value) async {
+    state = value;
+    await ref.read(arcaRepositoryProvider).setSetting('dexLiving', value ? '1' : '0');
+  }
+}
+
+final dexLivingProvider = NotifierProvider<DexLivingNotifier, bool>(DexLivingNotifier.new);
+
+/// Filtros de la cuadrícula de la Dex (en memoria; el modo living viene de
+/// [dexLivingProvider]).
+class DexFilterNotifier extends Notifier<DexFilter> {
+  @override
+  DexFilter build() => const DexFilter();
+
+  void update(DexFilter Function(DexFilter) f) => state = f(state);
+  void clear() => state = state.cleared();
+}
+
+final dexFilterProvider = NotifierProvider<DexFilterNotifier, DexFilter>(DexFilterNotifier.new);
+
 // ---------------------------------------------------------------- ajustes
 
 class AppSettings {
