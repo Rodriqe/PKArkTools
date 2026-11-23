@@ -9,6 +9,11 @@
 </p>
 
 <p align="center">
+  <a href="docs/media/pkarktools-demo.mp4"><img src="docs/media/pkarktools-demo.webp" width="600" alt="Vista previa animada: el Arca con los colores de cada versión, los filtros y una partida con su equipo y sus cajas"></a><br>
+  <sub>▶ <a href="docs/media/pkarktools-demo.mp4">Ver la demostración completa (40 s, MP4, interfaz en inglés)</a> · <a href="#demostración">qué muestra</a></sub>
+</p>
+
+<p align="center">
   <a href="https://github.com/Rodriqe/PKArkTools/actions/workflows/ci.yml"><img src="https://github.com/Rodriqe/PKArkTools/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-GPL--3.0-blue.svg" alt="Licencia: GPL-3.0"></a>
   <img src="https://img.shields.io/badge/plataformas-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Windows%20%7C%20Linux-lightgrey" alt="Plataformas">
@@ -126,6 +131,21 @@ comparten.
 | Leyendas Pokémon: Z-A | Switch | ✅ | ✅ | Pokédex de Luminalia e Hiperespacio, `.pa9` |
 
 Detalles, contenedores y limitaciones: [docs/formatos.md](docs/formatos.md).
+
+## Demostración
+
+[**Ver el vídeo de demostración**](docs/media/pkarktools-demo.mp4) (40 s,
+1080p, sin audio, interfaz en inglés), grabado en un emulador Android con
+partidas de ejemplo sintéticas: la bienvenida, el Arca con un color por
+versión, los filtros, una partida con su equipo y sus cajas, el editor de
+Pokémon (nivel, variocolor, movimientos), origen y cintas, avisos de legalidad
+con corrección segura, y guardar una copia nueva en el Arca para compararla
+con la anterior. La vista previa animada de arriba son sus primeros 12
+segundos.
+
+El vídeo se reconstruye a partir de las grabaciones con
+`tool/record_demo_video.sh` y `tool/make_demo_video.sh` (ver
+[Desarrollo](docs/desarrollo.md#vídeo-de-demostración)).
 
 ## Capturas
 

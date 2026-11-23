@@ -9,6 +9,11 @@
 </p>
 
 <p align="center">
+  <a href="docs/media/pkarktools-demo.mp4"><img src="docs/media/pkarktools-demo.webp" width="600" alt="Animated preview: the Ark with version colours, filters and a save with its party and boxes"></a><br>
+  <sub>▶ <a href="docs/media/pkarktools-demo.mp4">Watch the full demo (40 s, MP4)</a> · <a href="#demo">what it shows</a></sub>
+</p>
+
+<p align="center">
   <a href="https://github.com/Rodriqe/PKArkTools/actions/workflows/ci.yml"><img src="https://github.com/Rodriqe/PKArkTools/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg" alt="License: GPL-3.0"></a>
   <img src="https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Windows%20%7C%20Linux-lightgrey" alt="Platforms">
@@ -122,6 +127,18 @@ Drive, OneDrive, Dropbox or Syncthing and all your devices share it.
 | Legends: Z-A | Switch | ✅ | ✅ | Lumiose & Hyperspace Pokédex, `.pa9` |
 
 Details, containers and known limits: [docs/formatos.md](docs/formatos.md).
+
+## Demo
+
+[**Watch the demo video**](docs/media/pkarktools-demo.mp4) (40 s, 1080p, no
+audio), recorded on an Android emulator with synthetic saves: the welcome
+screen, the Ark with a colour for every version, filters, a save with its party
+and boxes, the Pokémon editor (level, shiny, moves), origin and ribbons,
+legality warnings with safe fixes, and saving a new copy to the Ark to compare
+it with the previous one. The animated preview above is the first 12 seconds.
+
+The video is rebuilt from the recordings with `tool/record_demo_video.sh` and
+`tool/make_demo_video.sh` (see [Development](docs/desarrollo.md#vídeo-de-demostración)).
 
 ## Screenshots
 

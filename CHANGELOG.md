@@ -6,6 +6,17 @@ Todos los cambios relevantes del proyecto. El formato sigue
 PKArkTools 0.1.0 (`0.1.0+1` en `apps/pkarktools/pubspec.yaml`); las secciones
 que la siguen son los hitos internos de desarrollo que llevaron a ella.
 
+## [Unreleased]
+
+### Añadido
+- **Demo video**: vídeo de demostración de 40 s
+  ([`docs/media/pkarktools-demo.mp4`](docs/media/pkarktools-demo.mp4)) con
+  vista previa animada al principio del README. Se graba en el emulador
+  Android headless con partidas sintéticas
+  (`integration_test/demo_video_test.dart`, `tool/record_demo_video.sh`) y se
+  monta con ffmpeg (`tool/make_demo_video.sh`), también en versiones vertical
+  y cuadrada en español para redes.
+
 ## [0.1.0] — 2026-11-23
 
 Primera versión publicada. Descargas en

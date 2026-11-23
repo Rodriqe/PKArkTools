@@ -234,6 +234,32 @@ abrir Simulator.app. Solo se versionan las capturas que enlaza algún `.md`, y
 a las del simulador de iOS se les quitan los bloques `eXIf`/`iDOT` (sin
 pérdida).
 
+## Vídeo de demostración
+
+`docs/media/pkarktools-demo.mp4` (inglés, 1920×1080) y su vista previa
+animada `docs/media/pkarktools-demo.webp` (600 px, la que muestra el README)
+se reconstruyen en dos pasos, sin abrir ventanas en el Mac:
+
+1. **Tomas**: `tool/record_demo_video.sh en` (y `es`) ejecuta
+   `integration_test/demo_video_test.dart` en perfil en el emulador headless
+   (`emulator-5554`, Pixel 8 1080×2400, tema oscuro) y lo graba con
+   `adb shell screenrecord`. La prueba importa partidas sintéticas a un Arca en
+   memoria, precarga los iconos, dibuja un círculo en cada toque y marca cada
+   escena con `DEMO_SCENE`; el script guarda la toma y los tiempos de las
+   escenas en `.scratch/video/takes/`.
+2. **Montaje**: `tool/make_demo_video.sh` recorta y acelera cada escena según
+   esas marcas, la encaja en un marco de teléfono sobre el fondo de la marca
+   con un rótulo en Manrope, añade la tarjeta de título y la de cierre con el
+   logo, y une todo con fundidos. Sin música (pista AAC en silencio) y sin
+   metadatos. Además de los archivos del repo, deja las versiones en español
+   para redes (vertical 1080×1920 y cuadrada 1080×1080) en
+   `.scratch/video/fb/`, fuera de git.
+
+Necesita un ffmpeg estático con libx264, libfreetype y libwebp en
+`.ref/ffmpeg/bin/` y las instancias estáticas de Manrope (OFL) en
+`.ref/fonts/Manrope-{500,700,800}.ttf`; ambas rutas se pueden cambiar con
+`FFMPEG`, `FFPROBE` y `FONTS`.
+
 ## Cómo añadir un juego o formato
 
 1. **Datos**: si el juego trae especies, movimientos u objetos nuevos,
