@@ -67,6 +67,7 @@ extension ArcaProblemText on ArcaProblemKind {
     ArcaProblemKind.inboxWrongGame => l10n.problemInboxWrongGame,
     ArcaProblemKind.modifiedMain => l10n.problemModifiedMain,
     ArcaProblemKind.conflictCopy => l10n.problemConflictCopy,
+    ArcaProblemKind.duplicateCopy => l10n.problemDuplicateCopy,
     ArcaProblemKind.looseSave => l10n.problemLooseSave,
   };
 
@@ -81,6 +82,7 @@ extension ArcaProblemText on ArcaProblemKind {
     ArcaProblemKind.inboxWrongGame => l10n.problemInboxWrongGameDesc,
     ArcaProblemKind.modifiedMain => l10n.problemModifiedMainDesc,
     ArcaProblemKind.conflictCopy => l10n.problemConflictCopyDesc,
+    ArcaProblemKind.duplicateCopy => l10n.problemDuplicateCopyDesc,
     ArcaProblemKind.looseSave => l10n.problemLooseSaveDesc,
   };
 }
@@ -405,7 +407,11 @@ class _Group extends StatelessWidget {
           for (final p in items.take(limit))
             _Item(
               problem: p,
-              subtitle: p.game == null ? rel(p.path) : '${rel(p.path)}  →  ${gameTitle(context, p.game!)}',
+              subtitle: p.kind == ArcaProblemKind.duplicateCopy && p.detail != null
+                  ? '${rel(p.path)}\n${l10n.problemDuplicateOf(p.detail!.split('/').last)}'
+                  : p.game == null
+                  ? rel(p.path)
+                  : '${rel(p.path)}  →  ${gameTitle(context, p.game!)}',
               actions: [
                 IconButton(
                   tooltip: l10n.problemsFix,

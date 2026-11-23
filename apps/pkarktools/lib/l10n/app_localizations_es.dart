@@ -2423,4 +2423,16 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get problemLooseSaveDesc =>
       'Copiado a mano fuera de su sitio. Arreglar detecta su juego y lo guarda en el historial.';
+
+  @override
+  String get problemDuplicateCopy => 'Copias duplicadas en el historial';
+
+  @override
+  String get problemDuplicateCopyDesc =>
+      'Mismo contenido (SHA-256) que una copia más antigua de la misma partida. Arreglar conserva la más antigua y aparta las demás, con su .json, a _cuarentena/duplicados/.';
+
+  @override
+  String problemDuplicateOf(String name) {
+    return 'Igual que $name, que se conserva';
+  }
 }

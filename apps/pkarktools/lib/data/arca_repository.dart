@@ -171,6 +171,11 @@ class ReindexReport {
   /// de otros archivos se ignoran).
   List<FsEntry> conflicts = const [];
 
+  /// Copias del historial con el mismo contenido que otra más antigua de la
+  /// misma carpeta de entrenador: (ruta del duplicado, ruta de la que se
+  /// conserva). Las restauraciones no cuentan (repiten contenido a propósito).
+  List<(String, String)> historyDuplicates = const [];
+
   /// Todos los archivos de la carpeta (ruta → tamaño y fecha), para la clave
   /// con la que se ignora un problema.
   Map<String, FsEntry> entries = const {};
@@ -667,6 +672,13 @@ class ArcaRepository {
     final mains = await ArcaMainFiles.sync(
         folder: folder, listing: listing, history: history, cache: _mainHashes, knownShas: {for (final r in indexed.values) r.sha256});
     final looseNow = {for (final e in mains.loose) e.path};
+    report.historyDuplicates = _historyDuplicates([
+      for (final rel in listing.pairs.keys)
+        if (indexed[rel] case final r?)
+          (rel, r.sha256, r.importedAt, r.origin)
+        else if (fresh[rel] case (final m, null))
+          (rel, m.sha256, m.importedAt, m.origin),
+    ]);
     report
       ..mains = mains.mains
       ..conflictsCleaned = mains.conflictsCleaned
@@ -681,6 +693,30 @@ class ArcaRepository {
       ];
     await _processInbox(report);
     return report;
+  }
+
+  /// Duplicados por contenido dentro de cada carpeta de entrenador: se
+  /// conserva la copia más antigua (y, a igual fecha, la de ruta menor, la
+  /// misma que elige el índice) y el resto se señala.
+  static List<(String, String)> _historyDuplicates(List<(String, String, DateTime, String)> copies) {
+    final groups = <String, List<(String, String, DateTime, String)>>{};
+    for (final c in copies) {
+      if (c.$4 == ImportOrigin.restored.code) continue;
+      groups.putIfAbsent('${ArcaLayout.ownerDirOf(c.$1)}|${c.$2}', () => []).add(c);
+    }
+    final out = <(String, String)>[];
+    for (final g in groups.values) {
+      if (g.length < 2) continue;
+      g.sort((a, b) {
+        final c = a.$3.compareTo(b.$3);
+        return c != 0 ? c : a.$1.compareTo(b.$1);
+      });
+      for (final d in g.skip(1)) {
+        out.add((d.$1, g.first.$1));
+      }
+    }
+    out.sort((a, b) => a.$1.compareTo(b.$1));
+    return out;
   }
 
   /// Bandeja de entrada: un save suelto directamente en `<Juego>/` se valida,

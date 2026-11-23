@@ -209,6 +209,54 @@ void main() {
       expect(quarantined(fs), contains('${ArcaLayout.quarantineDir}/Pokémon Esmeralda/roto.sav'));
     });
 
+    test('copias duplicadas en el historial: se conserva la más antigua y el resto va a _cuarentena/duplicados/', () async {
+      // Caso real: la misma copia importada otra vez con fecha nueva (p. ej.
+      // al importar una carpeta que contenía el propio Arca).
+      final (fs, repo, rel) = await arca();
+      final dir = rel.substring(0, rel.lastIndexOf('/'));
+      final hash8 = sha(emerald()).substring(0, 8);
+      final sidecar = jsonDecode(utf8.decode(fs.files['$root/$rel.json']!.$1)) as Map<String, Object?>;
+      final dups = <String>[];
+      for (final (i, at) in [DateTime(2026, 1, 3, 8), DateTime(2026, 1, 5, 9)].indexed) {
+        final d = '$dir/${ArcaLayout.stamp(at)}_$hash8.sav';
+        dups.add(d);
+        fs.files['$root/$d'] = (emerald(), old);
+        final meta = {...sidecar, 'importedAt': at.toUtc().toIso8601String(), 'origin': i == 0 ? 'saf' : 'folder'};
+        fs.files['$root/$d.json'] = (Uint8List.fromList(utf8.encode(jsonEncode(meta))), old);
+      }
+      // Una restauración repite contenido a propósito: no es un duplicado.
+      final s = (await repo.allSlots()).single.$2.single;
+      await repo.restoreAsCurrent(s, now: DateTime(2026, 1, 6));
+      final list = await problems(repo);
+      expect(list.map((p) => p.kind), everyElement(ArcaProblemKind.duplicateCopy));
+      expect(list.map((p) => p.path), dups);
+      expect(list.map((p) => p.detail).toSet(), {rel}, reason: 'se conserva la más antigua');
+
+      // Si la que se conserva no se puede verificar, no se toca nada.
+      final keptBytes = fs.files['$root/$rel']!;
+      fs.files['$root/$rel'] = (Uint8List.fromList(emerald())..[300] ^= 1, old);
+      final bad = await ArcaRepair(repo).fixAll(list);
+      expect(bad.failed, 2);
+      expect(dups.every((d) => fs.files.containsKey('$root/$d')), isTrue);
+      fs.files['$root/$rel'] = keptBytes;
+
+      final r = await ArcaRepair(repo).fixAll(await problems(repo));
+      expect((r.fixed, r.quarantined, r.failed), (2, 0, 0));
+      expect(await problems(repo), isEmpty);
+      expect(quarantined(fs), [
+        for (final d in dups) ...[
+          '${ArcaLayout.quarantineDir}/${ArcaRepair.duplicatesDir}/$d',
+          '${ArcaLayout.quarantineDir}/${ArcaRepair.duplicatesDir}/$d.json',
+          '${ArcaLayout.quarantineDir}/${ArcaRepair.duplicatesDir}/$d.json.nota.txt',
+          '${ArcaLayout.quarantineDir}/${ArcaRepair.duplicatesDir}/$d.nota.txt',
+        ],
+      ]..sort());
+      expect(utf8.decode(fs.files['$root/${ArcaLayout.quarantineDir}/${ArcaRepair.duplicatesDir}/${dups.first}.nota.txt']!.$1),
+          contains(rel));
+      expect(fs.files['$root/$rel']!.$1, emerald(), reason: 'la conservada sigue en su sitio');
+      expect((await repo.allSlots()).single.$2, hasLength(2), reason: 'la original y la restaurada');
+    });
+
     test('un fallo no detiene el resto y se cuenta', () async {
       final (fs, repo, _) = await arca();
       fs.files['$root/copiados/a.sav'] = (emerald(hours: 70), old);

@@ -42,6 +42,10 @@ enum ArcaProblemKind {
   /// Copia de conflicto de la nube (`main (1)`, `… (1).sav`, `conflicted copy`…).
   conflictCopy,
 
+  /// Copia del historial con el mismo SHA-256 que otra más antigua de la
+  /// misma carpeta de entrenador ([ArcaProblem.detail] = la que se conserva).
+  duplicateCopy,
+
   /// Save copiado a mano fuera de su sitio.
   looseSave;
 
@@ -115,6 +119,9 @@ List<ArcaProblem> arcaProblemsOf(ReindexReport? report) {
   }
   for (final e in report.conflicts) {
     out.add(p(ArcaProblemKind.conflictCopy, e.path));
+  }
+  for (final (path, kept) in report.historyDuplicates) {
+    out.add(p(ArcaProblemKind.duplicateCopy, path, detail: kept));
   }
   for (final e in report.loose) {
     out.add(p(ArcaLayout.ignoreReason(e.path) == IgnoreReason.conflictCopy ? ArcaProblemKind.conflictCopy : ArcaProblemKind.looseSave,
@@ -220,6 +227,8 @@ class ArcaRepair {
       case ArcaProblemKind.looseSave:
       case ArcaProblemKind.conflictCopy:
         return _adoptBytes(p.path);
+      case ArcaProblemKind.duplicateCopy:
+        return _retireDuplicate(p.path, p.detail);
       case ArcaProblemKind.inboxUnreadable:
         await quarantine(p.path, 'No es un save legible / Not a readable save${p.detail == null ? '' : ': ${p.detail}'}');
         return FixOutcome.quarantined;
@@ -229,12 +238,12 @@ class ArcaRepair {
   /// Mueve [rel] a `_cuarentena/<rel>` (sufijo si ya existe), comprueba la
   /// copia por su SHA-256, escribe una nota al lado y solo entonces retira el
   /// original. Devuelve la ruta en cuarentena.
-  Future<String> quarantine(String rel, String reason) async {
+  Future<String> quarantine(String rel, String reason, {String subdir = ''}) async {
     final bytes = await folder.read(rel);
     final sha = ArcaFolder.sha256Of(bytes);
     String? dest;
     for (var n = 0; n < 50 && dest == null; n++) {
-      final candidate = '${ArcaLayout.quarantineDir}/$rel${n == 0 ? '' : ' ($n)'}';
+      final candidate = '${ArcaLayout.quarantineDir}/${subdir.isEmpty ? '' : '$subdir/'}$rel${n == 0 ? '' : ' ($n)'}';
       try {
         await folder.writeNew(candidate, bytes);
         dest = candidate;
@@ -262,6 +271,26 @@ class ArcaRepair {
     }
     await folder.delete(rel);
     return dest;
+  }
+
+  /// Subcarpeta de la cuarentena para las copias duplicadas del historial.
+  static const duplicatesDir = 'duplicados';
+
+  /// Duplicado del historial: con la copia que se conserva verificada por su
+  /// SHA-256, el duplicado y su `.json` van a `_cuarentena/duplicados/`.
+  Future<FixOutcome> _retireDuplicate(String rel, String? kept) async {
+    if (kept == null) return FixOutcome.failed;
+    final sha = ArcaFolder.sha256Of(await folder.read(rel));
+    // Lanza si la que se conserva falta o no coincide: entonces no se toca nada.
+    await folder.readVerified(kept, sha);
+    final keptMeta = await folder.readMeta(kept);
+    if (keptMeta.sha256 != sha) throw StateError('$kept no tiene el mismo contenido');
+    final reason = 'Copia duplicada de / Duplicate of: $kept';
+    final side = ArcaLayout.sidecarFor(rel);
+    if (await folder.exists(side)) await quarantine(side, reason, subdir: duplicatesDir);
+    await quarantine(rel, reason, subdir: duplicatesDir);
+    // Su contenido sigue a salvo en la copia conservada: cuenta como arreglado.
+    return FixOutcome.retired;
   }
 
   /// Importa el contenido de [rel] como copia nueva de su partida y, con la

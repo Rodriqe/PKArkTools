@@ -3912,6 +3912,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Copiado a mano fuera de su sitio. Arreglar detecta su juego y lo guarda en el historial.'**
   String get problemLooseSaveDesc;
+
+  /// No description provided for @problemDuplicateCopy.
+  ///
+  /// In es, this message translates to:
+  /// **'Copias duplicadas en el historial'**
+  String get problemDuplicateCopy;
+
+  /// No description provided for @problemDuplicateCopyDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Mismo contenido (SHA-256) que una copia más antigua de la misma partida. Arreglar conserva la más antigua y aparta las demás, con su .json, a _cuarentena/duplicados/.'**
+  String get problemDuplicateCopyDesc;
+
+  /// No description provided for @problemDuplicateOf.
+  ///
+  /// In es, this message translates to:
+  /// **'Igual que {name}, que se conserva'**
+  String problemDuplicateOf(String name);
 }
 
 class _AppLocalizationsDelegate
