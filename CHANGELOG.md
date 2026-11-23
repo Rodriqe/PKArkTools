@@ -8,6 +8,12 @@ que la siguen son los hitos internos de desarrollo que llevaron a ella.
 
 ## [Unreleased]
 
+## [0.1.1] — 2026-11-23
+
+La carpeta del Arca deja a la vista la última versión de cada partida con el
+nombre que usa el juego, con las copias en `historial/`; las carpetas de 0.1.0
+se migran solas. Iconos de Pokémon HOME para las 1025 especies, más grandes.
+
 ### Añadido
 - **Última versión a la vista**: cada carpeta de entrenador del Arca tiene el
   archivo de la última versión con el nombre que usa el juego (`main` en
@@ -55,8 +61,6 @@ que la siguen son los hitos internos de desarrollo que llevaron a ella.
   la insignia y el borde dorado.
 - «Descargar todos los iconos» pasa a ~16 MB (2168 archivos); la caché de la
   versión anterior se borra sola. Ajustes › Acerca de indica ambas fuentes.
-
-### Cambiado
 - **Restaurar** crea una entrada nueva «Restaurada» en el historial y
   actualiza la última versión (el historial nunca se reescribe); escribir
   también en el archivo original es una opción del mismo diálogo.
@@ -68,6 +72,15 @@ que la siguen son los hitos internos de desarrollo que llevaron a ella.
   `conflicted copy`) se retiran si su contenido ya está en el historial.
 - Índice local (drift) a esquema 4: sin la restricción única
   `(partida, sha256)`.
+
+### Limitaciones conocidas
+- Formas sin icono propio en HOME (megas nuevas de Leyendas Z-A, Teraforma de
+  Terapagos, tipos de Silvally, modos de Koraidon/Miraidon…) usan el icono de
+  la especie.
+- Sin iconos variocolor: el Pokémon variocolor se marca con el borde dorado y
+  la insignia ✦.
+- Las de 0.1.0 siguen vigentes (Leyendas Z-A y Crear Pokémon, Windows/Linux
+  validados solo en la CI, iPhone/iPad compilando desde el código).
 
 ## [0.1.0] — 2026-11-23
 
