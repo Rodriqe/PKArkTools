@@ -59,7 +59,8 @@ void main() {
     await tester.runAsync(() => SpriteCache.instance.downloadAll());
 
     final db = ArcaDatabase(DatabaseConnection(NativeDatabase.memory(), closeStreamsSynchronously: true));
-    final repo = ArcaRepository(db, ArcaFolder(MemoryFolderFs(label: 'PKArkTools')));
+    final fs = MemoryFolderFs(label: 'PKArkTools');
+    final repo = ArcaRepository(db, ArcaFolder(fs), inboxSettle: Duration.zero);
     final ids = <String, int>{};
     final saves = {
       ...SyntheticSaves.demoSet(),
@@ -194,6 +195,31 @@ void main() {
     }
     await open('/arca/save/${ids['Rubi.sav']!}');
     await shot('version_actual', number: 42);
+
+    // 8. Problemas del Arca: un save suelto, un .json sin su save y una copia
+    //    de conflicto de la nube. En Ajustes, una línea plegada; desplegada,
+    //    agrupados con Arreglar/Ignorar. En el Arca, solo un aviso de una línea.
+    await tester.runAsync(() async {
+      await fs.writeNew('PKArkTools/Rubi copiado.sav', SyntheticSaves.gen3(
+          game: GameVersion.rubySapphire, trainer: const SynthTrainer(name: 'BRENDAN', tid: 2024, sid: 77, hours: 50)));
+      final side = fs.files.keys.firstWhere((k) => k.endsWith('.sav.json'));
+      await fs.writeNew(side.replaceFirst(RegExp(r'_[0-9a-f]{8}\.sav\.json$'), '_0badc0de.sav.json'), fs.files[side]!.$1);
+      final save = side.substring(0, side.length - 5);
+      await fs.writeNew(save.replaceFirst('.sav', ' (1).sav'), fs.files[save]!.$1);
+      await repo.reindex();
+    });
+    await open('/arca');
+    await shot('arca_aviso_problemas', number: 43);
+    await open('/ajustes');
+    await reveal(find.byKey(const ValueKey('arca-problems-summary')), alignment: 0.3);
+    await shot('ajustes_problemas', number: 44);
+    await tester.tap(find.byKey(const ValueKey('arca-problems-summary')));
+    await settle(10);
+    await reveal(find.byKey(const ValueKey('arca-problems-summary')), alignment: 0.02);
+    await shot('problemas_detalle', number: 45);
+    await tester.tap(find.byKey(const ValueKey('arca-problems-fix-all')));
+    await settle(10);
+    await shot('problemas_arreglar_todo', number: 46);
 
     await tester.pumpWidget(const SizedBox());
     await settle(5);

@@ -787,8 +787,31 @@ void main() {
           SyntheticSaves.gen3(trainer: const SynthTrainer(name: 'MAY', tid: 31415, sid: 9265, gender: 1, hours: 52)));
       await repo.reindex();
     });
-    await show('/ajustes', const Size(1280, 1900));
+    // Más problemas típicos: un save copiado a mano en la raíz y un .json
+    // que se quedó sin su save.
+    await tester.runAsync(() async {
+      await fs.writeNew('PKArkTools/Copia de Esmeralda.sav',
+          SyntheticSaves.gen3(trainer: const SynthTrainer(name: 'MAY', tid: 31415, sid: 9265, gender: 1, hours: 20)));
+      final side = fs.files.keys.firstWhere((k) => k.endsWith('.sav.json'));
+      await fs.writeNew(side.replaceFirst(RegExp(r'_[0-9a-f]{8}\.sav\.json$'), '_0badc0de.sav.json'), fs.files[side]!.$1);
+      await repo.reindex();
+    });
+    await show('/ajustes', const Size(1280, 1100));
+    // Plegado: una línea con el recuento.
     await capture('v2/mac_43_ajustes_arca');
+    final summary = find.byKey(const ValueKey('arca-problems-summary'));
+    await tester.ensureVisible(summary);
+    await settle(3);
+    await tester.tap(summary);
+    await settle(6);
+    await Scrollable.ensureVisible(tester.element(summary), alignment: 0.02);
+    await settle(4);
+    await capture('v2/mac_44_problemas_arca');
+    await tester.tap(find.byKey(const ValueKey('arca-problems-fix-all')));
+    await settle(8);
+    await capture('v2/mac_45_problemas_arreglar_todo');
+    await tester.tap(find.text(tr('Cancelar')));
+    await settle(4);
 
     await show('/arca', const Size(1440, 900));
     await tester.runAsync(() async {

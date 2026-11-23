@@ -110,7 +110,8 @@ void main() {
       final repo = await withProblems(tester);
       await pump(tester, repo, size: size);
       expect(find.text('3 problemas en el Arca'), findsOneWidget);
-      expect(find.text('1 error · 2 avisos'), findsOneWidget);
+      // En el teléfono el desglose no cabe: solo el título completo y el icono.
+      expect(find.text('1 error · 2 avisos'), size.width > 600 ? findsOneWidget : findsNothing);
       expect(find.textContaining('.json dañado'), findsNothing, reason: 'plegado');
       expect(find.byKey(const ValueKey('arca-problems-fix-all')), findsNothing);
 
