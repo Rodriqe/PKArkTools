@@ -11,6 +11,56 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [0.1.5] — 2026-11-23
+
+Las formas regionales y alternativas usan sus propios datos en vez de los de
+la especie base: Decidueye de Hisui es Planta/Lucha, no Planta/Fantasma. Es
+la primera versión que la app puede instalar con su propio botón **Buscar
+actualizaciones**.
+
+### Corregido
+- **Tipos, estadísticas base y habilidades de las formas** (Alola, Galar,
+  Hisui, Paldea, Tauros de Paldea, Rotom, Oricorio, Lycanroc, Urshifu,
+  Calyrex, Necrozma, Kyurem, Deoxys, Giratina, Shaymin, los genios, Meloetta,
+  Hoopa, Zygarde, Ogerpon, Basculegion, Wormadam, Castform, megas en Let's Go
+  y Z-A…): los chips de tipo del equipo, las cajas, la ficha, el editor, la
+  Pokédex, la comparación y las tarjetas de partida, las estadísticas
+  calculadas y las habilidades salen ahora de los datos de la forma **en el
+  juego del save**, incluidos los tipos que cambiaron entre generaciones
+  (Gardevoir o Snubbull no son Hada en Gen 3).
+- **Legalidad por forma**: los movimientos aprendibles siguen la cadena
+  evolutiva de la forma (Sandslash de Alola aprende lo de Sandshrew de Alola),
+  los encuentros tienen que coincidir en forma (un Growlithe de Hisui no sale
+  de un encuentro de Growlithe de Kanto), las habilidades se comprueban con las
+  de la forma y se avisa de una forma que no existe en el juego (Decidueye
+  normal en Leyendas Arceus).
+- La lista de especies ya no ofrece entradas de formas como especies en
+  algunos juegos (p. ej. las «especies» 494+ en Diamante/Perla), y las especies
+  que solo existen como forma regional (Growlithe en Leyendas Arceus) están
+  disponibles.
+- Los Pokémon nuevos reciben el learnset, las habilidades y el género de la
+  forma y, en Escarlata y Púrpura, el teratipo del primer tipo de la forma
+  (Ogerpon: el de su máscara).
+
+### Añadido
+- **Nombres de forma**: «Decidueye (Hisui)», «Rotom (Lavado)», «Tauros
+  (Paldea Ardiente)» en la ficha, el equipo, las cajas, los avisos de
+  legalidad y la comparación. El selector **Forma** del editor muestra por
+  nombre las formas que existen en el juego y al cambiarla actualiza tipos,
+  estadísticas, habilidad, género y (Ogerpon) teratipo. La Pokédex nombra las
+  formas vistas y muestra cada entrada con su forma.
+- Las tarjetas de partida recuerdan las formas del equipo (las entradas
+  anteriores muestran la forma base hasta reindexar).
+
+### Desarrollo
+- `SpeciesForms` en pkcore: tipos, estadísticas base, habilidades, género,
+  presencia, nombres y preevoluciones por (especie, forma, juego).
+- El oráculo PKHeX tiene un comando `forms`; `tool/gen_form_data.sh` genera
+  los nombres de forma y una tabla versionada de **11 888** combinaciones
+  (juego, especie, forma) de todos los juegos de Gen 3–9, que
+  `form_data_pkhex_test.dart` compara con pkcore: tipos, estadísticas base,
+  habilidades, género, presencia y preevolución, 0 diferencias.
+
 ## [0.1.4] — 2026-11-23
 
 PKArkTools puede buscar versiones nuevas y actualizarse: en Android descarga

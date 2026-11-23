@@ -11,6 +11,50 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [0.1.5] — 2026-11-23
+
+Regional and alternate forms use their own data instead of the base
+species': Hisuian Decidueye is Grass/Fighting, not Grass/Ghost. This is the
+first release the app can install with its own **Check for updates** button.
+
+### Fixed
+- **Types, base stats and abilities of forms** (Alola, Galar, Hisui, Paldea,
+  Paldean Tauros, Rotom, Oricorio, Lycanroc, Urshifu, Calyrex, Necrozma,
+  Kyurem, Deoxys, Giratina, Shaymin, the Forces of Nature, Meloetta, Hoopa,
+  Zygarde, Ogerpon, Basculegion, Wormadam, Castform, Megas in Let's Go and
+  Z-A…): the type chips in the party, boxes, summary, editor, Pokédex,
+  comparison and save cards, the calculated stats and the abilities now come
+  from the form's personal data **in the save's game**, including types that
+  changed between generations (Gardevoir or Snubbull are not Fairy in Gen 3).
+- **Legality by form**: learnable moves follow the form's evolution chain
+  (Alolan Sandslash learns what Alolan Sandshrew learns), encounters must match
+  the form (a Hisuian Growlithe does not come from a Kanto Growlithe slot),
+  abilities are checked against the form's, and a form that does not exist in
+  the game is flagged (regular Decidueye in Legends: Arceus).
+- The species list no longer offers form entries as species in some games
+  (e.g. "species" 494+ in Diamond/Pearl), and species that only exist as a
+  regional form (Growlithe in Legends: Arceus) are available.
+- New Pokémon get the form's learnset, abilities and gender, and in Scarlet
+  and Violet a Tera Type matching the form's first type (Ogerpon: its mask's).
+
+### Added
+- **Form names**: "Decidueye (Hisui)", "Rotom (Wash)", "Tauros (Paldea
+  Blaze)" in the summary, party, boxes, legality messages and comparison. The
+  editor's **Form** selector lists the forms present in the game by name and
+  updates types, stats, ability, gender and (Ogerpon) Tera Type when changed.
+  The Pokédex names the forms seen and shows each entry with its form.
+- Save cards remember the party's forms (older entries show the base form
+  until the save is reindexed).
+
+### Development
+- `SpeciesForms` in pkcore: types, base stats, abilities, gender, presence,
+  names and pre-evolutions by (species, form, game).
+- The PKHeX oracle has a `forms` command; `tool/gen_form_data.sh` generates the
+  form names and a versioned table of **11,888** (game, species, form)
+  combinations from every Gen 3–9 game, which `form_data_pkhex_test.dart`
+  compares with pkcore: types, base stats, abilities, gender, presence and
+  pre-evolution, 0 differences.
+
 ## [0.1.4] — 2026-11-23
 
 PKArkTools can check for new versions and update itself: on Android it
