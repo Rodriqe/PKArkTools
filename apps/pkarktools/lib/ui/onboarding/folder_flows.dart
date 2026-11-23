@@ -138,5 +138,6 @@ String syncProviderName(SyncProvider p) => switch (p) {
       SyncProvider.oneDrive => 'OneDrive',
       SyncProvider.dropbox => 'Dropbox',
       SyncProvider.syncthing => 'Syncthing',
+      SyncProvider.nas => 'NAS',
       SyncProvider.none => '',
     };

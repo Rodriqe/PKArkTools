@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -7,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'folder_fs.dart';
+import 'resilient_folder_fs.dart';
+import 'volume_info.dart';
 
 /// Cómo se llega a la carpeta del Arca en este dispositivo.
 enum LocationKind {
@@ -25,30 +28,61 @@ enum LocationKind {
 
 /// Carpeta del Arca elegida en este dispositivo (se guarda en el índice local).
 class ArcaLocation {
-  const ArcaLocation(this.kind, {this.value = '', this.label = ''});
+  const ArcaLocation(this.kind, {this.value = '', this.label = '', this.network = false, this.volume = ''});
   final LocationKind kind;
 
   /// Ruta, bookmark en base64 o URI del árbol SAF.
   final String value;
   final String label;
 
-  Map<String, Object?> toJson() => {'kind': kind.name, 'value': value, 'label': label};
+  /// La carpeta está en un volumen de red (NAS). Se recuerda para que, si al
+  /// abrir la app el recurso no está montado, se muestre «Carpeta de red no
+  /// disponible» y nunca se escriba en la ruta local que queda en su lugar.
+  final bool network;
+
+  /// Nombre del NAS y del recurso (`NAS/Compartido`) para mostrar.
+  final String volume;
+
+  Map<String, Object?> toJson() => {
+        'kind': kind.name,
+        'value': value,
+        'label': label,
+        if (network) 'network': true,
+        if (volume.isNotEmpty) 'volume': volume,
+      };
 
   static ArcaLocation? fromJson(Map<String, Object?>? m) {
     if (m == null) return null;
     final kind = LocationKind.values.where((k) => k.name == m['kind']).firstOrNull;
     if (kind == null) return null;
-    return ArcaLocation(kind, value: (m['value'] as String?) ?? '', label: (m['label'] as String?) ?? '');
+    return ArcaLocation(kind,
+        value: (m['value'] as String?) ?? '',
+        label: (m['label'] as String?) ?? '',
+        network: m['network'] == true,
+        volume: (m['volume'] as String?) ?? '');
   }
 
-  ArcaLocation withValue(String v) => ArcaLocation(kind, value: v, label: label);
+  ArcaLocation withValue(String v) => ArcaLocation(kind, value: v, label: label, network: network, volume: volume);
+
+  /// Copia con los datos del volumen detectado en [fs].
+  ArcaLocation withVolumeOf(FolderFs fs) {
+    final v = fs.volume;
+    if (v == null) return this;
+    return ArcaLocation(kind, value: value, label: label, network: v.isNetwork, volume: v.isNetwork ? v.displayName : '');
+  }
 }
 
 /// Servicio de nube que sincroniza la carpeta, deducido de su ruta.
-enum SyncProvider { iCloud, googleDrive, oneDrive, dropbox, syncthing, none }
+enum SyncProvider { iCloud, googleDrive, oneDrive, dropbox, syncthing, nas, none }
 
-SyncProvider detectSyncProvider(String label) {
+/// Servicio que sincroniza o aloja la carpeta. [network] = la carpeta está en
+/// un volumen de red (NAS por SMB/AFP/NFS/WebDAV, o un proveedor SMB de SAF).
+SyncProvider detectSyncProvider(String label, {bool network = false}) {
+  if (network) return SyncProvider.nas;
   final l = label.toLowerCase();
+  if (l.startsWith('smb://') || l.startsWith('afp://') || l.startsWith('nfs://') || l.startsWith(r'\\')) {
+    return SyncProvider.nas;
+  }
   if (l.contains('mobile documents') || l.contains('clouddocs') || l.contains('icloud')) return SyncProvider.iCloud;
   if (l.contains('google drive') || l.contains('googledrive') || l.contains('com.google.android.apps.docs')) {
     return SyncProvider.googleDrive;
@@ -136,14 +170,16 @@ class PlatformFolderAccess implements FolderAccess {
       final r = await _apple.invokeMapMethod<String, Object?>('pick');
       if (r == null) return null;
       final path = r['path']! as String;
-      final loc = ArcaLocation(LocationKind.bookmark, value: r['bookmark']! as String, label: path);
-      return OpenedFolder(loc, IoFolderFs(Directory(path), label: path));
+      final fs = forVolume(IoFolderFs(Directory(path), label: path, expectNetwork: r['volumeIsLocal'] == false));
+      final loc = ArcaLocation(LocationKind.bookmark, value: r['bookmark']! as String, label: path).withVolumeOf(fs);
+      return OpenedFolder(loc, fs);
     }
     if (_isAndroid) {
       final tree = await _saf.invokeMethod<String>('pickTree');
       if (tree == null) return null;
       final label = SafFolderFs.labelFor(tree);
-      return OpenedFolder(ArcaLocation(LocationKind.saf, value: tree, label: label), SafFolderFs(tree, label));
+      final fs = SafFolderFs(tree, label);
+      return OpenedFolder(ArcaLocation(LocationKind.saf, value: tree, label: label).withVolumeOf(fs), fs);
     }
     String? initial;
     try {
@@ -152,7 +188,8 @@ class PlatformFolderAccess implements FolderAccess {
     final uri = await FilePicker.pickDirectory(dialogTitle: 'Carpeta del Arca', initialDirectory: initial);
     if (uri == null || uri.scheme != 'file') return null;
     final path = uri.toFilePath();
-    return OpenedFolder(ArcaLocation(LocationKind.path, value: path, label: path), IoFolderFs(Directory(path)));
+    final fs = forVolume(IoFolderFs(Directory(path)));
+    return OpenedFolder(ArcaLocation(LocationKind.path, value: path, label: path).withVolumeOf(fs), fs);
   }
 
   @override
@@ -170,30 +207,57 @@ class PlatformFolderAccess implements FolderAccess {
       case LocationKind.appLocal:
         return appLocal();
       case LocationKind.path:
-        final fs = IoFolderFs(Directory(location.value));
-        if (!await fs.checkAccess()) throw FolderAccessLostException('No se puede escribir en ${location.value}');
-        return OpenedFolder(location, fs);
+        return openIoFolder(location, location.value);
       case LocationKind.bookmark:
         final Map<String, Object?>? r;
         try {
-          r = await _apple.invokeMapMethod<String, Object?>('resolve', {'bookmark': location.value});
+          // Resolver un bookmark de un recurso de red puede intentar montarlo:
+          // nunca más de unos segundos.
+          r = await _apple
+              .invokeMapMethod<String, Object?>('resolve', {'bookmark': location.value}).timeout(resolveTimeout);
+        } on TimeoutException {
+          throw NetworkFolderUnavailableException('La carpeta de red ${location.label} no responde');
         } on PlatformException catch (e) {
-          throw FolderAccessLostException(e.message ?? 'No se pudo recuperar el acceso a la carpeta');
+          final msg = e.message ?? 'No se pudo recuperar el acceso a la carpeta';
+          throw location.network ? NetworkFolderUnavailableException(msg) : FolderAccessLostException(msg);
         }
         if (r == null) throw const FolderAccessLostException('No se pudo recuperar el acceso a la carpeta');
         final path = r['path']! as String;
         final refreshed = r['bookmark'] as String?;
-        final loc = ArcaLocation(LocationKind.bookmark, value: refreshed ?? location.value, label: path);
-        final fs = IoFolderFs(Directory(path), label: path);
-        if (!await fs.checkAccess()) throw FolderAccessLostException('La carpeta $path no está disponible');
-        return OpenedFolder(loc, fs);
+        final loc = ArcaLocation(LocationKind.bookmark,
+            value: refreshed ?? location.value, label: path, network: location.network, volume: location.volume);
+        return openIoFolder(loc, path, expectNetwork: r['volumeIsLocal'] == false);
       case LocationKind.saf:
         final fs = SafFolderFs(location.value, location.label);
         if (!await fs.checkAccess()) {
-          throw FolderAccessLostException('Android ya no da permiso sobre "${location.label}"');
+          final msg = 'Android ya no da permiso sobre "${location.label}"';
+          throw location.network ? NetworkFolderUnavailableException(msg) : FolderAccessLostException(msg);
         }
-        return OpenedFolder(location, fs);
+        return OpenedFolder(location.withVolumeOf(fs), fs);
     }
+  }
+
+  /// Tiempo máximo para resolver un bookmark (puede montar un recurso de red).
+  static const resolveTimeout = Duration(seconds: 20);
+
+  /// Abre una carpeta por ruta comprobando que se puede escribir. Si la
+  /// ubicación es de red y el recurso no está montado lanza
+  /// [NetworkFolderUnavailableException] sin crear ni escribir nada.
+  static Future<OpenedFolder> openIoFolder(ArcaLocation location, String path,
+      {bool expectNetwork = false, MountTable? mounts}) async {
+    final io = IoFolderFs(Directory(path),
+        label: location.kind == LocationKind.path ? null : path,
+        mounts: mounts,
+        expectNetwork: expectNetwork || location.network);
+    final fs = forVolume(io);
+    if (!await fs.checkAccess()) {
+      if (location.network || io.isNetwork) {
+        throw NetworkFolderUnavailableException(
+            'La carpeta de red ${location.volume.isEmpty ? path : location.volume} no está disponible');
+      }
+      throw FolderAccessLostException('La carpeta $path no está disponible');
+    }
+    return OpenedFolder(location.withVolumeOf(fs), fs);
   }
 
   /// Pide a iCloud que descargue los archivos aún no presentes (`.icloud`).
@@ -220,6 +284,19 @@ class SafFolderFs implements FolderFs {
 
   @override
   String? get nativePath => null;
+
+  /// Un proveedor de documentos SMB/CIFS (p. ej. «CIFS Documents Provider»)
+  /// cuenta como carpeta de red.
+  @override
+  VolumeInfo? get volume => isNetworkTree(tree)
+      ? VolumeInfo(fsType: 'smb', mountPoint: label, source: label, network: true)
+      : null;
+
+  static bool isNetworkTree(String tree) {
+    final authority = Uri.tryParse(tree)?.authority.toLowerCase() ?? '';
+    return authority.split(RegExp(r'[.\-_]')).any((p) => const {'cifs', 'smb', 'samba', 'nas', 'lan', 'smbj'}.contains(p)) ||
+        authority.contains('cifsdocumentsprovider');
+  }
 
   static String labelFor(String tree) {
     final last = Uri.decodeComponent(tree.split('/').last);

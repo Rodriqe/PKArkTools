@@ -7,6 +7,7 @@ import 'package:pkcore/pkcore.dart' show SaveDetector;
 import 'arca_game_folders.dart';
 import 'arca_layout.dart';
 import 'folder_fs.dart';
+import 'unicode_names.dart';
 
 /// Un save gestionado con su sidecar.
 class ScannedSnapshot {
@@ -77,16 +78,55 @@ class ArcaFolder {
 
   String _full(String rel) => prefix.isEmpty ? rel : '$prefix/$rel';
 
-  /// Abre una carpeta elegida: si es ya la carpeta `PKArkTools` de otro
-  /// dispositivo (tiene nuestro README en la raíz) se usa tal cual.
+  /// Abre una carpeta elegida:
+  ///
+  /// * si contiene una `PKArkTools/` (p. ej. la carpeta compartida del NAS
+  ///   donde otro dispositivo ya creó el Arca) se usa esa, sin crear otra;
+  /// * si es ya la carpeta `PKArkTools` de otro dispositivo (tiene nuestro
+  ///   README en la raíz, o se llama así y no contiene otra `PKArkTools/`)
+  ///   se usa tal cual: nunca se anida `PKArkTools/PKArkTools`.
   static Future<ArcaFolder> open(FolderFs fs) async {
-    if (await fs.exists(ArcaLayout.readmeName) && !await fs.exists('${ArcaLayout.rootDir}/${ArcaLayout.readmeName}')) {
+    if (await fs.exists('${ArcaLayout.rootDir}/${ArcaLayout.readmeName}')) return ArcaFolder(fs);
+    if (await fs.exists(ArcaLayout.readmeName)) {
       try {
         final text = utf8.decode(await fs.read(ArcaLayout.readmeName), allowMalformed: true);
         if (text.startsWith(ArcaLayout.readmeMarker)) return ArcaFolder(fs, prefix: '');
       } catch (_) {}
     }
+    final name = fs.label.split(RegExp(r'[/\\:]')).where((s) => s.isNotEmpty).lastOrNull ?? '';
+    if (name.toLowerCase() == ArcaLayout.rootDir.toLowerCase()) {
+      try {
+        if ((await fs.list(ArcaLayout.rootDir)).isEmpty) return ArcaFolder(fs, prefix: '');
+      } on FolderAccessLostException {
+        rethrow;
+      } catch (_) {}
+    }
     return ArcaFolder(fs);
+  }
+
+  /// Carpetas vistas en el último listado: nombre en minúsculas → nombre real.
+  /// En un NAS (SMB) o en macOS el sistema de archivos no distingue
+  /// mayúsculas: una copia nueva se escribe en la carpeta existente con su
+  /// grafía real para que la ruta del índice coincida con la del listado.
+  final Map<String, String> _dirCase = {};
+
+  void _learnDirs(String rel) {
+    final segs = rel.split('/');
+    for (var i = 1; i < segs.length; i++) {
+      final d = segs.take(i).join('/');
+      _dirCase.putIfAbsent(d.toLowerCase(), () => d);
+    }
+  }
+
+  /// [rel] con las carpetas existentes en su grafía real.
+  String canonicalCase(String rel) {
+    if (_dirCase.isEmpty) return rel;
+    final segs = rel.split('/');
+    for (var i = segs.length - 1; i > 0; i--) {
+      final known = _dirCase[segs.take(i).join('/').toLowerCase()];
+      if (known != null) return [known, ...segs.skip(i)].join('/');
+    }
+    return rel;
   }
 
   static String sha256Of(Uint8List bytes) => crypto.sha256.convert(bytes).toString();
@@ -135,7 +175,7 @@ class ArcaFolder {
   Future<String> writeSnapshot(Uint8List bytes, SnapshotMeta meta) async {
     await ensureReadme();
     for (var attempt = 0; attempt < 50; attempt++) {
-      final rel = ArcaLayout.savePath(
+      final rel = canonicalCase(ArcaLayout.savePath(
         gameCode: meta.slot.gameCode,
         trainerName: meta.slot.trainerName,
         displayTid: meta.slot.displayTid,
@@ -143,7 +183,7 @@ class ArcaFolder {
         sha256: meta.sha256,
         originalName: meta.originalFileName,
         attempt: attempt,
-      );
+      ));
       try {
         await fs.writeNew(_full(rel), bytes);
       } on FsExistsException {
@@ -156,6 +196,7 @@ class ArcaFolder {
       } on FsExistsException {
         // Sidecar ya presente (mismo save): se conserva el existente.
       }
+      _learnDirs(rel);
       return rel;
     }
     throw StateError('No se encontró un nombre libre para ${meta.originalFileName}');
@@ -186,8 +227,11 @@ class ArcaFolder {
     final entries = await fs.list(sub.isEmpty ? prefix : _full(sub));
     final byPath = <String, FsEntry>{};
     for (final e in entries) {
-      final rel = prefix.isEmpty ? e.path : e.path.substring(prefix.length + 1);
+      // Nombres en NFC: macOS (smbfs, AFP) los devuelve descompuestos.
+      final path = toNfc(e.path);
+      final rel = prefix.isEmpty ? path : path.substring(prefix.length + 1);
       byPath[rel] = FsEntry(rel, e.size, e.modified);
+      _learnDirs(rel);
     }
     out.entries.addAll(byPath);
     final sidecars = <String>{};

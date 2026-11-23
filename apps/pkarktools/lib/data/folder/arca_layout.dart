@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:pkcore/pkcore.dart' as pk show Platform;
 import 'package:pkcore/pkcore.dart' hide Platform;
 
+import 'folder_fs.dart' show SystemJunk;
+
 /// Estructura de la carpeta del Arca.
 ///
 /// ```
@@ -215,7 +217,7 @@ abstract final class ArcaLayout {
     final segments = relPath.split('/');
     if (segments.length > 1 && segments.first == quarantineDir) return IgnoreReason.quarantined;
     for (final s in segments.take(segments.length - 1)) {
-      if (s.startsWith('.') || s.startsWith('~')) return IgnoreReason.hidden;
+      if (s.startsWith('.') || s.startsWith('~') || SystemJunk.isDir(s)) return IgnoreReason.hidden;
     }
     final name = segments.last;
     final lower = name.toLowerCase();
@@ -230,7 +232,7 @@ abstract final class ArcaLayout {
         lower.startsWith('.~')) {
       return IgnoreReason.partial;
     }
-    if (name.startsWith('.') || lower == 'desktop.ini' || lower == 'thumbs.db') return IgnoreReason.hidden;
+    if (name.startsWith('.') || SystemJunk.isFile(name)) return IgnoreReason.hidden;
     if (managedSave.hasMatch(name) || managedSidecar.hasMatch(name)) return null;
     // Un nombre del Arca con algo añadido es una copia de conflicto de la nube
     // ("… 2.sav" de iCloud, "…-PORTATIL.sav" de OneDrive, "… (1).sav"…).

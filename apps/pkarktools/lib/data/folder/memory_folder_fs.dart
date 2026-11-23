@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'folder_fs.dart';
+import 'volume_info.dart';
 
 /// [FolderFs] en memoria: para capturas y pruebas sin tocar el disco.
 class MemoryFolderFs implements FolderFs {
@@ -11,6 +12,10 @@ class MemoryFolderFs implements FolderFs {
 
   @override
   String? get nativePath => null;
+
+  /// Volumen simulado (p. ej. un NAS en pruebas y capturas).
+  @override
+  VolumeInfo? volume;
 
   final Map<String, (Uint8List, DateTime)> files = {};
   bool accessible = true;
