@@ -10,10 +10,11 @@ import '../../data/sprites/sprites.dart';
 /// Icono descargado bajo demanda; mientras carga, sin conexión o si no
 /// existe, muestra [fallback].
 ///
-/// Proporciones: cada icono se dibuja con su lienzo original, sin recortar
-/// ni estirar, a la escala que [SpriteLayout] calcula para su grupo y el
-/// tamaño del hueco. Así dos Pokémon (o dos objetos) en huecos iguales
-/// conservan el tamaño relativo del juego y los píxeles salen cuadrados.
+/// Tamaño y proporciones: cada icono se dibuja entero, sin recortar ni
+/// estirar, a la escala que [SpriteLayout] calcula para su grupo y el tamaño
+/// del hueco. La escala no depende del sprite (salvo los poquísimos que no
+/// cabrían), así que todos los iconos de un grupo se ven coherentes, y se
+/// elige para que el contenido típico del grupo llene casi todo el hueco.
 class SpriteImage extends StatefulWidget {
   const SpriteImage({
     super.key,
@@ -30,7 +31,8 @@ class SpriteImage extends StatefulWidget {
   final String? semanticLabel;
 
   /// Arte de píxeles: escala entera y sin suavizar (vecino más próximo).
-  /// Los iconos dibujados (tipos, cintas) se escalan con suavizado.
+  /// Solo se aplica a los grupos de arte de píxeles ([Sprites.isPixelArt]);
+  /// los iconos dibujados (Pokémon de HOME, tipos, cintas) se suavizan.
   final bool pixelated;
 
   @override
@@ -39,36 +41,42 @@ class SpriteImage extends StatefulWidget {
 
 /// Geometría común a todos los iconos (pura, para poder probarla).
 abstract final class SpriteLayout {
-  /// Escala (píxeles físicos por píxel del sprite) para los iconos de
-  /// [group] en un hueco de [box] píxeles físicos: el lienzo de referencia
-  /// del grupo cabe entero (BoxFit.contain). Con [pixelated], la mayor escala
-  /// entera que cabe cuando ocupa al menos el 80 % del hueco; si no, la
-  /// fracción que cabe (uniforme, sin deformar, con suavizado).
-  static double scaleFor(String group, double box, {bool pixelated = true}) {
-    final (cw, ch) = Sprites.canvas[group] ?? (68, 56);
-    final fit = box / (cw > ch ? cw : ch);
-    if (!pixelated || fit < 1) return fit;
-    // Escala entera solo si apenas desperdicia hueco (≤ 20 %); si no (p. ej.
-    // ×1,9 → ×1 dejaría el sprite a la mitad), la fracción exacta, suavizada.
-    final whole = fit.floorToDouble();
-    return whole / fit >= 0.8 ? whole : fit;
+  /// Escala (píxeles físicos por píxel del sprite) para [ref] en un hueco de
+  /// [box] píxeles físicos.
+  ///
+  /// El lado de contenido de referencia del grupo ([Sprites.contentRef],
+  /// percentil 92 de todo el set) llena [Sprites.fill] del hueco. Un sprite
+  /// cuyo contenido no cabría a esa escala ([Sprites.needOf]) se reduce lo
+  /// justo para no recortarse. Con [pixelated] (arte de píxeles), la mayor
+  /// escala entera si aprovecha al menos el 80 % de esa escala; si no, la
+  /// escala exacta (no entera, uniforme), que se pinta igualmente con vecino
+  /// más próximo.
+  static double scaleFor(SpriteRef ref, double box, {bool pixelated = true}) {
+    var s = box * (Sprites.fill[ref.group] ?? 1) / Sprites.contentRef(ref.group);
+    final need = Sprites.needOf(ref);
+    if (need != null && need * s > box) s = box / need;
+    if (!pixelated || s < 1) return s;
+    final whole = s.floorToDouble();
+    return whole / s >= 0.8 ? whole : s;
   }
 
   /// Rectángulo (en píxeles lógicos) donde se dibuja una imagen de
   /// [imageW]×[imageH] centrada en un hueco de [size] lógicos, a la escala del
-  /// grupo, alineado a píxeles físicos para que no haya columnas más anchas.
-  static Rect destRect(String group, int imageW, int imageH, double size, double dpr, {bool pixelated = true}) {
+  /// grupo; con [pixelated], alineado a píxeles físicos.
+  static Rect destRect(SpriteRef ref, int imageW, int imageH, double size, double dpr, {bool pixelated = true}) {
     final box = size * dpr;
-    var s = scaleFor(group, box, pixelated: pixelated);
-    // Un icono más grande que el lienzo del grupo (no debería haberlo) se
-    // reduce lo justo para caber, sin deformarlo.
-    final over = (imageW * s > box || imageH * s > box) ? box / (imageW > imageH ? imageW : imageH) : null;
-    if (over != null) s = pixelated && over >= 1 ? over.floorToDouble() : over;
+    final s = scaleFor(ref, box, pixelated: pixelated);
     final w = imageW * s, h = imageH * s;
     final left = pixelated ? ((box - w) / 2).roundToDouble() : (box - w) / 2;
     final top = pixelated ? ((box - h) / 2).roundToDouble() : (box - h) / 2;
     return Rect.fromLTWH(left / dpr, top / dpr, w / dpr, h / dpr);
   }
+
+  /// Filtro al pintar: vecino más próximo para el arte de píxeles ampliado
+  /// (también con escala no entera, para que no se emborrone); suavizado al
+  /// reducir y para los iconos dibujados (HOME, tipos, cintas).
+  static FilterQuality filterFor(double scale, {required bool pixelated}) =>
+      pixelated && scale >= 1 ? FilterQuality.none : FilterQuality.medium;
 }
 
 class _SpriteImageState extends State<SpriteImage> {
@@ -159,7 +167,12 @@ class _SpriteImageState extends State<SpriteImage> {
       image: widget.semanticLabel != null,
       child: CustomPaint(
         size: Size.square(widget.size),
-        painter: _SpritePainter(img, ref.group, MediaQuery.maybeDevicePixelRatioOf(context) ?? 1, widget.pixelated),
+        painter: _SpritePainter(
+          img,
+          ref,
+          MediaQuery.maybeDevicePixelRatioOf(context) ?? 1,
+          widget.pixelated && Sprites.isPixelArt(ref.group),
+        ),
       ),
     );
   }
@@ -191,25 +204,22 @@ class _Decoded {
 }
 
 class _SpritePainter extends CustomPainter {
-  _SpritePainter(this.image, this.group, this.dpr, this.pixelated);
+  _SpritePainter(this.image, this.ref, this.dpr, this.pixelated);
   final ui.Image image;
-  final String group;
+  final SpriteRef ref;
   final double dpr;
   final bool pixelated;
 
   @override
   void paint(Canvas canvas, Size size) {
     final src = Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble());
-    final r = SpriteLayout.destRect(group, image.width, image.height, size.shortestSide, dpr, pixelated: pixelated);
+    final r = SpriteLayout.destRect(ref, image.width, image.height, size.shortestSide, dpr, pixelated: pixelated);
     final dst = r.shift(Offset((size.width - size.shortestSide) / 2, (size.height - size.shortestSide) / 2));
-    // Vecino más próximo solo con escala entera ≥ 1: con una fracción saldrían
-    // columnas de píxeles de anchos distintos; ahí se suaviza.
     final k = dst.width * dpr / image.width;
-    final sharp = pixelated && k >= 1 && (k - k.roundToDouble()).abs() < 1e-6;
-    canvas.drawImageRect(image, src, dst, Paint()..filterQuality = sharp ? FilterQuality.none : FilterQuality.medium);
+    canvas.drawImageRect(image, src, dst, Paint()..filterQuality = SpriteLayout.filterFor(k, pixelated: pixelated));
   }
 
   @override
   bool shouldRepaint(_SpritePainter old) =>
-      old.image != image || old.dpr != dpr || old.group != group || old.pixelated != pixelated;
+      old.image != image || old.dpr != dpr || old.ref != ref || old.pixelated != pixelated;
 }

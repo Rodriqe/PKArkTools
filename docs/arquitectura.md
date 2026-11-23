@@ -118,7 +118,8 @@ de importaciones la hace el repositorio.
 ### Caché de iconos
 
 `lib/data/sprites/sprite_cache.dart`: memoria (LRU, 400 entradas) → disco
-(`getApplicationCacheDirectory()/sprites/<commit>`) → red (un único
+(`getApplicationCacheDirectory()/sprites/<commits>`; las carpetas de commits
+anteriores se borran) → red (un único
 `HttpClient` con conexiones persistentes; raw.githubusercontent.com y, solo
 ante errores transitorios, jsDelivr; timeouts de 8/15 s, 2 reintentos con
 backoff solo ante error de red o HTTP 429/5xx, fallos recordados 2 minutos).
@@ -126,9 +127,37 @@ backoff solo ante error de red o HTTP 429/5xx, fallos recordados 2 minutos).
 saves del Arca, es cancelable y reanudable (salta lo que ya está en disco) y,
 si ningún servidor responde (sin red o sin permiso de Internet), se corta en
 ~2 s en vez de reintentar archivo por archivo. Límites de
-512 KB por archivo y 64 MB en total. `sprite_manifest.g.dart` (generado) lista
-los iconos que existen en el commit fijado de PKHeX, así que nunca se piden
-rutas inexistentes.
+512 KB por archivo y 64 MB en total. `sprite_manifest.g.dart` (generado por
+`tool/gen_sprite_manifest.py`) lista los iconos que existen en cada commit
+fijado, con su tamaño exacto (se verifica cada descarga), así que nunca se
+piden rutas inexistentes.
+
+Fuentes (por grupo, en `kSpriteSources`/`kSpriteCommits`):
+
+| Grupo | Repositorio | Carpeta |
+| --- | --- | --- |
+| `pokemon` | `smogon/sprites` | `src/minisprites/pokemon/home` (iconos de HOME, 1025 especies + formas + huevo) |
+| `item`, `ball`, `ribbon`, `type` | `kwsch/PKHeX` | `PKHeX.Drawing.*/Resources/img/…` |
+
+Especie y forma → archivo: `kPokemonIconBase` (nombre «aplanado» de smogon por
+especie, de los nombres en inglés de PKHeX) y `kPokemonIconForms`
+(«especie-forma» con los índices de forma de PKHeX). Esta tabla se genera a
+partir de los volcados de HOME del mismo repositorio
+(`src/_uncategorized/canonical/home/small*`, que llevan número de especie y de
+forma) más la tabla explícita `HAND_FORMS` del generador (Gen 9, Hisui y lo
+que el volcado no recoge). Una forma sin icono propio (megas nuevas de
+Leyendas Z-A, Teraforma de Terapagos, tipos de Silvally…) usa el de la
+especie. No hay iconos variocolor: el avatar pone la insignia.
+
+Escala (`SpriteLayout` en `lib/ui/common/sprite_image.dart`): el generador mide
+el contenido no transparente de cada PNG y guarda por grupo el percentil 92
+del lado que necesita (`kSpriteContentRef`) y los que lo superan
+(`kSpriteOversize`). Todos los iconos de un grupo usan la misma escala, la que
+hace que ese lado de referencia llene el 88 % del hueco (Pokémon y objetos;
+tipos, cintas y Balls, el 100 %); uno que no cabría se reduce lo justo. El arte
+de píxeles (objetos, Balls) usa la mayor escala entera si aprovecha ≥ 80 % de
+la exacta y, si no, la exacta, siempre con vecino más próximo al ampliar; los
+iconos de HOME, tipos y cintas se suavizan.
 
 ## Flujo de datos
 

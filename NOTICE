@@ -47,9 +47,13 @@ Iconos (sprites)
 ----------------
 
 Los sprites de Pokémon, objetos, Balls, tipos y cintas NO se distribuyen con
-PKArkTools: la app los descarga bajo demanda de los recursos del repositorio
-de PKHeX en GitHub (commit fijo, ver lib/data/sprites/sprite_manifest.g.dart) y
-los guarda en su caché. Son © Nintendo / Game Freak / The Pokémon Company.
+PKArkTools: la app los descarga bajo demanda de GitHub, cada fuente en un
+commit fijo (ver lib/data/sprites/sprite_manifest.g.dart), y los guarda en su
+caché. Son © Nintendo / Game Freak / The Pokémon Company.
+    - Pokémon: iconos de Pokémon HOME del repositorio de sprites de Smogon /
+      Pokémon Showdown — https://github.com/smogon/sprites
+      (src/minisprites/pokemon/home).
+    - Objetos, Balls, tipos y cintas: recursos de PKHeX (PKHeX.Drawing.*).
 
 Logo
 ----

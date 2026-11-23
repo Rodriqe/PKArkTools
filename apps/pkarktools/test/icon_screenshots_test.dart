@@ -45,14 +45,19 @@ void main() {
     SpriteCache.instance = SpriteCache(directory: () async => cacheDir);
     await tester.runAsync(() => SpriteCache.instance.downloadAll());
 
-    // Joltik, Pikachu, Bulbasaur, Charizard, Snorlax, Wailord, Eternatus, Rotom Lavado (forma), Totodile variocolor.
-    const mons = [(595, 0, false), (25, 0, false), (1, 0, false), (6, 0, false), (143, 0, false), (321, 0, false), (890, 0, false), (479, 3, false), (158, 0, true)];
+    // Joltik, Pikachu, Bulbasaur, Charizard, Snorlax, Wailord, Eternatus, Rotom Lavado (forma),
+    // Totodile variocolor y Gen 9: Sprigatito, Tauros de Paldea, Ogerpon Cimiento, Koraidon, Terapagos, Pecharunt.
+    const mons = [
+      (595, 0, false), (25, 0, false), (1, 0, false), (6, 0, false), (143, 0, false), (321, 0, false), (890, 0, false),
+      (479, 2, false), (158, 0, true), (906, 0, false), (128, 2, false), (1017, 3, false), (1007, 0, false),
+      (1024, 0, false), (1025, 0, false),
+    ];
     const items = [1, 4, 17, 28, 50, 221, 1606, 2564]; // Master Ball, Poké Ball, Poción, Revivir, Caramelo raro, Restos, Mega piedra…
     const balls = [1, 2, 3, 4, 5, 26];
     final ribbons = Ribbons.all.take(6).toList();
 
     for (final (dpr, name) in [(2.3, 'odin3'), (3.0, 'phone'), (2.0, 'desktop')]) {
-      tester.view.physicalSize = Size(1100 * dpr, 900 * dpr);
+      tester.view.physicalSize = Size(1700 * dpr, 900 * dpr);
       tester.view.devicePixelRatio = dpr;
       final key = GlobalKey();
       Widget row(String label, List<Widget> children) => Padding(

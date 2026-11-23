@@ -141,11 +141,16 @@ class SpriteCache {
   /// si el anterior falla con un error transitorio.
   final List<String> mirrors;
 
-  static const String baseUrl = 'https://raw.githubusercontent.com/kwsch/PKHeX/$kSpriteCommit/';
+  /// Origen principal. `{repo}` y `{commit}` se sustituyen por los del grupo
+  /// del icono ([kSpriteSources], [kSpriteCommits]).
+  static const String baseUrl = 'https://raw.githubusercontent.com/{repo}/{commit}/';
 
-  /// jsDelivr sirve el mismo commit, pero el repositorio de PKHeX supera su
+  /// jsDelivr sirve el mismo commit, pero los dos repositorios superan su
   /// límite de 50 MB y responde 403 a lo que no tenga ya en caché: solo respaldo.
-  static const String mirrorUrl = 'https://cdn.jsdelivr.net/gh/kwsch/PKHeX@$kSpriteCommit/';
+  static const String mirrorUrl = 'https://cdn.jsdelivr.net/gh/{repo}@{commit}/';
+
+  /// Versión de la caché en disco: cambia si cambia cualquiera de los commits.
+  static final String cacheVersion = [for (final c in kSpriteCommits.values) c.substring(0, 7)].join('-');
 
   /// Descargas simultáneas por defecto (todas por el mismo [HttpClient]).
   static const int defaultConcurrency = 32;
@@ -171,7 +176,16 @@ class SpriteCache {
 
   static Future<Directory?> _defaultDirectory() async {
     final base = await getApplicationCacheDirectory();
-    return Directory(p.join(base.path, 'sprites', kSpriteCommit.substring(0, 12)));
+    final root = Directory(p.join(base.path, 'sprites'));
+    // Las cachés de commits anteriores ya no se usan: se borran en segundo plano.
+    unawaited(() async {
+      try {
+        await for (final e in root.list()) {
+          if (e is Directory && p.basename(e.path) != cacheVersion) await e.delete(recursive: true);
+        }
+      } catch (_) {}
+    }());
+    return Directory(p.join(root.path, cacheVersion));
   }
 
   /// Un único cliente con conexiones persistentes (keep-alive): cada archivo
@@ -227,8 +241,11 @@ class SpriteCache {
     return _dir;
   }
 
-  static Uri urlOf(SpriteRef ref, [String base = baseUrl]) =>
-      Uri.parse(base + [...kSpriteDirs[ref.group]!.split('/'), '${ref.name}.png'].map(Uri.encodeComponent).join('/'));
+  static Uri urlOf(SpriteRef ref, [String base = baseUrl]) {
+    final (repo, dir) = kSpriteSources[ref.group]!;
+    final root = base.replaceAll('{repo}', repo).replaceAll('{commit}', kSpriteCommits[repo]!);
+    return Uri.parse(root + [...dir.split('/'), '${ref.name}.png'].map(Uri.encodeComponent).join('/'));
+  }
 
   static String _fileName(SpriteRef ref) => '${ref.group}_${ref.name}.png';
 
@@ -443,13 +460,11 @@ class SpriteCache {
   static List<SpriteRef> allRefs() => _sizes.keys.toList();
 
   /// Iconos de las especies de un equipo (`ArcaRepository.decodeParty`), para
-  /// descargarlos antes que el resto.
-  static List<SpriteRef> refsForParty(Iterable<({int species, bool shiny, bool egg})> party) => [
-        for (final m in party) ...[
-          ?Sprites.pokemon(m.species, egg: m.egg),
-          if (m.shiny && !m.egg) ?Sprites.pokemon(m.species, shiny: true),
-        ],
-      ];
+  /// descargarlos antes que el resto (sin repetidos; los variocolor usan el
+  /// mismo icono con insignia).
+  static List<SpriteRef> refsForParty(Iterable<({int species, bool shiny, bool egg})> party) => {
+        for (final m in party) ?Sprites.pokemon(m.species, egg: m.egg),
+      }.toList();
 
   /// Comprueba la caché en disco sin red: cuántos iconos del índice están
   /// guardados y son válidos. Borra los archivos inválidos (vacíos, truncados,

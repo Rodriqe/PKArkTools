@@ -22,16 +22,99 @@ void main() {
   setUp(() => tmp = Directory.systemTemp.createTempSync('sprites'));
   tearDown(() => tmp.deleteSync(recursive: true));
 
-  group('resolución de nombres (PKHeX SpriteName)', () {
-    test('forma, variocolor, género, huevo y caídas a la forma base', () {
-      expect(Sprites.pokemon(25)!.key, 'pokemon/b_25');
-      expect(Sprites.pokemon(25, shiny: true)!.key, 'shiny/b_25s');
-      expect(Sprites.pokemon(479, form: 3)!.key, 'pokemon/b_479-3'); // Rotom Lavado
-      expect(Sprites.pokemon(25, form: 99)!.key, 'pokemon/b_25'); // forma sin sprite → base
-      expect(Sprites.pokemon(449, female: true)!.key, 'pokemon/b_449f'); // Hippopotas hembra
-      expect(Sprites.pokemon(25, female: true)!.key, 'pokemon/b_25'); // sin sprite de género
-      expect(Sprites.pokemon(25, egg: true)!.key, 'pokemon/b_egg');
+  group('resolución de nombres', () {
+    test('Pokémon: especie, forma, hembra, huevo y caídas a la especie', () {
+      expect(Sprites.pokemon(25)!.key, 'pokemon/spikachu');
+      // Sin iconos variocolor en la fuente: mismo icono (la interfaz pone la insignia).
+      expect(Sprites.pokemon(25, shiny: true)!.key, 'pokemon/spikachu');
+      expect(Sprites.pokemon(479, form: 2)!.key, 'pokemon/srotom-owash'); // Rotom Lavado
+      expect(Sprites.pokemon(25, form: 99)!.key, 'pokemon/spikachu'); // forma sin icono → especie
+      expect(Sprites.pokemon(592, female: true)!.key, 'pokemon/sfrillish-f');
+      expect(Sprites.pokemon(25, female: true)!.key, 'pokemon/spikachu'); // sin icono de hembra
+      expect(Sprites.pokemon(25, egg: true)!.key, 'pokemon/xegg');
       expect(Sprites.pokemon(0), isNull);
+      expect(Sprites.pokemon(1026), isNull);
+    });
+
+    test('todas las especies 1–1025 tienen icono propio', () {
+      final seen = <String>{};
+      for (var sp = 1; sp <= 1025; sp++) {
+        final r = Sprites.pokemon(sp);
+        expect(r, isNotNull, reason: '#$sp');
+        expect(seen.add(r!.name), isTrue, reason: '#$sp repite ${r.name}');
+      }
+      // Muestras con nombres «aplanados» de smogon.
+      expect(Sprites.pokemon(29)!.name, 'snidoran_f');
+      expect(Sprites.pokemon(83)!.name, 'sfarfetchd');
+      expect(Sprites.pokemon(122)!.name, 'smr_mime');
+      expect(Sprites.pokemon(250)!.name, 'sho_oh');
+      expect(Sprites.pokemon(669)!.name, 'sflabebe');
+      expect(Sprites.pokemon(906)!.name, 'ssprigatito');
+      expect(Sprites.pokemon(1024)!.name, 'sterapagos');
+      expect(Sprites.pokemon(1025)!.name, 'specharunt');
+    });
+
+    test('formas de Gen 1–9 y Leyendas (índices de forma de PKHeX)', () {
+      const cases = {
+        (3, 1): 'svenusaur-omega',
+        (6, 1): 'scharizard-omega_x',
+        (6, 2): 'scharizard-omega_y',
+        (25, 8): 'spikachu-ostarter',
+        (52, 2): 'smeowth-ogalar',
+        (58, 1): 'sgrowlithe-ohisui',
+        (80, 2): 'sslowbro-ogalar',
+        (128, 1): 'stauros-opaldea_combat',
+        (128, 3): 'stauros-opaldea_aqua',
+        (194, 1): 'swooper-opaldea',
+        (201, 26): 'sunown-oexclamation',
+        (483, 1): 'sdialga-oorigin',
+        (550, 2): 'sbasculin-owhite_striped',
+        (666, 0): 'svivillon-oicy_snow',
+        (666, 6): 'svivillon',
+        (670, 5): 'sfloette-oeternal',
+        (678, 1): 'smeowstic-of',
+        (716, 0): 'sxerneas-oneutral',
+        (718, 1): 'szygarde-o10',
+        (718, 4): 'szygarde-ocomplete',
+        (741, 2): 'soricorio-opau',
+        (774, 0): 'sminior-ometeor',
+        (774, 7): 'sminior',
+        (774, 13): 'sminior-oviolet',
+        (869, 8): 'salcremie-orainbow_swirl',
+        (892, 1): 'surshifu-orapid_strike',
+        (898, 2): 'scalyrex-oshadow',
+        (901, 1): 'sursaluna-obloodmoon',
+        (902, 1): 'sbasculegion-of',
+        (905, 1): 'senamorus-otherian',
+        (916, 1): 'soinkologne-of',
+        (925, 1): 'smaushold-ofour',
+        (931, 3): 'ssquawkabilly-owhite',
+        (964, 1): 'spalafin-ohero',
+        (978, 2): 'statsugiri-ostretchy',
+        (982, 1): 'sdudunsparce-othree_segment',
+        (999, 1): 'sgimmighoul-oroaming',
+        (1013, 1): 'ssinistcha-omasterpiece',
+        (1017, 3): 'sogerpon-ocornerstone',
+        (1017, 4): 'sogerpon', // Teal teracristalizada: mismo icono
+        (1017, 6): 'sogerpon-ohearthflame',
+      };
+      for (final MapEntry(key: (sp, f), :value) in cases.entries) {
+        expect(Sprites.pokemon(sp, form: f)?.name, value, reason: '$sp-$f');
+      }
+      // Formas sin icono propio en HOME (megas nuevas de Leyendas Z-A, Teraforma,
+      // Silvally…): icono de la especie, nunca iniciales.
+      for (final (sp, f) in [(36, 1), (149, 1), (773, 5), (1024, 2), (1007, 1)]) {
+        expect(Sprites.pokemon(sp, form: f)?.name, Sprites.pokemon(sp)!.name, reason: '$sp-$f');
+      }
+    });
+
+    test('todas las formas del índice apuntan a un archivo que existe', () {
+      for (final e in kPokemonIconForms.entries) {
+        expect(Sprites.exists('pokemon', e.value), isTrue, reason: e.key);
+      }
+      for (final sp in kPokemonIconFemale) {
+        expect(Sprites.exists('pokemon', '${kPokemonIconBase[sp]}-f'), isTrue, reason: '$sp');
+      }
     });
 
     test('objetos por generación, Balls, tipos y cintas', () {
@@ -48,10 +131,11 @@ void main() {
     });
 
     test('URL con commit fijo y espacios codificados', () {
-      final u = SpriteCache.urlOf(const SpriteRef('pokemon', 'b_25')).toString();
-      expect(u, contains(kSpriteCommit));
-      expect(u, endsWith('Big%20Pokemon%20Sprites/b_25.png'));
-      expect(u, startsWith('https://raw.githubusercontent.com/kwsch/PKHeX/'));
+      final u = SpriteCache.urlOf(const SpriteRef('pokemon', 'spikachu')).toString();
+      expect(u, 'https://raw.githubusercontent.com/smogon/sprites/${kSpriteCommits['smogon/sprites']}/src/minisprites/pokemon/home/spikachu.png');
+      final i = SpriteCache.urlOf(const SpriteRef('item', 'bitem_1'), SpriteCache.mirrorUrl).toString();
+      expect(i, contains('cdn.jsdelivr.net/gh/kwsch/PKHeX@${kSpriteCommits['kwsch/PKHeX']}/'));
+      expect(i, endsWith('Big%20Items/bitem_1.png'));
     });
   });
 
@@ -62,10 +146,10 @@ void main() {
         calls++;
         return _png;
       });
-      const ref = SpriteRef('pokemon', 'b_25');
+      const ref = SpriteRef('pokemon', 'spikachu');
       expect(await cache.load(ref), _png);
       expect(calls, 1);
-      expect(File('${tmp.path}/pokemon_b_25.png').existsSync(), isTrue);
+      expect(File('${tmp.path}/pokemon_spikachu.png').existsSync(), isTrue);
       // Otra instancia (app reiniciada): sale del disco sin red.
       final again = SpriteCache(strictSizes: false, directory: () async => tmp, fetcher: (u) async => throw const SocketException('sin red'));
       expect(await again.load(ref), _png);
@@ -86,17 +170,17 @@ void main() {
           throw const SocketException('sin red');
         },
       );
-      expect(await cache.load(const SpriteRef('pokemon', 'b_1')), isNull);
+      expect(await cache.load(const SpriteRef('pokemon', 'sbulbasaur')), isNull);
       expect(calls, 6); // 3 intentos en raw.githubusercontent y 3 en jsDelivr
-      expect(await cache.load(const SpriteRef('pokemon', 'b_1')), isNull);
+      expect(await cache.load(const SpriteRef('pokemon', 'sbulbasaur')), isNull);
       expect(calls, 6); // fallo recordado
     });
 
     test('rechaza respuestas que no son PNG o demasiado grandes', () async {
       final notPng = SpriteCache(strictSizes: false, directory: () async => tmp, fetcher: (u) async => Uint8List.fromList('<html>404</html>'.codeUnits));
-      expect(await notPng.load(const SpriteRef('pokemon', 'b_2')), isNull);
+      expect(await notPng.load(const SpriteRef('pokemon', 'sivysaur')), isNull);
       final big = SpriteCache(strictSizes: false, directory: () async => tmp, maxFileBytes: 10, fetcher: (u) async => _png);
-      expect(await big.load(const SpriteRef('pokemon', 'b_3')), isNull);
+      expect(await big.load(const SpriteRef('pokemon', 'svenusaur')), isNull);
       expect(tmp.listSync(), isEmpty);
     });
 
@@ -145,7 +229,7 @@ void main() {
       final onDisk = tmp.listSync().length;
       expect(onDisk, first.downloaded);
       // Un corte a mitad de escritura deja un .part: se descarta al reanudar.
-      File('${tmp.path}/pokemon_b_1.png.part').writeAsBytesSync([1, 2]);
+      File('${tmp.path}/pokemon_sbulbasaur.png.part').writeAsBytesSync([1, 2]);
       calls = 0;
       final progress = <SpriteDownloadProgress>[];
       final second = await make().downloadAll(onProgress: progress.add);
@@ -168,22 +252,22 @@ void main() {
           final key = u.pathSegments.last;
           final k = '${u.host} $key';
           hits[k] = (hits[k] ?? 0) + 1;
-          if (key == 'b_1.png') throw SpriteHttpStatusException(404, u);
-          if (key == 'b_2.png' && u.host == 'raw.githubusercontent.com') throw SpriteHttpStatusException(503, u);
-          if (key == 'b_3.png' && hits[k]! < 2) throw const SocketException('reset');
+          if (key == 'sbulbasaur.png') throw SpriteHttpStatusException(404, u);
+          if (key == 'sivysaur.png' && u.host == 'raw.githubusercontent.com') throw SpriteHttpStatusException(503, u);
+          if (key == 'svenusaur.png' && hits[k]! < 2) throw const SocketException('reset');
           return _png;
         },
       );
       final r = await cache.downloadAll();
-      expect(r.failed, 1); // solo b_1 (404)
-      expect(hits['raw.githubusercontent.com b_1.png'], 1);
-      expect(hits['cdn.jsdelivr.net b_1.png'], isNull);
-      expect(hits['raw.githubusercontent.com b_2.png'], 3);
-      expect(hits['cdn.jsdelivr.net b_2.png'], 1);
-      expect(hits['raw.githubusercontent.com b_3.png'], 2);
+      expect(r.failed, 1); // solo sbulbasaur (404)
+      expect(hits['raw.githubusercontent.com sbulbasaur.png'], 1);
+      expect(hits['cdn.jsdelivr.net sbulbasaur.png'], isNull);
+      expect(hits['raw.githubusercontent.com sivysaur.png'], 3);
+      expect(hits['cdn.jsdelivr.net sivysaur.png'], 1);
+      expect(hits['raw.githubusercontent.com svenusaur.png'], 2);
       expect(r.offline, isFalse);
-      expect(File('${tmp.path}/pokemon_b_2.png').existsSync(), isTrue);
-      expect(File('${tmp.path}/pokemon_b_1.png').existsSync(), isFalse);
+      expect(File('${tmp.path}/pokemon_sivysaur.png').existsSync(), isTrue);
+      expect(File('${tmp.path}/pokemon_sbulbasaur.png').existsSync(), isFalse);
     });
 
     test('sin red (o sin permiso de Internet) aborta enseguida', () async {
@@ -206,7 +290,7 @@ void main() {
       expect(cache.isOffline, isTrue);
       // Las cargas sueltas tampoco esperan: avatar de iniciales al momento.
       calls = 0;
-      expect(await cache.load(const SpriteRef('pokemon', 'b_25')), isNull);
+      expect(await cache.load(const SpriteRef('pokemon', 'spikachu')), isNull);
       expect(calls, 0);
     });
 
@@ -216,10 +300,15 @@ void main() {
         order.add(u.pathSegments.last);
         return _png;
       });
-      final prio = SpriteCache.refsForParty([(species: 445, shiny: true, egg: false), (species: 1, shiny: false, egg: true)]);
-      expect(prio.map((r) => r.key), ['pokemon/b_445', 'shiny/b_445s', 'pokemon/b_egg']);
+      final prio = SpriteCache.refsForParty([
+        (species: 445, shiny: true, egg: false),
+        (species: 906, shiny: false, egg: false),
+        (species: 445, shiny: false, egg: false),
+        (species: 1, shiny: false, egg: true),
+      ]);
+      expect(prio.map((r) => r.key), ['pokemon/sgarchomp', 'pokemon/ssprigatito', 'pokemon/xegg']);
       await cache.downloadAll(priority: prio, concurrency: 1, cancel: () => order.length >= 3);
-      expect(order, ['b_445.png', 'b_445s.png', 'b_egg.png']);
+      expect(order, ['sgarchomp.png', 'ssprigatito.png', 'xegg.png']);
     });
   });
 
@@ -227,7 +316,7 @@ void main() {
     testWidgets('sin icono muestra el respaldo (iniciales)', (t) async {
       await t.pumpWidget(const Directionality(
         textDirection: TextDirection.ltr,
-        child: SpriteImage(sprite: SpriteRef('pokemon', 'b_25'), size: 40, fallback: Text('Pi')),
+        child: SpriteImage(sprite: SpriteRef('pokemon', 'spikachu'), size: 40, fallback: Text('Pi')),
       ));
       await t.pump();
       expect(find.text('Pi'), findsOneWidget);
@@ -237,10 +326,10 @@ void main() {
       final prev = SpriteCache.instance;
       SpriteCache.instance = SpriteCache(strictSizes: false, directory: () async => null, fetcher: (u) async => _png);
       addTearDown(() => SpriteCache.instance = prev);
-      await t.runAsync(() => SpriteCache.instance.load(const SpriteRef('pokemon', 'b_25')));
+      await t.runAsync(() => SpriteCache.instance.load(const SpriteRef('pokemon', 'spikachu')));
       await t.pumpWidget(const Directionality(
         textDirection: TextDirection.ltr,
-        child: SpriteImage(sprite: SpriteRef('pokemon', 'b_25'), size: 40, fallback: Text('Pi')),
+        child: SpriteImage(sprite: SpriteRef('pokemon', 'spikachu'), size: 40, fallback: Text('Pi')),
       ));
       await t.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 50))); // decodificación
       await t.pump();

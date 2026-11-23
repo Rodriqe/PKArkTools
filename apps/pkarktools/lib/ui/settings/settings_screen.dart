@@ -110,7 +110,9 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                     ]),
                     const SizedBox(height: 12),
-                    Text(l10n.spritesCredits(kSpriteCommit.substring(0, 7)),
+                    Text(
+                        l10n.spritesCredits(kSpriteCommits['smogon/sprites']!.substring(0, 7),
+                            kSpriteCommits['kwsch/PKHeX']!.substring(0, 7)),
                         style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
                     const SizedBox(height: 4),
                     TextButton(

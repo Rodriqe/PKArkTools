@@ -17,25 +17,40 @@ class SpriteRef {
   String toString() => key;
 }
 
-/// Traduce Pokémon, objetos, Balls, tipos y cintas a iconos del índice
-/// (nombres de PKHeX `SpriteName`), comprobando que existan.
+/// Traduce Pokémon (iconos de HOME de smogon/sprites), objetos, Balls, tipos
+/// y cintas (nombres de PKHeX `SpriteName`) a iconos del índice, comprobando
+/// que existan.
 abstract final class Sprites {
   static final Map<String, Set<String>> _names = {
     for (final e in kSpriteFiles.entries) e.key: {for (final f in e.value.split(',')) f.substring(0, f.lastIndexOf(':'))},
   };
 
-  /// Lienzo de referencia de cada grupo (el mayor de sus PNG). Todos los
-  /// iconos de un grupo se dibujan a la misma escala sobre este lienzo, así
-  /// el tamaño relativo entre ellos es el del juego (un objeto de 16×16 no se
-  /// amplía como uno de 32×32, ni un Joltik como un Wailord).
-  static const Map<String, (int, int)> canvas = {
-    'pokemon': (68, 56),
-    'shiny': (68, 56),
-    'item': (32, 32),
-    'ball': (20, 20),
-    'type': (60, 60),
-    'ribbon': (40, 40),
+  /// Lado de referencia del contenido de cada grupo (en píxeles del sprite):
+  /// el percentil 92 del contenido no transparente de todo el set, medido
+  /// por `tool/gen_sprite_manifest.py`. Todos los iconos de un grupo se
+  /// dibujan a la misma escala, la que hace que este lado llene [fill] del
+  /// hueco; los pocos que lo superan ([needOf]) se reducen lo justo.
+  static double contentRef(String group) => kSpriteContentRef[group] ?? 32;
+
+  /// Fracción del hueco que llena el recuadro de referencia de cada grupo.
+  /// Los Pokémon y los objetos dejan un margen; tipos, cintas y Balls ya
+  /// ocupan su lienzo entero.
+  static const Map<String, double> fill = {'pokemon': 0.88, 'item': 0.88};
+
+  /// Grupos de arte de píxeles (se amplían con vecino más próximo). Los
+  /// iconos de HOME, tipos y cintas son ilustraciones y se suavizan.
+  static bool isPixelArt(String group) => group == 'item' || group == 'ball';
+
+  static final Map<String, double> _oversize = {
+    for (final e in kSpriteOversize.entries)
+      if (e.value.isNotEmpty)
+        for (final f in e.value.split(','))
+          '${e.key}/${f.substring(0, f.lastIndexOf(':'))}': double.parse(f.substring(f.lastIndexOf(':') + 1)),
   };
+
+  /// Lado que necesita el contenido de [ref] si supera la referencia de su
+  /// grupo (si no, null).
+  static double? needOf(SpriteRef ref) => _oversize[ref.key];
 
   static bool exists(String group, String name) => _names[group]?.contains(name) ?? false;
 
@@ -51,33 +66,19 @@ abstract final class Sprites {
   static int bytesOf(String group) =>
       kSpriteFiles[group]!.split(',').fold(0, (a, f) => a + int.parse(f.substring(f.lastIndexOf(':') + 1)));
 
-  /// Especies que solo cambian de sprite por género (PKHeX `SpeciesGenderedSprite`).
-  static const _gendered = {449, 450, 521, 592, 593, 668};
-
-  /// Especies que muestran siempre la forma base (PKHeX `SpeciesDefaultFormSprite`).
-  static const _defaultForm = {414, 664, 665, 744, 778, 854, 855, 892, 982, 1012, 1013};
-
-  /// Icono de un Pokémon. Si no hay sprite de la forma, el género o el
-  /// variocolor, cae a la forma base / normal.
+  /// Icono de un Pokémon (iconos de HOME). Una forma sin icono propio usa el
+  /// de la especie; con hembra, el de hembra si lo hay. No hay iconos
+  /// variocolor: [shiny] no cambia el archivo (la interfaz pone la insignia).
   static SpriteRef? pokemon(int species, {int form = 0, bool female = false, bool shiny = false, bool egg = false}) {
-    if (egg) return const SpriteRef('pokemon', 'b_egg');
-    if (species <= 0) return null;
-    final f = _defaultForm.contains(species) ? 0 : form;
-    final g = female && _gendered.contains(species) ? 'f' : '';
-    final candidates = [
-      if (f > 0) 'b_$species-$f$g',
-      'b_$species$g',
-      'b_$species',
-    ];
-    if (shiny) {
-      for (final c in candidates) {
-        if (exists('shiny', '${c}s')) return SpriteRef('shiny', '${c}s');
-      }
+    if (egg) return exists('pokemon', kPokemonIconEgg) ? const SpriteRef('pokemon', kPokemonIconEgg) : null;
+    if (species <= 0 || species >= kPokemonIconBase.length) return null;
+    final byForm = kPokemonIconForms['$species-$form'];
+    if (byForm != null && byForm != kPokemonIconBase[species]) return SpriteRef('pokemon', byForm);
+    final base = kPokemonIconBase[species];
+    if (female && kPokemonIconFemale.contains(species) && exists('pokemon', '$base-f')) {
+      return SpriteRef('pokemon', '$base-f');
     }
-    for (final c in candidates) {
-      if (exists('pokemon', c)) return SpriteRef('pokemon', c);
-    }
-    return null;
+    return exists('pokemon', base) ? SpriteRef('pokemon', base) : null;
   }
 
   /// Icono de un objeto. [generation] indica en qué numeración está [item]
