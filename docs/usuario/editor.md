@@ -28,6 +28,18 @@ tienen autocompletado y las estadísticas se calculan en vivo.
   <img src="../screenshots/17_editor_movil.png" width="150" alt="Editor en móvil">
 </p>
 
+Las **formas** regionales y alternativas tienen sus propios datos en cada
+juego: Decidueye de Hisui es Planta/Lucha, con sus estadísticas y su habilidad
+oculta (Intrépido). El selector **Forma** muestra por nombre las formas que
+existen en el juego del save; al cambiarla se actualizan tipos, estadísticas,
+habilidad (misma ranura), género y, en Ogerpon, el teratipo. El nombre de la
+forma se ve en la ficha, el equipo, las cajas y los avisos («Decidueye (Hisui)»).
+
+<p>
+  <img src="../screenshots/35_forma_hisui.png" width="420" alt="Decidueye de Hisui en el editor">
+  <img src="../screenshots/36_selector_forma.png" width="420" alt="Selector de forma">
+</p>
+
 Las Balls de cada juego son las que existían en él (las de Hisui con su nombre
 propio); una Ball traída de otro juego se conserva.
 

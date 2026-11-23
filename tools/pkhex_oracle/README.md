@@ -23,3 +23,9 @@ Comandos de la consola (`dotnet <bin>/PkhexOracle.dll …`):
 - `roundtrip <save>`: carga y reescribe sin cambios; cuenta bytes distintos.
 - `edit <in> <out>`: edición simple (dinero y primer Pokémon de la caja 1) para
   el round-trip cruzado con `pkhex_dump.dart --edit`.
+- `forms <dir>`: tabla (juego, especie, forma) de todos los juegos de Gen 3–9
+  (tipos, stats base, habilidades, género, preevolución), formas presentes y
+  nombres de forma. La usa `tool/gen_form_data.sh`, que regenera
+  `packages/pkcore/lib/src/data/generated/form_names.dart` y la tabla
+  versionada `packages/pkcore/test/data/form_oracle.csv.gz` del test
+  `form_data_pkhex_test.dart` (no necesita PKHeX para ejecutarse).
