@@ -32,7 +32,7 @@ que la siguen son los hitos internos de desarrollo que llevaron a ella.
   [antes/después](docs/screenshots/iconos_antes_despues.png).
 - Variocolor: la nueva fuente no tiene iconos variocolor, así que se mantiene
   la insignia y el borde dorado.
-- «Descargar todos los iconos» pasa a ~17 MB (2168 archivos); la caché de la
+- «Descargar todos los iconos» pasa a ~16 MB (2168 archivos); la caché de la
   versión anterior se borra sola. Ajustes › Acerca de indica ambas fuentes.
 
 ## [0.1.0] — 2026-11-23

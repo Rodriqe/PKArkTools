@@ -49,7 +49,7 @@ y se reintenta más tarde.
 <img src="../screenshots/v2/mac_08_ajustes_iconos.png" width="480" alt="Ajustes de iconos">
 
 * Tamaño de la caché y de la descarga completa.
-* **Descargar todos los iconos** (~17 MB, unos 2200 archivos; menos de un
+* **Descargar todos los iconos** (~16 MB, unos 2200 archivos; menos de un
   minuto con buena conexión): útil antes de quedarte sin conexión. Empieza por
   los Pokémon de tus saves, muestra archivos y MB, se puede cancelar y, si se
   corta, la siguiente vez continúa donde se quedó. Sin conexión avisa enseguida.
