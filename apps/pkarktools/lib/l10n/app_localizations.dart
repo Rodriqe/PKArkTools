@@ -3636,6 +3636,150 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Carpeta actualizada: {count} copias movidas a historial/'**
   String historyMigrated(int count);
+
+  /// No description provided for @originInbox.
+  ///
+  /// In es, this message translates to:
+  /// **'Bandeja de entrada'**
+  String get originInbox;
+
+  /// No description provided for @gameFoldersQuestion.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Quieres crear las carpetas de tus juegos?'**
+  String get gameFoldersQuestion;
+
+  /// No description provided for @gameFoldersQuestionBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Así sabrás dónde dejar cada save: PKArkTools lo recoge solo y lo guarda con su historial.'**
+  String get gameFoldersQuestionBody;
+
+  /// No description provided for @gameFoldersAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Sí, todos los juegos'**
+  String get gameFoldersAll;
+
+  /// No description provided for @gameFoldersChoose.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegir juegos…'**
+  String get gameFoldersChoose;
+
+  /// No description provided for @gameFoldersNotNow.
+  ///
+  /// In es, this message translates to:
+  /// **'Ahora no'**
+  String get gameFoldersNotNow;
+
+  /// No description provided for @gameFoldersCreate.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear carpetas de juegos'**
+  String get gameFoldersCreate;
+
+  /// No description provided for @gameFoldersCreateDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Una carpeta por juego con un LEEME que dice qué save dejar. Lo que dejes ahí se recoge solo.'**
+  String get gameFoldersCreateDesc;
+
+  /// No description provided for @gameFoldersPickerTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpetas de juegos'**
+  String get gameFoldersPickerTitle;
+
+  /// No description provided for @gameFoldersPickAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos'**
+  String get gameFoldersPickAll;
+
+  /// No description provided for @gameFoldersPickNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguno'**
+  String get gameFoldersPickNone;
+
+  /// No description provided for @gameFoldersPickOwned.
+  ///
+  /// In es, this message translates to:
+  /// **'Los que tengo'**
+  String get gameFoldersPickOwned;
+
+  /// No description provided for @gameFoldersGeneration.
+  ///
+  /// In es, this message translates to:
+  /// **'Generación {n}'**
+  String gameFoldersGeneration(int n);
+
+  /// No description provided for @gameFoldersExists.
+  ///
+  /// In es, this message translates to:
+  /// **'ya existe'**
+  String get gameFoldersExists;
+
+  /// No description provided for @gameFoldersConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{Crear 1 carpeta} other{Crear {count} carpetas}}'**
+  String gameFoldersConfirm(int count);
+
+  /// No description provided for @gameFoldersDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpetas creadas: {created} (ya existían: {existing})'**
+  String gameFoldersDone(String created, String existing);
+
+  /// No description provided for @inboxTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Bandeja de entrada'**
+  String get inboxTitle;
+
+  /// No description provided for @inboxDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Saves dejados en la carpeta de un juego que no se pudieron recoger. Se quedan donde están.'**
+  String get inboxDesc;
+
+  /// No description provided for @inboxUnreadable.
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede leer: {detail}'**
+  String inboxUnreadable(String detail);
+
+  /// No description provided for @inboxWrongGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Es de {actual}, no de {folder}'**
+  String inboxWrongGame(String actual, String folder);
+
+  /// No description provided for @inboxMoveTo.
+  ///
+  /// In es, this message translates to:
+  /// **'Mover a {game}'**
+  String inboxMoveTo(String game);
+
+  /// No description provided for @inboxAdoptedToast.
+  ///
+  /// In es, this message translates to:
+  /// **'Recogido de la bandeja: {files}'**
+  String inboxAdoptedToast(String files);
+
+  /// No description provided for @inboxProblemsToast.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} saves de la bandeja necesitan tu atención'**
+  String inboxProblemsToast(int count);
+
+  /// No description provided for @inboxSee.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver'**
+  String get inboxSee;
 }
 
 class _AppLocalizationsDelegate

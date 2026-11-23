@@ -2193,4 +2193,102 @@ class AppLocalizationsEs extends AppLocalizations {
   String historyMigrated(int count) {
     return 'Carpeta actualizada: $count copias movidas a historial/';
   }
+
+  @override
+  String get originInbox => 'Bandeja de entrada';
+
+  @override
+  String get gameFoldersQuestion =>
+      '¿Quieres crear las carpetas de tus juegos?';
+
+  @override
+  String get gameFoldersQuestionBody =>
+      'Así sabrás dónde dejar cada save: PKArkTools lo recoge solo y lo guarda con su historial.';
+
+  @override
+  String get gameFoldersAll => 'Sí, todos los juegos';
+
+  @override
+  String get gameFoldersChoose => 'Elegir juegos…';
+
+  @override
+  String get gameFoldersNotNow => 'Ahora no';
+
+  @override
+  String get gameFoldersCreate => 'Crear carpetas de juegos';
+
+  @override
+  String get gameFoldersCreateDesc =>
+      'Una carpeta por juego con un LEEME que dice qué save dejar. Lo que dejes ahí se recoge solo.';
+
+  @override
+  String get gameFoldersPickerTitle => 'Carpetas de juegos';
+
+  @override
+  String get gameFoldersPickAll => 'Todos';
+
+  @override
+  String get gameFoldersPickNone => 'Ninguno';
+
+  @override
+  String get gameFoldersPickOwned => 'Los que tengo';
+
+  @override
+  String gameFoldersGeneration(int n) {
+    return 'Generación $n';
+  }
+
+  @override
+  String get gameFoldersExists => 'ya existe';
+
+  @override
+  String gameFoldersConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Crear $count carpetas',
+      one: 'Crear 1 carpeta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String gameFoldersDone(String created, String existing) {
+    return 'Carpetas creadas: $created (ya existían: $existing)';
+  }
+
+  @override
+  String get inboxTitle => 'Bandeja de entrada';
+
+  @override
+  String get inboxDesc =>
+      'Saves dejados en la carpeta de un juego que no se pudieron recoger. Se quedan donde están.';
+
+  @override
+  String inboxUnreadable(String detail) {
+    return 'No se puede leer: $detail';
+  }
+
+  @override
+  String inboxWrongGame(String actual, String folder) {
+    return 'Es de $actual, no de $folder';
+  }
+
+  @override
+  String inboxMoveTo(String game) {
+    return 'Mover a $game';
+  }
+
+  @override
+  String inboxAdoptedToast(String files) {
+    return 'Recogido de la bandeja: $files';
+  }
+
+  @override
+  String inboxProblemsToast(int count) {
+    return '$count saves de la bandeja necesitan tu atención';
+  }
+
+  @override
+  String get inboxSee => 'Ver';
 }

@@ -1465,5 +1465,91 @@
         "type": "int"
       }
     }
-  }
+  },
+  "originInbox": "Bandeja de entrada",
+  "gameFoldersQuestion": "¿Quieres crear las carpetas de tus juegos?",
+  "gameFoldersQuestionBody": "Así sabrás dónde dejar cada save: PKArkTools lo recoge solo y lo guarda con su historial.",
+  "gameFoldersAll": "Sí, todos los juegos",
+  "gameFoldersChoose": "Elegir juegos…",
+  "gameFoldersNotNow": "Ahora no",
+  "gameFoldersCreate": "Crear carpetas de juegos",
+  "gameFoldersCreateDesc": "Una carpeta por juego con un LEEME que dice qué save dejar. Lo que dejes ahí se recoge solo.",
+  "gameFoldersPickerTitle": "Carpetas de juegos",
+  "gameFoldersPickAll": "Todos",
+  "gameFoldersPickNone": "Ninguno",
+  "gameFoldersPickOwned": "Los que tengo",
+  "gameFoldersGeneration": "Generación {n}",
+  "@gameFoldersGeneration": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "gameFoldersExists": "ya existe",
+  "gameFoldersConfirm": "{count, plural, =1{Crear 1 carpeta} other{Crear {count} carpetas}}",
+  "@gameFoldersConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameFoldersDone": "Carpetas creadas: {created} (ya existían: {existing})",
+  "@gameFoldersDone": {
+    "placeholders": {
+      "created": {
+        "type": "String"
+      },
+      "existing": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxTitle": "Bandeja de entrada",
+  "inboxDesc": "Saves dejados en la carpeta de un juego que no se pudieron recoger. Se quedan donde están.",
+  "inboxUnreadable": "No se puede leer: {detail}",
+  "@inboxUnreadable": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxWrongGame": "Es de {actual}, no de {folder}",
+  "@inboxWrongGame": {
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "folder": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxMoveTo": "Mover a {game}",
+  "@inboxMoveTo": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxAdoptedToast": "Recogido de la bandeja: {files}",
+  "@inboxAdoptedToast": {
+    "placeholders": {
+      "files": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxProblemsToast": "{count} saves de la bandeja necesitan tu atención",
+  "@inboxProblemsToast": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inboxSee": "Ver"
 }

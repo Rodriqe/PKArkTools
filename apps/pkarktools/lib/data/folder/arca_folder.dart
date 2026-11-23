@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:pkcore/pkcore.dart' show SaveDetector;
 
+import 'arca_game_folders.dart';
 import 'arca_layout.dart';
 import 'folder_fs.dart';
 
@@ -194,6 +195,7 @@ class ArcaFolder {
         out.latestIndexes.add(rel);
         continue;
       }
+      if (ArcaGameFolders.isGameReadme(rel)) continue;
       final reason = ArcaLayout.ignoreReason(rel);
       if (reason != null) {
         out.ignored.update(reason, (v) => v + 1, ifAbsent: () => 1);

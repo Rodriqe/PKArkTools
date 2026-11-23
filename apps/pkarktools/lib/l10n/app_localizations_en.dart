@@ -2186,4 +2186,101 @@ class AppLocalizationsEn extends AppLocalizations {
   String historyMigrated(int count) {
     return 'Folder updated: $count copies moved to historial/';
   }
+
+  @override
+  String get originInbox => 'Inbox';
+
+  @override
+  String get gameFoldersQuestion => 'Create folders for your games?';
+
+  @override
+  String get gameFoldersQuestionBody =>
+      'So you know where to drop each save: PKArkTools picks it up and keeps it with its history.';
+
+  @override
+  String get gameFoldersAll => 'Yes, all games';
+
+  @override
+  String get gameFoldersChoose => 'Choose games…';
+
+  @override
+  String get gameFoldersNotNow => 'Not now';
+
+  @override
+  String get gameFoldersCreate => 'Create game folders';
+
+  @override
+  String get gameFoldersCreateDesc =>
+      'One folder per game with a README saying which save to drop. Anything you drop there is picked up automatically.';
+
+  @override
+  String get gameFoldersPickerTitle => 'Game folders';
+
+  @override
+  String get gameFoldersPickAll => 'All';
+
+  @override
+  String get gameFoldersPickNone => 'None';
+
+  @override
+  String get gameFoldersPickOwned => 'The ones I have';
+
+  @override
+  String gameFoldersGeneration(int n) {
+    return 'Generation $n';
+  }
+
+  @override
+  String get gameFoldersExists => 'already exists';
+
+  @override
+  String gameFoldersConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Create $count folders',
+      one: 'Create 1 folder',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String gameFoldersDone(String created, String existing) {
+    return 'Folders created: $created (already there: $existing)';
+  }
+
+  @override
+  String get inboxTitle => 'Inbox';
+
+  @override
+  String get inboxDesc =>
+      'Saves dropped in a game folder that couldn\'t be picked up. They stay where they are.';
+
+  @override
+  String inboxUnreadable(String detail) {
+    return 'Can\'t be read: $detail';
+  }
+
+  @override
+  String inboxWrongGame(String actual, String folder) {
+    return 'It\'s from $actual, not $folder';
+  }
+
+  @override
+  String inboxMoveTo(String game) {
+    return 'Move to $game';
+  }
+
+  @override
+  String inboxAdoptedToast(String files) {
+    return 'Picked up from the inbox: $files';
+  }
+
+  @override
+  String inboxProblemsToast(int count) {
+    return '$count inbox saves need your attention';
+  }
+
+  @override
+  String get inboxSee => 'View';
 }

@@ -10,6 +10,7 @@ import 'package:pkcore/pkcore.dart';
 
 import 'db/arca_database.dart';
 import 'folder/arca_folder.dart';
+import 'folder/arca_game_folders.dart';
 import 'folder/arca_layout.dart';
 import 'folder/arca_main_files.dart';
 import 'folder/arca_migration.dart';
@@ -70,7 +71,10 @@ enum ImportOrigin {
   migrated('migrated'),
 
   /// Copia antigua restaurada como versión actual (entrada nueva del historial).
-  restored('restored');
+  restored('restored'),
+
+  /// Save dejado suelto en la carpeta de su juego (bandeja de entrada).
+  inbox('inbox');
 
   const ImportOrigin(this.code);
   final String code;
@@ -165,10 +169,42 @@ class ReindexReport {
   /// Copias del diseño anterior movidas a `historial/` en este reindexado.
   MigrationResult? historyMigration;
 
+  /// Saves recogidos de la bandeja de entrada (`<Juego>/archivo`) en este
+  /// reindexado: archivo, juego y entrenador.
+  List<(String, GameVersion, String)> inboxAdopted = [];
+
+  /// Saves de la bandeja que no se pudieron recoger (se quedan donde están).
+  List<InboxProblem> inboxProblems = const [];
+
+  /// Saves de la bandeja aún escribiéndose (se recogen en un momento).
+  int inboxPending = 0;
+
   /// Principales reemplazados a mano (contenido fuera del historial).
   List<MainFileStatus> get modifiedMains => [for (final m in mains) if (m.state == MainState.modified) m];
 
   int get ignoredCount => ignored.values.fold(0, (a, b) => a + b);
+}
+
+enum InboxProblemKind {
+  /// No se pudo leer o no es un save reconocible.
+  unreadable,
+
+  /// Es un save de otro juego (se ofrece moverlo a su carpeta).
+  wrongGame,
+}
+
+/// Un save de la bandeja de entrada que se queda donde está.
+class InboxProblem {
+  const InboxProblem(this.kind, this.path, {this.detail, this.actualGame, this.folderGame});
+  final InboxProblemKind kind;
+  final String path;
+  final String? detail;
+
+  /// Juego real del save (si se pudo leer).
+  final GameVersion? actualGame;
+
+  /// Juego de la carpeta donde se dejó.
+  final GameVersion? folderGame;
 }
 
 /// Identidad de este dispositivo (se guarda en el `.json` de cada copia).
@@ -183,9 +219,13 @@ class ArcaDevice {
 /// La fuente de verdad es la carpeta ([ArcaFolder]); la base drift es un
 /// índice local de este dispositivo que [reindex] reconstruye.
 class ArcaRepository {
-  ArcaRepository(this.db, ArcaFolder? folder, {String? deviceName})
+  ArcaRepository(this.db, ArcaFolder? folder, {String? deviceName, this.inboxSettle = const Duration(seconds: 5)})
       : _folder = folder,
         _deviceName = deviceName;
+
+  /// Un save de la bandeja modificado hace menos de esto aún se está
+  /// copiando o sincronizando: se recoge en el siguiente reindexado.
+  final Duration inboxSettle;
 
   final ArcaDatabase db;
   ArcaFolder? _folder;
@@ -470,10 +510,16 @@ class ArcaRepository {
 
   Future<ReindexReport> _reindexLoop() async {
     ReindexReport r;
+    final adopted = <(String, GameVersion, String)>[];
+    var rounds = 0;
     do {
       _rerun = false;
       r = await _reindexOnce();
+      adopted.addAll(r.inboxAdopted);
+      // Lo recogido de la bandeja cambia la carpeta: otra pasada la pone al día.
+      if (r.inboxAdopted.isNotEmpty && rounds++ < 3) _rerun = true;
     } while (_rerun);
+    r.inboxAdopted = adopted;
     _lastReport = r;
     _reports.add(r);
     return r;
@@ -614,7 +660,74 @@ class ArcaRepository {
       ..mains = mains.mains
       ..conflictsCleaned = mains.conflictsCleaned
       ..loose = mains.loose;
+    await _processInbox(report);
     return report;
+  }
+
+  /// Bandeja de entrada: un save suelto directamente en `<Juego>/` se valida,
+  /// se guarda como copia nueva de su entrenador (y pasa a ser la última
+  /// versión) y, con la copia verificada por su hash, se retira de la bandeja.
+  /// Lo que no se puede leer o es de otro juego se queda donde está.
+  Future<void> _processInbox(ReindexReport report) async {
+    final inbox = [
+      for (final e in report.loose)
+        if (e.path.split('/').length == 2 && ArcaGameFolders.gameOfDir(e.path.split('/').first) != null) e,
+    ];
+    if (inbox.isEmpty) return;
+    final now = DateTime.now();
+    final problems = <InboxProblem>[];
+    final handled = <String>{};
+    for (final e in inbox) {
+      final folderGame = ArcaGameFolders.gameOfDir(e.path.split('/').first)!;
+      final name = e.path.split('/').last;
+      if (e.modified != null && now.difference(e.modified!) < inboxSettle) {
+        report.inboxPending++;
+        handled.add(e.path);
+        continue;
+      }
+      handled.add(e.path);
+      final Uint8List bytes;
+      final SaveFile save;
+      try {
+        bytes = await folder.read(e.path);
+        save = await parseSaveInIsolate(bytes);
+      } on UnsupportedSaveException catch (err) {
+        problems.add(InboxProblem(InboxProblemKind.unreadable, e.path, detail: err.message, folderGame: folderGame));
+        continue;
+      } on CorruptSaveException catch (err) {
+        problems.add(InboxProblem(InboxProblemKind.unreadable, e.path, detail: err.message, folderGame: folderGame));
+        continue;
+      } catch (err) {
+        problems.add(InboxProblem(InboxProblemKind.unreadable, e.path, detail: '$err', folderGame: folderGame));
+        continue;
+      }
+      if (ArcaGameFolders.dirOf(save.game) != ArcaGameFolders.dirOf(folderGame)) {
+        problems.add(InboxProblem(InboxProblemKind.wrongGame, e.path, actualGame: save.game, folderGame: folderGame));
+        continue;
+      }
+      final out = await importBytes(bytes, fileName: name, origin: ImportOrigin.inbox);
+      final sha = sha256Of(bytes);
+      final verified = switch (out) {
+        ImportAdded(:final snapshotId) => await _verifyStored(snapshotId, sha),
+        // Mismo contenido ya en el historial: la bandeja se vacía igual.
+        ImportDuplicate() => true,
+        ImportFailed() => false,
+      };
+      if (!verified) {
+        problems.add(InboxProblem(InboxProblemKind.unreadable, e.path,
+            detail: out is ImportFailed ? out.reason : 'copia no verificada', folderGame: folderGame));
+        continue;
+      }
+      try {
+        await folder.delete(e.path);
+      } catch (_) {
+        // Se retira en el próximo reindexado (la copia ya está a salvo).
+      }
+      report.inboxAdopted.add((name, save.game, save.trainer.name));
+    }
+    report
+      ..inboxProblems = problems
+      ..loose = [for (final e in report.loose) if (!handled.contains(e.path)) e];
   }
 
   /// Archivo principal (ruta relativa a la raíz del Arca) de la partida de

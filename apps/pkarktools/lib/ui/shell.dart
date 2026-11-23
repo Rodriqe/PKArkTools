@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
 import 'common/brand_mark.dart';
 import 'common/format.dart';
+import 'settings/game_folders.dart';
 
 /// Contenedor adaptativo: rail lateral en pantallas anchas, barra inferior en móvil.
 class AppShell extends StatelessWidget {
@@ -22,7 +23,7 @@ class AppShell extends StatelessWidget {
       (Icons.history_rounded, Icons.history_rounded, l10n.navActivity),
       (Icons.tune_outlined, Icons.tune_rounded, l10n.navSettings),
     ];
-    return LayoutBuilder(builder: (context, c) {
+    return ArcaEventsHost(child: LayoutBuilder(builder: (context, c) {
       if (c.maxWidth >= railBreakpoint) {
         final extended = c.maxWidth >= 1280;
         return Scaffold(
@@ -58,7 +59,7 @@ class AppShell extends StatelessWidget {
           ],
         ),
       );
-    });
+    }));
   }
 }
 

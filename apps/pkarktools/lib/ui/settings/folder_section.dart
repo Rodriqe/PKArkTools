@@ -10,6 +10,7 @@ import '../../data/folder/folder_access.dart';
 import '../../theme/app_theme.dart';
 import '../common/format.dart';
 import '../detail/snapshot_history.dart' show saveMainAsNewCopy;
+import 'game_folders.dart';
 import '../onboarding/folder_flows.dart';
 
 final _snapshotCountProvider = StreamProvider<int>((ref) => ref.watch(arcaRepositoryProvider).watchSnapshotCount());
@@ -106,6 +107,7 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
     final issues = report?.issues ?? const <ArcaIssue>[];
     final loose = report?.loose ?? const [];
     final modified = report?.modifiedMains ?? const <MainFileStatus>[];
+    final inbox = report?.inboxProblems ?? const <InboxProblem>[];
     final moved = (report?.historyMigration?.copied ?? 0) + (report?.historyMigration?.skipped ?? 0);
     final time = report == null
         ? null
@@ -195,6 +197,12 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
                     icon: const Icon(Icons.drive_file_move_rounded),
                     label: Text(l10n.folderChange),
                   ),
+                  OutlinedButton.icon(
+                    key: const ValueKey('create-game-folders'),
+                    onPressed: () => createGameFolders(context, ref),
+                    icon: const Icon(Icons.create_new_folder_rounded),
+                    label: Text(l10n.gameFoldersCreate),
+                  ),
                 ],
               ),
             ],
@@ -216,6 +224,38 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
         if (moved > 0) ...[
           const SizedBox(height: 12),
           Text(l10n.historyMigrated(moved), style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
+        ],
+        if (inbox.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Text('${l10n.inboxTitle} (${inbox.length})', style: context.text.titleSmall),
+          Text(l10n.inboxDesc, style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
+          const SizedBox(height: 6),
+          for (final i in inbox)
+            ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(
+                i.kind == InboxProblemKind.wrongGame ? Icons.swap_horiz_rounded : Icons.report_gmailerrorred_rounded,
+                color: i.kind == InboxProblemKind.wrongGame ? context.tokens.shiny : context.colors.error,
+              ),
+              title: Text(i.path.split('/').last),
+              subtitle: Text([
+                i.path,
+                switch (i.kind) {
+                  InboxProblemKind.wrongGame => l10n.inboxWrongGame(
+                      gameTitle(context, i.actualGame!), i.folderGame == null ? '?' : gameTitle(context, i.folderGame!)),
+                  InboxProblemKind.unreadable => l10n.inboxUnreadable(i.detail ?? '?'),
+                },
+              ].join('\n')),
+              trailing: i.kind != InboxProblemKind.wrongGame
+                  ? null
+                  : _adopting.contains(i.path)
+                      ? const SizedBox.square(dimension: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : TextButton(
+                          onPressed: _adopting.isNotEmpty ? null : () => _adopt([i.path]),
+                          child: Text(l10n.inboxMoveTo(gameTitle(context, i.actualGame!))),
+                        ),
+            ),
         ],
         if (modified.isNotEmpty) ...[
           const SizedBox(height: 16),

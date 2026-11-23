@@ -46,6 +46,7 @@ String originLabel(BuildContext context, String code) => switch (ImportOrigin.fr
       ImportOrigin.adopted => context.l10n.originAdopted,
       ImportOrigin.migrated => context.l10n.originMigrated,
       ImportOrigin.restored => context.l10n.originRestored,
+      ImportOrigin.inbox => context.l10n.originInbox,
     };
 
 String formatMoney(BuildContext context, int money) =>

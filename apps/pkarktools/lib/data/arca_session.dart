@@ -106,6 +106,30 @@ final arcaRepositoryProvider = Provider<ArcaRepository>((ref) {
 
 final arcaSetupProvider = NotifierProvider<ArcaController, ArcaSetup>(ArcaController.new);
 
+/// `true` cuando hay que preguntar (una sola vez, tras elegir la carpeta en el
+/// primer arranque) si se crean las carpetas de los juegos.
+final gameFoldersPromptProvider = NotifierProvider<GameFoldersPrompt, bool>(GameFoldersPrompt.new);
+
+class GameFoldersPrompt extends Notifier<bool> {
+  /// Preferencia local: ya se preguntó (la respuesta, sea cual sea, no se
+  /// vuelve a pedir; queda en Ajustes → Crear carpetas de juegos).
+  static const askedKey = 'gameFoldersAsked';
+
+  @override
+  bool build() => false;
+
+  Future<void> request() async {
+    final repo = ref.read(arcaRepositoryProvider);
+    if (await repo.getSetting(askedKey) == '1') return;
+    state = true;
+  }
+
+  Future<void> answered() async {
+    state = false;
+    await ref.read(arcaRepositoryProvider).setSetting(askedKey, '1');
+  }
+}
+
 /// Último informe de reindexado.
 final reindexReportProvider = StreamProvider<ReindexReport?>((ref) async* {
   final repo = ref.watch(arcaRepositoryProvider);
@@ -120,6 +144,7 @@ class ArcaController extends Notifier<ArcaSetup> {
 
   StreamSubscription<FileSystemEvent>? _watch;
   Timer? _debounce;
+  Timer? _inboxRetry;
 
   @override
   ArcaSetup build() {
@@ -141,6 +166,7 @@ class ArcaController extends Notifier<ArcaSetup> {
       if (result.ok) await legacy.retire();
     }
     await _activate(opened.location, folder);
+    await ref.read(gameFoldersPromptProvider.notifier).request();
     return result;
   }
 
@@ -192,6 +218,9 @@ class ArcaController extends Notifier<ArcaSetup> {
         throw FolderAccessLostException('La carpeta ${_repo.folder.label} no está disponible');
       }
       final r = await _repo.reindex();
+      // Saves de la bandeja aún copiándose: se recogen en un momento.
+      _inboxRetry?.cancel();
+      if (r.inboxPending > 0) _inboxRetry = Timer(_repo.inboxSettle + const Duration(seconds: 1), () => unawaited(reindex()));
       final native = _repo.folder.fs.nativePath;
       if (native != null && r.placeholders.isNotEmpty) {
         unawaited(PlatformFolderAccess.requestDownloads(p.join(native, _repo.folder.prefix), r.placeholders));
@@ -228,6 +257,7 @@ class ArcaController extends Notifier<ArcaSetup> {
 
   void _stopWatching() {
     _debounce?.cancel();
+    _inboxRetry?.cancel();
     unawaited(_watch?.cancel());
     _watch = null;
   }
