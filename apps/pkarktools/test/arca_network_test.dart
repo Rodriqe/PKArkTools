@@ -49,7 +49,7 @@ void main() {
 
   group('detección de volúmenes de red', () {
     test('origen del montaje: servidor y recurso', () {
-      expect(VolumeInfo.parseSource('//ana@NASRIGO._smb._tcp.local/SharedFiles'), ('NASRIGO', 'SharedFiles'));
+      expect(VolumeInfo.parseSource('//ana@MINAS._smb._tcp.local/Juegos'), ('MINAS', 'Juegos'));
       expect(VolumeInfo.parseSource('//DOM;ana@nas.local/Mis%20Juegos'), ('nas.local', 'Mis Juegos'));
       expect(VolumeInfo.parseSource('//nas/share'), ('nas', 'share'));
       expect(VolumeInfo.parseSource('nas.local:/volume1/juegos'), ('nas.local', 'juegos'));
@@ -368,8 +368,8 @@ void main() {
 
   group('elegir la carpeta del NAS', () {
     test('una carpeta con PKArkTools/ existente la reconoce y no crea otra', () async {
-      // Réplica sintética de /Volumes/SharedFiles/PKArkToosl con su Arca.
-      final share = Directory(p.join(tmp.path, 'PKArkToosl'))..createSync();
+      // Réplica sintética de /Volumes/Juegos/Partidas con su Arca.
+      final share = Directory(p.join(tmp.path, 'Partidas'))..createSync();
       final other = ArcaRepository(db(), ArcaFolder(IoFolderFs(share, mounts: mountsFor(share))), deviceName: 'iPhone');
       await other.importBytes(emerald(), fileName: 'E.sav', origin: ImportOrigin.file);
       // Sin README raíz (solo carpetas de juego con LEEME): igual se reconoce.
@@ -389,7 +389,7 @@ void main() {
     });
 
     test('elegir la propia carpeta PKArkTools (sin README) no anida otra', () async {
-      final arca = Directory(p.join(tmp.path, 'SharedFiles', 'PKArkTools'))..createSync(recursive: true);
+      final arca = Directory(p.join(tmp.path, 'Juegos', 'PKArkTools'))..createSync(recursive: true);
       File(p.join(arca.path, 'Pokémon Esmeralda', 'LEEME.txt'))
         ..parent.createSync()
         ..writeAsStringSync('x');

@@ -142,10 +142,10 @@ void main() {
   testWidgets('NAS desmontado: «Carpeta de red no disponible» con Reintentar y Elegir otra', (tester) async {
     final repo = ArcaRepository(db, null, deviceName: 'Mac');
     final nas = ArcaLocation(LocationKind.bookmark,
-        value: 'xx', label: '/Volumes/SharedFiles/PKArkToosl', network: true, volume: 'NASRIGO/SharedFiles');
+        value: 'xx', label: '/Volumes/Juegos/Partidas', network: true, volume: 'MINAS/Juegos');
     await pumpApp(tester, repo: repo, setup: SetupAccessLost(nas, 'La carpeta de red no está montada'));
     expect(find.text('Carpeta de red no disponible'), findsOneWidget);
-    expect(find.textContaining('NASRIGO/SharedFiles'), findsOneWidget);
+    expect(find.textContaining('MINAS/Juegos'), findsOneWidget);
     expect(find.byKey(const ValueKey('network-retry')), findsOneWidget);
     expect(find.text('Elegir otra'), findsOneWidget);
     // Sin la opción de carpeta local: no se crea un Arca vacía por error.
@@ -160,10 +160,10 @@ void main() {
   });
 
   testWidgets('Ajustes: carpeta en un NAS con icono de red y nombre del recurso', (tester) async {
-    final share = Directory(p.join(tmp.path, 'SharedFiles'))..createSync();
+    final share = Directory(p.join(tmp.path, 'Juegos'))..createSync();
     final mounts = StaticMountTable([
       const MountEntry(mountPoint: '/', fsType: 'apfs', source: '/dev/disk3s1'),
-      MountEntry(mountPoint: share.path, fsType: 'smbfs', source: '//ana@NASRIGO._smb._tcp.local/SharedFiles'),
+      MountEntry(mountPoint: share.path, fsType: 'smbfs', source: '//ana@MINAS._smb._tcp.local/Juegos'),
     ]);
     final repo = ArcaRepository(db, ArcaFolder(IoFolderFs(share, mounts: mounts)), deviceName: 'Mac');
     await pumpApp(tester,
@@ -171,7 +171,7 @@ void main() {
         setup: SetupReady(ArcaLocation(LocationKind.bookmark, value: 'b', label: share.path, network: true)),
         initial: '/ajustes',
         size: const Size(1280, 1600));
-    expect(find.text('Carpeta de red (NAS) · NASRIGO/SharedFiles'), findsOneWidget);
+    expect(find.text('Carpeta de red (NAS) · MINAS/Juegos'), findsOneWidget);
     expect(find.byIcon(Icons.lan_rounded), findsOneWidget);
     expect(find.byKey(const ValueKey('folder-network-hint')), findsOneWidget);
   });
