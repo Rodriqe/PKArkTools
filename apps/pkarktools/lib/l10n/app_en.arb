@@ -478,7 +478,7 @@
   "spritesProgressBytes": "{done} of {total} icons · {size} of {totalSize}",
   "spritesOffline": "No Internet connection: GitHub couldn't be reached. What was already downloaded is kept; try again when online.",
   "spritesCleared": "Icon cache cleared.",
-  "spritesCredits": "Icons: PKHeX resources (github.com/kwsch/PKHeX, commit {commit}), downloaded on demand. Sprites are © Nintendo / Game Freak / The Pokémon Company.",
+  "spritesCredits": "Pokémon icons: Pokémon HOME box icons from the Smogon / Pokémon Showdown sprite repository (github.com/smogon/sprites, commit {pokemonCommit}). Items, Balls, types and ribbons: PKHeX resources (github.com/kwsch/PKHeX, commit {pkhexCommit}). Downloaded on demand, never bundled. Sprites are © Nintendo / Game Freak / The Pokémon Company.",
   "sectionOrigin": "Origin",
   "sectionRibbons": "Ribbons and marks",
   "originGame": "Origin game",

@@ -51,7 +51,7 @@ Uint8List _pngOfSize(int size) {
 }
 
 /// Carpeta del repositorio → grupo, para saber qué icono pide una URL.
-final _groupByDir = {for (final e in kSpriteDirs.entries) e.value.split('/').last: e.key};
+final _groupByDir = {for (final e in kSpriteSources.entries) e.value.$2.split('/').last: e.key};
 
 /// Bytes que serviría el servidor para [u]: el tamaño exacto del índice.
 Uint8List _serve(Uri u) {
@@ -68,7 +68,7 @@ void main() {
   tearDown(() => tmp.deleteSync(recursive: true));
 
   final total = SpriteCache.allRefs().length;
-  const b1 = SpriteRef('pokemon', 'b_1'), b4 = SpriteRef('pokemon', 'b_4'), b7 = SpriteRef('pokemon', 'b_7');
+  const b1 = SpriteRef('pokemon', 'sbulbasaur'), b4 = SpriteRef('pokemon', 'scharmander'), b7 = SpriteRef('pokemon', 'ssquirtle');
 
   group('validación de lo que se guarda', () {
     test('PNG completo: firma, IHDR e IEND; rechaza vacíos, cortados y páginas de error', () {
@@ -143,18 +143,18 @@ void main() {
 
     test('404 y escritura fallida: no se marca completo y se informa de cuántos faltan', () async {
       // Un directorio con el nombre del archivo hace fallar el rename (como un disco lleno).
-      Directory('${tmp.path}/pokemon_b_4.png').createSync();
+      Directory('${tmp.path}/pokemon_scharmander.png').createSync();
       final cache = SpriteCache(
         directory: () async => tmp,
         retryDelay: Duration.zero,
         fetcher: (u) async {
-          if (u.pathSegments.last == 'b_1.png') throw SpriteHttpStatusException(404, u);
+          if (u.pathSegments.last == 'sbulbasaur.png') throw SpriteHttpStatusException(404, u);
           return _serve(u);
         },
       );
       final r = await cache.downloadAll();
       expect(r.complete, isFalse);
-      expect(r.failed, 2, reason: 'b_1 (404) y b_4 (no se pudo guardar)');
+      expect(r.failed, 2, reason: 'sbulbasaur (404) y scharmander (no se pudo guardar)');
       expect(r.missing, 2);
       expect(r.downloaded, total - 2);
       expect(tmp.listSync().where((e) => e.path.endsWith('.part')), isEmpty);
@@ -221,43 +221,71 @@ void main() {
   });
 
   group('proporciones', () {
-    test('misma escala entera para todo un grupo; los iconos pequeños no se amplían más', () {
-      // 44 dp a 2,3 ppp ≈ 101 px físicos: el lienzo de 68×56 cabe ×1.
-      expect(SpriteLayout.scaleFor('pokemon', 68), 1);
-      expect(SpriteLayout.scaleFor('pokemon', 140), 2);
-      expect(SpriteLayout.scaleFor('pokemon', 220), 3); // ×3,24 → ×3 (desperdicia < 20 %)
-      // ×1,88 → ×1 dejaría medio hueco vacío: fracción exacta (suavizada).
-      expect(SpriteLayout.scaleFor('pokemon', 128), closeTo(128 / 68, 1e-9));
-      // Objeto de 16×16 y de 32×32 en el mismo hueco: misma escala, mitad de tamaño.
-      final small = SpriteLayout.destRect('item', 16, 16, 24, 3);
-      final big = SpriteLayout.destRect('item', 32, 32, 24, 3);
-      expect(big.width, closeTo(small.width * 2, 0.001));
-      expect(big.width * 3, 64); // ×2 en píxeles físicos
+    const pika = SpriteRef('pokemon', 'spikachu'), wailord = SpriteRef('pokemon', 'swailord');
+    const gourgeist = SpriteRef('pokemon', 'sgourgeist-osuper');
+
+    test('Pokémon: el contenido de referencia llena ~88 % del hueco, igual para todos', () {
+      final ref = Sprites.contentRef('pokemon');
+      for (final (size, dpr) in [(32.0, 2.3), (44.0, 3.0), (52.0, 2.0), (104.0, 2.3)]) {
+        final box = size * dpr;
+        final s = SpriteLayout.scaleFor(pika, box, pixelated: false);
+        expect(ref * s / box, closeTo(Sprites.fill['pokemon']!, 1e-9), reason: '$size@$dpr');
+        expect(SpriteLayout.scaleFor(wailord, box, pixelated: false), s, reason: 'misma escala');
+      }
     });
 
-    test('nunca deforma: proporción del lienzo original y centrado en píxeles enteros', () {
-      for (final (size, dpr) in [(28.0, 2.3), (44.0, 2.3), (64.0, 2.0), (96.0, 3.0), (20.0, 1.0)]) {
-        final r = SpriteLayout.destRect('pokemon', 68, 56, size, dpr);
-        expect(r.width / r.height, closeTo(68 / 56, 0.0001), reason: '$size@$dpr');
-        expect(r.width, lessThanOrEqualTo(size + 1e-9));
-        final s = r.width * dpr / 68;
-        final fit = size * dpr / 68;
-        expect(s, anyOf(closeTo(fit, 1e-9), equals(fit.floorToDouble())), reason: '$size@$dpr');
-        expect(s, greaterThanOrEqualTo(fit * 0.8 - 1e-9), reason: 'no deja el hueco medio vacío');
+    test('sin recortes: ningún sprite del índice se sale del hueco', () {
+      for (final ref in SpriteCache.allRefs()) {
+        final need = Sprites.needOf(ref) ?? Sprites.contentRef(ref.group);
+        for (final box in [40.0, 73.6, 101.2, 156.0]) {
+          final px = Sprites.isPixelArt(ref.group);
+          expect(need * SpriteLayout.scaleFor(ref, box, pixelated: px), lessThanOrEqualTo(box + 1e-9), reason: '$ref $box');
+        }
       }
-      // Hueco más pequeño que el lienzo: la mayor escala que cabe, uniforme.
-      final tiny = SpriteLayout.destRect('pokemon', 68, 56, 20, 2);
-      expect(tiny.width, closeTo(20, 1e-9));
-      expect(tiny.height, closeTo(20 * 56 / 68, 1e-9));
-      // Tipos y cintas (arte suavizado): BoxFit.contain fraccionario sobre su lienzo.
-      expect(SpriteLayout.destRect('type', 60, 60, 16, 2.3).width, closeTo(16, 1e-9));
+      // El que supera la referencia (Gourgeist enorme) aún cabe en el margen:
+      // no se reduce y conserva la escala común.
+      final need = Sprites.needOf(gourgeist)!;
+      expect(need, greaterThan(Sprites.contentRef('pokemon')));
+      expect(SpriteLayout.scaleFor(gourgeist, 100, pixelated: false), SpriteLayout.scaleFor(pika, 100, pixelated: false));
+      expect(need * SpriteLayout.scaleFor(gourgeist, 100, pixelated: false), lessThanOrEqualTo(100));
+    });
+
+    test('arte de píxeles: escala entera si aprovecha ≥ 80 %; si no, la exacta (vecino más próximo)', () {
+      const item = SpriteRef('item', 'bitem_1');
+      final ref = Sprites.contentRef('item');
+      double exact(double box) => box * 0.88 / ref;
+      // Exacta ×3,52 → ×3 (85 %).
+      expect(SpriteLayout.scaleFor(item, 100), 3);
+      // Exacta ×1,41 → ×1 sería el 71 %: se queda ×1,41.
+      expect(SpriteLayout.scaleFor(item, 40), closeTo(exact(40), 1e-9));
+      expect(SpriteLayout.filterFor(1.41, pixelated: true), FilterQuality.none);
+      expect(SpriteLayout.filterFor(0.7, pixelated: true), FilterQuality.medium); // reducir: suavizado
+      expect(SpriteLayout.filterFor(2, pixelated: false), FilterQuality.medium);
+      // Objeto de 16×16 y de 32×32 en el mismo hueco: misma escala, mitad de tamaño.
+      final small = SpriteLayout.destRect(item, 16, 16, 24, 3);
+      final big = SpriteLayout.destRect(item, 32, 32, 24, 3);
+      expect(big.width, closeTo(small.width * 2, 0.001));
+    });
+
+    test('nunca deforma y centra (en píxeles enteros con arte de píxeles)', () {
+      for (final (size, dpr) in [(28.0, 2.3), (44.0, 2.3), (64.0, 2.0), (96.0, 3.0), (20.0, 1.0)]) {
+        final r = SpriteLayout.destRect(wailord, 124, 104, size, dpr, pixelated: false);
+        expect(r.width / r.height, closeTo(124 / 104, 0.0001), reason: '$size@$dpr');
+        expect(r.center.dx, closeTo(size / 2, 1e-9));
+        expect(r.center.dy, closeTo(size / 2, 1e-9));
+        final i = SpriteLayout.destRect(const SpriteRef('item', 'bitem_1'), 32, 32, size, dpr);
+        expect((i.left * dpr - (i.left * dpr).roundToDouble()).abs(), lessThan(1e-6));
+      }
+      // Tipos y cintas: llenan su hueco (su lienzo ya es el contenido).
+      expect(SpriteLayout.destRect(const SpriteRef('type', 'type_icon_09'), 60, 60, 16, 2.3, pixelated: false).width,
+          closeTo(16, 1e-9));
     });
 
     testWidgets('el avatar usa el lienzo completo, no un recorte por sprite', (t) async {
       final prev = SpriteCache.instance;
       SpriteCache.instance = SpriteCache(strictSizes: false, directory: () async => null, fetcher: (u) async => _png);
       addTearDown(() => SpriteCache.instance = prev);
-      const ref = SpriteRef('pokemon', 'b_25');
+      const ref = SpriteRef('pokemon', 'spikachu');
       await t.runAsync(() => SpriteCache.instance.load(ref));
       await t.pumpWidget(const Directionality(
         textDirection: TextDirection.ltr,
@@ -288,7 +316,7 @@ void main() {
       addTearDown(() => SpriteCache.instance = prev);
       await t.pumpWidget(const Directionality(
         textDirection: TextDirection.ltr,
-        child: SpriteImage(sprite: SpriteRef('pokemon', 'b_25'), size: 40, fallback: Text('Pi')),
+        child: SpriteImage(sprite: SpriteRef('pokemon', 'spikachu'), size: 40, fallback: Text('Pi')),
       ));
       for (var i = 0; i < 60 && (calls < 2 || find.text('Pi').evaluate().isNotEmpty); i++) {
         await t.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 30)));

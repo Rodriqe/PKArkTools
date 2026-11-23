@@ -2974,8 +2974,8 @@ abstract class AppLocalizations {
   /// No description provided for @spritesCredits.
   ///
   /// In es, this message translates to:
-  /// **'Iconos: recursos de PKHeX (github.com/kwsch/PKHeX, commit {commit}), descargados bajo demanda. Los sprites son © Nintendo / Game Freak / The Pokémon Company.'**
-  String spritesCredits(String commit);
+  /// **'Iconos de Pokémon: iconos de caja de Pokémon HOME del repositorio de sprites de Smogon / Pokémon Showdown (github.com/smogon/sprites, commit {pokemonCommit}). Objetos, Balls, tipos y cintas: recursos de PKHeX (github.com/kwsch/PKHeX, commit {pkhexCommit}). Se descargan bajo demanda, nunca se incluyen. Los sprites son © Nintendo / Game Freak / The Pokémon Company.'**
+  String spritesCredits(String pokemonCommit, String pkhexCommit);
 
   /// No description provided for @sectionOrigin.
   ///

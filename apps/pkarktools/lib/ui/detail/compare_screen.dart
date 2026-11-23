@@ -260,7 +260,7 @@ class _MonCard extends StatelessWidget {
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Opacity(
           opacity: diff.kind == MonChangeKind.removed ? 0.5 : 1,
-          child: SpeciesAvatar(species: m.species, shiny: m.isShiny, egg: m.isEgg, size: 52),
+          child: SpeciesAvatar(species: m.species, form: m.form, female: m.gender == 1, shiny: m.isShiny, egg: m.isEgg, size: 52),
         ),
         const SizedBox(width: 14),
         Expanded(

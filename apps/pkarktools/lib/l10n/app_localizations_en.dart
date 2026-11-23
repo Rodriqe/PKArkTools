@@ -1776,8 +1776,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get spritesCleared => 'Icon cache cleared.';
 
   @override
-  String spritesCredits(String commit) {
-    return 'Icons: PKHeX resources (github.com/kwsch/PKHeX, commit $commit), downloaded on demand. Sprites are © Nintendo / Game Freak / The Pokémon Company.';
+  String spritesCredits(String pokemonCommit, String pkhexCommit) {
+    return 'Pokémon icons: Pokémon HOME box icons from the Smogon / Pokémon Showdown sprite repository (github.com/smogon/sprites, commit $pokemonCommit). Items, Balls, types and ribbons: PKHeX resources (github.com/kwsch/PKHeX, commit $pkhexCommit). Downloaded on demand, never bundled. Sprites are © Nintendo / Game Freak / The Pokémon Company.';
   }
 
   @override
