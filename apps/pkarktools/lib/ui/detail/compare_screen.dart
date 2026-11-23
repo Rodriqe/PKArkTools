@@ -116,7 +116,7 @@ class _Body extends StatelessWidget {
       ],
       if (d.dex.isNotEmpty) ...[
         _Title(l10n.comparePokedex, d.dex.length),
-        _Dex(dex: d.dex),
+        _Dex(dex: d.dex, game: game),
       ],
     ]);
   }
@@ -260,13 +260,13 @@ class _MonCard extends StatelessWidget {
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Opacity(
           opacity: diff.kind == MonChangeKind.removed ? 0.5 : 1,
-          child: SpeciesAvatar(species: m.species, form: m.form, female: m.gender == 1, shiny: m.isShiny, egg: m.isEgg, size: 52),
+          child: SpeciesAvatar(species: m.species, form: m.form, game: m.dataGame, female: m.gender == 1, shiny: m.isShiny, egg: m.isEgg, size: 52),
         ),
         const SizedBox(width: 14),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Wrap(spacing: 10, crossAxisAlignment: WrapCrossAlignment.center, children: [
-              Text(m.isNicknamed ? m.nickname : speciesName(context, m.species), style: context.text.titleMedium),
+              Text(m.isNicknamed ? m.nickname : pokemonName(context, m.species, m.form, m.dataGame), style: context.text.titleMedium),
               Text(l10n.level(m.level), style: context.text.bodyMedium!.copyWith(color: tokens.muted)),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -320,8 +320,9 @@ class _Items extends StatelessWidget {
 }
 
 class _Dex extends StatelessWidget {
-  const _Dex({required this.dex});
+  const _Dex({required this.dex, required this.game});
   final List<DexDiff> dex;
+  final GameVersion game;
 
   @override
   Widget build(BuildContext context) {
@@ -333,7 +334,7 @@ class _Dex extends StatelessWidget {
     Widget chips(List<DexDiff> list) => Wrap(spacing: 6, runSpacing: 6, children: [
           for (final d in list.take(60))
             Chip(
-              avatar: SpeciesAvatar(species: d.after.species, size: 24),
+              avatar: SpeciesAvatar(species: d.after.species, form: dexDisplayForm(d.after, game), game: game, size: 24),
               label: Text(speciesName(context, d.after.species)),
               visualDensity: VisualDensity.compact,
             ),

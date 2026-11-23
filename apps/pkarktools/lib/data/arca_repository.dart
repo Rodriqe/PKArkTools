@@ -19,6 +19,9 @@ import 'save_source.dart';
 
 export 'save_source.dart' show SaveSource;
 
+/// Icono de un Pokémon del equipo en la tarjeta de la partida.
+typedef PartyIcon = ({int species, int form, bool shiny, bool egg});
+
 /// Lee un save en otro isolate. Es una función de nivel superior para que
 /// el closure solo capture los bytes (nunca la base de datos).
 Future<SaveFile> parseSaveInIsolate(Uint8List bytes) => Isolate.run(() => readSaveWithVersion(bytes));
@@ -274,12 +277,15 @@ class ArcaRepository {
   static String sha256Of(Uint8List bytes) => crypto.sha256.convert(bytes).toString();
 
   static String encodeParty(List<PokemonSummary> party) =>
-      party.map((p) => '${p.species}${p.isShiny ? 's' : ''}${p.isEgg ? 'e' : ''}').join(',');
+      party.map((p) => '${p.species}${p.form > 0 ? 'f${p.form}' : ''}${p.isShiny ? 's' : ''}${p.isEgg ? 'e' : ''}').join(',');
 
-  static List<({int species, bool shiny, bool egg})> decodeParty(String s) => [
+  /// Equipo guardado como «724f1s,25e»: especie, forma (`f<n>`, opcional en
+  /// índices anteriores a 0.1.5), variocolor (`s`) y huevo (`e`).
+  static List<PartyIcon> decodeParty(String s) => [
         for (final part in s.split(',').where((e) => e.isNotEmpty))
           (
-            species: int.tryParse(part.replaceAll(RegExp('[se]'), '')) ?? 0,
+            species: int.tryParse(RegExp(r'^\d+').stringMatch(part) ?? '') ?? 0,
+            form: int.tryParse(RegExp(r'f(\d+)').firstMatch(part)?.group(1) ?? '') ?? 0,
             shiny: part.contains('s'),
             egg: part.contains('e'),
           ),

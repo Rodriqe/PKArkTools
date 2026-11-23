@@ -265,13 +265,14 @@ class _Specimen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final tokens = context.tokens;
-    final species = speciesName(context, pk.species);
+    final species = pokemonName(context, pk.species, pk.form, pk.dataGame);
     final nick = pk.isNicknamed ? pk.nickname : null;
-    final (t1, t2) = Species.types(pk.species);
+    // Tipos de la forma en el juego (Decidueye de Hisui: Planta/Lucha).
+    final (t1, t2) = SpeciesForms.types(pk.species, pk.form, game);
     final g = pk.gender;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        SpeciesAvatar(species: pk.species, form: pk.form, female: pk.gender == 1, shiny: pk.isShiny, egg: pk.isEgg, size: 104, showNumber: true),
+        SpeciesAvatar(species: pk.species, form: pk.form, game: pk.dataGame, female: pk.gender == 1, shiny: pk.isShiny, egg: pk.isEgg, size: 104, showNumber: true),
         const SizedBox(width: 20),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -516,29 +517,33 @@ class _IdentityFields extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final pk = s.pk;
-    final personal = s.table.entry(pk.species);
-    final forms = personal?.formCount ?? 1;
+    final game = s.widget.game;
+    final lang = context.isSpanish ? DataLanguage.es : DataLanguage.en;
+    // Formas que existen en el juego (más la actual, aunque no exista, para no ocultarla).
+    final forms = {...SpeciesForms.presentForms(pk.species, game), pk.form}.toList()..sort();
     final ratio = s.table.entry(pk.species, pk.form)?.genderRatio ?? 255;
+    String formLabel(int f) {
+      final n = SpeciesForms.formName(pk.species, f, game, lang);
+      if (n.isNotEmpty) return n;
+      return f == 0 ? l10n.formBase : l10n.formN(f);
+    }
     return _FieldGrid(children: [
       SearchPicker(
         label: l10n.species,
         options: s._species,
         value: pk.species,
         onSelected: (v) => s.mutate((p) {
-          final slot = p.abilitySlot;
+          final present = SpeciesForms.presentForms(v, game);
           p.species = v;
-          p.form = 0;
-          p.setAbilitySlot(slot);
-          final r = s.table.entry(v)?.genderRatio ?? 255;
-          if (p.generation >= 4) p.gender = r == 255 ? 2 : (r == 254 ? 1 : (r == 0 ? 0 : p.gender.clamp(0, 1)));
+          _setForm(p, present.isEmpty ? 0 : present.first, game);
         }),
       ),
-      if (forms > 1)
+      if (forms.length > 1)
         _Dropdown<int>(
           label: l10n.form,
-          value: pk.form.clamp(0, forms - 1),
-          items: {for (var i = 0; i < forms; i++) i: i == 0 ? l10n.formBase : l10n.formN(i)},
-          onChanged: (v) => s.mutate((p) => p.form = v),
+          value: pk.form,
+          items: {for (final f in forms) f: formLabel(f)},
+          onChanged: (v) => s.mutate((p) => _setForm(p, v, game)),
         ),
       _TextFieldCommit(
         label: l10n.nickname,
@@ -593,6 +598,21 @@ class _IdentityFields extends StatelessWidget {
           onChanged: (v) => s.mutate((p) => p.language = v),
         ),
     ]);
+  }
+}
+
+/// Cambia la forma y rehace lo que depende de ella: la habilidad (misma
+/// ranura, con las habilidades de la nueva forma), el género si la forma lo
+/// fija (Basculegion, Indeedee…) y, en Ogerpon, el teratipo de la máscara.
+void _setForm(Pkm p, int form, GameVersion game) {
+  final slot = p.abilitySlot;
+  p.form = form;
+  p.setAbilitySlot(slot);
+  final r = GameDataTable.forGame(game).entry(p.species, form)?.genderRatio ?? 255;
+  if (p.generation >= 4) p.gender = r == 255 ? 2 : (r == 254 ? 1 : (r == 0 ? 0 : p.gender.clamp(0, 1)));
+  if (p.format.hasTeraType && p.species == 1017) {
+    p.teraTypeOriginal = SpeciesForms.defaultTeraType(p.species, form, game);
+    p.teraType = p.teraTypeOriginal;
   }
 }
 

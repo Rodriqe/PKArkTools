@@ -462,8 +462,8 @@ class SpriteCache {
   /// Iconos de las especies de un equipo (`ArcaRepository.decodeParty`), para
   /// descargarlos antes que el resto (sin repetidos; los variocolor usan el
   /// mismo icono con insignia).
-  static List<SpriteRef> refsForParty(Iterable<({int species, bool shiny, bool egg})> party) => {
-        for (final m in party) ?Sprites.pokemon(m.species, egg: m.egg),
+  static List<SpriteRef> refsForParty(Iterable<({int species, int form, bool shiny, bool egg})> party) => {
+        for (final m in party) ?Sprites.pokemon(m.species, form: m.form, egg: m.egg),
       }.toList();
 
   /// Comprueba la caché en disco sin red: cuántos iconos del índice están

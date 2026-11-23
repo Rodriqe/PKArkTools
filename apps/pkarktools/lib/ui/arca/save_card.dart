@@ -98,7 +98,7 @@ class _SaveCardState extends State<SaveCard> {
                                   for (final p in party)
                                     Padding(
                                       padding: const EdgeInsets.only(right: 8),
-                                      child: SpeciesAvatar(species: p.species, shiny: p.shiny, egg: p.egg, size: 32),
+                                      child: SpeciesAvatar(species: p.species, form: p.form, game: e.game, shiny: p.shiny, egg: p.egg, size: 32),
                                     ),
                                 ]),
                         ),

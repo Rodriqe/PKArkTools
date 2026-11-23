@@ -19,6 +19,24 @@ String platformName(BuildContext context, Platform p) => context.isSpanish ? p.n
 String speciesName(BuildContext context, int species) =>
     Species.name(species, context.isSpanish ? SpeciesLanguage.es : SpeciesLanguage.en);
 
+/// Nombre de la especie con su forma en [game]: «Decidueye (Hisui)», «Rotom (Lavado)».
+String pokemonName(BuildContext context, int species, int form, GameVersion? game) =>
+    SpeciesForms.displayName(species, form, game, context.isSpanish ? DataLanguage.es : DataLanguage.en);
+
+/// Forma con la que se muestra una entrada: la primera vista o, si no hay
+/// ninguna marcada, la primera que existe en el juego (en Leyendas Arceus
+/// Growlithe solo existe como forma de Hisui).
+int dexDisplayForm(DexEntry e, GameVersion game) {
+  final present = SpeciesForms.presentForms(e.species, game);
+  final seen = e.forms;
+  if (seen != null) {
+    for (final f in present) {
+      if (f < 31 && (seen >> f) & 1 == 1) return f;
+    }
+  }
+  return present.isEmpty ? 0 : present.first;
+}
+
 String formatDate(BuildContext context, DateTime dt, {bool withTime = false}) {
   final locale = Localizations.localeOf(context).toLanguageTag();
   final d = DateFormat.yMMMd(locale).format(dt);

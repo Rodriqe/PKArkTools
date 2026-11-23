@@ -175,7 +175,7 @@ class _SlotDnD extends StatelessWidget {
       color: Colors.transparent,
       child: Transform.scale(
         scale: 1.08,
-        child: SpeciesAvatar(species: pk.species, form: pk.form, female: pk.gender == 1, shiny: pk.isShiny, egg: pk.isEgg, size: 64),
+        child: SpeciesAvatar(species: pk.species, form: pk.form, game: pk.dataGame, female: pk.gender == 1, shiny: pk.isShiny, egg: pk.isEgg, size: 64),
       ),
     );
     final data = SlotDrag(slot, pk);
@@ -252,7 +252,7 @@ class _PartyTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = context.tokens;
     final l10n = context.l10n;
-    final name = p.isEgg ? l10n.egg : speciesName(context, p.species);
+    final name = p.isEgg ? l10n.egg : pokemonName(context, p.species, p.form, p.dataGame);
     final nick = p.isNicknamed && !p.isEgg ? p.nickname : null;
     return Material(
       color: hover ? context.colors.primary.withValues(alpha: 0.12) : tokens.raised,
@@ -270,7 +270,7 @@ class _PartyTile extends StatelessWidget {
           padding: const EdgeInsets.all(14),
           child: Row(children: [
             Stack(clipBehavior: Clip.none, children: [
-              SpeciesAvatar(species: p.species, form: p.form, female: p.gender == 1, shiny: p.isShiny, egg: p.isEgg, size: 52),
+              SpeciesAvatar(species: p.species, form: p.form, game: p.dataGame, female: p.gender == 1, shiny: p.isShiny, egg: p.isEgg, size: 52),
               if (warnings > 0) Positioned(left: -5, bottom: -5, child: LegalityDot(count: warnings)),
             ]),
             const SizedBox(width: 14),
@@ -495,7 +495,7 @@ class _BoxSlot extends StatelessWidget {
         ),
       );
     }
-    final name = p.isEgg ? context.l10n.egg : speciesName(context, p.species);
+    final name = p.isEgg ? context.l10n.egg : pokemonName(context, p.species, p.form, p.dataGame);
     final nick = p.isNicknamed && !p.isEgg ? p.nickname : null;
     return Tooltip(
       message: '${nick ?? name}\n${p.isEgg ? '' : context.l10n.level(p.level)}${p.isShiny ? '  ${context.l10n.shiny}' : ''}',
@@ -508,7 +508,7 @@ class _BoxSlot extends StatelessWidget {
           onTap: onTap,
           child: LayoutBuilder(
             builder: (context, c) => Stack(alignment: Alignment.center, clipBehavior: Clip.none, children: [
-              SpeciesAvatar(species: p.species, form: p.form, female: p.gender == 1, shiny: p.isShiny, egg: p.isEgg, size: c.maxWidth * 0.86),
+              SpeciesAvatar(species: p.species, form: p.form, game: p.dataGame, female: p.gender == 1, shiny: p.isShiny, egg: p.isEgg, size: c.maxWidth * 0.86),
               if (!p.isEgg && c.maxWidth > 56)
                 Positioned(
                   bottom: 2,

@@ -301,10 +301,10 @@ void main() {
         return _png;
       });
       final prio = SpriteCache.refsForParty([
-        (species: 445, shiny: true, egg: false),
-        (species: 906, shiny: false, egg: false),
-        (species: 445, shiny: false, egg: false),
-        (species: 1, shiny: false, egg: true),
+        (species: 445, form: 0, shiny: true, egg: false),
+        (species: 906, form: 0, shiny: false, egg: false),
+        (species: 445, form: 0, shiny: false, egg: false),
+        (species: 1, form: 0, shiny: false, egg: true),
       ]);
       expect(prio.map((r) => r.key), ['pokemon/sgarchomp', 'pokemon/ssprigatito', 'pokemon/xegg']);
       await cache.downloadAll(priority: prio, concurrency: 1, cancel: () => order.length >= 3);

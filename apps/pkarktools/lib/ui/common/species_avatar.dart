@@ -23,9 +23,13 @@ class SpeciesAvatar extends StatelessWidget {
     this.showNumber = false,
     this.form = 0,
     this.female = false,
+    this.game,
   });
 
   final int form;
+
+  /// Juego cuyos datos dan los tipos de la forma (null: el más reciente que la tenga).
+  final GameVersion? game;
 
   /// Hembra (algunas especies tienen sprite propio).
   final bool female;
@@ -41,10 +45,11 @@ class SpeciesAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final (t1, t2) = Species.types(species);
+    // Tipos de la forma en el juego: Decidueye de Hisui es Planta/Lucha.
+    final (t1, t2) = SpeciesForms.types(species, form, game);
     final c1 = TypePalette.of(t1);
     final c2 = t2 == PokemonType.none || t2 == t1 ? null : TypePalette.of(t2);
-    final name = speciesName(context, species);
+    final name = pokemonName(context, species, form, game);
     final initials = _initials(name);
     final radius = size * 0.3;
     final ink = GamePalette.onAccent(c2 == null ? c1 : Color.lerp(c1, c2, 0.35)!);

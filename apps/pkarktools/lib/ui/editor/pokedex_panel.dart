@@ -48,7 +48,7 @@ class _PokedexPanelState extends ConsumerState<PokedexPanel> {
   Future<void> _detail(Pokedex dex, DexEntry entry) async {
     final result = await showAdaptiveSheet<DexEntry>(
       context: context,
-      builder: (ctx) => _DexDetailDialog(dex: dex, entry: entry, accent: widget.accent),
+      builder: (ctx) => _DexDetailDialog(dex: dex, entry: entry, accent: widget.accent, game: widget.editor.game),
     );
     if (result != null && result != entry) _apply(PokedexEdit([result]));
   }
@@ -206,6 +206,7 @@ class _PokedexPanelState extends ConsumerState<PokedexPanel> {
                 crossAxisCount: cols, mainAxisExtent: 64, crossAxisSpacing: 8, mainAxisSpacing: 8),
             itemBuilder: (context, i) => _DexTile(
               entry: shown[i],
+              game: widget.editor.game,
               hasShiny: dex.hasShiny,
               accent: widget.accent,
               number: _region == null ? null : dex.regionalNumber(shown[i].species)?.$2,
@@ -284,6 +285,7 @@ class _DexMeter extends StatelessWidget {
 class _DexTile extends StatelessWidget {
   const _DexTile({
     required this.entry,
+    required this.game,
     required this.hasShiny,
     required this.accent,
     required this.onCycle,
@@ -293,6 +295,7 @@ class _DexTile extends StatelessWidget {
     this.research,
   });
   final DexEntry entry;
+  final GameVersion game;
   final bool hasShiny;
   final Color accent;
   final VoidCallback onCycle;
@@ -310,6 +313,7 @@ class _DexTile extends StatelessWidget {
     final l10n = context.l10n;
     final tokens = context.tokens;
     final e = entry;
+    final form = dexDisplayForm(e, game);
     final state = e.caught ? l10n.dexToggleCaught : (e.seen ? l10n.dexToggleSeen : '—');
     final bg = e.caught ? accent.withValues(alpha: 0.16) : (e.seen ? tokens.raised : tokens.sunken);
     final border = e.caught ? accent.withValues(alpha: 0.6) : (e.seen ? tokens.hairline : Colors.transparent);
@@ -333,7 +337,7 @@ class _DexTile extends StatelessWidget {
             child: Row(children: [
               Opacity(
                 opacity: e.seen ? 1 : 0.28,
-                child: SpeciesAvatar(species: e.species, shiny: e.shiny, size: narrow ? 36 : 44),
+                child: SpeciesAvatar(species: e.species, form: form, game: game, shiny: e.shiny, size: narrow ? 36 : 44),
               ),
               const SizedBox(width: 6),
               Expanded(
@@ -380,8 +384,9 @@ class _DexTile extends StatelessWidget {
 /// Detalle editable de una especie: visto/capturado, variocolor, géneros, formas
 /// e investigación (solo lectura, Leyendas Arceus).
 class _DexDetailDialog extends StatefulWidget {
-  const _DexDetailDialog({required this.dex, required this.entry, required this.accent});
+  const _DexDetailDialog({required this.dex, required this.entry, required this.accent, required this.game});
   final Pokedex dex;
+  final GameVersion game;
   final DexEntry entry;
   final Color accent;
 
@@ -408,6 +413,12 @@ class _DexDetailDialogState extends State<_DexDetailDialog> {
     final region = dex.regionalNumber(s);
     final research = dex.researchLevel(s);
     final forms = dex.formCount(s);
+    // Nombre de cada forma («Hisui», «Lavado»); sin nombre, «Forma n».
+    String formLabel(int f) {
+      final n = SpeciesForms.formName(s, f, widget.game, context.isSpanish ? DataLanguage.es : DataLanguage.en);
+      if (n.isNotEmpty) return n;
+      return f == 0 ? l10n.dexDetailFormBase : l10n.dexDetailForm('$f');
+    }
     Widget section(String title, Widget child) => Padding(
           padding: const EdgeInsets.only(top: 18),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -418,7 +429,7 @@ class _DexDetailDialogState extends State<_DexDetailDialog> {
           ]),
         );
     final header = Row(children: [
-        SpeciesAvatar(species: s, shiny: e.shiny, size: 56),
+        SpeciesAvatar(species: s, form: dexDisplayForm(e, widget.game), game: widget.game, shiny: e.shiny, size: 56),
         const SizedBox(width: 14),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -492,7 +503,7 @@ class _DexDetailDialogState extends State<_DexDetailDialog> {
                     Tooltip(
                       message: dex.formAvailable(s, f) ? '' : l10n.dexDetailFormUnavailable,
                       child: FilterChip(
-                        label: Text(f == 0 ? l10n.dexDetailFormBase : l10n.dexDetailForm('$f')),
+                        label: Text(formLabel(f)),
                         selected: e.formSeen(f),
                         selectedColor: widget.accent.withValues(alpha: 0.2),
                         onSelected: dex.formAvailable(s, f)
