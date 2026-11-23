@@ -1637,13 +1637,13 @@ abstract class AppLocalizations {
   /// No description provided for @dexFilterAll.
   ///
   /// In es, this message translates to:
-  /// **'Todas'**
+  /// **'Todos'**
   String get dexFilterAll;
 
   /// No description provided for @dexFilterMissing.
   ///
   /// In es, this message translates to:
-  /// **'Por capturar'**
+  /// **'Faltantes'**
   String get dexFilterMissing;
 
   /// No description provided for @dexFilterSeen.
@@ -1655,7 +1655,7 @@ abstract class AppLocalizations {
   /// No description provided for @dexFilterCaught.
   ///
   /// In es, this message translates to:
-  /// **'Capturadas'**
+  /// **'Capturados'**
   String get dexFilterCaught;
 
   /// No description provided for @dexSearch.
@@ -4218,6 +4218,600 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Reintentar'**
   String get updateRetry;
+
+  /// No description provided for @navDex.
+  ///
+  /// In es, this message translates to:
+  /// **'Dex'**
+  String get navDex;
+
+  /// No description provided for @dexSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'{caught} de {total} capturados · {saves} partidas'**
+  String dexSubtitle(String caught, String saves, String total);
+
+  /// No description provided for @dexSubtitleLiving.
+  ///
+  /// In es, this message translates to:
+  /// **'{caught} de {total} en tus cajas · {saves} partidas'**
+  String dexSubtitleLiving(String caught, String saves, String total);
+
+  /// No description provided for @dexEmptyTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu Dex está vacía'**
+  String get dexEmptyTitle;
+
+  /// No description provided for @dexEmptyBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Importa partidas al Arca: la Dex se llena con lo que tengas registrado o capturado en cualquiera de ellas.'**
+  String get dexEmptyBody;
+
+  /// No description provided for @dexStatCaught.
+  ///
+  /// In es, this message translates to:
+  /// **'Capturados'**
+  String get dexStatCaught;
+
+  /// No description provided for @dexStatSeen.
+  ///
+  /// In es, this message translates to:
+  /// **'Vistos'**
+  String get dexStatSeen;
+
+  /// No description provided for @dexStatShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor'**
+  String get dexStatShiny;
+
+  /// No description provided for @dexStatForms.
+  ///
+  /// In es, this message translates to:
+  /// **'Formas'**
+  String get dexStatForms;
+
+  /// No description provided for @dexStatOwned.
+  ///
+  /// In es, this message translates to:
+  /// **'En cajas'**
+  String get dexStatOwned;
+
+  /// No description provided for @dexSearchHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar por nombre o número'**
+  String get dexSearchHint;
+
+  /// No description provided for @dexFilterSeenOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo vistos'**
+  String get dexFilterSeenOnly;
+
+  /// No description provided for @dexFilterShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor'**
+  String get dexFilterShiny;
+
+  /// No description provided for @dexFilterLockedForms.
+  ///
+  /// In es, this message translates to:
+  /// **'Formas por desbloquear'**
+  String get dexFilterLockedForms;
+
+  /// No description provided for @dexFilterType.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo'**
+  String get dexFilterType;
+
+  /// No description provided for @dexFilterGeneration.
+  ///
+  /// In es, this message translates to:
+  /// **'Generación'**
+  String get dexFilterGeneration;
+
+  /// No description provided for @dexFilterGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Juego'**
+  String get dexFilterGame;
+
+  /// No description provided for @dexAnyType.
+  ///
+  /// In es, this message translates to:
+  /// **'Cualquier tipo'**
+  String get dexAnyType;
+
+  /// No description provided for @dexAnyGeneration.
+  ///
+  /// In es, this message translates to:
+  /// **'Todas las generaciones'**
+  String get dexAnyGeneration;
+
+  /// No description provided for @dexAnyGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos los juegos'**
+  String get dexAnyGame;
+
+  /// No description provided for @dexSortNumber.
+  ///
+  /// In es, this message translates to:
+  /// **'Por número'**
+  String get dexSortNumber;
+
+  /// No description provided for @dexSortName.
+  ///
+  /// In es, this message translates to:
+  /// **'Por nombre'**
+  String get dexSortName;
+
+  /// No description provided for @dexResults.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} especies'**
+  String dexResults(int count);
+
+  /// No description provided for @dexNoResults.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguna especie coincide con los filtros.'**
+  String get dexNoResults;
+
+  /// No description provided for @dexGenRegion.
+  ///
+  /// In es, this message translates to:
+  /// **'Gen. {gen} · {region}'**
+  String dexGenRegion(String gen, String region);
+
+  /// No description provided for @dexProgress.
+  ///
+  /// In es, this message translates to:
+  /// **'Progreso'**
+  String get dexProgress;
+
+  /// No description provided for @dexByGeneration.
+  ///
+  /// In es, this message translates to:
+  /// **'Por generación y región'**
+  String get dexByGeneration;
+
+  /// No description provided for @dexByGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Por juego'**
+  String get dexByGame;
+
+  /// No description provided for @dexGameLine.
+  ///
+  /// In es, this message translates to:
+  /// **'{caught} capturados · {seen} vistos de {available} · {count} partidas'**
+  String dexGameLine(String available, String caught, int count, String seen);
+
+  /// No description provided for @dexSettings.
+  ///
+  /// In es, this message translates to:
+  /// **'Ajustes de la Dex'**
+  String get dexSettings;
+
+  /// No description provided for @dexLivingTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Living dex'**
+  String get dexLivingTitle;
+
+  /// No description provided for @dexLivingBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuenta como capturada solo una especie que tengas en cajas o equipo en alguna partida, no solo registrada en su Pokédex. Así ves qué te falta de verdad.'**
+  String get dexLivingBody;
+
+  /// No description provided for @dexLivingBadge.
+  ///
+  /// In es, this message translates to:
+  /// **'Living dex'**
+  String get dexLivingBadge;
+
+  /// No description provided for @dexStatusCaught.
+  ///
+  /// In es, this message translates to:
+  /// **'Capturado'**
+  String get dexStatusCaught;
+
+  /// No description provided for @dexStatusSeen.
+  ///
+  /// In es, this message translates to:
+  /// **'Visto'**
+  String get dexStatusSeen;
+
+  /// No description provided for @dexStatusUnknown.
+  ///
+  /// In es, this message translates to:
+  /// **'No registrado'**
+  String get dexStatusUnknown;
+
+  /// No description provided for @dexStatusOwned.
+  ///
+  /// In es, this message translates to:
+  /// **'En tus cajas'**
+  String get dexStatusOwned;
+
+  /// No description provided for @dexBaseStats.
+  ///
+  /// In es, this message translates to:
+  /// **'Estadísticas base'**
+  String get dexBaseStats;
+
+  /// No description provided for @dexStatTotal.
+  ///
+  /// In es, this message translates to:
+  /// **'Total'**
+  String get dexStatTotal;
+
+  /// No description provided for @dexAbilities.
+  ///
+  /// In es, this message translates to:
+  /// **'Habilidades'**
+  String get dexAbilities;
+
+  /// No description provided for @dexHiddenAbility.
+  ///
+  /// In es, this message translates to:
+  /// **'oculta'**
+  String get dexHiddenAbility;
+
+  /// No description provided for @dexGender.
+  ///
+  /// In es, this message translates to:
+  /// **'Género'**
+  String get dexGender;
+
+  /// No description provided for @dexGenderless.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin género'**
+  String get dexGenderless;
+
+  /// No description provided for @dexGenderRatio.
+  ///
+  /// In es, this message translates to:
+  /// **'{male} % ♂ · {female} % ♀'**
+  String dexGenderRatio(String female, String male);
+
+  /// No description provided for @dexEvolution.
+  ///
+  /// In es, this message translates to:
+  /// **'Evolución'**
+  String get dexEvolution;
+
+  /// No description provided for @dexNoEvolution.
+  ///
+  /// In es, this message translates to:
+  /// **'No evoluciona.'**
+  String get dexNoEvolution;
+
+  /// No description provided for @dexForms.
+  ///
+  /// In es, this message translates to:
+  /// **'Formas'**
+  String get dexForms;
+
+  /// No description provided for @dexSpecialForms.
+  ///
+  /// In es, this message translates to:
+  /// **'Formas especiales'**
+  String get dexSpecialForms;
+
+  /// No description provided for @dexSpecialFormsHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Megaevoluciones, Gigamax y otras formas de combate. Se desbloquean con un ejemplar que las habilite en un juego donde existen; la variocolor, con uno variocolor.'**
+  String get dexSpecialFormsHint;
+
+  /// No description provided for @dexGames.
+  ///
+  /// In es, this message translates to:
+  /// **'Juegos donde está'**
+  String get dexGames;
+
+  /// No description provided for @dexRecords.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus registros'**
+  String get dexRecords;
+
+  /// No description provided for @dexRecordsEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguna partida la tiene registrada.'**
+  String get dexRecordsEmpty;
+
+  /// No description provided for @dexSpecimens.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus ejemplares'**
+  String get dexSpecimens;
+
+  /// No description provided for @dexSpecimensEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes ninguno en equipos ni cajas.'**
+  String get dexSpecimensEmpty;
+
+  /// No description provided for @dexInParty.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipo, posición {slot}'**
+  String dexInParty(String slot);
+
+  /// No description provided for @dexInBox.
+  ///
+  /// In es, this message translates to:
+  /// **'Caja {box}, hueco {slot}'**
+  String dexInBox(String box, String slot);
+
+  /// No description provided for @dexOpenInBox.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver en su caja'**
+  String get dexOpenInBox;
+
+  /// No description provided for @dexNormal.
+  ///
+  /// In es, this message translates to:
+  /// **'Normal'**
+  String get dexNormal;
+
+  /// No description provided for @dexShinyVariant.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor'**
+  String get dexShinyVariant;
+
+  /// No description provided for @dexUnlockedBy.
+  ///
+  /// In es, this message translates to:
+  /// **'{trainer} · {game}'**
+  String dexUnlockedBy(String game, String trainer);
+
+  /// No description provided for @dexLocked.
+  ///
+  /// In es, this message translates to:
+  /// **'Bloqueada'**
+  String get dexLocked;
+
+  /// No description provided for @dexHowMega.
+  ///
+  /// In es, this message translates to:
+  /// **'Ten un {species} en {games}.'**
+  String dexHowMega(String games, String species);
+
+  /// No description provided for @dexHowMegaForm.
+  ///
+  /// In es, this message translates to:
+  /// **'Ten un {species} ({form}) en {games}.'**
+  String dexHowMegaForm(String form, String games, String species);
+
+  /// No description provided for @dexHowGmax.
+  ///
+  /// In es, this message translates to:
+  /// **'Ten un {species} con factor Gigamax en Espada/Escudo.'**
+  String dexHowGmax(String species);
+
+  /// No description provided for @dexHowUltra.
+  ///
+  /// In es, this message translates to:
+  /// **'Ten un Necrozma fusionado (Melena Crepuscular o Alas del Alba) en Ultrasol/Ultraluna.'**
+  String get dexHowUltra;
+
+  /// No description provided for @dexHowShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'La variocolor necesita un ejemplar variocolor.'**
+  String get dexHowShiny;
+
+  /// No description provided for @dexItemInBag.
+  ///
+  /// In es, this message translates to:
+  /// **'{item} en la mochila: {where}'**
+  String dexItemInBag(String item, String where);
+
+  /// No description provided for @dexItemMissing.
+  ///
+  /// In es, this message translates to:
+  /// **'{item}: no está en la mochila de esas partidas'**
+  String dexItemMissing(String item);
+
+  /// No description provided for @dexGigantamax.
+  ///
+  /// In es, this message translates to:
+  /// **'Gigamax'**
+  String get dexGigantamax;
+
+  /// No description provided for @dexFormOwned.
+  ///
+  /// In es, this message translates to:
+  /// **'Tienes esta forma'**
+  String get dexFormOwned;
+
+  /// No description provided for @dexFormMissing.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin ejemplar'**
+  String get dexFormMissing;
+
+  /// No description provided for @dexEvoLevel.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel {level}'**
+  String dexEvoLevel(String level);
+
+  /// No description provided for @dexEvoLevelUp.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir de nivel'**
+  String get dexEvoLevelUp;
+
+  /// No description provided for @dexEvoFriendship.
+  ///
+  /// In es, this message translates to:
+  /// **'Amistad alta'**
+  String get dexEvoFriendship;
+
+  /// No description provided for @dexEvoFriendshipDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Amistad alta, de día'**
+  String get dexEvoFriendshipDay;
+
+  /// No description provided for @dexEvoFriendshipNight.
+  ///
+  /// In es, this message translates to:
+  /// **'Amistad alta, de noche'**
+  String get dexEvoFriendshipNight;
+
+  /// No description provided for @dexEvoTrade.
+  ///
+  /// In es, this message translates to:
+  /// **'Intercambio'**
+  String get dexEvoTrade;
+
+  /// No description provided for @dexEvoTradeItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Intercambio con {item}'**
+  String dexEvoTradeItem(String item);
+
+  /// No description provided for @dexEvoTradeWith.
+  ///
+  /// In es, this message translates to:
+  /// **'Intercambio por {species}'**
+  String dexEvoTradeWith(String species);
+
+  /// No description provided for @dexEvoItemMale.
+  ///
+  /// In es, this message translates to:
+  /// **'{item} (♂)'**
+  String dexEvoItemMale(String item);
+
+  /// No description provided for @dexEvoItemFemale.
+  ///
+  /// In es, this message translates to:
+  /// **'{item} (♀)'**
+  String dexEvoItemFemale(String item);
+
+  /// No description provided for @dexEvoLevelMale.
+  ///
+  /// In es, this message translates to:
+  /// **'{level} (♂)'**
+  String dexEvoLevelMale(String level);
+
+  /// No description provided for @dexEvoLevelFemale.
+  ///
+  /// In es, this message translates to:
+  /// **'{level} (♀)'**
+  String dexEvoLevelFemale(String level);
+
+  /// No description provided for @dexEvoDay.
+  ///
+  /// In es, this message translates to:
+  /// **'{level}, de día'**
+  String dexEvoDay(String level);
+
+  /// No description provided for @dexEvoNight.
+  ///
+  /// In es, this message translates to:
+  /// **'{level}, de noche'**
+  String dexEvoNight(String level);
+
+  /// No description provided for @dexEvoDusk.
+  ///
+  /// In es, this message translates to:
+  /// **'{level}, al atardecer'**
+  String dexEvoDusk(String level);
+
+  /// No description provided for @dexEvoHeldDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir de nivel con {item}, de día'**
+  String dexEvoHeldDay(String item);
+
+  /// No description provided for @dexEvoHeldNight.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir de nivel con {item}, de noche'**
+  String dexEvoHeldNight(String item);
+
+  /// No description provided for @dexEvoKnowMove.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir de nivel sabiendo {move}'**
+  String dexEvoKnowMove(String move);
+
+  /// No description provided for @dexEvoMoveType.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir de nivel con un movimiento de tipo {type}'**
+  String dexEvoMoveType(String type);
+
+  /// No description provided for @dexEvoTeammate.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir de nivel con {species} en el equipo'**
+  String dexEvoTeammate(String species);
+
+  /// No description provided for @dexEvoLocation.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir de nivel en un lugar concreto'**
+  String get dexEvoLocation;
+
+  /// No description provided for @dexEvoStats.
+  ///
+  /// In es, this message translates to:
+  /// **'{level}, según Ataque y Defensa'**
+  String dexEvoStats(String level);
+
+  /// No description provided for @dexEvoRandom.
+  ///
+  /// In es, this message translates to:
+  /// **'{level} (al azar)'**
+  String dexEvoRandom(String level);
+
+  /// No description provided for @dexEvoOther.
+  ///
+  /// In es, this message translates to:
+  /// **'Método especial'**
+  String get dexEvoOther;
+
+  /// No description provided for @dexPrev.
+  ///
+  /// In es, this message translates to:
+  /// **'Anterior'**
+  String get dexPrev;
+
+  /// No description provided for @dexNext.
+  ///
+  /// In es, this message translates to:
+  /// **'Siguiente'**
+  String get dexNext;
+
+  /// No description provided for @dexFormsCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} formas'**
+  String dexFormsCount(int count);
+
+  /// No description provided for @dexLockedCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} por desbloquear'**
+  String dexLockedCount(int count);
 }
 
 class _AppLocalizationsDelegate

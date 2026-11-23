@@ -602,10 +602,10 @@
   "dexSeen": "Vistos",
   "dexCaught": "Capturados",
   "dexShiny": "Variocolor vistos",
-  "dexFilterAll": "Todas",
-  "dexFilterMissing": "Por capturar",
+  "dexFilterAll": "Todos",
+  "dexFilterMissing": "Faltantes",
   "dexFilterSeen": "Solo vistas",
-  "dexFilterCaught": "Capturadas",
+  "dexFilterCaught": "Capturados",
   "dexSearch": "Buscar por nombre o número",
   "dexComplete": "Completar",
   "dexCompleteShiny": "Completar con variocolor",
@@ -1766,5 +1766,380 @@
   "updateErrorStorage": "No se pudo guardar la descarga (¿falta espacio?).",
   "updateErrorPermission": "Falta el permiso para instalar apps de esta fuente.",
   "updateNoAsset": "Este release no tiene descarga para tu sistema.",
-  "updateRetry": "Reintentar"
+  "updateRetry": "Reintentar",
+  "navDex": "Dex",
+  "dexSubtitle": "{caught} de {total} capturados · {saves} partidas",
+  "@dexSubtitle": {
+    "placeholders": {
+      "caught": {
+        "type": "String"
+      },
+      "saves": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "dexSubtitleLiving": "{caught} de {total} en tus cajas · {saves} partidas",
+  "@dexSubtitleLiving": {
+    "placeholders": {
+      "caught": {
+        "type": "String"
+      },
+      "saves": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEmptyTitle": "Tu Dex está vacía",
+  "dexEmptyBody": "Importa partidas al Arca: la Dex se llena con lo que tengas registrado o capturado en cualquiera de ellas.",
+  "dexStatCaught": "Capturados",
+  "dexStatSeen": "Vistos",
+  "dexStatShiny": "Variocolor",
+  "dexStatForms": "Formas",
+  "dexStatOwned": "En cajas",
+  "dexSearchHint": "Buscar por nombre o número",
+  "dexFilterSeenOnly": "Solo vistos",
+  "dexFilterShiny": "Variocolor",
+  "dexFilterLockedForms": "Formas por desbloquear",
+  "dexFilterType": "Tipo",
+  "dexFilterGeneration": "Generación",
+  "dexFilterGame": "Juego",
+  "dexAnyType": "Cualquier tipo",
+  "dexAnyGeneration": "Todas las generaciones",
+  "dexAnyGame": "Todos los juegos",
+  "dexSortNumber": "Por número",
+  "dexSortName": "Por nombre",
+  "dexResults": "{count} especies",
+  "@dexResults": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dexNoResults": "Ninguna especie coincide con los filtros.",
+  "dexGenRegion": "Gen. {gen} · {region}",
+  "@dexGenRegion": {
+    "placeholders": {
+      "gen": {
+        "type": "String"
+      },
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "dexProgress": "Progreso",
+  "dexByGeneration": "Por generación y región",
+  "dexByGame": "Por juego",
+  "dexGameLine": "{caught} capturados · {seen} vistos de {available} · {count} partidas",
+  "@dexGameLine": {
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "caught": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "seen": {
+        "type": "String"
+      }
+    }
+  },
+  "dexSettings": "Ajustes de la Dex",
+  "dexLivingTitle": "Living dex",
+  "dexLivingBody": "Cuenta como capturada solo una especie que tengas en cajas o equipo en alguna partida, no solo registrada en su Pokédex. Así ves qué te falta de verdad.",
+  "dexLivingBadge": "Living dex",
+  "dexStatusCaught": "Capturado",
+  "dexStatusSeen": "Visto",
+  "dexStatusUnknown": "No registrado",
+  "dexStatusOwned": "En tus cajas",
+  "dexBaseStats": "Estadísticas base",
+  "dexStatTotal": "Total",
+  "dexAbilities": "Habilidades",
+  "dexHiddenAbility": "oculta",
+  "dexGender": "Género",
+  "dexGenderless": "Sin género",
+  "dexGenderRatio": "{male} % ♂ · {female} % ♀",
+  "@dexGenderRatio": {
+    "placeholders": {
+      "female": {
+        "type": "String"
+      },
+      "male": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvolution": "Evolución",
+  "dexNoEvolution": "No evoluciona.",
+  "dexForms": "Formas",
+  "dexSpecialForms": "Formas especiales",
+  "dexSpecialFormsHint": "Megaevoluciones, Gigamax y otras formas de combate. Se desbloquean con un ejemplar que las habilite en un juego donde existen; la variocolor, con uno variocolor.",
+  "dexGames": "Juegos donde está",
+  "dexRecords": "Tus registros",
+  "dexRecordsEmpty": "Ninguna partida la tiene registrada.",
+  "dexSpecimens": "Tus ejemplares",
+  "dexSpecimensEmpty": "No tienes ninguno en equipos ni cajas.",
+  "dexInParty": "Equipo, posición {slot}",
+  "@dexInParty": {
+    "placeholders": {
+      "slot": {
+        "type": "String"
+      }
+    }
+  },
+  "dexInBox": "Caja {box}, hueco {slot}",
+  "@dexInBox": {
+    "placeholders": {
+      "box": {
+        "type": "String"
+      },
+      "slot": {
+        "type": "String"
+      }
+    }
+  },
+  "dexOpenInBox": "Ver en su caja",
+  "dexNormal": "Normal",
+  "dexShinyVariant": "Variocolor",
+  "dexUnlockedBy": "{trainer} · {game}",
+  "@dexUnlockedBy": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      },
+      "trainer": {
+        "type": "String"
+      }
+    }
+  },
+  "dexLocked": "Bloqueada",
+  "dexHowMega": "Ten un {species} en {games}.",
+  "@dexHowMega": {
+    "placeholders": {
+      "games": {
+        "type": "String"
+      },
+      "species": {
+        "type": "String"
+      }
+    }
+  },
+  "dexHowMegaForm": "Ten un {species} ({form}) en {games}.",
+  "@dexHowMegaForm": {
+    "placeholders": {
+      "form": {
+        "type": "String"
+      },
+      "games": {
+        "type": "String"
+      },
+      "species": {
+        "type": "String"
+      }
+    }
+  },
+  "dexHowGmax": "Ten un {species} con factor Gigamax en Espada/Escudo.",
+  "@dexHowGmax": {
+    "placeholders": {
+      "species": {
+        "type": "String"
+      }
+    }
+  },
+  "dexHowUltra": "Ten un Necrozma fusionado (Melena Crepuscular o Alas del Alba) en Ultrasol/Ultraluna.",
+  "dexHowShiny": "La variocolor necesita un ejemplar variocolor.",
+  "dexItemInBag": "{item} en la mochila: {where}",
+  "@dexItemInBag": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "where": {
+        "type": "String"
+      }
+    }
+  },
+  "dexItemMissing": "{item}: no está en la mochila de esas partidas",
+  "@dexItemMissing": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "dexGigantamax": "Gigamax",
+  "dexFormOwned": "Tienes esta forma",
+  "dexFormMissing": "Sin ejemplar",
+  "dexEvoLevel": "Nivel {level}",
+  "@dexEvoLevel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoLevelUp": "Subir de nivel",
+  "dexEvoFriendship": "Amistad alta",
+  "dexEvoFriendshipDay": "Amistad alta, de día",
+  "dexEvoFriendshipNight": "Amistad alta, de noche",
+  "dexEvoTrade": "Intercambio",
+  "dexEvoTradeItem": "Intercambio con {item}",
+  "@dexEvoTradeItem": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoTradeWith": "Intercambio por {species}",
+  "@dexEvoTradeWith": {
+    "placeholders": {
+      "species": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoItemMale": "{item} (♂)",
+  "@dexEvoItemMale": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoItemFemale": "{item} (♀)",
+  "@dexEvoItemFemale": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoLevelMale": "{level} (♂)",
+  "@dexEvoLevelMale": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoLevelFemale": "{level} (♀)",
+  "@dexEvoLevelFemale": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoDay": "{level}, de día",
+  "@dexEvoDay": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoNight": "{level}, de noche",
+  "@dexEvoNight": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoDusk": "{level}, al atardecer",
+  "@dexEvoDusk": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoHeldDay": "Subir de nivel con {item}, de día",
+  "@dexEvoHeldDay": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoHeldNight": "Subir de nivel con {item}, de noche",
+  "@dexEvoHeldNight": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoKnowMove": "Subir de nivel sabiendo {move}",
+  "@dexEvoKnowMove": {
+    "placeholders": {
+      "move": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoMoveType": "Subir de nivel con un movimiento de tipo {type}",
+  "@dexEvoMoveType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoTeammate": "Subir de nivel con {species} en el equipo",
+  "@dexEvoTeammate": {
+    "placeholders": {
+      "species": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoLocation": "Subir de nivel en un lugar concreto",
+  "dexEvoStats": "{level}, según Ataque y Defensa",
+  "@dexEvoStats": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoRandom": "{level} (al azar)",
+  "@dexEvoRandom": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEvoOther": "Método especial",
+  "dexPrev": "Anterior",
+  "dexNext": "Siguiente",
+  "dexFormsCount": "{count} formas",
+  "@dexFormsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dexLockedCount": "{count} por desbloquear",
+  "@dexLockedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

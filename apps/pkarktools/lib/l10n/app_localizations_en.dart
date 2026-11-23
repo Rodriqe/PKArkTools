@@ -970,7 +970,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dexFilterAll => 'All';
 
   @override
-  String get dexFilterMissing => 'Not caught';
+  String get dexFilterMissing => 'Missing';
 
   @override
   String get dexFilterSeen => 'Seen only';
@@ -2595,4 +2595,371 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateRetry => 'Retry';
+
+  @override
+  String get navDex => 'Dex';
+
+  @override
+  String dexSubtitle(String caught, String saves, String total) {
+    return '$caught of $total caught · $saves saves';
+  }
+
+  @override
+  String dexSubtitleLiving(String caught, String saves, String total) {
+    return '$caught of $total in your boxes · $saves saves';
+  }
+
+  @override
+  String get dexEmptyTitle => 'Your Dex is empty';
+
+  @override
+  String get dexEmptyBody =>
+      'Import saves into the Ark: the Dex fills in with everything registered or caught in any of them.';
+
+  @override
+  String get dexStatCaught => 'Caught';
+
+  @override
+  String get dexStatSeen => 'Seen';
+
+  @override
+  String get dexStatShiny => 'Shiny';
+
+  @override
+  String get dexStatForms => 'Forms';
+
+  @override
+  String get dexStatOwned => 'In boxes';
+
+  @override
+  String get dexSearchHint => 'Search by name or number';
+
+  @override
+  String get dexFilterSeenOnly => 'Seen only';
+
+  @override
+  String get dexFilterShiny => 'Shiny';
+
+  @override
+  String get dexFilterLockedForms => 'Forms to unlock';
+
+  @override
+  String get dexFilterType => 'Type';
+
+  @override
+  String get dexFilterGeneration => 'Generation';
+
+  @override
+  String get dexFilterGame => 'Game';
+
+  @override
+  String get dexAnyType => 'Any type';
+
+  @override
+  String get dexAnyGeneration => 'All generations';
+
+  @override
+  String get dexAnyGame => 'All games';
+
+  @override
+  String get dexSortNumber => 'By number';
+
+  @override
+  String get dexSortName => 'By name';
+
+  @override
+  String dexResults(int count) {
+    return '$count species';
+  }
+
+  @override
+  String get dexNoResults => 'No species match the filters.';
+
+  @override
+  String dexGenRegion(String gen, String region) {
+    return 'Gen $gen · $region';
+  }
+
+  @override
+  String get dexProgress => 'Progress';
+
+  @override
+  String get dexByGeneration => 'By generation and region';
+
+  @override
+  String get dexByGame => 'By game';
+
+  @override
+  String dexGameLine(String available, String caught, int count, String seen) {
+    return '$caught caught · $seen seen of $available · $count saves';
+  }
+
+  @override
+  String get dexSettings => 'Dex settings';
+
+  @override
+  String get dexLivingTitle => 'Living dex';
+
+  @override
+  String get dexLivingBody =>
+      'Counts a species as caught only if you have one in a box or team in some save, not just registered in its Pokédex. Shows what you are really missing.';
+
+  @override
+  String get dexLivingBadge => 'Living dex';
+
+  @override
+  String get dexStatusCaught => 'Caught';
+
+  @override
+  String get dexStatusSeen => 'Seen';
+
+  @override
+  String get dexStatusUnknown => 'Not registered';
+
+  @override
+  String get dexStatusOwned => 'In your boxes';
+
+  @override
+  String get dexBaseStats => 'Base stats';
+
+  @override
+  String get dexStatTotal => 'Total';
+
+  @override
+  String get dexAbilities => 'Abilities';
+
+  @override
+  String get dexHiddenAbility => 'hidden';
+
+  @override
+  String get dexGender => 'Gender';
+
+  @override
+  String get dexGenderless => 'Genderless';
+
+  @override
+  String dexGenderRatio(String female, String male) {
+    return '$male% ♂ · $female% ♀';
+  }
+
+  @override
+  String get dexEvolution => 'Evolution';
+
+  @override
+  String get dexNoEvolution => 'Does not evolve.';
+
+  @override
+  String get dexForms => 'Forms';
+
+  @override
+  String get dexSpecialForms => 'Special forms';
+
+  @override
+  String get dexSpecialFormsHint =>
+      'Mega Evolutions, Gigantamax and other battle forms. Unlocked by a specimen that enables them in a game where they exist; the shiny one, by a shiny specimen.';
+
+  @override
+  String get dexGames => 'Games it appears in';
+
+  @override
+  String get dexRecords => 'Your records';
+
+  @override
+  String get dexRecordsEmpty => 'No save has it registered.';
+
+  @override
+  String get dexSpecimens => 'Your specimens';
+
+  @override
+  String get dexSpecimensEmpty => 'You have none in teams or boxes.';
+
+  @override
+  String dexInParty(String slot) {
+    return 'Team, slot $slot';
+  }
+
+  @override
+  String dexInBox(String box, String slot) {
+    return 'Box $box, slot $slot';
+  }
+
+  @override
+  String get dexOpenInBox => 'Show in its box';
+
+  @override
+  String get dexNormal => 'Normal';
+
+  @override
+  String get dexShinyVariant => 'Shiny';
+
+  @override
+  String dexUnlockedBy(String game, String trainer) {
+    return '$trainer · $game';
+  }
+
+  @override
+  String get dexLocked => 'Locked';
+
+  @override
+  String dexHowMega(String games, String species) {
+    return 'Have a $species in $games.';
+  }
+
+  @override
+  String dexHowMegaForm(String form, String games, String species) {
+    return 'Have a $species ($form) in $games.';
+  }
+
+  @override
+  String dexHowGmax(String species) {
+    return 'Have a $species with the Gigantamax Factor in Sword/Shield.';
+  }
+
+  @override
+  String get dexHowUltra =>
+      'Have a fused Necrozma (Dusk Mane or Dawn Wings) in Ultra Sun/Ultra Moon.';
+
+  @override
+  String get dexHowShiny => 'The shiny one needs a shiny specimen.';
+
+  @override
+  String dexItemInBag(String item, String where) {
+    return '$item in the bag: $where';
+  }
+
+  @override
+  String dexItemMissing(String item) {
+    return '$item: not in the bag of those saves';
+  }
+
+  @override
+  String get dexGigantamax => 'Gigantamax';
+
+  @override
+  String get dexFormOwned => 'You have this form';
+
+  @override
+  String get dexFormMissing => 'No specimen';
+
+  @override
+  String dexEvoLevel(String level) {
+    return 'Level $level';
+  }
+
+  @override
+  String get dexEvoLevelUp => 'Level up';
+
+  @override
+  String get dexEvoFriendship => 'High friendship';
+
+  @override
+  String get dexEvoFriendshipDay => 'High friendship, daytime';
+
+  @override
+  String get dexEvoFriendshipNight => 'High friendship, nighttime';
+
+  @override
+  String get dexEvoTrade => 'Trade';
+
+  @override
+  String dexEvoTradeItem(String item) {
+    return 'Trade holding $item';
+  }
+
+  @override
+  String dexEvoTradeWith(String species) {
+    return 'Trade for $species';
+  }
+
+  @override
+  String dexEvoItemMale(String item) {
+    return '$item (♂)';
+  }
+
+  @override
+  String dexEvoItemFemale(String item) {
+    return '$item (♀)';
+  }
+
+  @override
+  String dexEvoLevelMale(String level) {
+    return '$level (♂)';
+  }
+
+  @override
+  String dexEvoLevelFemale(String level) {
+    return '$level (♀)';
+  }
+
+  @override
+  String dexEvoDay(String level) {
+    return '$level, daytime';
+  }
+
+  @override
+  String dexEvoNight(String level) {
+    return '$level, nighttime';
+  }
+
+  @override
+  String dexEvoDusk(String level) {
+    return '$level, at dusk';
+  }
+
+  @override
+  String dexEvoHeldDay(String item) {
+    return 'Level up holding $item, daytime';
+  }
+
+  @override
+  String dexEvoHeldNight(String item) {
+    return 'Level up holding $item, nighttime';
+  }
+
+  @override
+  String dexEvoKnowMove(String move) {
+    return 'Level up knowing $move';
+  }
+
+  @override
+  String dexEvoMoveType(String type) {
+    return 'Level up knowing a $type-type move';
+  }
+
+  @override
+  String dexEvoTeammate(String species) {
+    return 'Level up with $species in the team';
+  }
+
+  @override
+  String get dexEvoLocation => 'Level up at a special location';
+
+  @override
+  String dexEvoStats(String level) {
+    return '$level, depending on Attack and Defense';
+  }
+
+  @override
+  String dexEvoRandom(String level) {
+    return '$level (random)';
+  }
+
+  @override
+  String get dexEvoOther => 'Special method';
+
+  @override
+  String get dexPrev => 'Previous';
+
+  @override
+  String get dexNext => 'Next';
+
+  @override
+  String dexFormsCount(int count) {
+    return '$count forms';
+  }
+
+  @override
+  String dexLockedCount(int count) {
+    return '$count to unlock';
+  }
 }

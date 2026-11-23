@@ -967,16 +967,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dexShiny => 'Variocolor vistos';
 
   @override
-  String get dexFilterAll => 'Todas';
+  String get dexFilterAll => 'Todos';
 
   @override
-  String get dexFilterMissing => 'Por capturar';
+  String get dexFilterMissing => 'Faltantes';
 
   @override
   String get dexFilterSeen => 'Solo vistas';
 
   @override
-  String get dexFilterCaught => 'Capturadas';
+  String get dexFilterCaught => 'Capturados';
 
   @override
   String get dexSearch => 'Buscar por nombre o número';
@@ -2618,4 +2618,371 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get updateRetry => 'Reintentar';
+
+  @override
+  String get navDex => 'Dex';
+
+  @override
+  String dexSubtitle(String caught, String saves, String total) {
+    return '$caught de $total capturados · $saves partidas';
+  }
+
+  @override
+  String dexSubtitleLiving(String caught, String saves, String total) {
+    return '$caught de $total en tus cajas · $saves partidas';
+  }
+
+  @override
+  String get dexEmptyTitle => 'Tu Dex está vacía';
+
+  @override
+  String get dexEmptyBody =>
+      'Importa partidas al Arca: la Dex se llena con lo que tengas registrado o capturado en cualquiera de ellas.';
+
+  @override
+  String get dexStatCaught => 'Capturados';
+
+  @override
+  String get dexStatSeen => 'Vistos';
+
+  @override
+  String get dexStatShiny => 'Variocolor';
+
+  @override
+  String get dexStatForms => 'Formas';
+
+  @override
+  String get dexStatOwned => 'En cajas';
+
+  @override
+  String get dexSearchHint => 'Buscar por nombre o número';
+
+  @override
+  String get dexFilterSeenOnly => 'Solo vistos';
+
+  @override
+  String get dexFilterShiny => 'Variocolor';
+
+  @override
+  String get dexFilterLockedForms => 'Formas por desbloquear';
+
+  @override
+  String get dexFilterType => 'Tipo';
+
+  @override
+  String get dexFilterGeneration => 'Generación';
+
+  @override
+  String get dexFilterGame => 'Juego';
+
+  @override
+  String get dexAnyType => 'Cualquier tipo';
+
+  @override
+  String get dexAnyGeneration => 'Todas las generaciones';
+
+  @override
+  String get dexAnyGame => 'Todos los juegos';
+
+  @override
+  String get dexSortNumber => 'Por número';
+
+  @override
+  String get dexSortName => 'Por nombre';
+
+  @override
+  String dexResults(int count) {
+    return '$count especies';
+  }
+
+  @override
+  String get dexNoResults => 'Ninguna especie coincide con los filtros.';
+
+  @override
+  String dexGenRegion(String gen, String region) {
+    return 'Gen. $gen · $region';
+  }
+
+  @override
+  String get dexProgress => 'Progreso';
+
+  @override
+  String get dexByGeneration => 'Por generación y región';
+
+  @override
+  String get dexByGame => 'Por juego';
+
+  @override
+  String dexGameLine(String available, String caught, int count, String seen) {
+    return '$caught capturados · $seen vistos de $available · $count partidas';
+  }
+
+  @override
+  String get dexSettings => 'Ajustes de la Dex';
+
+  @override
+  String get dexLivingTitle => 'Living dex';
+
+  @override
+  String get dexLivingBody =>
+      'Cuenta como capturada solo una especie que tengas en cajas o equipo en alguna partida, no solo registrada en su Pokédex. Así ves qué te falta de verdad.';
+
+  @override
+  String get dexLivingBadge => 'Living dex';
+
+  @override
+  String get dexStatusCaught => 'Capturado';
+
+  @override
+  String get dexStatusSeen => 'Visto';
+
+  @override
+  String get dexStatusUnknown => 'No registrado';
+
+  @override
+  String get dexStatusOwned => 'En tus cajas';
+
+  @override
+  String get dexBaseStats => 'Estadísticas base';
+
+  @override
+  String get dexStatTotal => 'Total';
+
+  @override
+  String get dexAbilities => 'Habilidades';
+
+  @override
+  String get dexHiddenAbility => 'oculta';
+
+  @override
+  String get dexGender => 'Género';
+
+  @override
+  String get dexGenderless => 'Sin género';
+
+  @override
+  String dexGenderRatio(String female, String male) {
+    return '$male % ♂ · $female % ♀';
+  }
+
+  @override
+  String get dexEvolution => 'Evolución';
+
+  @override
+  String get dexNoEvolution => 'No evoluciona.';
+
+  @override
+  String get dexForms => 'Formas';
+
+  @override
+  String get dexSpecialForms => 'Formas especiales';
+
+  @override
+  String get dexSpecialFormsHint =>
+      'Megaevoluciones, Gigamax y otras formas de combate. Se desbloquean con un ejemplar que las habilite en un juego donde existen; la variocolor, con uno variocolor.';
+
+  @override
+  String get dexGames => 'Juegos donde está';
+
+  @override
+  String get dexRecords => 'Tus registros';
+
+  @override
+  String get dexRecordsEmpty => 'Ninguna partida la tiene registrada.';
+
+  @override
+  String get dexSpecimens => 'Tus ejemplares';
+
+  @override
+  String get dexSpecimensEmpty => 'No tienes ninguno en equipos ni cajas.';
+
+  @override
+  String dexInParty(String slot) {
+    return 'Equipo, posición $slot';
+  }
+
+  @override
+  String dexInBox(String box, String slot) {
+    return 'Caja $box, hueco $slot';
+  }
+
+  @override
+  String get dexOpenInBox => 'Ver en su caja';
+
+  @override
+  String get dexNormal => 'Normal';
+
+  @override
+  String get dexShinyVariant => 'Variocolor';
+
+  @override
+  String dexUnlockedBy(String game, String trainer) {
+    return '$trainer · $game';
+  }
+
+  @override
+  String get dexLocked => 'Bloqueada';
+
+  @override
+  String dexHowMega(String games, String species) {
+    return 'Ten un $species en $games.';
+  }
+
+  @override
+  String dexHowMegaForm(String form, String games, String species) {
+    return 'Ten un $species ($form) en $games.';
+  }
+
+  @override
+  String dexHowGmax(String species) {
+    return 'Ten un $species con factor Gigamax en Espada/Escudo.';
+  }
+
+  @override
+  String get dexHowUltra =>
+      'Ten un Necrozma fusionado (Melena Crepuscular o Alas del Alba) en Ultrasol/Ultraluna.';
+
+  @override
+  String get dexHowShiny => 'La variocolor necesita un ejemplar variocolor.';
+
+  @override
+  String dexItemInBag(String item, String where) {
+    return '$item en la mochila: $where';
+  }
+
+  @override
+  String dexItemMissing(String item) {
+    return '$item: no está en la mochila de esas partidas';
+  }
+
+  @override
+  String get dexGigantamax => 'Gigamax';
+
+  @override
+  String get dexFormOwned => 'Tienes esta forma';
+
+  @override
+  String get dexFormMissing => 'Sin ejemplar';
+
+  @override
+  String dexEvoLevel(String level) {
+    return 'Nivel $level';
+  }
+
+  @override
+  String get dexEvoLevelUp => 'Subir de nivel';
+
+  @override
+  String get dexEvoFriendship => 'Amistad alta';
+
+  @override
+  String get dexEvoFriendshipDay => 'Amistad alta, de día';
+
+  @override
+  String get dexEvoFriendshipNight => 'Amistad alta, de noche';
+
+  @override
+  String get dexEvoTrade => 'Intercambio';
+
+  @override
+  String dexEvoTradeItem(String item) {
+    return 'Intercambio con $item';
+  }
+
+  @override
+  String dexEvoTradeWith(String species) {
+    return 'Intercambio por $species';
+  }
+
+  @override
+  String dexEvoItemMale(String item) {
+    return '$item (♂)';
+  }
+
+  @override
+  String dexEvoItemFemale(String item) {
+    return '$item (♀)';
+  }
+
+  @override
+  String dexEvoLevelMale(String level) {
+    return '$level (♂)';
+  }
+
+  @override
+  String dexEvoLevelFemale(String level) {
+    return '$level (♀)';
+  }
+
+  @override
+  String dexEvoDay(String level) {
+    return '$level, de día';
+  }
+
+  @override
+  String dexEvoNight(String level) {
+    return '$level, de noche';
+  }
+
+  @override
+  String dexEvoDusk(String level) {
+    return '$level, al atardecer';
+  }
+
+  @override
+  String dexEvoHeldDay(String item) {
+    return 'Subir de nivel con $item, de día';
+  }
+
+  @override
+  String dexEvoHeldNight(String item) {
+    return 'Subir de nivel con $item, de noche';
+  }
+
+  @override
+  String dexEvoKnowMove(String move) {
+    return 'Subir de nivel sabiendo $move';
+  }
+
+  @override
+  String dexEvoMoveType(String type) {
+    return 'Subir de nivel con un movimiento de tipo $type';
+  }
+
+  @override
+  String dexEvoTeammate(String species) {
+    return 'Subir de nivel con $species en el equipo';
+  }
+
+  @override
+  String get dexEvoLocation => 'Subir de nivel en un lugar concreto';
+
+  @override
+  String dexEvoStats(String level) {
+    return '$level, según Ataque y Defensa';
+  }
+
+  @override
+  String dexEvoRandom(String level) {
+    return '$level (al azar)';
+  }
+
+  @override
+  String get dexEvoOther => 'Método especial';
+
+  @override
+  String get dexPrev => 'Anterior';
+
+  @override
+  String get dexNext => 'Siguiente';
+
+  @override
+  String dexFormsCount(int count) {
+    return '$count formas';
+  }
+
+  @override
+  String dexLockedCount(int count) {
+    return '$count por desbloquear';
+  }
 }
