@@ -85,6 +85,9 @@ class MainSyncReport {
   /// el historial).
   int conflictsCleaned = 0;
 
+  /// Rutas de esas copias de conflicto retiradas.
+  final Set<String> cleanedPaths = {};
+
   /// Archivos sueltos que no son principales ni copias de conflicto ya
   /// conocidas (se ofrecen para adoptar).
   final List<FsEntry> loose = [];
@@ -218,6 +221,7 @@ abstract final class ArcaMainFiles {
             await folder.delete(e.path);
             hashes.remove(e.path);
             report.conflictsCleaned++;
+            report.cleanedPaths.add(e.path);
             claimed.add(e.path);
           }
         } catch (_) {

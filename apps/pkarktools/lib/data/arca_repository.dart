@@ -166,6 +166,14 @@ class ReindexReport {
   /// el historial).
   int conflictsCleaned = 0;
 
+  /// Copias de conflicto de la nube que siguen en la carpeta (las del
+  /// principal con contenido desconocido van en [loose]).
+  List<FsEntry> conflicts = const [];
+
+  /// Todos los archivos de la carpeta (ruta → tamaño y fecha), para la clave
+  /// con la que se ignora un problema.
+  Map<String, FsEntry> entries = const {};
+
   /// Copias del diseño anterior movidas a `historial/` en este reindexado.
   MigrationResult? historyMigration;
 
@@ -569,6 +577,7 @@ class ArcaRepository {
           await (db.update(db.snapshots)..where((s) => s.id.equals(row.id))).write(SnapshotsCompanion(problem: Value(problem)));
         }
         if (problem == 'size') report.issues.add(ArcaIssue(ArcaIssueKind.sizeMismatch, rel));
+        if (problem == 'hash') report.issues.add(ArcaIssue(ArcaIssueKind.hashMismatch, rel));
         continue;
       }
       try {
@@ -656,10 +665,16 @@ class ArcaRepository {
     }
     final mains = await ArcaMainFiles.sync(
         folder: folder, listing: listing, history: history, cache: _mainHashes, knownShas: {for (final r in indexed.values) r.sha256});
+    final looseNow = {for (final e in mains.loose) e.path};
     report
       ..mains = mains.mains
       ..conflictsCleaned = mains.conflictsCleaned
-      ..loose = mains.loose;
+      ..loose = mains.loose
+      ..entries = listing.entries
+      ..conflicts = [
+        for (final c in listing.conflicts)
+          if (!mains.cleanedPaths.contains(c.path) && !looseNow.contains(c.path)) c,
+      ];
     await _processInbox(report);
     return report;
   }
