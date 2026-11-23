@@ -57,6 +57,10 @@ class FolderListing {
   /// Copias de conflicto de la nube (se ignoran, pero el reindexado retira
   /// las del archivo principal cuyo contenido ya está en el historial).
   final List<FsEntry> conflicts = [];
+
+  /// Todos los archivos listados (ruta relativa → entrada), para saber el
+  /// tamaño y la fecha de cualquier archivo con problema.
+  final Map<String, FsEntry> entries = {};
 }
 
 /// La carpeta del Arca: layout + acceso a archivos.
@@ -185,6 +189,7 @@ class ArcaFolder {
       final rel = prefix.isEmpty ? e.path : e.path.substring(prefix.length + 1);
       byPath[rel] = FsEntry(rel, e.size, e.modified);
     }
+    out.entries.addAll(byPath);
     final sidecars = <String>{};
     final saves = <String, FsEntry>{};
     for (final e in byPath.values) {
@@ -197,6 +202,8 @@ class ArcaFolder {
       }
       if (ArcaGameFolders.isGameReadme(rel)) continue;
       final reason = ArcaLayout.ignoreReason(rel);
+      // Lo apartado por «Arreglar» no cuenta para nada.
+      if (reason == IgnoreReason.quarantined) continue;
       if (reason != null) {
         out.ignored.update(reason, (v) => v + 1, ifAbsent: () => 1);
         if (reason == IgnoreReason.cloudPlaceholder) out.placeholders.add(rel);

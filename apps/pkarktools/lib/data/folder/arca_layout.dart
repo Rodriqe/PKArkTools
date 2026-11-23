@@ -29,6 +29,16 @@ abstract final class ArcaLayout {
   static const sidecarExt = '.json';
   static const schema = 'pkarktools-snapshot';
 
+  /// Esquemas anteriores al cambio de nombre de la app (PokeSavTool): mismo
+  /// formato, se leen igual y se reescriben con [schema] al migrar o arreglar.
+  static const legacySchemas = {'pokesavtool-snapshot'};
+
+  static bool isSnapshotSchema(Object? s) => s == schema || legacySchemas.contains(s);
+
+  /// Carpeta (en la raíz del Arca) donde «Arreglar» aparta lo irreparable.
+  /// Nunca se indexa ni se ofrece para adoptar.
+  static const quarantineDir = '_cuarentena';
+
   /// Subcarpeta con las copias inmutables de cada entrenador.
   static const historyDir = 'historial';
 
@@ -197,6 +207,7 @@ abstract final class ArcaLayout {
   /// copias de conflicto, ocultos y metadatos del sistema.
   static IgnoreReason? ignoreReason(String relPath) {
     final segments = relPath.split('/');
+    if (segments.length > 1 && segments.first == quarantineDir) return IgnoreReason.quarantined;
     for (final s in segments.take(segments.length - 1)) {
       if (s.startsWith('.') || s.startsWith('~')) return IgnoreReason.hidden;
     }
@@ -274,7 +285,7 @@ Reglas
 ''';
 }
 
-enum IgnoreReason { hidden, cloudPlaceholder, partial, conflictCopy }
+enum IgnoreReason { hidden, cloudPlaceholder, partial, conflictCopy, quarantined }
 
 /// Metadatos de un snapshot tal como se guardan en su `.json`.
 class SnapshotMeta {
@@ -413,7 +424,7 @@ class SnapshotMeta {
     } catch (_) {
       throw const FormatException('JSON ilegible');
     }
-    if (raw is! Map<String, Object?> || raw['schema'] != ArcaLayout.schema) {
+    if (raw is! Map<String, Object?> || !ArcaLayout.isSnapshotSchema(raw['schema'])) {
       throw const FormatException('No es un sidecar de PKArkTools');
     }
     T req<T>(Map<String, Object?> m, String k) {

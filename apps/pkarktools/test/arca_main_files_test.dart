@@ -300,6 +300,34 @@ void main() {
       expect(r.historyMigration!.failures.single, contains(key.substring('PKArkTools/'.length)));
       expect(fs.files[key]!.$1, bad, reason: 'nunca se borra');
     });
+
+    test('.json de PokeSavTool (esquema anterior al cambio de nombre): se lee, se migra y se normaliza', () async {
+      // Caso real: Arca creada con la app aún llamada PokeSavTool y abierta
+      // con PKArkTools 0.1.1. Antes, cada .json salía como «dañado» y la
+      // migración a historial/ fallaba en todas las copias.
+      final fs = MemoryFolderFs();
+      final repo = device(fs);
+      await repo.importBytes(emerald(), fileName: 'e.sav', origin: ImportOrigin.file, now: DateTime(2026, 1, 1));
+      await repo.importBytes(emerald(hours: 60), fileName: 'e.sav', origin: ImportOrigin.file, now: DateTime(2026, 1, 2));
+      toLegacy(fs);
+      for (final k in fs.files.keys.where((k) => k.endsWith('.sav.json')).toList()) {
+        final text = utf8.decode(fs.files[k]!.$1).replaceFirst('"pkarktools-snapshot"', '"pokesavtool-snapshot"');
+        fs.files[k] = (Uint8List.fromList(utf8.encode(text)), DateTime(2026, 1, 3));
+      }
+      final b = device(fs, 'B');
+      final r = await b.reindex();
+      expect(r.issues, isEmpty, reason: '${r.issues}');
+      expect(r.historyMigration!.failures, isEmpty);
+      expect(r.historyMigration!.copied, 2);
+      expect((await b.allSlots()).single.$2, hasLength(2));
+      expect(fs.files[mayMain]!.$1, emerald(hours: 60));
+      final sidecars = fs.files.entries.where((e) => e.key.endsWith('.sav.json'));
+      expect(sidecars, hasLength(2));
+      for (final e in sidecars) {
+        expect(e.key, contains('/historial/'));
+        expect(utf8.decode(e.value.$1), contains('"${ArcaLayout.schema}"'));
+      }
+    });
   });
 
   group('varios dispositivos', () {

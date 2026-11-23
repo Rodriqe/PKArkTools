@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drift/drift.dart';
 
 import '../blob_store.dart';
@@ -206,7 +208,9 @@ abstract final class ArcaMigration {
         await folder.readVerified(dest, meta.sha256);
         final side = ArcaLayout.sidecarFor(dest);
         try {
-          await folder.writeNew(side, await folder.read(ArcaLayout.sidecarFor(rel)));
+          // Se reescribe con el esquema actual (un .json de PokeSavTool queda
+          // como uno de PKArkTools con los mismos datos).
+          await folder.writeNew(side, Uint8List.fromList(utf8.encode(meta.encode())));
         } on FsExistsException {
           // Ya copiado en una ejecución anterior: se valida abajo.
         }

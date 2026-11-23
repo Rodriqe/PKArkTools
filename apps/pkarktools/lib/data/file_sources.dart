@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 import 'package:pkcore/pkcore.dart' hide Platform;
 
 import 'arca_repository.dart';
+import 'folder/arca_layout.dart';
 
 /// Un archivo elegido por el usuario, listo para importar.
 class PickedSave {
@@ -76,6 +77,14 @@ class FileSources {
 
   static bool isBlocked(String name) => _blockedExtensions.contains(p.extension(name).toLowerCase());
 
+  /// Copias del historial de un Arca (`AAAA-MM-DD_HHMMSS_hash8.ext`) o lo
+  /// apartado en `_cuarentena/`. Al escanear una carpeta que contiene el
+  /// propio Arca no se reimportan: cada una acabaría como otra copia más.
+  static bool isArcaCopy(String relPath) {
+    final segments = relPath.split(RegExp(r'[/\\]'));
+    return ArcaLayout.managedSave.hasMatch(segments.last) || segments.contains(ArcaLayout.quarantineDir);
+  }
+
   Future<List<PickedSave>> pickFiles() async {
     final files = await FilePicker.pickFiles(dialogTitle: 'Importar saves');
     final out = <PickedSave>[];
@@ -108,7 +117,7 @@ class FileSources {
       if (entity is! File) continue;
       if (scanned >= 3000) break;
       final rel = p.relative(entity.path, from: root.path);
-      if (rel.split(p.separator).length > 12 || isBlocked(entity.path)) {
+      if (rel.split(p.separator).length > 12 || isBlocked(entity.path) || isArcaCopy(rel)) {
         ignored++;
         continue;
       }
@@ -147,7 +156,7 @@ class FileSources {
       final size = (e['size'] as num?)?.toInt() ?? 0;
       final uri = e['uri'] as String;
       final rel = e['path'] as String? ?? name;
-      if (isBlocked(name) || !SaveDetector.isPlausibleSize(size)) {
+      if (isBlocked(name) || isArcaCopy(rel) || !SaveDetector.isPlausibleSize(size)) {
         ignored++;
         continue;
       }

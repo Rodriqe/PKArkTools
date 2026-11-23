@@ -10,6 +10,7 @@ import 'package:pkcore/testing.dart';
 import 'package:pkarktools/data/arca_repository.dart';
 import 'package:pkarktools/data/arca_session.dart';
 import 'package:pkarktools/data/blob_store.dart';
+import 'package:pkarktools/data/file_sources.dart';
 import 'package:pkarktools/data/db/arca_database.dart';
 import 'package:pkarktools/data/folder/arca_folder.dart';
 import 'package:pkarktools/data/folder/arca_layout.dart';
@@ -307,6 +308,26 @@ void main() {
       expect(r2.loose, hasLength(1));
       expect(await repo.adopt('basura.bin'), isA<ImportFailed>());
       expect(File(p.join(tmp.path, 'PKArkTools', 'basura.bin')).existsSync(), isTrue);
+    });
+
+    test('importar una carpeta que contiene el Arca no reimporta sus copias', () async {
+      // Caso real: «Importar carpeta» sobre ROMs/Saves (que contiene
+      // PKArkTools/) duplicaba cada copia del historial con fecha nueva.
+      final repo = device(tmp, 'A');
+      await repo.importBytes(emerald(), fileName: 'e.sav', origin: ImportOrigin.file, now: DateTime(2026, 1, 1));
+      await repo.reindex();
+      File(p.join(tmp.path, 'GBA', 'Pokemon Emerald.sav'))
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(emerald(hours: 70));
+      File(p.join(tmp.path, 'PKArkTools', '_cuarentena', 'x.sav'))
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(emerald(hours: 80));
+      final scan = await const FileSources().scanDirectory(tmp);
+      // Solo el save externo y el principal derivado (duplicado por hash).
+      expect(scan.found.map((c) => c.relativePath.split(p.separator).last).toSet(), {'Pokemon Emerald.sav', 'Pokémon Esmeralda.sav'});
+      expect(FileSources.isArcaCopy('PKArkTools/Pokémon Esmeralda/MAY (12345)/historial/2026-01-01_000000_abcdef01.sav'), isTrue);
+      expect(FileSources.isArcaCopy(r'PKArkTools\_cuarentena\a.sav'), isTrue);
+      expect(FileSources.isArcaCopy('GBA/Pokemon Emerald.sav'), isFalse);
     });
 
     test('nunca sobrescribe: mismo nombre con otro contenido usa sufijo', () async {
