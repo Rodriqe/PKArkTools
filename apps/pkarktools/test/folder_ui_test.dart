@@ -12,6 +12,7 @@ import 'package:pkarktools/data/db/arca_database.dart';
 import 'package:pkarktools/data/folder/arca_folder.dart';
 import 'package:pkarktools/data/folder/folder_access.dart';
 import 'package:pkarktools/data/folder/folder_fs.dart';
+import 'package:pkarktools/data/folder/volume_info.dart';
 
 import 'arca_folder_test.dart' show memoryDb;
 import 'arca_screen_test.dart' show settle;
@@ -136,6 +137,43 @@ void main() {
     await tester.tap(find.text('Volver a elegir la carpeta'));
     await settle(tester, until: find.text('Tu Arca está vacía'));
     expect(find.text('Tu Arca está vacía'), findsOneWidget);
+  });
+
+  testWidgets('NAS desmontado: «Carpeta de red no disponible» con Reintentar y Elegir otra', (tester) async {
+    final repo = ArcaRepository(db, null, deviceName: 'Mac');
+    final nas = ArcaLocation(LocationKind.bookmark,
+        value: 'xx', label: '/Volumes/SharedFiles/PKArkToosl', network: true, volume: 'NASRIGO/SharedFiles');
+    await pumpApp(tester, repo: repo, setup: SetupAccessLost(nas, 'La carpeta de red no está montada'));
+    expect(find.text('Carpeta de red no disponible'), findsOneWidget);
+    expect(find.textContaining('NASRIGO/SharedFiles'), findsOneWidget);
+    expect(find.byKey(const ValueKey('network-retry')), findsOneWidget);
+    expect(find.text('Elegir otra'), findsOneWidget);
+    // Sin la opción de carpeta local: no se crea un Arca vacía por error.
+    expect(find.text('Usar carpeta local de la app'), findsNothing);
+    // Reintentar con el NAS aún desmontado: sigue en la misma pantalla.
+    await tester.tap(find.byKey(const ValueKey('network-retry')));
+    await settle(tester);
+    expect(find.text('Carpeta de red no disponible'), findsOneWidget);
+    await tester.tap(find.text('Elegir otra'));
+    await settle(tester, until: find.text('Tu Arca está vacía'));
+    expect(find.text('Tu Arca está vacía'), findsOneWidget);
+  });
+
+  testWidgets('Ajustes: carpeta en un NAS con icono de red y nombre del recurso', (tester) async {
+    final share = Directory(p.join(tmp.path, 'SharedFiles'))..createSync();
+    final mounts = StaticMountTable([
+      const MountEntry(mountPoint: '/', fsType: 'apfs', source: '/dev/disk3s1'),
+      MountEntry(mountPoint: share.path, fsType: 'smbfs', source: '//ana@NASRIGO._smb._tcp.local/SharedFiles'),
+    ]);
+    final repo = ArcaRepository(db, ArcaFolder(IoFolderFs(share, mounts: mounts)), deviceName: 'Mac');
+    await pumpApp(tester,
+        repo: repo,
+        setup: SetupReady(ArcaLocation(LocationKind.bookmark, value: 'b', label: share.path, network: true)),
+        initial: '/ajustes',
+        size: const Size(1280, 1600));
+    expect(find.text('Carpeta de red (NAS) · NASRIGO/SharedFiles'), findsOneWidget);
+    expect(find.byIcon(Icons.lan_rounded), findsOneWidget);
+    expect(find.byKey(const ValueKey('folder-network-hint')), findsOneWidget);
   });
 
   testWidgets('Ajustes: carpeta, reindexar y arreglar (adoptar) un save suelto', (tester) async {
