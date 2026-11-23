@@ -11,6 +11,12 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [0.1.2] — 2026-11-23
+
+Problems in the Ark folder are folded into one line in Settings and can be
+fixed or ignored there. Arks created under the app's previous name are read correctly
+again.
+
 ### Added
 - **Arca problems in Settings, folded into one line**: "3 problems in the
   Arca" with a severity icon, collapsed by default. Expanded, problems are
@@ -26,13 +32,18 @@ developer documentation in `docs/` is in Spanish.
   changed by hand as a new copy. Nothing is deleted: anything that can't be
   repaired is moved to `PKArkTools/_cuarentena/` with a note, after checking
   it by SHA-256.
+- **Duplicate copies in the history** (same SHA-256 in the same trainer
+  folder, for example after importing a folder that contained the Ark): Fix
+  keeps the oldest copy and moves the others, with their `.json`, to
+  `PKArkTools/_cuarentena/duplicados/` with a note. Restored copies don't
+  count, since they repeat content on purpose.
 - **Ignore** per file or per group: hidden from the summary until the file
   changes (path + size + date), stored only in this device's settings;
   **Show ignored (N)** lists them to undo.
 
 ### Fixed
-- Arks created while the app was still called PokeSavTool: their `.json`
-  files (schema `pokesavtool-snapshot`) were all reported as damaged and the
+- Arks created while the app still had its previous name: their `.json`
+  files (schema `<previous name>-snapshot`) were all reported as damaged and the
   move to `historial/` failed on every reindex. They are now read as our own
   and rewritten with the current schema when migrated.
 - Importing a folder that contains the Ark itself (for example `ROMs/Saves`)

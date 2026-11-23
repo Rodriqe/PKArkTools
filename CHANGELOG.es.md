@@ -11,6 +11,12 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [0.1.2] — 2026-11-23
+
+Los problemas de la carpeta del Arca se pliegan en una línea en Ajustes y se
+pueden arreglar o ignorar desde ahí. Las Arcas creadas con el nombre anterior de
+la app se vuelven a leer bien.
+
 ### Añadido
 - **Problemas del Arca en Ajustes, plegados en una línea**: «3 problemas en
   el Arca» con un icono de gravedad, plegado por defecto. Desplegado, se
@@ -26,13 +32,18 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   historial y guarda como copia nueva un principal cambiado a mano. Nada se
   borra: lo irreparable se mueve a `PKArkTools/_cuarentena/` con una nota,
   tras comprobarlo por su SHA-256.
+- **Copias duplicadas en el historial** (mismo SHA-256 en la misma carpeta
+  de entrenador, por ejemplo tras importar una carpeta que contenía el
+  Arca): Arreglar conserva la más antigua y mueve las demás, con su `.json`,
+  a `PKArkTools/_cuarentena/duplicados/` con una nota. Las restauraciones no
+  cuentan: repiten contenido a propósito.
 - **Ignorar** por archivo o por grupo: se oculta del resumen hasta que el
   archivo cambie (ruta + tamaño + fecha) y se guarda solo en los ajustes de
   este dispositivo; **Mostrar ignorados (N)** los lista para deshacerlo.
 
 ### Corregido
-- Arcas creadas cuando la app aún se llamaba PokeSavTool: todos sus `.json`
-  (esquema `pokesavtool-snapshot`) salían como dañados y el paso a
+- Arcas creadas cuando la app aún tenía su nombre anterior: todos sus `.json`
+  (esquema `<nombre anterior>-snapshot`) salían como dañados y el paso a
   `historial/` fallaba en cada reindexado. Ahora se leen como propios y se
   reescriben con el esquema actual al migrar.
 - Importar una carpeta que contiene el propio Arca (por ejemplo `ROMs/Saves`)
