@@ -57,6 +57,11 @@ abstract class FolderFs {
   /// [FsExistsException] si ya existe: nunca sobrescribe.
   Future<void> writeNew(String path, Uint8List bytes);
 
+  /// Escribe (o reemplaza) un archivo de forma atómica: temporal + rename.
+  /// Solo para archivos derivados (el archivo principal, `ultima.json`, el
+  /// README), nunca para el historial.
+  Future<void> writeReplace(String path, Uint8List bytes);
+
   Future<void> delete(String path);
 
   /// Comprueba que la carpeta sigue accesible y se puede escribir.
@@ -118,6 +123,20 @@ class IoFolderFs implements FolderFs {
     try {
       await tmp.writeAsBytes(bytes, flush: true);
       if (await f.exists()) throw FsExistsException(path);
+      await tmp.rename(f.path);
+    } finally {
+      if (await tmp.exists()) await tmp.delete();
+    }
+  }
+
+  @override
+  Future<void> writeReplace(String path, Uint8List bytes) async {
+    final f = File(_abs(path));
+    await f.parent.create(recursive: true);
+    final tmp = File(p.join(f.parent.path, '.${p.basename(f.path)}.${_rand.nextInt(1 << 32).toRadixString(16)}.tmp'));
+    try {
+      await tmp.writeAsBytes(bytes, flush: true);
+      // rename reemplaza el destino de forma atómica (POSIX y MoveFileEx).
       await tmp.rename(f.path);
     } finally {
       if (await tmp.exists()) await tmp.delete();

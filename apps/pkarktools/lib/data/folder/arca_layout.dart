@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:pkcore/pkcore.dart' as pk show Platform;
 import 'package:pkcore/pkcore.dart' hide Platform;
 
 /// Estructura de la carpeta del Arca.
@@ -7,18 +8,33 @@ import 'package:pkcore/pkcore.dart' hide Platform;
 /// ```
 /// PKArkTools/
 ///   README.txt
-///   <Juego>/<Entrenador (TID)>/<AAAA-MM-DD_HHMMSS>_<hash8>.<ext>
-///   <Juego>/<Entrenador (TID)>/<AAAA-MM-DD_HHMMSS>_<hash8>.<ext>.json
+///   <Juego>/<Entrenador (TID)>/
+///     main                      ← última versión (nombre según el juego, ver [mainFileName])
+///     ultima.json               ← qué copia del historial es la última (derivado)
+///     historial/
+///       <AAAA-MM-DD_HHMMSS>_<hash8>.<ext>        ← copias inmutables
+///       <AAAA-MM-DD_HHMMSS>_<hash8>.<ext>.json
 /// ```
-/// Los archivos son inmutables y su nombre es único (fecha + hash), así que
-/// varios dispositivos pueden escribir en la misma carpeta sincronizada sin
-/// pisarse.
+/// Las copias del historial son inmutables y su nombre es único (fecha +
+/// hash), así que varios dispositivos pueden escribir en la misma carpeta
+/// sincronizada sin pisarse. El historial es la fuente de verdad: el archivo
+/// principal y `ultima.json` se regeneran siempre desde él.
 abstract final class ArcaLayout {
   static const rootDir = 'PKArkTools';
   static const readmeName = 'README.txt';
   static const readmeMarker = 'PKArkTools · Arca';
+
+  /// Línea que identifica la versión del README (se reescribe si cambia).
+  static const readmeRevision = 'Estructura v2 (historial/ + archivo principal)';
   static const sidecarExt = '.json';
   static const schema = 'pkarktools-snapshot';
+
+  /// Subcarpeta con las copias inmutables de cada entrenador.
+  static const historyDir = 'historial';
+
+  /// Índice derivado con la última copia de cada archivo principal.
+  static const latestName = 'ultima.json';
+  static const latestSchema = 'pkarktools-latest';
 
   static const schemaVersion = 1;
   static const maxSegment = 64;
@@ -73,7 +89,82 @@ abstract final class ArcaLayout {
   static String trainerDir(String trainerName, String displayTid) =>
       safeSegment('${trainerName.trim().isEmpty ? '_' : trainerName} ($displayTid)');
 
-  /// Ruta relativa (a `PKArkTools/`) del save de un snapshot.
+  /// Extensiones de contenedor que conservan los emuladores y lectores
+  /// (el resto se guarda como `.sav`).
+  static const containerExts = {'.sav', '.dsv', '.srm', '.sa1', '.fla', '.dat', '.bin'};
+
+  /// Nombre del archivo principal (la última versión) de una copia.
+  ///
+  /// | Juego / plataforma                         | Nombre           |
+  /// |--------------------------------------------|------------------|
+  /// | Espada/Escudo, Leyendas Arceus, Escarlata/Púrpura, Leyendas Z-A | `main` |
+  /// | Diamante Brillante / Perla Reluciente      | `SaveData.bin`   |
+  /// | Let's Go Pikachu / Eevee                   | `savedata.bin`   |
+  /// | 3DS (X/Y, ROZA, Sol/Luna, USUL)            | `main`           |
+  /// | GB, GBC, GBA, DS                           | `<Juego><ext>`   |
+  ///
+  /// Son los nombres que usan Checkpoint/JKSM y los emuladores de Switch y
+  /// 3DS. En GB…DS `<ext>` es la del contenedor original si es conocida
+  /// (`.sav`, `.dsv` de DeSmuME/DraStic, `.srm` de RetroArch, `.sa1`, `.fla`,
+  /// `.dat`, `.bin`) y `.sav` si no: un mismo entrenador con contenedores
+  /// distintos tiene un archivo principal por contenedor.
+  static String mainFileName(String gameCode, String originalName) {
+    final game = GameVersion.fromCode(gameCode);
+    switch (game) {
+      case GameVersion.brilliantDiamondShiningPearl:
+        return 'SaveData.bin';
+      case GameVersion.letsGo:
+        return 'savedata.bin';
+      case null:
+        break;
+      default:
+        if (game.platform == pk.Platform.nintendoSwitch || game.platform == pk.Platform.nintendo3ds) return 'main';
+    }
+    var ext = extensionFor(originalName);
+    if (!containerExts.contains(ext)) ext = '.sav';
+    return '${gameDir(gameCode)}$ext';
+  }
+
+  /// Carpeta del entrenador (`<Juego>/<Entrenador (TID)>`) de una copia, esté
+  /// en `historial/` o (diseño anterior) suelta en la carpeta del entrenador.
+  static String ownerDirOf(String savePath) {
+    final parts = savePath.split('/')..removeLast();
+    if (parts.isNotEmpty && parts.last == historyDir) parts.removeLast();
+    return parts.join('/');
+  }
+
+  /// `true` si la copia está en un `historial/` (diseño actual).
+  static bool inHistory(String savePath) {
+    final parts = savePath.split('/');
+    return parts.length >= 2 && parts[parts.length - 2] == historyDir;
+  }
+
+  /// Ruta en `historial/` de una copia del diseño anterior.
+  static String historyPathFor(String legacySavePath) {
+    final name = legacySavePath.split('/').last;
+    final dir = ownerDirOf(legacySavePath);
+    return dir.isEmpty ? '$historyDir/$name' : '$dir/$historyDir/$name';
+  }
+
+  static String _join(String dir, String name) => dir.isEmpty ? name : '$dir/$name';
+
+  static String mainPath(String ownerDir, String mainName) => _join(ownerDir, mainName);
+
+  static String latestPath(String ownerDir) => _join(ownerDir, latestName);
+
+  /// Copias de conflicto de la nube de un archivo principal: `main (1)`,
+  /// `main 2`, `main-PORTATIL`, `Esmeralda (conflicted copy).sav`…
+  static bool isConflictOf(String name, String mainName) {
+    if (name == mainName) return false;
+    final dot = mainName.lastIndexOf('.');
+    final stem = dot > 0 ? mainName.substring(0, dot) : mainName;
+    final ext = dot > 0 ? mainName.substring(dot) : '';
+    if (!name.startsWith(stem) || !name.toLowerCase().endsWith(ext.toLowerCase())) return false;
+    final middle = name.substring(stem.length, name.length - ext.length);
+    return middle.isNotEmpty && RegExp(r'^[\s_\-.(]').hasMatch(middle);
+  }
+
+  /// Ruta relativa (a `PKArkTools/`) del save de un snapshot (en `historial/`).
   static String savePath({
     required String gameCode,
     required String trainerName,
@@ -84,7 +175,7 @@ abstract final class ArcaLayout {
     int attempt = 0,
   }) {
     final base = '${stamp(importedAt)}_${sha256.substring(0, 8)}${attempt > 0 ? '-${attempt + 1}' : ''}';
-    return '${gameDir(gameCode)}/${trainerDir(trainerName, displayTid)}/$base${extensionFor(originalName)}';
+    return '${gameDir(gameCode)}/${trainerDir(trainerName, displayTid)}/$historyDir/$base${extensionFor(originalName)}';
   }
 
   static String sidecarFor(String savePath) => '$savePath$sidecarExt';
@@ -135,6 +226,7 @@ abstract final class ArcaLayout {
   static String readme() => '''
 $readmeMarker
 ====================
+$readmeRevision
 
 Esta carpeta contiene las copias de tus partidas guardadas por PKArkTools.
 Puedes ponerla en iCloud Drive, Google Drive, OneDrive, Dropbox o Syncthing
@@ -145,20 +237,37 @@ Estructura
   PKArkTools/
     README.txt                       (este archivo)
     <Juego>/<Entrenador (TID)>/
-      AAAA-MM-DD_HHMMSS_<hash8>.<ext>         la copia del save, tal cual
-      AAAA-MM-DD_HHMMSS_<hash8>.<ext>.json    sus datos: SHA-256 completo, juego,
-                                              entrenador, TID/SID, horas, origen,
-                                              notas, dispositivo y versión.
+      main                           LA ÚLTIMA VERSIÓN, lista para copiar al
+                                     juego o al emulador. Se llama como la
+                                     espera cada juego: "main" (Switch y 3DS),
+                                     "SaveData.bin" (Diamante Brillante / Perla
+                                     Reluciente), "savedata.bin" (Let's Go) o
+                                     "<Juego>.sav" / ".dsv" / ".srm"... (GB, GBA, DS).
+      ultima.json                    qué copia del historial es la última.
+      historial/
+        AAAA-MM-DD_HHMMSS_<hash8>.<ext>        cada copia del save, tal cual
+        AAAA-MM-DD_HHMMSS_<hash8>.<ext>.json   sus datos: SHA-256 completo, juego,
+                                               entrenador, TID/SID, horas, origen,
+                                               notas, dispositivo y versión.
 
 Reglas
 ------
-* Los archivos nunca se modifican ni se sobrescriben: cada copia nueva es un
-  archivo nuevo con nombre único (fecha + hash). Por eso varios dispositivos
-  pueden usar la misma carpeta a la vez.
+* El historial es la fuente de verdad. Sus archivos nunca se modifican ni se
+  sobrescriben: cada copia nueva es un archivo nuevo con nombre único (fecha +
+  hash). Por eso varios dispositivos pueden usar la misma carpeta a la vez.
+* El archivo principal es una copia de la entrada más reciente del historial.
+  PKArkTools lo reescribe (de forma atómica) cuando llega una copia más nueva
+  y lo regenera si falta.
+* Si reemplazas el archivo principal a mano (p. ej. copias encima un save
+  nuevo del juego), PKArkTools lo detecta y te ofrece "Guardar como nueva
+  copia"; nunca lo borra ni lo pisa.
+* Restaurar una copia antigua crea una entrada nueva en el historial y
+  actualiza el archivo principal: el historial nunca se reescribe.
 * Si copias un save suelto en cualquier subcarpeta, PKArkTools lo detecta y
   te ofrece "adoptarlo" (lo identifica y lo coloca en su sitio).
 * Las copias de conflicto de la nube ("conflicted copy", "(1)", .icloud,
-  .tmp…) se ignoran sin borrar nada.
+  .tmp...) se ignoran. Las del archivo principal se retiran solas si su
+  contenido ya está en el historial; si no, se ofrecen para adoptar.
 * La base de datos de la app es solo un índice local de cada dispositivo y
   nunca se guarda aquí: se puede reconstruir en cualquier momento desde
   Ajustes → Reindexar.

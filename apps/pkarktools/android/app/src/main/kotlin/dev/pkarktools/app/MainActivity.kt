@@ -42,6 +42,9 @@ class MainActivity : FlutterActivity() {
                 "treeWriteNew" -> background(result) {
                     treeWriteNew(tree(call), call.argument<String>("path")!!, call.argument<ByteArray>("bytes")!!); null
                 }
+                "treeReplace" -> background(result) {
+                    treeReplace(tree(call), call.argument<String>("path")!!, call.argument<ByteArray>("bytes")!!); null
+                }
                 "treeDelete" -> background(result) { treeDelete(tree(call), call.argument<String>("path")!!); null }
                 else -> result.notImplemented()
             }
@@ -300,6 +303,48 @@ class MainActivity : FlutterActivity() {
             if (actual == null) {
                 DocumentsContract.deleteDocument(contentResolver, renamed)
                 throw SafError("exists", "Ya existe $path")
+            }
+        } catch (e: Exception) {
+            try {
+                DocumentsContract.deleteDocument(contentResolver, tmp)
+            } catch (_: Exception) {
+            }
+            throw e
+        }
+    }
+
+    /**
+     * Escribe o reemplaza un archivo derivado (archivo principal, ultima.json,
+     * README): temporal oculto + borrar el anterior + renombrar. Si se corta
+     * entre el borrado y el rename, el archivo falta y PKArkTools lo regenera
+     * desde el historial. Sin rename, se trunca y reescribe el existente.
+     */
+    private fun treeReplace(tree: Uri, path: String, bytes: ByteArray) {
+        val segs = segments(path)
+        val name = segs.last()
+        val parentId = resolve(tree, segs.dropLast(1).joinToString("/"), createDirs = true)!!
+        val parent = DocumentsContract.buildDocumentUriUsingTree(tree, parentId)
+        val mime = "application/octet-stream"
+        val existing = childId(tree, parentId, name)?.first
+        val tmpName = ".$name.${Random.nextInt().toUInt().toString(16)}.tmp"
+        val tmp = DocumentsContract.createDocument(contentResolver, parent, mime, tmpName)
+            ?: throw SafError("saf_error", "No se pudo crear $tmpName")
+        try {
+            contentResolver.openOutputStream(tmp, "w")?.use { it.write(bytes) }
+                ?: throw SafError("saf_error", "No se pudo escribir $tmpName")
+            if (existing != null) {
+                DocumentsContract.deleteDocument(contentResolver, DocumentsContract.buildDocumentUriUsingTree(tree, existing))
+            }
+            val renamed = try {
+                DocumentsContract.renameDocument(contentResolver, tmp, name)
+            } catch (_: UnsupportedOperationException) {
+                null
+            }
+            if (renamed == null) {
+                DocumentsContract.deleteDocument(contentResolver, tmp)
+                val direct = DocumentsContract.createDocument(contentResolver, parent, mime, name)
+                    ?: throw SafError("saf_error", "No se pudo crear $name")
+                contentResolver.openOutputStream(direct, "wt")?.use { it.write(bytes) }
             }
         } catch (e: Exception) {
             try {

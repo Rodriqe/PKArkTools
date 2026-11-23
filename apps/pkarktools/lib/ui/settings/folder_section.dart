@@ -5,9 +5,11 @@ import 'package:intl/intl.dart';
 import '../../data/arca_repository.dart';
 import '../../data/arca_session.dart';
 import '../../data/folder/arca_folder.dart';
+import '../../data/folder/arca_main_files.dart';
 import '../../data/folder/folder_access.dart';
 import '../../theme/app_theme.dart';
 import '../common/format.dart';
+import '../detail/snapshot_history.dart' show saveMainAsNewCopy;
 import '../onboarding/folder_flows.dart';
 
 final _snapshotCountProvider = StreamProvider<int>((ref) => ref.watch(arcaRepositoryProvider).watchSnapshotCount());
@@ -37,6 +39,12 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
         ..hideCurrentSnackBar()
         ..showSnackBar(SnackBar(content: Text(l10n.reindexResult(r.added, r.removed, r.duplicates))));
     }
+  }
+
+  Future<void> _saveMain(String path) async {
+    setState(() => _adopting.add(path));
+    await saveMainAsNewCopy(context, ref, path);
+    if (mounted) setState(() => _adopting.remove(path));
   }
 
   Future<void> _adopt(List<String> paths) async {
@@ -97,6 +105,8 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
 
     final issues = report?.issues ?? const <ArcaIssue>[];
     final loose = report?.loose ?? const [];
+    final modified = report?.modifiedMains ?? const <MainFileStatus>[];
+    final moved = (report?.historyMigration?.copied ?? 0) + (report?.historyMigration?.skipped ?? 0);
     final time = report == null
         ? null
         : DateFormat.Hms(Localizations.localeOf(context).toLanguageTag()).format(report.at);
@@ -161,6 +171,8 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
                   stat('${report?.ignoredCount ?? 0}', l10n.statIgnored),
                 ],
               ),
+              const SizedBox(height: 16),
+              _LayoutExplainer(),
               const SizedBox(height: 14),
               Text(
                 time == null ? l10n.reindexNever : l10n.reindexLast(time),
@@ -201,6 +213,28 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
               subtitle: Text(i.detail == null ? i.path : '${i.path}\n${i.detail}', maxLines: 3),
             ),
         ],
+        if (moved > 0) ...[
+          const SizedBox(height: 12),
+          Text(l10n.historyMigrated(moved), style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
+        ],
+        if (modified.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Text('${l10n.modifiedMainsTitle} (${modified.length})', style: context.text.titleSmall),
+          Text(l10n.modifiedMainsDesc, style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
+          const SizedBox(height: 6),
+          for (final m in modified)
+            ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(Icons.edit_document, color: context.tokens.shiny),
+              title: Text(m.name),
+              subtitle: Text(m.path),
+              trailing: TextButton(
+                onPressed: _adopting.isNotEmpty ? null : () => _saveMain(m.path),
+                child: Text(l10n.saveAsNewCopy),
+              ),
+            ),
+        ],
         if (loose.isNotEmpty) ...[
           const SizedBox(height: 16),
           Row(
@@ -237,6 +271,35 @@ class _ArcaFolderSectionState extends ConsumerState<ArcaFolderSection> {
           ),
         ],
       ],
+    );
+  }
+}
+
+/// Explicación corta del diseño de la carpeta (última versión + historial/).
+class _LayoutExplainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final mono = context.text.bodySmall!.copyWith(fontFamily: 'monospace', color: context.tokens.muted);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: context.colors.primary.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(l10n.arcaLayoutTitle, style: context.text.titleSmall),
+        const SizedBox(height: 4),
+        Text(l10n.arcaLayoutDesc, style: context.text.bodySmall),
+        const SizedBox(height: 8),
+        Text(
+          context.isSpanish
+              ? 'PKArkTools/<Juego>/<Entrenador (TID)>/\n  main            ← última versión\n  historial/      ← todas las copias'
+              : 'PKArkTools/<Game>/<Trainer (TID)>/\n  main            ← latest version\n  historial/      ← every copy',
+          style: mono,
+        ),
+      ]),
     );
   }
 }

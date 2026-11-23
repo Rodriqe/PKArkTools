@@ -1127,10 +1127,6 @@ class $SnapshotsTable extends Snapshots
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  List<Set<GeneratedColumn>> get uniqueKeys => [
-    {slotId, sha256},
-  ];
-  @override
   Snapshot map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Snapshot(
@@ -1230,7 +1226,7 @@ class Snapshot extends DataClass implements Insertable<Snapshot> {
   final DateTime importedAt;
   final String fileName;
 
-  /// file | folder | saf | demo | restore-backup | edit
+  /// file | folder | saf | demo | restore-backup | edit | adopted | migrated | restored
   final String origin;
 
   /// Ruta (o URI SAF) de donde se importó, para restaurar en el mismo sitio.

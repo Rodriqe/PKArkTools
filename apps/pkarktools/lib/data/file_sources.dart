@@ -59,6 +59,21 @@ class FileSources {
 
   static bool get _useSaf => !kIsWeb && Platform.isAndroid;
 
+  /// Abre [path] (una carpeta) en el gestor de archivos del escritorio.
+  /// `false` si la plataforma no lo permite (móvil, SAF) o falla.
+  Future<bool> revealFolder(String path) async {
+    if (kIsWeb || !(Platform.isMacOS || Platform.isWindows || Platform.isLinux)) return false;
+    if (!await Directory(path).exists()) return false;
+    final cmd = Platform.isMacOS ? 'open' : (Platform.isWindows ? 'explorer' : 'xdg-open');
+    try {
+      final r = await Process.run(cmd, [path]);
+      // explorer devuelve 1 aunque abra la carpeta.
+      return Platform.isWindows || r.exitCode == 0;
+    } catch (_) {
+      return false;
+    }
+  }
+
   static bool isBlocked(String name) => _blockedExtensions.contains(p.extension(name).toLowerCase());
 
   Future<List<PickedSave>> pickFiles() async {

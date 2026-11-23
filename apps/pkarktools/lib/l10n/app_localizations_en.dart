@@ -2093,4 +2093,97 @@ class AppLocalizationsEn extends AppLocalizations {
   String spritesIncomplete(int count) {
     return 'The download finished, but $count icons are missing. Tap “Repair icons” when online.';
   }
+
+  @override
+  String get originRestored => 'Restored';
+
+  @override
+  String currentVersionTitle(String date) {
+    return 'Current version · $date';
+  }
+
+  @override
+  String mainFileLabel(String name) {
+    return 'In the folder as “$name”, ready to copy to the game or emulator.';
+  }
+
+  @override
+  String get openFolder => 'Open folder';
+
+  @override
+  String get openFolderTitle => 'Save folder';
+
+  @override
+  String openFolderBody(String path, String root) {
+    return 'Inside the Ark folder ($root):\n\n$path';
+  }
+
+  @override
+  String get copyPath => 'Copy path';
+
+  @override
+  String get pathCopied => 'Path copied';
+
+  @override
+  String historyCount(int count) {
+    return 'History ($count)';
+  }
+
+  @override
+  String get historyFoldedHint =>
+      'Every copy, newest first. They are never modified.';
+
+  @override
+  String get mainModifiedTitle => 'The main file changed outside the app';
+
+  @override
+  String mainModifiedBody(String name) {
+    return '“$name” doesn\'t match any copy in the history (did you copy a new save over it?). Save it as a new copy to keep it; it is never deleted.';
+  }
+
+  @override
+  String get saveAsNewCopy => 'Save as new copy';
+
+  @override
+  String savedAsNewCopy(String name) {
+    return 'Saved to the history: $name';
+  }
+
+  @override
+  String get restoreAsCurrentTitle => 'Restore as the current version?';
+
+  @override
+  String restoreAsCurrentBody(String name) {
+    return 'A new history entry is created from this copy and the main file (“$name”) becomes this version. No copy in the history is modified.';
+  }
+
+  @override
+  String get restoreAlsoSource => 'Restore and write to the original';
+
+  @override
+  String get restoredAsCurrent => 'Copy restored as the current version';
+
+  @override
+  String restoredNote(String date) {
+    return 'Restored from the copy of $date';
+  }
+
+  @override
+  String get arcaLayoutTitle => 'How the folder is organized';
+
+  @override
+  String get arcaLayoutDesc =>
+      'Each save has its own folder with the latest version, named the way the game expects (main, SaveData.bin, Emerald.sav…), ready to copy to the game or emulator. Below it, historial/ keeps every copy and never modifies them. The latest version is derived: it is always rebuilt from the history, so nothing is lost even if you delete or change it.';
+
+  @override
+  String get modifiedMainsTitle => 'Main files changed by hand';
+
+  @override
+  String get modifiedMainsDesc =>
+      'They don\'t match any copy in the history. Save them as a new copy; the app leaves them alone until then.';
+
+  @override
+  String historyMigrated(int count) {
+    return 'Folder updated: $count copies moved to historial/';
+  }
 }

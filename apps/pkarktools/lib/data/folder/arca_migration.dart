@@ -4,6 +4,7 @@ import '../blob_store.dart';
 import '../db/arca_database.dart';
 import 'arca_folder.dart';
 import 'arca_layout.dart';
+import 'folder_fs.dart';
 
 /// Progreso de una migración o copia.
 typedef MigrationProgress = void Function(int done, int total);
@@ -116,15 +117,18 @@ abstract final class ArcaMigration {
   }) async {
     final result = MigrationResult();
     final listing = await from.listing();
-    result.leftBehind = listing.loose.length + listing.missingSidecar.length + listing.missingSave.length;
     final pairs = listing.pairs.keys.toList()..sort();
     await to.ensureReadme();
     final verified = <String>[];
+    final movedShas = <String>{};
+    // Archivos principales (derivados) de las copias del origen.
+    final mains = <String>{};
     var done = 0;
     onProgress?.call(0, pairs.length);
     for (final rel in pairs) {
       try {
         final meta = await from.readMeta(rel);
+        mains.add(ArcaLayout.mainPath(ArcaLayout.ownerDirOf(rel), ArcaLayout.mainFileName(meta.gameCode, meta.originalFileName)));
         final bytes = await from.readVerified(rel, meta.sha256);
         final existed = await to.exists(rel) && await to.exists(ArcaLayout.sidecarFor(rel));
         // writeSnapshot reutiliza un archivo idéntico y nunca pisa uno distinto.
@@ -132,16 +136,111 @@ abstract final class ArcaMigration {
         await _verify(to, destRel, meta.sha256);
         existed ? result.skipped++ : result.copied++;
         verified.add(rel);
+        movedShas.add(meta.sha256);
       } catch (e) {
         result.failures.add('$rel: $e');
       }
       onProgress?.call(++done, pairs.length);
     }
+    result.leftBehind =
+        listing.loose.where((e) => !mains.contains(e.path)).length + listing.missingSidecar.length + listing.missingSave.length;
     if (move) {
       for (final rel in verified) {
         await from.delete(ArcaLayout.sidecarFor(rel));
         await from.delete(rel);
       }
+      // Los principales derivados de lo movido se retiran también (el destino
+      // los regenera); uno cambiado a mano se queda.
+      final remaining = {for (final r in pairs) if (!verified.contains(r)) ArcaLayout.ownerDirOf(r)};
+      for (final path in mains) {
+        final dir = ArcaLayout.ownerDirOf(path);
+        if (remaining.contains(dir)) continue;
+        try {
+          if (await from.exists(path) && movedShas.contains(ArcaFolder.sha256Of(await from.read(path)))) await from.delete(path);
+          await from.delete(ArcaLayout.latestPath(dir));
+        } catch (_) {}
+      }
+    }
+    return result;
+  }
+
+  /// `true` si la carpeta tiene copias del diseño anterior (sueltas en la
+  /// carpeta del entrenador en vez de en `historial/`).
+  static bool needsHistoryLayout(FolderListing listing) =>
+      listing.pairs.keys.any((p) => !ArcaLayout.inHistory(p)) ||
+      listing.missingSidecar.any((e) => !ArcaLayout.inHistory(e.path));
+
+  /// Mueve las copias del diseño anterior a `<Entrenador>/historial/`.
+  ///
+  /// Para cada copia: comprueba su SHA-256, la escribe en `historial/` (sin
+  /// sobrescribir nunca), relee y verifica save y `.json`, avisa con
+  /// [onMoved] y solo entonces borra el original (primero el `.json`).
+  /// Es idempotente: si se corta a mitad, la siguiente ejecución reconoce lo
+  /// ya copiado por su hash y termina el trabajo sin duplicar ni perder nada.
+  static Future<MigrationResult> toHistoryLayout(
+    ArcaFolder folder,
+    FolderListing listing, {
+    Future<void> Function(String from, String to)? onMoved,
+    MigrationProgress? onProgress,
+  }) async {
+    final result = MigrationResult();
+    final legacy = listing.pairs.keys.where((p) => !ArcaLayout.inHistory(p)).toList()..sort();
+    final orphans = listing.missingSidecar.where((e) => !ArcaLayout.inHistory(e.path)).toList();
+    final total = legacy.length + orphans.length;
+    var done = 0;
+    onProgress?.call(0, total);
+    for (final rel in legacy) {
+      final dest = ArcaLayout.historyPathFor(rel);
+      try {
+        final meta = await folder.readMeta(rel);
+        final bytes = await folder.readVerified(rel, meta.sha256);
+        var existed = false;
+        try {
+          await folder.writeNew(dest, bytes);
+        } on FsExistsException {
+          if (ArcaFolder.sha256Of(await folder.read(dest)) != meta.sha256) {
+            throw StateError('$dest ya existe con otro contenido');
+          }
+          existed = true;
+        }
+        await folder.readVerified(dest, meta.sha256);
+        final side = ArcaLayout.sidecarFor(dest);
+        try {
+          await folder.writeNew(side, await folder.read(ArcaLayout.sidecarFor(rel)));
+        } on FsExistsException {
+          // Ya copiado en una ejecución anterior: se valida abajo.
+        }
+        if ((await folder.readMeta(dest)).sha256 != meta.sha256) {
+          throw StateError('el .json de $dest no corresponde a la copia');
+        }
+        await onMoved?.call(rel, dest);
+        await folder.delete(ArcaLayout.sidecarFor(rel));
+        await folder.delete(rel);
+        existed ? result.skipped++ : result.copied++;
+      } catch (e) {
+        result.failures.add('$rel: $e');
+      }
+      onProgress?.call(++done, total);
+    }
+    // Saves antiguos sin .json: si una ejecución anterior se cortó tras borrar
+    // el .json, su copia verificada ya está en historial/ y se retiran.
+    for (final e in orphans) {
+      final dest = ArcaLayout.historyPathFor(e.path);
+      try {
+        if (await folder.exists(dest) && await folder.exists(ArcaLayout.sidecarFor(dest))) {
+          final meta = await folder.readMeta(dest);
+          final bytes = await folder.read(e.path);
+          if (ArcaFolder.sha256Of(bytes) == meta.sha256) {
+            await folder.readVerified(dest, meta.sha256);
+            await onMoved?.call(e.path, dest);
+            await folder.delete(e.path);
+            result.skipped++;
+          }
+        }
+      } catch (err) {
+        result.failures.add('${e.path}: $err');
+      }
+      onProgress?.call(++done, total);
     }
     return result;
   }

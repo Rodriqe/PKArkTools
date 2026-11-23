@@ -61,7 +61,7 @@ void main() {
       expect(ArcaLayout.safeSegment('x' * 200).runes.length, ArcaLayout.maxSegment);
     });
 
-    test('ruta del save: Juego/Entrenador (TID)/fecha_hash8.ext', () {
+    test('ruta del save: Juego/Entrenador (TID)/historial/fecha_hash8.ext', () {
       final path = ArcaLayout.savePath(
         gameCode: 'emerald',
         trainerName: 'MAY',
@@ -70,7 +70,7 @@ void main() {
         sha256: 'abcdef0123456789' * 4,
         originalName: 'Pokemon Esmeralda.SAV',
       );
-      expect(path, 'Pokémon Esmeralda/MAY (12345)/2026-11-22_090507_abcdef01.sav');
+      expect(path, 'Pokémon Esmeralda/MAY (12345)/historial/2026-11-22_090507_abcdef01.sav');
       expect(ArcaLayout.sidecarFor(path), '$path.json');
       expect(ArcaLayout.managedSave.hasMatch(path.split('/').last), isTrue);
       expect(
@@ -82,7 +82,7 @@ void main() {
               sha256: '0' * 64,
               originalName: 'main',
               attempt: 1),
-          'Pokémon Rojo - Azul/RED - BLUE (00001)/2026-01-01_000000_00000000-2.sav');
+          'Pokémon Rojo - Azul/RED - BLUE (00001)/historial/2026-01-01_000000_00000000-2.sav');
     });
 
     test('extensión original o .sav si no es razonable', () {
@@ -145,17 +145,22 @@ void main() {
       final sha = ArcaRepository.sha256Of(emerald());
       final name = '2026-11-22_183042_${sha.substring(0, 8)}.sav';
       expect(filesIn(tmp), [
-        'PKArkTools/Pokémon Esmeralda/MAY (12345)/$name',
-        'PKArkTools/Pokémon Esmeralda/MAY (12345)/$name.json',
+        'PKArkTools/Pokémon Esmeralda/MAY (12345)/Pokémon Esmeralda.sav',
+        'PKArkTools/Pokémon Esmeralda/MAY (12345)/historial/$name',
+        'PKArkTools/Pokémon Esmeralda/MAY (12345)/historial/$name.json',
+        'PKArkTools/Pokémon Esmeralda/MAY (12345)/ultima.json',
         'PKArkTools/README.txt',
       ]);
+      // El archivo principal es la última versión, lista para el juego.
+      expect(File(p.join(tmp.path, 'PKArkTools', 'Pokémon Esmeralda', 'MAY (12345)', 'Pokémon Esmeralda.sav')).readAsBytesSync(),
+          emerald());
       expect(File(p.join(tmp.path, 'PKArkTools', 'README.txt')).readAsStringSync(), startsWith(ArcaLayout.readmeMarker));
       // Los bytes se leen de la carpeta verificando el hash.
       final snap = await repo.snapshot((out as ImportAdded).snapshotId);
       expect(await repo.snapshotBytes(snap), emerald());
       // Duplicado exacto: no escribe nada nuevo.
       expect(await repo.importBytes(emerald(), fileName: 'otra.sav', origin: ImportOrigin.file), isA<ImportDuplicate>());
-      expect(filesIn(tmp), hasLength(3));
+      expect(filesIn(tmp), hasLength(5));
     });
 
     test('el índice se reconstruye desde la carpeta con los mismos datos', () async {
@@ -214,7 +219,7 @@ void main() {
         a.importBytes(gs, fileName: 'gs.sav', origin: ImportOrigin.file, now: same),
         b.importBytes(gs, fileName: 'gs.sav', origin: ImportOrigin.file, now: same),
       ]);
-      final saves = filesIn(tmp).where((f) => f.endsWith('.sav')).toList();
+      final saves = filesIn(tmp).where((f) => f.endsWith('.sav') && f.contains('/historial/')).toList();
       expect(saves, hasLength(5), reason: '2 copias del mismo Esmeralda + HG + BW + 1 Oro: $saves');
       expect(filesIn(tmp).where((f) => f.contains('.tmp')), isEmpty);
 
@@ -456,9 +461,16 @@ void main() {
       expect(r.failures.single, contains(bad));
       expect(r.leftBehind, 1);
       expect(progress.last, (2, 2));
-      // Origen: queda la copia dañada (nunca se borra) y el suelto.
-      expect(filesIn(from).where((f) => !f.endsWith('README.txt')).toList()..sort(),
-          ['PKArkTools/$bad', 'PKArkTools/$bad.json', 'PKArkTools/suelto.sav']..sort());
+      // Origen: queda la copia dañada (nunca se borra), su archivo principal
+      // y el suelto; el principal de lo movido se retira.
+      final badDir = ArcaLayout.ownerDirOf(bad);
+      expect(filesIn(from).where((f) => !f.endsWith('README.txt')).toList()..sort(), [
+        'PKArkTools/$bad',
+        'PKArkTools/$bad.json',
+        'PKArkTools/$badDir/Pokémon Platino.sav',
+        'PKArkTools/$badDir/ultima.json',
+        'PKArkTools/suelto.sav',
+      ]..sort());
       // Destino: la copia buena, verificada, y reindexable.
       final b = device(to, 'A');
       expect((await b.reindex()).added, 1);

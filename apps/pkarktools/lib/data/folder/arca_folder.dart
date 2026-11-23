@@ -49,6 +49,13 @@ class FolderListing {
 
   /// Marcadores `.icloud` (archivos aún no descargados): ruta absoluta si la hay.
   final List<String> placeholders = [];
+
+  /// `ultima.json` de cada carpeta de entrenador.
+  final List<String> latestIndexes = [];
+
+  /// Copias de conflicto de la nube (se ignoran, pero el reindexado retira
+  /// las del archivo principal cuyo contenido ya está en el historial).
+  final List<FsEntry> conflicts = [];
 }
 
 /// La carpeta del Arca: layout + acceso a archivos.
@@ -79,10 +86,21 @@ class ArcaFolder {
 
   static String sha256Of(Uint8List bytes) => crypto.sha256.convert(bytes).toString();
 
-  /// Escribe el README si falta (nunca lo sobrescribe).
+  /// Escribe el README si falta, o lo actualiza si es nuestro y de una
+  /// versión anterior de la estructura (un README ajeno nunca se toca).
   Future<void> ensureReadme() async {
     final path = _full(ArcaLayout.readmeName);
-    if (await fs.exists(path)) return;
+    if (await fs.exists(path)) {
+      try {
+        final text = utf8.decode(await fs.read(path), allowMalformed: true);
+        if (text.startsWith(ArcaLayout.readmeMarker) && !text.contains(ArcaLayout.readmeRevision)) {
+          await fs.writeReplace(path, Uint8List.fromList(utf8.encode(ArcaLayout.readme())));
+        }
+      } catch (_) {
+        // README ilegible o a medio sincronizar: se reintenta en otro momento.
+      }
+      return;
+    }
     try {
       await fs.writeNew(path, Uint8List.fromList(utf8.encode(ArcaLayout.readme())));
     } on FsExistsException {
@@ -95,6 +113,12 @@ class ArcaFolder {
   Future<bool> exists(String rel) => fs.exists(_full(rel));
 
   Future<void> delete(String rel) => fs.delete(_full(rel));
+
+  /// Escribe un archivo nuevo (nunca sobrescribe).
+  Future<void> writeNew(String rel, Uint8List bytes) => fs.writeNew(_full(rel), bytes);
+
+  /// Escribe o reemplaza de forma atómica un archivo derivado.
+  Future<void> writeReplace(String rel, Uint8List bytes) => fs.writeReplace(_full(rel), bytes);
 
   /// Escribe save + sidecar de un snapshot nuevo y devuelve la ruta del save.
   ///
@@ -152,9 +176,9 @@ class ArcaFolder {
   }
 
   /// Lista y clasifica los archivos de la carpeta (sin leer su contenido).
-  Future<FolderListing> listing() async {
+  Future<FolderListing> listing({String sub = ''}) async {
     final out = FolderListing();
-    final entries = await fs.list(prefix);
+    final entries = await fs.list(sub.isEmpty ? prefix : _full(sub));
     final byPath = <String, FsEntry>{};
     for (final e in entries) {
       final rel = prefix.isEmpty ? e.path : e.path.substring(prefix.length + 1);
@@ -165,13 +189,18 @@ class ArcaFolder {
     for (final e in byPath.values) {
       final rel = e.path;
       if (rel == ArcaLayout.readmeName) continue;
+      final name = rel.split('/').last;
+      if (name == ArcaLayout.latestName) {
+        out.latestIndexes.add(rel);
+        continue;
+      }
       final reason = ArcaLayout.ignoreReason(rel);
       if (reason != null) {
         out.ignored.update(reason, (v) => v + 1, ifAbsent: () => 1);
         if (reason == IgnoreReason.cloudPlaceholder) out.placeholders.add(rel);
+        if (reason == IgnoreReason.conflictCopy) out.conflicts.add(e);
         continue;
       }
-      final name = rel.split('/').last;
       if (ArcaLayout.managedSidecar.hasMatch(name)) {
         sidecars.add(rel);
       } else if (ArcaLayout.managedSave.hasMatch(name)) {

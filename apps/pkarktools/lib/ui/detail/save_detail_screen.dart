@@ -164,10 +164,11 @@ class _SaveDetailScreenState extends ConsumerState<SaveDetailScreen> {
                         const SizedBox(width: 32),
                         SizedBox(width: 360, child: history),
                       ])
+                    // Estrecho: la versión actual (y el historial plegado) arriba.
                     : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                        content,
-                        const SizedBox(height: 32),
                         history,
+                        const SizedBox(height: 28),
+                        content,
                       ]),
               ),
             ),

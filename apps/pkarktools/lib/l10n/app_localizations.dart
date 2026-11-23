@@ -3492,6 +3492,150 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'La descarga terminó, pero faltan {count} iconos. Pulsa «Reparar iconos» con conexión.'**
   String spritesIncomplete(int count);
+
+  /// No description provided for @originRestored.
+  ///
+  /// In es, this message translates to:
+  /// **'Restaurada'**
+  String get originRestored;
+
+  /// No description provided for @currentVersionTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Versión actual · {date}'**
+  String currentVersionTitle(String date);
+
+  /// No description provided for @mainFileLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'En la carpeta como «{name}», lista para copiar al juego o al emulador.'**
+  String mainFileLabel(String name);
+
+  /// No description provided for @openFolder.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir carpeta'**
+  String get openFolder;
+
+  /// No description provided for @openFolderTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta de la partida'**
+  String get openFolderTitle;
+
+  /// No description provided for @openFolderBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Dentro de la carpeta del Arca ({root}):\n\n{path}'**
+  String openFolderBody(String path, String root);
+
+  /// No description provided for @copyPath.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiar ruta'**
+  String get copyPath;
+
+  /// No description provided for @pathCopied.
+  ///
+  /// In es, this message translates to:
+  /// **'Ruta copiada'**
+  String get pathCopied;
+
+  /// No description provided for @historyCount.
+  ///
+  /// In es, this message translates to:
+  /// **'Historial ({count})'**
+  String historyCount(int count);
+
+  /// No description provided for @historyFoldedHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Todas las copias, de la más reciente a la más antigua. Nunca se modifican.'**
+  String get historyFoldedHint;
+
+  /// No description provided for @mainModifiedTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo principal cambió fuera de la app'**
+  String get mainModifiedTitle;
+
+  /// No description provided for @mainModifiedBody.
+  ///
+  /// In es, this message translates to:
+  /// **'«{name}» no coincide con ninguna copia del historial (¿copiaste encima un save nuevo?). Guárdalo como copia nueva para conservarlo; nunca se borra.'**
+  String mainModifiedBody(String name);
+
+  /// No description provided for @saveAsNewCopy.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar como nueva copia'**
+  String get saveAsNewCopy;
+
+  /// No description provided for @savedAsNewCopy.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardado en el historial: {name}'**
+  String savedAsNewCopy(String name);
+
+  /// No description provided for @restoreAsCurrentTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Restaurar como versión actual?'**
+  String get restoreAsCurrentTitle;
+
+  /// No description provided for @restoreAsCurrentBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se creará una entrada nueva en el historial con esta copia y el archivo principal («{name}») pasará a ser esta versión. Ninguna copia del historial se modifica.'**
+  String restoreAsCurrentBody(String name);
+
+  /// No description provided for @restoreAlsoSource.
+  ///
+  /// In es, this message translates to:
+  /// **'Restaurar y escribir en el original'**
+  String get restoreAlsoSource;
+
+  /// No description provided for @restoredAsCurrent.
+  ///
+  /// In es, this message translates to:
+  /// **'Copia restaurada como versión actual'**
+  String get restoredAsCurrent;
+
+  /// No description provided for @restoredNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Restaurada desde la copia del {date}'**
+  String restoredNote(String date);
+
+  /// No description provided for @arcaLayoutTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Cómo se organiza la carpeta'**
+  String get arcaLayoutTitle;
+
+  /// No description provided for @arcaLayoutDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Cada partida tiene su carpeta con la última versión, con el nombre que usa el juego (main, SaveData.bin, Esmeralda.sav…), lista para copiar al juego o al emulador. Debajo, historial/ guarda todas las copias sin modificarlas nunca. La última versión es una copia derivada: se regenera siempre desde el historial, así que nada se pierde aunque la borres o la cambies.'**
+  String get arcaLayoutDesc;
+
+  /// No description provided for @modifiedMainsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Archivos principales cambiados a mano'**
+  String get modifiedMainsTitle;
+
+  /// No description provided for @modifiedMainsDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'No coinciden con ninguna copia del historial. Guárdalos como copia nueva; la app no los toca hasta entonces.'**
+  String get modifiedMainsDesc;
+
+  /// No description provided for @historyMigrated.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta actualizada: {count} copias movidas a historial/'**
+  String historyMigrated(int count);
 }
 
 class _AppLocalizationsDelegate

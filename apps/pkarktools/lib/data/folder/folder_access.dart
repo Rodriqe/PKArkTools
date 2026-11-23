@@ -270,6 +270,16 @@ class SafFolderFs implements FolderFs {
   }
 
   @override
+  Future<void> writeReplace(String path, Uint8List bytes) async {
+    try {
+      await _ch.invokeMethod<void>('treeReplace', {'tree': tree, 'path': path, 'bytes': bytes});
+    } on PlatformException catch (e) {
+      if (e.code == 'access') _lost(e);
+      rethrow;
+    }
+  }
+
+  @override
   Future<void> delete(String path) => _ch.invokeMethod<void>('treeDelete', {'tree': tree, 'path': path});
 
   @override

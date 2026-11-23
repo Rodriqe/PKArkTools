@@ -50,6 +50,16 @@ class MemoryFolderFs implements FolderFs {
     files[key] = (Uint8List.fromList(bytes), DateTime.now());
   }
 
+  /// Escrituras de reemplazo hechas (para pruebas).
+  int replaceCount = 0;
+
+  @override
+  Future<void> writeReplace(String path, Uint8List bytes) async {
+    _check();
+    replaceCount++;
+    files[_norm(path)] = (Uint8List.fromList(bytes), DateTime.now());
+  }
+
   @override
   Future<void> delete(String path) async => files.remove(_norm(path));
 

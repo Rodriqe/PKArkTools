@@ -128,9 +128,15 @@ void main() {
     expect(find.text('LEAFY'), findsOneWidget);
     expect(find.text('Pikachu'), findsOneWidget);
     expect(find.text('Cajas'), findsOneWidget);
-    expect(find.text('Historial'), findsOneWidget);
+    // Versión actual destacada; el historial empieza plegado.
+    expect(find.textContaining('Versión actual'), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^Esmeralda_v2\.sav')), findsNothing);
+    await tester.ensureVisible(find.text('Historial (2)'));
+    await tester.tap(find.text('Historial (2)'));
+    await tester.pumpAndSettle();
     expect(find.textContaining('Esmeralda_v2.sav'), findsOneWidget);
-    expect(find.textContaining('Esmeralda.sav'), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^Esmeralda\.sav')), findsOneWidget);
+    expect(find.textContaining('«Pokémon Esmeralda.sav»'), findsOneWidget);
     expect(find.text('Más reciente'), findsOneWidget);
     expect(find.text('Checksum correcto'), findsOneWidget);
   });

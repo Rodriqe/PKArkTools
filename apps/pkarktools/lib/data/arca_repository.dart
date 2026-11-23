@@ -11,6 +11,8 @@ import 'package:pkcore/pkcore.dart';
 import 'db/arca_database.dart';
 import 'folder/arca_folder.dart';
 import 'folder/arca_layout.dart';
+import 'folder/arca_main_files.dart';
+import 'folder/arca_migration.dart';
 import 'folder/folder_fs.dart';
 import 'save_source.dart';
 
@@ -65,7 +67,10 @@ enum ImportOrigin {
   restoreBackup('restore-backup'),
   edit('edit'),
   adopted('adopted'),
-  migrated('migrated');
+  migrated('migrated'),
+
+  /// Copia antigua restaurada como versión actual (entrada nueva del historial).
+  restored('restored');
 
   const ImportOrigin(this.code);
   final String code;
@@ -150,6 +155,19 @@ class ReindexReport {
   Map<IgnoreReason, int> ignored = const {};
   List<String> placeholders = const [];
 
+  /// Archivos principales (última versión de cada carpeta de entrenador).
+  List<MainFileStatus> mains = const [];
+
+  /// Copias de conflicto de la nube del principal retiradas (ya estaban en
+  /// el historial).
+  int conflictsCleaned = 0;
+
+  /// Copias del diseño anterior movidas a `historial/` en este reindexado.
+  MigrationResult? historyMigration;
+
+  /// Principales reemplazados a mano (contenido fuera del historial).
+  List<MainFileStatus> get modifiedMains => [for (final m in mains) if (m.state == MainState.modified) m];
+
   int get ignoredCount => ignored.values.fold(0, (a, b) => a + b);
 }
 
@@ -175,6 +193,7 @@ class ArcaRepository {
   ArcaDevice? _device;
 
   final _reports = StreamController<ReindexReport>.broadcast();
+  final MainHashCache _mainHashes = {};
   ReindexReport? _lastReport;
   Future<ReindexReport>? _running;
   bool _rerun = false;
@@ -253,6 +272,7 @@ class ArcaRepository {
     String? note,
     int? forceSlotId,
   }) async {
+    final allowDuplicate = origin == ImportOrigin.restored;
     final SaveFile save;
     try {
       save = await parseSaveInIsolate(bytes);
@@ -272,15 +292,16 @@ class ArcaRepository {
     final folder = this.folder;
 
     try {
-      return await db.transaction(() async {
+      return await db.transaction<(ImportOutcome, String?)>(() async {
         final slot = forceSlotId != null
             ? await (db.select(db.saveSlots)..where((s) => s.id.equals(forceSlotId))).getSingleOrNull()
             : await (db.select(db.saveSlots)..where((s) => s.identityKey.equals(save.identityKey))).getSingleOrNull();
-        if (slot != null) {
+        if (slot != null && !allowDuplicate) {
           final existing = await (db.select(db.snapshots)
-                ..where((s) => s.slotId.equals(slot.id) & s.sha256.equals(sha)))
+                ..where((s) => s.slotId.equals(slot.id) & s.sha256.equals(sha))
+                ..limit(1))
               .getSingleOrNull();
-          if (existing != null) return ImportDuplicate(fileName, slot.id, save);
+          if (existing != null) return (ImportDuplicate(fileName, slot.id, save), null);
         }
         final slotMeta = slot != null
             ? (forceSlotId != null
@@ -335,10 +356,40 @@ class ArcaRepository {
         final rel = await folder.writeSnapshot(bytes, meta);
         final (slotId, newSlot) = await _upsertSlot(slotMeta, ts, renamed: forceSlotId != null);
         final snapId = await _insertSnapshot(slotId, meta, rel);
-        return ImportAdded(fileName, slotId, snapId, save, newSlot: newSlot);
+        return (ImportAdded(fileName, slotId, snapId, save, newSlot: newSlot), rel);
+      }).then((r) async {
+        // La copia nueva puede ser la última: se actualiza ya el archivo principal.
+        if (r.$2 != null) await refreshMainsFor(ArcaLayout.ownerDirOf(r.$2!));
+        return r.$1;
       });
     } catch (e) {
       return ImportFailed(fileName, 'No se pudo escribir en la carpeta del Arca: $e');
+    }
+  }
+
+  /// Recalcula el archivo principal de una sola carpeta de entrenador (tras
+  /// importar, editar o restaurar). Nunca lanza: un fallo se corrige en el
+  /// próximo reindexado.
+  Future<List<MainFileStatus>> refreshMainsFor(String ownerDir) async {
+    try {
+      final folder = this.folder;
+      final listing = await folder.listing(sub: ownerDir);
+      final rows = await db.select(db.snapshots).get();
+      final history = [
+        for (final r in rows)
+          if (r.relPath != null && r.problem == null && ArcaLayout.ownerDirOf(r.relPath!) == ownerDir && listing.pairs.containsKey(r.relPath))
+            HistoryEntry(path: r.relPath!, sha256: r.sha256, importedAt: r.importedAt, gameCode: r.gameCode, originalName: r.fileName),
+      ];
+      final out = await ArcaMainFiles.sync(
+        folder: folder,
+        listing: listing,
+        history: history,
+        cache: _mainHashes,
+        knownShas: {for (final r in rows) r.sha256},
+      );
+      return out.mains;
+    } catch (_) {
+      return const [];
     }
   }
 
@@ -431,7 +482,16 @@ class ArcaRepository {
   Future<ReindexReport> _reindexOnce() async {
     final folder = this.folder;
     final report = ReindexReport(at: DateTime.now());
-    final listing = await folder.listing();
+    var listing = await folder.listing();
+    if (ArcaMigration.needsHistoryLayout(listing)) {
+      // Diseño anterior: las copias pasan a historial/ conservando sus filas
+      // del índice (mismo id), y se vuelve a listar.
+      await folder.ensureReadme();
+      report.historyMigration = await ArcaMigration.toHistoryLayout(folder, listing, onMoved: (from, to) async {
+        await (db.update(db.snapshots)..where((s) => s.relPath.equals(from))).write(SnapshotsCompanion(relPath: Value(to)));
+      });
+      listing = await folder.listing();
+    }
     report
       ..loose = listing.loose
       ..ignored = listing.ignored
@@ -492,8 +552,15 @@ class ArcaRepository {
       }
       for (final (rel, meta, problem) in metas) {
         final (slotId, _) = await _upsertSlot(meta.slot, meta.importedAt, renamed: true);
-        final dup = await (db.select(db.snapshots)..where((s) => s.slotId.equals(slotId) & s.sha256.equals(meta.sha256)))
-            .getSingleOrNull();
+        // Una restauración es siempre una entrada propia del historial aunque
+        // repita el contenido de otra copia.
+        final dup = meta.origin == ImportOrigin.restored.code
+            ? null
+            : await (db.select(db.snapshots)
+                  ..where((s) =>
+                      s.slotId.equals(slotId) & s.sha256.equals(meta.sha256) & s.origin.equals(ImportOrigin.restored.code).not())
+                  ..limit(1))
+                .getSingleOrNull();
         if (dup != null) {
           report.duplicates++;
           // Todos los dispositivos convergen en la misma copia: la más antigua
@@ -518,7 +585,75 @@ class ArcaRepository {
       }
       if (gone.isNotEmpty) await _dropEmptySlots();
     });
+
+    // Archivo principal de cada carpeta: copia de la entrada más reciente del
+    // historial (copias íntegras; las dañadas no cuentan).
+    final indexed = {for (final r in await db.select(db.snapshots).get()) if (r.relPath != null) r.relPath!: r};
+    final fresh = {for (final (rel, meta, problem) in metas) rel: (meta, problem)};
+    final history = <HistoryEntry>[];
+    for (final rel in listing.pairs.keys) {
+      final row = indexed[rel];
+      final m = fresh[rel];
+      if (row != null) {
+        if (row.problem != null) continue;
+        history.add(HistoryEntry(
+            path: rel, sha256: row.sha256, importedAt: row.importedAt, gameCode: row.gameCode, originalName: row.fileName));
+      } else if (m != null && m.$2 == null) {
+        // Duplicado de otra copia (mismo contenido): cuenta para la fecha.
+        history.add(HistoryEntry(
+            path: rel,
+            sha256: m.$1.sha256,
+            importedAt: m.$1.importedAt,
+            gameCode: m.$1.gameCode,
+            originalName: m.$1.originalFileName));
+      }
+    }
+    final mains = await ArcaMainFiles.sync(
+        folder: folder, listing: listing, history: history, cache: _mainHashes, knownShas: {for (final r in indexed.values) r.sha256});
+    report
+      ..mains = mains.mains
+      ..conflictsCleaned = mains.conflictsCleaned
+      ..loose = mains.loose;
     return report;
+  }
+
+  /// Archivo principal (ruta relativa a la raíz del Arca) de la partida de
+  /// [latest], su copia más reciente.
+  static String? mainPathOf(Snapshot latest) {
+    final rel = latest.relPath;
+    if (rel == null) return null;
+    return ArcaLayout.mainPath(ArcaLayout.ownerDirOf(rel), ArcaLayout.mainFileName(latest.gameCode, latest.fileName));
+  }
+
+  /// Guarda en el historial un archivo principal reemplazado a mano. Pasa a
+  /// ser la versión actual; el archivo nunca se borra.
+  Future<ImportOutcome> saveMainAsCopy(String mainPath) async {
+    final name = mainPath.split('/').last;
+    final Uint8List bytes;
+    try {
+      bytes = await folder.read(mainPath);
+    } catch (e) {
+      return ImportFailed(name, 'No se pudo leer $mainPath: $e');
+    }
+    final out = await importBytes(bytes, fileName: name, origin: ImportOrigin.adopted, sourcePath: null);
+    await reindex();
+    return out;
+  }
+
+  /// Restaura una copia antigua como versión actual: crea una entrada nueva
+  /// del historial (origen «restaurada») con su contenido y actualiza el
+  /// archivo principal. El historial nunca se reescribe.
+  Future<ImportOutcome> restoreAsCurrent(Snapshot s, {String? note, DateTime? now}) async {
+    final bytes = await snapshotBytes(s);
+    final out = await importBytes(bytes,
+        fileName: s.fileName,
+        origin: ImportOrigin.restored,
+        sourcePath: s.sourcePath,
+        note: note,
+        now: now,
+        forceSlotId: s.slotId);
+    await reindex();
+    return out;
   }
 
   Future<void> _dropEmptySlots() => db.customStatement(
@@ -586,7 +721,7 @@ class ArcaRepository {
   }
 
   static Set<SaveSource> _sources(List<Snapshot> snaps) {
-    const derived = {'edit', 'restore-backup'};
+    const derived = {'edit', 'restore-backup', 'restored'};
     final imported = snaps.where((s) => !derived.contains(s.origin));
     final found = {for (final s in imported) SaveSource.ofSnapshot(s)};
     if (found.length > 1) found.remove(SaveSource.other);
@@ -692,12 +827,26 @@ class ArcaRepository {
       await (db.delete(db.snapshots)..where((s) => s.slotId.equals(slotId))).go();
       await (db.delete(db.saveSlots)..where((s) => s.id.equals(slotId))).go();
     });
+    final dirs = <String>{};
+    final shas = {for (final s in snaps) s.sha256};
     for (final s in snaps) {
       final rel = s.relPath;
       if (rel == null) continue;
+      dirs.add(ArcaLayout.ownerDirOf(rel));
       // Primero el .json: sin él, otro dispositivo nunca indexa un save a medias.
       await folder.delete(ArcaLayout.sidecarFor(rel));
       await folder.delete(rel);
+    }
+    // Archivos principales derivados de esas copias (nunca uno modificado a mano).
+    for (final dir in dirs) {
+      final names = {for (final s in snaps) if (s.relPath != null && ArcaLayout.ownerDirOf(s.relPath!) == dir) ArcaLayout.mainFileName(s.gameCode, s.fileName)};
+      for (final name in names) {
+        final path = ArcaLayout.mainPath(dir, name);
+        try {
+          if (await folder.exists(path) && shas.contains(ArcaFolder.sha256Of(await folder.read(path)))) await folder.delete(path);
+        } catch (_) {}
+      }
+      await folder.delete(ArcaLayout.latestPath(dir));
     }
   }
 

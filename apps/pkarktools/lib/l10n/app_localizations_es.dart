@@ -2100,4 +2100,97 @@ class AppLocalizationsEs extends AppLocalizations {
   String spritesIncomplete(int count) {
     return 'La descarga terminó, pero faltan $count iconos. Pulsa «Reparar iconos» con conexión.';
   }
+
+  @override
+  String get originRestored => 'Restaurada';
+
+  @override
+  String currentVersionTitle(String date) {
+    return 'Versión actual · $date';
+  }
+
+  @override
+  String mainFileLabel(String name) {
+    return 'En la carpeta como «$name», lista para copiar al juego o al emulador.';
+  }
+
+  @override
+  String get openFolder => 'Abrir carpeta';
+
+  @override
+  String get openFolderTitle => 'Carpeta de la partida';
+
+  @override
+  String openFolderBody(String path, String root) {
+    return 'Dentro de la carpeta del Arca ($root):\n\n$path';
+  }
+
+  @override
+  String get copyPath => 'Copiar ruta';
+
+  @override
+  String get pathCopied => 'Ruta copiada';
+
+  @override
+  String historyCount(int count) {
+    return 'Historial ($count)';
+  }
+
+  @override
+  String get historyFoldedHint =>
+      'Todas las copias, de la más reciente a la más antigua. Nunca se modifican.';
+
+  @override
+  String get mainModifiedTitle => 'El archivo principal cambió fuera de la app';
+
+  @override
+  String mainModifiedBody(String name) {
+    return '«$name» no coincide con ninguna copia del historial (¿copiaste encima un save nuevo?). Guárdalo como copia nueva para conservarlo; nunca se borra.';
+  }
+
+  @override
+  String get saveAsNewCopy => 'Guardar como nueva copia';
+
+  @override
+  String savedAsNewCopy(String name) {
+    return 'Guardado en el historial: $name';
+  }
+
+  @override
+  String get restoreAsCurrentTitle => '¿Restaurar como versión actual?';
+
+  @override
+  String restoreAsCurrentBody(String name) {
+    return 'Se creará una entrada nueva en el historial con esta copia y el archivo principal («$name») pasará a ser esta versión. Ninguna copia del historial se modifica.';
+  }
+
+  @override
+  String get restoreAlsoSource => 'Restaurar y escribir en el original';
+
+  @override
+  String get restoredAsCurrent => 'Copia restaurada como versión actual';
+
+  @override
+  String restoredNote(String date) {
+    return 'Restaurada desde la copia del $date';
+  }
+
+  @override
+  String get arcaLayoutTitle => 'Cómo se organiza la carpeta';
+
+  @override
+  String get arcaLayoutDesc =>
+      'Cada partida tiene su carpeta con la última versión, con el nombre que usa el juego (main, SaveData.bin, Esmeralda.sav…), lista para copiar al juego o al emulador. Debajo, historial/ guarda todas las copias sin modificarlas nunca. La última versión es una copia derivada: se regenera siempre desde el historial, así que nada se pierde aunque la borres o la cambies.';
+
+  @override
+  String get modifiedMainsTitle => 'Archivos principales cambiados a mano';
+
+  @override
+  String get modifiedMainsDesc =>
+      'No coinciden con ninguna copia del historial. Guárdalos como copia nueva; la app no los toca hasta entonces.';
+
+  @override
+  String historyMigrated(int count) {
+    return 'Carpeta actualizada: $count copias movidas a historial/';
+  }
 }

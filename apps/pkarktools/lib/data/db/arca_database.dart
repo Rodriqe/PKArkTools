@@ -32,7 +32,7 @@ class Snapshots extends Table {
   DateTimeColumn get importedAt => dateTime()();
   TextColumn get fileName => text()();
 
-  /// file | folder | saf | demo | restore-backup | edit
+  /// file | folder | saf | demo | restore-backup | edit | adopted | migrated | restored
   TextColumn get origin => text()();
 
   /// Ruta (o URI SAF) de donde se importó, para restaurar en el mismo sitio.
@@ -61,10 +61,9 @@ class Snapshots extends Table {
   /// Problema detectado al leer la copia (tamaño o hash distintos…).
   TextColumn get problem => text().nullable()();
 
-  @override
-  List<Set<Column>> get uniqueKeys => [
-        {slotId, sha256},
-      ];
+  // Desde la versión 4 una partida puede tener varias copias con el mismo
+  // contenido: restaurar una copia antigua crea una entrada nueva del
+  // historial. La deduplicación de importaciones la hace el repositorio.
 }
 
 /// Preferencias clave/valor.
@@ -81,7 +80,7 @@ class ArcaDatabase extends _$ArcaDatabase {
   ArcaDatabase(super.e);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -93,6 +92,8 @@ class ArcaDatabase extends _$ArcaDatabase {
             await m.addColumn(snapshots, snapshots.deviceName);
             await m.addColumn(snapshots, snapshots.problem);
           }
+          // Sin la restricción única (partida, sha256): se recrea la tabla.
+          if (from < 4) await m.alterTable(TableMigration(snapshots));
         },
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON');
