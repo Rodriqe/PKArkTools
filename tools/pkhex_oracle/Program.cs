@@ -4,6 +4,7 @@
 //   roundtrip <save>              carga y vuelve a escribir sin cambios; cuenta bytes distintos
 //   edit <in> <out>               edición simple (dinero, nivel/movimiento del primer Pokémon de caja)
 //   forms <outdir>                tabla (especie, forma, juego) y nombres de forma (FormTable.cs)
+//   dex <outdir>                  formas especiales y evoluciones para la Dex global (DexTable.cs)
 //
 // Los volcados de saves reales contienen datos personales: guárdalos en .scratch/.
 using System.Text.Json;
@@ -16,6 +17,8 @@ static class Program
     {
         if (args.Length == 2 && args[0] == "forms")
             return FormTable.Run(args[1]);
+        if (args.Length == 2 && args[0] == "dex")
+            return DexTable.Run(args[1]);
         if (args.Length < 2)
         {
             Console.Error.WriteLine("uso: dump <save> [out.json] | roundtrip <save> | edit <in> <out> | forms <outdir>");

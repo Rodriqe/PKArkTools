@@ -28,9 +28,16 @@ import '../write/save_writer.dart';
 
 /// Pokémon a incluir en un save sintético.
 class SynthMon {
-  const SynthMon(this.species, {this.level = 5, this.nickname, this.shiny = false, this.egg = false, this.item = 0});
+  const SynthMon(this.species,
+      {this.level = 5, this.nickname, this.shiny = false, this.egg = false, this.item = 0, this.form = 0, this.gigantamax = false});
 
   final int species;
+
+  /// Forma (índice de PKHeX; Gen 4 en adelante).
+  final int form;
+
+  /// Factor Gigamax (solo PK8).
+  final bool gigantamax;
   final int level;
   final String? nickname;
   final bool shiny;
@@ -148,7 +155,7 @@ abstract final class SyntheticSaves {
     d.setU16le(0x0E, sid);
     d.setU32le(0x10, Species.expForLevel(m.species, m.level));
     d.setU32le(0x38, (m.nickname != null ? 1 << 31 : 0) | (m.egg ? 1 << 30 : 0));
-    d[0x40] = (_genderFor(m.species, pid) & 3) << 1;
+    d[0x40] = ((_genderFor(m.species, pid) & 3) << 1) | ((m.form & 0x1F) << 3);
     d[0x83] = 4;
     d[0x5F] = gen == 4 ? 12 : 21; // Platino / Negro
     d[0x84] = m.level.clamp(1, 100);
@@ -185,7 +192,7 @@ abstract final class SyntheticSaves {
     d.setU32le(0x18, _pidFor(m, tid, sid, salt));
     d.setRange(0x40, 0x40 + 24, StringCodec.encodeUtf16(m.nickname ?? Species.name(m.species, SpeciesLanguage.en), 24));
     d.setU32le(0x74, (m.nickname != null ? 1 << 31 : 0) | (m.egg ? 1 << 30 : 0));
-    d[0x1D] = (_genderFor(m.species, salt * 37) & 3) << 1;
+    d[0x1D] = ((_genderFor(m.species, salt * 37) & 3) << 1) | ((m.form & 0x1F) << 3);
     d[0xDC] = 4;
     d[0xDF] = 26; // Zafiro Alfa
     d[0xDD] = m.level.clamp(1, 100);
@@ -234,6 +241,8 @@ abstract final class SyntheticSaves {
       d.setU16le(0x14, abil.first);
       d[0x16] = 1;
     }
+    if (m.gigantamax && !gen9) d[0x16] |= 0x10;
+    d[0x24] = m.form;
     d[0x148] = m.level;
     d.setU16le(6, PkCrypto.checksumFrom8(d, PkCrypto.size8Stored));
     return PkCrypto.encrypt8(d);
@@ -651,6 +660,7 @@ abstract final class SyntheticSaves {
     final pk = Pkm.fromDecrypted(f, Uint8List(f.partySize))..dataGame = game;
     pk.encryptionConstant = 0x5EED0000 + salt * 0x3141;
     pk.species = m.species;
+    pk.form = m.form;
     pk.tid = t.tid;
     pk.sid = t.sid;
     pk.pid = _pidFor(m, t.tid, t.sid, salt, threshold: 16);

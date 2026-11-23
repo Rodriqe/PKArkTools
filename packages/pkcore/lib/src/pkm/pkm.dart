@@ -231,6 +231,18 @@ class Pkm {
     }
   }
 
+  /// Factor Gigamax (PKHeX `G8PKM.CanGigantamax`: bit 4 del byte 0x16 en
+  /// PK8/PB8/PA8). Solo Espada/Escudo lo usa; `false` en otros formatos.
+  bool get canGigantamax => switch (format) {
+        PkFormat.pk8 || PkFormat.pb8 || PkFormat.pa8 => (data[0x16] & 0x10) != 0,
+        _ => false,
+      };
+
+  set canGigantamax(bool v) {
+    if (format != PkFormat.pk8 && format != PkFormat.pb8 && format != PkFormat.pa8) return;
+    data[0x16] = (data[0x16] & ~0x10) | (v ? 0x10 : 0);
+  }
+
   // ------------------------------------------------------------ huevo / apodo
 
   bool get isEgg => switch (format) {
