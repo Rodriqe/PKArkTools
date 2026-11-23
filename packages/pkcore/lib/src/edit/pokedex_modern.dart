@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import '../crypto/sc_block.dart';
+import '../data/forms.dart';
 import '../data/game_data.dart';
 import '../data/generated/dex_data.dart';
 import '../data/species_convert.dart';
@@ -25,7 +26,11 @@ int _setMask(int mask, int bit, bool v) => v ? mask | (1 << bit) : mask & ~(1 <<
 mixin _GenderInfo on Pokedex {
   GameVersion get game;
 
-  int _ratio(int species) => GameDataTable.forGame(game).entry(species)?.genderRatio ?? 255;
+  // Primera forma presente: en Leyendas Arceus Growlithe solo existe como forma de Hisui.
+  int _ratio(int species) {
+    final forms = SpeciesForms.presentForms(species, game);
+    return GameDataTable.forGame(game).entry(species, forms.isEmpty ? 0 : forms.first)?.genderRatio ?? 255;
+  }
 
   bool _dualGender(int species) {
     final r = _ratio(species);

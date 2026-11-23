@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import '../data/forms.dart';
 import '../data/game_data.dart';
 import '../data/species.dart';
 import '../edit/save_editor.dart';
@@ -23,6 +24,7 @@ abstract final class PkmFactory {
   /// 00/00/00 u obediencia 0 es ilegal y el juego puede rechazar el save.
   static Pkm create(GameVersion game, TrainerData trainer,
       {int species = 25,
+      int form = 0,
       int level = 5,
       int language = 7,
       bool japanese = false,
@@ -38,6 +40,7 @@ abstract final class PkmFactory {
     if (f.hasEncryptionConstant) pk.encryptionConstant = rnd.nextInt(0x7FFFFFFF) | 1;
     if (!f.isGameBoy) pk.pid = (rnd.nextInt(0x10000) << 16) | rnd.nextInt(0x10000);
     pk.species = species;
+    pk.form = form;
     pk.tid = trainer.tid;
     pk.sid = trainer.sid;
     pk.language = f.isGameBoy ? 2 : language;
@@ -47,7 +50,7 @@ abstract final class PkmFactory {
     pk.ball = 4;
     pk.friendship = 70;
     final table = GameDataTable.forGame(game);
-    final personal = table.entry(species);
+    final personal = table.entry(species, form);
     if (f.generation >= 3) {
       if (f.generation >= 5) pk.nature = rnd.nextInt(25);
       if (f.hasStatNature) pk.statNature = pk.nature;
@@ -57,10 +60,15 @@ abstract final class PkmFactory {
         pk.gender = r == 255 ? 2 : (r == 254 ? 1 : (r == 0 ? 0 : (rnd.nextInt(253) + 1 < r ? 1 : 0)));
       }
     }
+    // Gen 9: teratipo original = primer tipo de la forma (PKHeX), salvo Ogerpon.
+    if (f.hasTeraType) {
+      pk.teraTypeOriginal = SpeciesForms.defaultTeraType(species, form, game);
+      pk.teraType = pk.teraTypeOriginal; // sin teralito (19)
+    }
     pk.setIvs([for (var i = 0; i < 6; i++) rnd.nextInt(f.maxIv + 1)]);
     // Últimos 4 movimientos aprendidos por nivel.
     final learned = [
-      for (final m in table.levelUpMoves(species))
+      for (final m in table.levelUpMoves(species, form))
         if (m.level <= level && m.move != 0) m.move,
     ];
     final unique = <int>[];

@@ -201,4 +201,13 @@ abstract final class SpeciesForms {
     if (ea == null || eb == null) return false;
     return ea.type1 != eb.type1 || ea.type2 != eb.type2 || ea.baseStats.join(',') != eb.baseStats.join(',');
   }
+
+  /// Teratipo original por defecto (id de PKHeX, 0 = Normal … 17 = Hada): el
+  /// primer tipo de la forma (Decidueye de Hisui → Planta); Ogerpon tiene el
+  /// de su máscara (Turquesa → Planta, Fuente → Agua, Horno → Fuego, Cimiento → Roca).
+  static int defaultTeraType(int species, int form, [GameVersion? game]) {
+    if (species == 1017) return const [11, 10, 9, 5][form & 3];
+    final (t1, _) = types(species, form, game ?? GameVersion.scarletViolet);
+    return t1 == PokemonType.none ? 0 : t1.index - 1;
+  }
 }
