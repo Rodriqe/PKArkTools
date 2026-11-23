@@ -91,6 +91,53 @@ todos tus dispositivos comparten el mismo Arca:
 Sugerencias por plataforma: Android → Google Drive o Documentos; iOS/macOS →
 iCloud Drive; Windows → OneDrive; Linux → Syncthing.
 
+### En un NAS (carpeta de red)
+
+También puedes poner el Arca en una carpeta compartida de un NAS (Synology,
+QNAP, TrueNAS, un Windows o un Mac que comparta una carpeta…) y usarla desde
+el Mac y desde Android a la vez:
+
+1. **Mac:** conéctate al recurso (Finder › Ir › Conectarse al servidor,
+   `smb://nas.local/Compartido`) y marca «Recordar esta contraseña en el
+   llavero». En la app pulsa **Elegir carpeta** y elige una carpeta dentro de
+   `/Volumes/Compartido`. Si esa carpeta ya tiene una `PKArkTools/` (la creó
+   otro dispositivo), se usa esa: no se crea otra.
+2. **Android:** instala un proveedor de documentos SMB (por ejemplo «CIFS
+   Documents Provider», libre) y añade el NAS. Después, en **Elegir carpeta**,
+   el selector del sistema muestra el NAS: elige la misma carpeta.
+3. En **Ajustes › Carpeta del Arca** verás «Carpeta de red (NAS) ·
+   NAS/Compartido» con un icono de red.
+
+Cómo se comporta en red:
+
+* **Cambios de otros dispositivos.** macOS no avisa de lo que otros equipos
+  escriben en un recurso SMB, así que la app revisa la carpeta **cada minuto
+  mientras está en primer plano** y al volver a ella (solo lista la carpeta y
+  lee las copias nuevas). Siempre puedes pulsar **Reindexar**.
+* **Si el NAS no está montado** al abrir la app (fuera de casa, NAS apagado,
+  Wi-Fi caída), aparece **«Carpeta de red no disponible»** con **Reintentar**
+  y **Elegir otra**. La app no la trata como un Arca vacía ni crea nada: en
+  macOS un recurso desmontado puede dejar `/Volumes/Compartido` como carpeta
+  local, y la app comprueba siempre que el NAS sigue montado antes de escribir.
+  Al volver a la app con el NAS ya montado se reintenta sola.
+* **Red lenta o cortes breves.** Las escrituras son atómicas (temporal +
+  renombrar), los errores pasajeros se reintentan con espera creciente y
+  ninguna operación se queda colgada: si el NAS no responde, se pasa a «no
+  disponible».
+* **Archivos del sistema del NAS** (`._*` de macOS, `.DS_Store`, `@eaDir` y
+  `#recycle` de Synology, `@Recycle` de QNAP, `.snapshot`, `$RECYCLE.BIN`,
+  `Thumbs.db`) se ignoran y ni siquiera se recorren.
+* **Nombres.** Los nombres de carpeta se sanean para SMB/Windows (sin
+  `: * ? " < > |`, rutas cortas) y la app no distingue mayúsculas ni la forma
+  de los acentos (macOS devuelve «Pokémon» descompuesto en los recursos SMB).
+
+Recomendaciones: usa SMB 3 (el predeterminado en macOS y en los NAS actuales);
+en Synology, si aparecen archivos `._*`, activa «Compatibilidad con Mac» /
+«Flujos de datos alternativos» en SMB; y guarda una copia aparte del NAS
+(snapshots del NAS o **Ajustes › Exportar el Arca** a zip). Las mismas reglas
+de varios dispositivos de arriba valen para el NAS: el historial nunca se
+sobrescribe y la última versión se recalcula desde él.
+
 ## 4. Prueba con partidas de ejemplo
 
 Con el Arca vacía (o desde Ajustes) pulsa **Probar con partidas de ejemplo**:
@@ -105,6 +152,9 @@ Si el sistema retira el permiso (bookmark caducado, permiso revocado en Ajustes
 del sistema, unidad desconectada), la app muestra una pantalla para
 **reintentar** o **elegir otra carpeta**. Tus copias siguen en la carpeta: no
 se borra nada.
+
+Si la carpeta está en un NAS que no está montado, la pantalla es **«Carpeta de
+red no disponible»** (ver [En un NAS](#en-un-nas-carpeta-de-red)).
 
 <img src="../screenshots/34_acceso_perdido.png" width="380" alt="Acceso perdido a la carpeta">
 

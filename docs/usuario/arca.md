@@ -157,6 +157,14 @@ PKArkTools/_cuarentena/     ← lo que «Arreglar» no pudo reparar, con una not
   nada. Las «copias en conflicto» del archivo (`main (1)`, `conflicted copy`,
   `.icloud`) se retiran solas si su contenido está en el historial; si no, se
   ofrecen para adoptar.
+* **En un NAS (SMB/AFP/NFS/WebDAV).** Funciona igual: la app detecta que la
+  carpeta está en red (Ajustes muestra «Carpeta de red (NAS)» con el nombre del
+  NAS y del recurso), revisa la carpeta cada minuto mientras está en primer
+  plano, reintenta los cortes breves, ignora los archivos del sistema del NAS
+  (`._*`, `.DS_Store`, `@eaDir`, `#recycle`, `.snapshot`, `$RECYCLE.BIN`,
+  `Thumbs.db`) y nunca escribe si el recurso no está montado. Mac y Android
+  (con un proveedor SMB) pueden usar la misma carpeta con las mismas reglas.
+  Ver [Primeros pasos › En un NAS](primeros-pasos.md#en-un-nas-carpeta-de-red).
 
 ## Bandeja de entrada
 

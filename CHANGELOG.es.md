@@ -11,6 +11,43 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+### Añadido
+- **Arca en una carpeta de red (NAS)** en macOS (SMB, también AFP/NFS/WebDAV)
+  y Android (SAF con un proveedor de documentos SMB). La carpeta se detecta
+  como de red (tabla de montajes con `getfsstat`, sin bloquearse nunca en un
+  servidor que no responde) y Ajustes muestra «Carpeta de red (NAS) ·
+  NAS/Recurso» con un icono de red. Ver
+  [Primeros pasos › En un NAS](docs/usuario/primeros-pasos.md#en-un-nas-carpeta-de-red).
+- Pantalla **«Carpeta de red no disponible»** con **Reintentar** y **Elegir
+  otra** cuando el recurso no está montado; se reintenta sola al volver a la
+  app.
+- Las carpetas de red se reindexan cada 60 s mientras la app está en primer
+  plano (FSEvents no ve los cambios de otros equipos en SMB), sin solaparse y
+  espaciándose si la red va lenta.
+- Diálogo de progreso («Importando N de M») en las importaciones grandes.
+
+### Corregido
+- Los nombres de carpeta que macOS devuelve descompuestos (NFD) en volúmenes
+  SMB/AFP («Pokémon») ya no hacen que cada reindexado quite y vuelva a añadir
+  todas las copias y reescriba los archivos principales.
+- La app nunca escribe en un recurso desmontado: detecta la carpeta local
+  `/Volumes/<recurso>` que puede quedar en su lugar y nunca crea la carpeta
+  raíz.
+- Elegir una carpeta que ya contiene `PKArkTools/` (o la propia carpeta
+  `PKArkTools`, aunque no tenga README) nunca anida otra `PKArkTools/`.
+
+### Cambiado
+- Carpetas de red: los errores pasajeros (EAGAIN, ETIMEDOUT, ESTALE, un ENOENT
+  momentáneo…) se reintentan con espera creciente y cada operación tiene un
+  tiempo máximo; reemplazar un archivo principal aparta el anterior y
+  renombra si el servidor no reemplaza al renombrar.
+- Los archivos de sistema del NAS y del SO (`._*` AppleDouble, `.DS_Store`,
+  `@eaDir`, `#recycle`, `@Recycle`, `.snapshot`, `$RECYCLE.BIN`,
+  `Thumbs.db`…) se ignoran y esas carpetas ni se recorren; el listado consulta
+  los archivos en paralelo.
+- Las carpetas existentes se reutilizan sin distinguir mayúsculas (SMB no las
+  distingue), también en Android.
+
 ## [0.1.2] — 2026-11-23
 
 Los problemas de la carpeta del Arca se pliegan en una línea en Ajustes y se

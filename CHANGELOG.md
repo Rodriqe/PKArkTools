@@ -11,6 +11,43 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+### Added
+- **Ark in a network folder (NAS)** on macOS (SMB, also AFP/NFS/WebDAV) and
+  Android (SAF with an SMB documents provider). The folder is detected as a
+  network folder (mount table via `getfsstat`, never blocking on an
+  unresponsive server) and Settings shows "Network folder (NAS) ·
+  NAS/Share" with a network icon. See
+  [Getting started › On a NAS](docs/usuario/primeros-pasos.md#en-un-nas-carpeta-de-red) (Spanish).
+- **"Network folder unavailable"** screen with **Retry** and **Choose
+  another** when the share is not mounted; retried automatically when the
+  app comes back to the foreground.
+- Network folders are re-indexed every 60 s while the app is in the
+  foreground (FSEvents does not see other machines' changes on SMB), never
+  overlapping and spaced out if the network is slow.
+- Progress dialog ("Importing N of M") for large imports.
+
+### Fixed
+- Folder names that macOS returns decomposed (NFD) on SMB/AFP volumes
+  ("Pokémon") no longer make every re-index drop and re-add all copies and
+  rewrite the main files.
+- The app never writes into an unmounted share: a stale local
+  `/Volumes/<share>` folder is detected and the root folder is never created.
+- Choosing a folder that already contains `PKArkTools/` (or the
+  `PKArkTools` folder itself, even without its README) never nests a second
+  `PKArkTools/`.
+
+### Changed
+- Network folders: transient errors (EAGAIN, ETIMEDOUT, ESTALE, a momentary
+  ENOENT…) are retried with backoff and every operation has a time limit;
+  replacing a main file falls back to set-aside + rename on servers that do
+  not replace on rename.
+- NAS and OS system files (`._*` AppleDouble, `.DS_Store`, `@eaDir`,
+  `#recycle`, `@Recycle`, `.snapshot`, `$RECYCLE.BIN`, `Thumbs.db`…) are
+  ignored and those folders are not even walked; listing stats files in
+  parallel.
+- Existing folders are reused regardless of letter case (SMB is case
+  insensitive), also on Android.
+
 ## [0.1.2] — 2026-11-23
 
 Problems in the Ark folder are folded into one line in Settings and can be
