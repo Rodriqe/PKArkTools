@@ -11,6 +11,41 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+### Added
+- **Arca problems in Settings, folded into one line**: "3 problems in the
+  Arca" with a severity icon, collapsed by default. Expanded, problems are
+  grouped by kind with a count, a short plain-language explanation and the
+  relative path of each file. The Arca tab shows at most a one-line notice
+  that opens Settings; with no problems there is only a discreet check. See
+  [The Ark › Arca problems](docs/usuario/arca.md#problemas-del-arca) (Spanish).
+- **Fix** per file, per group or **Fix all** (with its own confirmation,
+  progress and a "2 fixed, 1 quarantined" result): rebuilds a damaged or
+  missing `.json` from its save, rebuilds the main file and `ultima.json`
+  from the history, adopts loose saves and cloud conflict copies, removes
+  copies whose exact content is already in the history and saves a main file
+  changed by hand as a new copy. Nothing is deleted: anything that can't be
+  repaired is moved to `PKArkTools/_cuarentena/` with a note, after checking
+  it by SHA-256.
+- **Ignore** per file or per group: hidden from the summary until the file
+  changes (path + size + date), stored only in this device's settings;
+  **Show ignored (N)** lists them to undo.
+
+### Fixed
+- Arks created while the app was still called PokeSavTool: their `.json`
+  files (schema `pokesavtool-snapshot`) were all reported as damaged and the
+  move to `historial/` failed on every reindex. They are now read as our own
+  and rewritten with the current schema when migrated.
+- Importing a folder that contains the Ark itself (for example `ROMs/Saves`)
+  no longer re-imports every history copy as a new copy with today's date.
+- Cloud conflict copies of history files (`… (1).sav`) were skipped silently;
+  they are now listed so they can be removed or adopted. A copy whose SHA-256
+  doesn't match, found while reading it, is now reported on reindex.
+
+### Changed
+- Settings no longer shows the long, always-expanded lists of issues, inbox
+  saves, hand-edited main files and loose saves; they live in the folded
+  summary above.
+
 ## [0.1.1] — 2026-11-23
 
 The Ark folder now shows the latest version of each save under the name the

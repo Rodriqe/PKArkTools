@@ -11,6 +11,42 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+### Añadido
+- **Problemas del Arca en Ajustes, plegados en una línea**: «3 problemas en
+  el Arca» con un icono de gravedad, plegado por defecto. Desplegado, se
+  agrupan por tipo con su recuento, una explicación corta en lenguaje claro y
+  la ruta relativa de cada archivo. La pestaña Arca muestra como mucho un
+  aviso de una línea que lleva a Ajustes; sin problemas, solo un check
+  discreto. Ver [El Arca › Problemas del Arca](docs/usuario/arca.md#problemas-del-arca).
+- **Arreglar** por archivo, por grupo o **Arreglar todo** (con confirmación
+  propia, progreso y resultado «2 arreglados, 1 en cuarentena»): regenera un
+  `.json` dañado o que falta desde su save, reconstruye el archivo principal
+  y `ultima.json` desde el historial, adopta saves sueltos y copias de
+  conflicto de la nube, retira las copias cuyo contenido exacto ya está en el
+  historial y guarda como copia nueva un principal cambiado a mano. Nada se
+  borra: lo irreparable se mueve a `PKArkTools/_cuarentena/` con una nota,
+  tras comprobarlo por su SHA-256.
+- **Ignorar** por archivo o por grupo: se oculta del resumen hasta que el
+  archivo cambie (ruta + tamaño + fecha) y se guarda solo en los ajustes de
+  este dispositivo; **Mostrar ignorados (N)** los lista para deshacerlo.
+
+### Corregido
+- Arcas creadas cuando la app aún se llamaba PokeSavTool: todos sus `.json`
+  (esquema `pokesavtool-snapshot`) salían como dañados y el paso a
+  `historial/` fallaba en cada reindexado. Ahora se leen como propios y se
+  reescriben con el esquema actual al migrar.
+- Importar una carpeta que contiene el propio Arca (por ejemplo `ROMs/Saves`)
+  ya no reimporta cada copia del historial como copia nueva con la fecha de
+  hoy.
+- Las copias de conflicto de la nube de copias del historial (`… (1).sav`)
+  se ignoraban en silencio; ahora se listan para retirarlas o adoptarlas. Una
+  copia cuyo SHA-256 no coincide al leerla ahora se avisa al reindexar.
+
+### Cambiado
+- Ajustes ya no muestra las listas largas y siempre desplegadas de problemas,
+  bandeja de entrada, principales cambiados a mano y saves sueltos: están en
+  el resumen plegado.
+
 ## [0.1.1] — 2026-11-23
 
 La carpeta del Arca deja a la vista la última versión de cada partida con el

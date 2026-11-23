@@ -124,6 +124,7 @@ PKArkTools/<Juego>/<Entrenador (TID)>/
   ultima.json               ← qué copia del historial es la última (derivado)
   historial/
     2026-11-22_175258_a1fa22cf.sav   (+ .json)   ← todas las copias, inmutables
+PKArkTools/_cuarentena/     ← lo que «Arreglar» no pudo reparar, con una nota (nunca se borra)
 ```
 
 * **El historial es la fuente de verdad.** El archivo de la última versión es
@@ -148,7 +149,8 @@ PKArkTools/<Juego>/<Entrenador (TID)>/
   SHA-256 no está en el historial: la ficha muestra «El archivo principal
   cambió fuera de la app» con **Guardar como nueva copia**, que lo pasa al
   historial como versión actual. Hasta entonces la app no lo toca; nunca lo
-  borra. La lista también está en **Ajustes › Carpeta del Arca**.
+  borra. También aparece en [Problemas del Arca](#problemas-del-arca), donde
+  **Arreglar** hace lo mismo.
 * **Varios dispositivos.** El historial no choca (nombres únicos). La última
   versión se recalcula desde la copia más nueva; si otro dispositivo ya
   escribió una más nueva cuyo historial aún no ha llegado, se espera sin tocar
@@ -173,10 +175,9 @@ escritorio) en cuanto aparece:
 Un archivo que aún se está copiando o sincronizando espera unos segundos; los
 temporales y marcadores de la nube (`.tmp`, `.icloud`…) se ignoran. Si el save
 **no se puede leer**, o es **de otro juego**, se queda donde está y la app lo
-avisa (y en **Ajustes › Carpeta del Arca › Bandeja de entrada**, con **Mover a
-<juego>** para el segundo caso).
-
-<img src="../screenshots/v2/mac_43_ajustes_arca.png" width="560" alt="Ajustes del Arca: estructura, bandeja y principales cambiados">
+avisa (y en [Problemas del Arca](#problemas-del-arca): **Arreglar** lleva el
+save de otro juego a su partida y aparta a la cuarentena el que no se puede
+leer).
 
 ## Exportar y restaurar el Arca completa (zip)
 
@@ -198,12 +199,64 @@ emulador no se tocan. Si quieres conservarlas, exporta antes el zip del Arca.
 ## Saves sueltos en la carpeta
 
 Si copias un save a mano en otra subcarpeta del Arca (fuera de la bandeja de
-un juego), Ajustes lo ofrece para **Adoptar**: se detecta el juego, se coloca en su sitio con su `.json`, se
-verifica y solo entonces se retira el suelto. **Adoptar todos** hace lo mismo
-con todos.
+un juego), aparece en [Problemas del Arca](#problemas-del-arca) como **Save
+suelto**: **Arreglar** detecta el juego, lo coloca en su sitio con su `.json`,
+lo verifica y solo entonces retira el suelto.
 
-Un `.json` sin save, un save sin `.json`, un `.json` dañado o un tamaño que no
-cuadra se marcan como problema en Ajustes; el resto del Arca sigue
-funcionando. El SHA-256 se comprueba cada vez que se lee una copia.
+## Problemas del Arca
+
+En **Ajustes › Carpeta del Arca**, bajo la tarjeta de la carpeta, hay **una
+sola línea** con el resumen («3 problemas en el Arca», con un icono rojo si
+hay errores y ámbar si solo hay avisos). Está **plegada**: tócala para ver el
+detalle. Si no hay nada, solo se ve un discreto «Arca sin problemas». En la
+pestaña Arca, como mucho, aparece una línea con el recuento que lleva a
+Ajustes.
+
+<p>
+  <img src="../screenshots/v2/mac_43_ajustes_arca.png" width="420" alt="Resumen plegado de los problemas del Arca">
+  <img src="../screenshots/v2/mac_44_problemas_arca.png" width="420" alt="Problemas desplegados y agrupados por tipo">
+</p>
+<p>
+  <img src="../screenshots/android/v2_43_arca_aviso_problemas.png" width="180" alt="Aviso de una línea en la pestaña Arca (Android)">
+  <img src="../screenshots/android/v2_45_problemas_detalle.png" width="180" alt="Problemas desplegados en Android">
+  <img src="../screenshots/android/v2_46_problemas_arreglar_todo.png" width="180" alt="Confirmación de Arreglar todo en Android">
+</p>
+
+Desplegado, los problemas se agrupan por tipo con su recuento, una
+explicación corta y la ruta de cada archivo dentro de la carpeta:
+
+| Problema | Qué hace **Arreglar** |
+|---|---|
+| `.json` dañado o ilegible | Lo regenera releyendo el save (SHA-256, juego, entrenador, horas…); conserva la fecha, el origen y la nota si se pueden leer. El `.json` antiguo va a la cuarentena. |
+| Save sin su `.json` | Crea el `.json` desde el save (la fecha sale del nombre del archivo). |
+| `.json` sin su save | Lo aparta a la cuarentena (puede que el save aún se esté sincronizando: si llega, se recupera su `.json`). |
+| El save no coincide con su `.json` | Su contenido entra como copia nueva y la pareja antigua va a la cuarentena. |
+| Última versión sin actualizar | Reconstruye el archivo principal y `ultima.json` desde el historial. |
+| Última versión cambiada a mano | La guarda como copia nueva; el archivo se queda. |
+| Copia de conflicto de la nube | Si su contenido ya está en el historial, la retira; si no, la adopta. |
+| Save suelto / bandeja | Lo adopta en su partida; si no es un save legible, va a la cuarentena. |
+
+Se puede arreglar cada archivo, un grupo entero o **Arreglar todo**, que pide
+confirmación, muestra el progreso y termina con el resultado («2 arreglados,
+1 en cuarentena»).
+
+**Nada se borra.** Lo que no se puede reparar se mueve a
+`PKArkTools/_cuarentena/` (con la misma ruta y una nota `.nota.txt` al lado
+que explica el motivo) después de comprobar la copia por su SHA-256. Solo se
+retira un archivo cuando su contenido exacto ya está a salvo en el historial.
+La cuarentena no se indexa ni se vuelve a ofrecer; revísala y bórrala tú
+cuando quieras.
+
+**Ignorar** (por archivo o por grupo) oculta el problema del resumen y no
+vuelve a avisar mientras el archivo no cambie (se reconoce por su ruta,
+tamaño y fecha). Se guarda **solo en este dispositivo**, nunca en la carpeta
+del Arca. **Mostrar ignorados (N)** los lista para dejar de ignorarlos.
+
+> Arcas creadas cuando la app aún se llamaba PokeSavTool: sus `.json` usan el
+> esquema `pokesavtool-snapshot`. Desde esta versión se leen como propios y se
+> reescriben con el actual al pasar las copias a `historial/`; antes salían
+> todos como «.json dañado».
+
+El SHA-256 se comprueba cada vez que se lee una copia.
 
 Siguiente: [Editor](editor.md).
