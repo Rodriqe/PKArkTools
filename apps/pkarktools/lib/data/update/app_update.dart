@@ -29,7 +29,9 @@ class AppVersion implements Comparable<AppVersion> {
     return AppVersion(int.parse(m[1]!), int.parse(m[2]!), int.parse(m[3] ?? '0'), m[4] ?? '');
   }
 
-  static final current = tryParse(kAppVersion)!;
+  /// La versión instalada. Solo las pruebas la cambian (para simular una
+  /// versión anterior frente al release publicado).
+  static AppVersion current = tryParse(kAppVersion)!;
 
   @override
   int compareTo(AppVersion o) {

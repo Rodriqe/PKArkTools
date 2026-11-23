@@ -173,19 +173,55 @@ siguiente vez termina el trabajo sin duplicar ni perder nada.
 
 ## 7. Actualizar la app
 
-En **Ajustes → Actualizaciones**, **Buscar actualizaciones** consulta la
-última versión publicada en GitHub y muestra sus novedades.
+Al abrir, PKArkTools mira **como mucho una vez al día** si hay una versión
+nueva publicada en GitHub. Si la hay, aparece una tarjeta discreta
+**«PKArkTools 0.1.x disponible»** arriba de **Ajustes** y un punto en el
+icono de Ajustes. La tarjeta abre una hoja con las **novedades** del release
+y los botones **Actualizar** y **Omitir esta versión** (no vuelve a avisar de
+esa versión; sí de la siguiente).
 
-- **Android**: **Descargar e instalar** baja el APK nuevo dentro de la app y
-  abre el instalador del sistema; confirmas con **Actualizar** y la app se
-  cierra y se abre ya actualizada. Tus copias, ajustes y la carpeta del Arca
-  se conservan (es una actualización, no una instalación nueva). La primera
-  vez Android pide permitir «Instalar apps desconocidas» para PKArkTools:
-  actívalo, vuelve y pulsa otra vez. Android siempre pide esa confirmación
-  final para apps que no vienen de una tienda; no se puede saltar.
-- Si Android dice que la versión **está firmada con otra clave** (por ejemplo,
-  tenías una versión de prueba), no se puede instalar encima: exporta el Arca
-  (o deja tus copias en la carpeta del Arca), desinstala e instala la nueva.
-- **macOS, Windows y Linux**: el botón abre la página de descarga del release.
+En **Ajustes › Acerca de** ves la versión instalada, el botón **Buscar
+actualizaciones** (consulta en ese momento y te dice si estás al día o por qué
+no se pudo comprobar) y la opción **Buscar actualizaciones automáticamente**
+(activada por defecto; desactívala si no quieres ninguna consulta al abrir).
+Sin red, la búsqueda automática no muestra nada.
+
+<p>
+  <img src="../screenshots/android/v2_47_update_notice.png" width="200" alt="Aviso de versión nueva en Ajustes (Android)">
+  <img src="../screenshots/android/v2_48_update_sheet.png" width="200" alt="Novedades y botón Actualizar (Android)">
+  <img src="../screenshots/v2/mac_46_update.png" width="420" alt="Hoja de actualización en macOS">
+</p>
+
+**Cómo se actualiza en cada sistema:**
+
+- **Android**: **Actualizar** descarga el APK del release (con progreso; puedes
+  cancelar), comprueba su tamaño y que **está firmado con el mismo certificado
+  que la app instalada**, y abre el instalador del sistema: confirmas y la app
+  se cierra y se abre ya actualizada, con tus copias, ajustes y la carpeta del
+  Arca. La primera vez Android pide permitir **«Instalar apps desconocidas»**
+  para PKArkTools: la app te lleva a esa pantalla; actívalo, vuelve y pulsa
+  otra vez **Actualizar**. El APK descargado se borra al terminar o al
+  cancelar.
+- Si la firma **no coincide** (el archivo no es el oficial, o tienes instalada
+  una versión de prueba firmada con otra clave), **no se instala** y la app lo
+  explica. Para pasar de una versión de prueba a la oficial: deja tus copias en
+  la carpeta del Arca (o exporta un zip), desinstala e instala la nueva.
+
+  <p>
+    <img src="../screenshots/android/v2_49_update_permission.png" width="200" alt="Permitir «Instalar apps desconocidas»">
+    <img src="../screenshots/android/v2_51_update_signature_blocked.png" width="200" alt="Firma distinta: no se instala">
+  </p>
+
+- **macOS, Windows y Linux**: **Descargar** baja el archivo del release y te
+  deja elegir dónde guardarlo (empieza en Descargas). Luego:
+  - macOS: cierra PKArkTools, descomprime el zip y arrastra `PKArkTools.app` a
+    Aplicaciones sustituyendo la anterior.
+  - Windows: cierra PKArkTools y ejecuta el instalador (`…-setup.exe`).
+  - Linux: descomprime el `tar.gz` y sustituye la carpeta anterior.
+
+  Tus copias y ajustes se conservan. **Abrir la página del release** lleva a
+  GitHub si prefieres descargarlo desde el navegador.
+- **iPhone y iPad**: no se puede instalar desde la app; **Actualizar** abre la
+  página del release.
 
 Siguiente: [Importar saves](importar.md).

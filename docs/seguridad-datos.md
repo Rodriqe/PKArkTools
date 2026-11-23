@@ -46,21 +46,43 @@
   publicidad ni telemetría. Ningún dato de tus partidas sale del dispositivo
   salvo que tú pongas la carpeta del Arca en un servicio de nube (en cuyo caso
   lo sincroniza ese servicio, no la app).
-* **Única conexión a internet: los iconos.** La app descarga sprites de
-  `https://raw.githubusercontent.com/kwsch/PKHeX/<commit fijo>/…` por HTTPS.
-  La petición solo contiene la ruta del icono (p. ej. el número de especie);
-  GitHub ve, como cualquier servidor web, tu dirección IP y la hora. Los
-  iconos se guardan en la caché de la app. Sin red, la app funciona igual con
-  avatares de iniciales.
+* **Conexiones a internet: los iconos y la búsqueda de actualizaciones.**
+  * **Iconos.** La app descarga sprites de
+    `https://raw.githubusercontent.com/kwsch/PKHeX/<commit fijo>/…` por HTTPS.
+    La petición solo contiene la ruta del icono (p. ej. el número de especie);
+    GitHub ve, como cualquier servidor web, tu dirección IP y la hora. Los
+    iconos se guardan en la caché de la app. Sin red, la app funciona igual con
+    avatares de iniciales.
+  * **Actualizaciones** (la única conexión nueva). Al abrir, como mucho una vez
+    cada 24 h, y al pulsar **Buscar actualizaciones**, la app pide
+    `https://api.github.com/repos/Rodriqe/PKArkTools/releases/latest`, sin
+    token ni cuenta, con el `User-Agent` `PKArkTools/<versión>` y el `ETag`
+    de la respuesta anterior (si no ha cambiado, GitHub contesta 304). No se
+    envía nada tuyo. La respuesta, el `ETag`, la fecha de la consulta, la
+    versión omitida y la opción **Buscar actualizaciones automáticamente**
+    (desactivable) se guardan en los ajustes del índice local.
+  * Solo al pulsar **Actualizar** / **Descargar** se baja el archivo del
+    release, y solo por HTTPS desde el repositorio `Rodriqe/PKArkTools` en
+    los dominios de GitHub (`github.com` y su redirección a
+    `*.githubusercontent.com`, comprobada en cada salto); si llegan más bytes
+    de los anunciados o falta alguno, se descarta. La app **no ejecuta nada
+    descargado**: en Android entrega el APK al instalador del sistema solo si
+    tiene el mismo nombre de paquete y los mismos certificados de firma
+    (SHA-256) que la app instalada, y lo borra al terminar o cancelar; en
+    escritorio lo guarda donde elijas y lo instalas tú; en iOS solo abre la
+    página del release.
 * **Permisos.**
-  * Android: `INTERNET` (iconos). **Ningún** permiso de almacenamiento: las
+  * Android: `INTERNET` (iconos y actualizaciones) y
+    `REQUEST_INSTALL_PACKAGES` (entregar la actualización al instalador del
+    sistema; Android además pide permitir «Instalar apps desconocidas» y
+    confirmar cada instalación). **Ningún** permiso de almacenamiento: las
     carpetas y archivos se abren con el selector del sistema (SAF) y solo
     sobre lo que eliges.
   * iOS: ningún permiso con diálogo; acceso a archivos por el selector del
     sistema y *bookmarks*.
   * macOS: sandbox con acceso solo a archivos elegidos por ti
     (`files.user-selected.read-write`), *bookmarks* con *security scope* y
-    conexiones salientes (`network.client`, iconos).
+    conexiones salientes (`network.client`, iconos y actualizaciones).
 * **Dónde vive cada cosa.**
 
   | Dato | Ubicación |
@@ -68,6 +90,8 @@
   | Copias y metadatos | Carpeta del Arca (la que tú elegiste) |
   | Índice local (SQLite/drift) | Directorio de soporte de la app; se reconstruye desde la carpeta |
   | Iconos | Directorio de caché de la app |
+  | Última respuesta de GitHub (actualizaciones) | Ajustes del índice local |
+  | APK de una actualización (Android) | Caché de la app, solo mientras se instala |
   | Ajustes y permiso de la carpeta | Almacenamiento privado de la app |
 
 * El `.json` de cada copia incluye el nombre del entrenador, TID/SID, horas

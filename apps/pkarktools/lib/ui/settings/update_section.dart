@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../app_version.dart';
 import '../../data/update/app_update.dart';
 import '../../data/update/update_notice.dart';
 import '../../l10n/app_localizations.dart';
@@ -93,7 +92,7 @@ class _UpdateAboutControlsState extends ConsumerState<UpdateAboutControls> {
       setState(() {
         _checking = false;
         _error = false;
-        _result = r != null && r.isNewer ? null : l10n.updateUpToDate(kAppVersion);
+        _result = r != null && r.isNewer ? null : l10n.updateUpToDate(AppVersion.current.toString());
       });
       if (r != null && r.isNewer) unawaited(showUpdateSheet(context, r));
     } on UpdateException catch (e) {
@@ -352,7 +351,7 @@ class _UpdateSheetState extends ConsumerState<UpdateSheet> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
           Text(l10n.updateBannerTitle(_r.version.toString()), style: context.text.headlineSmall),
           const SizedBox(height: 4),
-          Text(l10n.updateCurrent(kAppVersion), style: muted),
+          Text(l10n.updateCurrent(AppVersion.current.toString()), style: muted),
           if (_r.notes.isNotEmpty) ...[
             const SizedBox(height: 16),
             Text(l10n.updateNotes, style: context.text.titleMedium),
