@@ -2438,4 +2438,98 @@ class AppLocalizationsEn extends AppLocalizations {
   String importProgress(String done, String total) {
     return 'Importing $done of $total…';
   }
+
+  @override
+  String get updateSection => 'Updates';
+
+  @override
+  String get updateSectionDesc =>
+      'Checks the latest version published on GitHub. On Android it is downloaded and installed over the current one: your copies, settings and Arca folder are kept.';
+
+  @override
+  String get updateCheck => 'Check for updates';
+
+  @override
+  String get updateChecking => 'Checking…';
+
+  @override
+  String updateCurrent(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String updateUpToDate(String version) {
+    return 'You have the latest version ($version).';
+  }
+
+  @override
+  String updateAvailable(String version) {
+    return 'A new version is available: $version';
+  }
+
+  @override
+  String get updateInstall => 'Download and install';
+
+  @override
+  String get updateOpenPage => 'Open the download page';
+
+  @override
+  String get updateNotes => 'What\'s new';
+
+  @override
+  String updateDownloading(String done, String total) {
+    return 'Downloading $done of $total…';
+  }
+
+  @override
+  String get updateCancel => 'Cancel';
+
+  @override
+  String get updateInstalling =>
+      'Confirm the installation in the Android window. The app will close and reopen updated.';
+
+  @override
+  String get updateBack => 'Back';
+
+  @override
+  String get updatePermissionTitle => 'Allow installing the update';
+
+  @override
+  String get updatePermissionBody =>
+      'Android only lets PKArkTools install its own update if you allow it once: on the screen that opens, turn on \"Allow from this source\", come back and press \"Download and install\" again.';
+
+  @override
+  String get updatePermissionOpen => 'Open settings';
+
+  @override
+  String get updateErrorNetwork =>
+      'Couldn\'t reach GitHub. Check your connection and try again.';
+
+  @override
+  String updateErrorGeneric(String code) {
+    return 'Couldn\'t update ($code).';
+  }
+
+  @override
+  String get updateErrorSize => 'The download was incomplete. Try again.';
+
+  @override
+  String get updateErrorAborted => 'Installation cancelled.';
+
+  @override
+  String get updateErrorConflict =>
+      'Android can\'t install this version over yours: it\'s signed with a different key (e.g. a test build). Export your Arca before uninstalling and installing the new one.';
+
+  @override
+  String get updateErrorStorage => 'There isn\'t enough space for the update.';
+
+  @override
+  String get updateErrorPermission =>
+      'Permission to install apps from this source is missing.';
+
+  @override
+  String get updateNoAsset => 'This release has no download for your system.';
+
+  @override
+  String get updateRetry => 'Retry';
 }

@@ -27,8 +27,16 @@ class MainActivity : FlutterActivity() {
     private var pendingPick: MethodChannel.Result? = null
     private val io = Executors.newSingleThreadExecutor()
 
+    private var updater: AppUpdateInstaller? = null
+
+    override fun onNewIntent(intent: Intent) {
+        if (updater?.onIntent(intent) == true) return
+        super.onNewIntent(intent)
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        updater = AppUpdateInstaller(this, flutterEngine.dartExecutor.binaryMessenger)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).setMethodCallHandler { call, result ->
             when (call.method) {
                 "pickTree" -> pickTree(result)

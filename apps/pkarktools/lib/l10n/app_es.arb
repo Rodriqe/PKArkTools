@@ -1672,5 +1672,69 @@
         "type": "String"
       }
     }
-  }
+  },
+  "updateSection": "Actualizaciones",
+  "updateSectionDesc": "Busca la última versión publicada en GitHub. En Android se descarga y se instala encima de la actual: tus copias, ajustes y la carpeta del Arca se conservan.",
+  "updateCheck": "Buscar actualizaciones",
+  "updateChecking": "Buscando…",
+  "updateCurrent": "Versión {version}",
+  "@updateCurrent": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateUpToDate": "Tienes la última versión ({version}).",
+  "@updateUpToDate": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateAvailable": "Hay una versión nueva: {version}",
+  "@updateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateInstall": "Descargar e instalar",
+  "updateOpenPage": "Abrir la página de descarga",
+  "updateNotes": "Novedades",
+  "updateDownloading": "Descargando {done} de {total}…",
+  "@updateDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "updateCancel": "Cancelar",
+  "updateInstalling": "Confirma la instalación en la ventana de Android. La app se cerrará y se abrirá ya actualizada.",
+  "updateBack": "Volver",
+  "updatePermissionTitle": "Permitir instalar la actualización",
+  "updatePermissionBody": "Android solo deja que PKArkTools instale su propia actualización si se lo permites una vez: en la pantalla que se abre, activa «Permitir de esta fuente», vuelve aquí y pulsa de nuevo «Descargar e instalar».",
+  "updatePermissionOpen": "Abrir ajustes",
+  "updateErrorNetwork": "No se pudo conectar con GitHub. Revisa la conexión e inténtalo de nuevo.",
+  "updateErrorGeneric": "No se pudo actualizar ({code}).",
+  "@updateErrorGeneric": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "updateErrorSize": "La descarga llegó incompleta. Inténtalo de nuevo.",
+  "updateErrorAborted": "Instalación cancelada.",
+  "updateErrorConflict": "Android no puede instalar esta versión encima de la tuya: está firmada con otra clave (p. ej. una versión de prueba). Exporta tu Arca antes de desinstalar e instalar la nueva.",
+  "updateErrorStorage": "No hay espacio suficiente para la actualización.",
+  "updateErrorPermission": "Falta el permiso para instalar apps de esta fuente.",
+  "updateNoAsset": "Este release no tiene descarga para tu sistema.",
+  "updateRetry": "Reintentar"
 }

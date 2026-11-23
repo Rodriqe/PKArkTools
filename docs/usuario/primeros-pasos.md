@@ -171,4 +171,21 @@ solas a `historial/`** y genera el archivo de la última versión. Cada copia se
 verifica por SHA-256 antes de retirar la original; si se corta a mitad, la
 siguiente vez termina el trabajo sin duplicar ni perder nada.
 
+## 7. Actualizar la app
+
+En **Ajustes → Actualizaciones**, **Buscar actualizaciones** consulta la
+última versión publicada en GitHub y muestra sus novedades.
+
+- **Android**: **Descargar e instalar** baja el APK nuevo dentro de la app y
+  abre el instalador del sistema; confirmas con **Actualizar** y la app se
+  cierra y se abre ya actualizada. Tus copias, ajustes y la carpeta del Arca
+  se conservan (es una actualización, no una instalación nueva). La primera
+  vez Android pide permitir «Instalar apps desconocidas» para PKArkTools:
+  actívalo, vuelve y pulsa otra vez. Android siempre pide esa confirmación
+  final para apps que no vienen de una tienda; no se puede saltar.
+- Si Android dice que la versión **está firmada con otra clave** (por ejemplo,
+  tenías una versión de prueba), no se puede instalar encima: exporta el Arca
+  (o deja tus copias en la carpeta del Arca), desinstala e instala la nueva.
+- **macOS, Windows y Linux**: el botón abre la página de descarga del release.
+
 Siguiente: [Importar saves](importar.md).

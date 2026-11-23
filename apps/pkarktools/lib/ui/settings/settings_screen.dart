@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app_version.dart';
 import '../../providers.dart';
 import '../../theme/app_theme.dart';
 import '../../data/sprites/sprite_manifest.g.dart';
@@ -9,6 +10,7 @@ import '../common/format.dart';
 import '../import/import_flow.dart';
 import 'folder_section.dart';
 import 'sprites_section.dart';
+import 'update_section.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -96,6 +98,8 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   body: l10n.sampleDataDesc,
                 ),
+                if (UpdateSection.supported(ref.watch(appUpdaterProvider)))
+                  section(l10n.updateSection, const UpdateSection(), body: l10n.updateSectionDesc),
                 section(
                   l10n.about,
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -105,7 +109,7 @@ class SettingsScreen extends ConsumerWidget {
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text('PKArkTools', style: context.text.titleLarge!.copyWith(fontFamily: AppTheme.display)),
-                          Text('0.1.0', style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
+                          Text(kAppVersion, style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
                         ]),
                       ),
                     ]),
@@ -119,7 +123,7 @@ class SettingsScreen extends ConsumerWidget {
                       onPressed: () => showLicensePage(
                         context: context,
                         applicationName: l10n.appTitle,
-                        applicationVersion: '0.1.0',
+                        applicationVersion: kAppVersion,
                         applicationIcon: const Padding(padding: EdgeInsets.all(8), child: BrandMark(size: 72)),
                       ),
                       child: Text(l10n.licenses),

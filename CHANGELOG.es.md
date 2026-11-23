@@ -22,6 +22,11 @@ acentos tal como los devuelve SMB en macOS. Probado en un NAS SMB real desde un
 Mac; **Android sobre SMB/SAF aún no se ha probado en un dispositivo**.
 
 ### Añadido
+- **Buscar actualizaciones** en Ajustes: muestra el último release de GitHub
+  y sus novedades. En Android descarga el APK dentro de la app y lo entrega al
+  instalador del sistema (una confirmación; datos y ajustes se conservan),
+  pidiendo una vez «Instalar apps desconocidas». En escritorio abre la página
+  de descarga. Ver [Primeros pasos › Actualizar la app](docs/usuario/primeros-pasos.md#7-actualizar-la-app).
 - **Arca en una carpeta de red (NAS)** en macOS (SMB, también AFP/NFS/WebDAV)
   y Android (SAF con un proveedor de documentos SMB). La carpeta se detecta
   como de red (tabla de montajes con `getfsstat`, sin bloquearse nunca en un
@@ -37,6 +42,7 @@ Mac; **Android sobre SMB/SAF aún no se ha probado en un dispositivo**.
 - Diálogo de progreso («Importando N de M») en las importaciones grandes.
 
 ### Corregido
+- Ajustes › Acerca de mostraba la versión 0.1.0 en vez de la instalada.
 - Los nombres de carpeta que macOS devuelve descompuestos (NFD) en volúmenes
   SMB/AFP («Pokémon») ya no hacen que cada reindexado quite y vuelva a añadir
   todas las copias y reescriba los archivos principales.

@@ -22,6 +22,11 @@ SMB returns them. Tested on a real SMB NAS from a Mac; **Android over
 SMB/SAF has not been tested on a device yet**.
 
 ### Added
+- **Check for updates** in Settings: shows the latest GitHub release and its
+  notes. On Android it downloads the APK inside the app and hands it to the
+  system installer (one confirmation; data and settings are kept), asking
+  once for "Install unknown apps". On desktop it opens the download page.
+  See [Getting started › Updating](docs/usuario/primeros-pasos.md#7-actualizar-la-app) (Spanish).
 - **Ark in a network folder (NAS)** on macOS (SMB, also AFP/NFS/WebDAV) and
   Android (SAF with an SMB documents provider). The folder is detected as a
   network folder (mount table via `getfsstat`, never blocking on an
@@ -37,6 +42,7 @@ SMB/SAF has not been tested on a device yet**.
 - Progress dialog ("Importing N of M") for large imports.
 
 ### Fixed
+- Settings › About showed version 0.1.0 instead of the installed version.
 - Folder names that macOS returns decomposed (NFD) on SMB/AFP volumes
   ("Pokémon") no longer make every re-index drop and re-add all copies and
   rewrite the main files.

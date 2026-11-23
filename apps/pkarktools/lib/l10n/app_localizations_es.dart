@@ -2460,4 +2460,100 @@ class AppLocalizationsEs extends AppLocalizations {
   String importProgress(String done, String total) {
     return 'Importando $done de $total…';
   }
+
+  @override
+  String get updateSection => 'Actualizaciones';
+
+  @override
+  String get updateSectionDesc =>
+      'Busca la última versión publicada en GitHub. En Android se descarga y se instala encima de la actual: tus copias, ajustes y la carpeta del Arca se conservan.';
+
+  @override
+  String get updateCheck => 'Buscar actualizaciones';
+
+  @override
+  String get updateChecking => 'Buscando…';
+
+  @override
+  String updateCurrent(String version) {
+    return 'Versión $version';
+  }
+
+  @override
+  String updateUpToDate(String version) {
+    return 'Tienes la última versión ($version).';
+  }
+
+  @override
+  String updateAvailable(String version) {
+    return 'Hay una versión nueva: $version';
+  }
+
+  @override
+  String get updateInstall => 'Descargar e instalar';
+
+  @override
+  String get updateOpenPage => 'Abrir la página de descarga';
+
+  @override
+  String get updateNotes => 'Novedades';
+
+  @override
+  String updateDownloading(String done, String total) {
+    return 'Descargando $done de $total…';
+  }
+
+  @override
+  String get updateCancel => 'Cancelar';
+
+  @override
+  String get updateInstalling =>
+      'Confirma la instalación en la ventana de Android. La app se cerrará y se abrirá ya actualizada.';
+
+  @override
+  String get updateBack => 'Volver';
+
+  @override
+  String get updatePermissionTitle => 'Permitir instalar la actualización';
+
+  @override
+  String get updatePermissionBody =>
+      'Android solo deja que PKArkTools instale su propia actualización si se lo permites una vez: en la pantalla que se abre, activa «Permitir de esta fuente», vuelve aquí y pulsa de nuevo «Descargar e instalar».';
+
+  @override
+  String get updatePermissionOpen => 'Abrir ajustes';
+
+  @override
+  String get updateErrorNetwork =>
+      'No se pudo conectar con GitHub. Revisa la conexión e inténtalo de nuevo.';
+
+  @override
+  String updateErrorGeneric(String code) {
+    return 'No se pudo actualizar ($code).';
+  }
+
+  @override
+  String get updateErrorSize =>
+      'La descarga llegó incompleta. Inténtalo de nuevo.';
+
+  @override
+  String get updateErrorAborted => 'Instalación cancelada.';
+
+  @override
+  String get updateErrorConflict =>
+      'Android no puede instalar esta versión encima de la tuya: está firmada con otra clave (p. ej. una versión de prueba). Exporta tu Arca antes de desinstalar e instalar la nueva.';
+
+  @override
+  String get updateErrorStorage =>
+      'No hay espacio suficiente para la actualización.';
+
+  @override
+  String get updateErrorPermission =>
+      'Falta el permiso para instalar apps de esta fuente.';
+
+  @override
+  String get updateNoAsset => 'Este release no tiene descarga para tu sistema.';
+
+  @override
+  String get updateRetry => 'Reintentar';
 }

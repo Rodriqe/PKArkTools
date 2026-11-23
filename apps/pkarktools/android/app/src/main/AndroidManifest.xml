@@ -3,6 +3,9 @@
          release no tiene red (el manifest debug lo añade solo para el depurador).
          No se pide ningún permiso de almacenamiento: todo va por SAF. -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- «Buscar actualizaciones» en Ajustes: entregar el APK nuevo al
+         instalador del sistema (el usuario confirma siempre). -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <application
         android:label="PKArkTools"
         android:name="${applicationName}"

@@ -3966,6 +3966,162 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Importando {done} de {total}…'**
   String importProgress(String done, String total);
+
+  /// No description provided for @updateSection.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizaciones'**
+  String get updateSection;
+
+  /// No description provided for @updateSectionDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Busca la última versión publicada en GitHub. En Android se descarga y se instala encima de la actual: tus copias, ajustes y la carpeta del Arca se conservan.'**
+  String get updateSectionDesc;
+
+  /// No description provided for @updateCheck.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar actualizaciones'**
+  String get updateCheck;
+
+  /// No description provided for @updateChecking.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscando…'**
+  String get updateChecking;
+
+  /// No description provided for @updateCurrent.
+  ///
+  /// In es, this message translates to:
+  /// **'Versión {version}'**
+  String updateCurrent(String version);
+
+  /// No description provided for @updateUpToDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Tienes la última versión ({version}).'**
+  String updateUpToDate(String version);
+
+  /// No description provided for @updateAvailable.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay una versión nueva: {version}'**
+  String updateAvailable(String version);
+
+  /// No description provided for @updateInstall.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar e instalar'**
+  String get updateInstall;
+
+  /// No description provided for @updateOpenPage.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir la página de descarga'**
+  String get updateOpenPage;
+
+  /// No description provided for @updateNotes.
+  ///
+  /// In es, this message translates to:
+  /// **'Novedades'**
+  String get updateNotes;
+
+  /// No description provided for @updateDownloading.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargando {done} de {total}…'**
+  String updateDownloading(String done, String total);
+
+  /// No description provided for @updateCancel.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get updateCancel;
+
+  /// No description provided for @updateInstalling.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma la instalación en la ventana de Android. La app se cerrará y se abrirá ya actualizada.'**
+  String get updateInstalling;
+
+  /// No description provided for @updateBack.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get updateBack;
+
+  /// No description provided for @updatePermissionTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Permitir instalar la actualización'**
+  String get updatePermissionTitle;
+
+  /// No description provided for @updatePermissionBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Android solo deja que PKArkTools instale su propia actualización si se lo permites una vez: en la pantalla que se abre, activa «Permitir de esta fuente», vuelve aquí y pulsa de nuevo «Descargar e instalar».'**
+  String get updatePermissionBody;
+
+  /// No description provided for @updatePermissionOpen.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir ajustes'**
+  String get updatePermissionOpen;
+
+  /// No description provided for @updateErrorNetwork.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo conectar con GitHub. Revisa la conexión e inténtalo de nuevo.'**
+  String get updateErrorNetwork;
+
+  /// No description provided for @updateErrorGeneric.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo actualizar ({code}).'**
+  String updateErrorGeneric(String code);
+
+  /// No description provided for @updateErrorSize.
+  ///
+  /// In es, this message translates to:
+  /// **'La descarga llegó incompleta. Inténtalo de nuevo.'**
+  String get updateErrorSize;
+
+  /// No description provided for @updateErrorAborted.
+  ///
+  /// In es, this message translates to:
+  /// **'Instalación cancelada.'**
+  String get updateErrorAborted;
+
+  /// No description provided for @updateErrorConflict.
+  ///
+  /// In es, this message translates to:
+  /// **'Android no puede instalar esta versión encima de la tuya: está firmada con otra clave (p. ej. una versión de prueba). Exporta tu Arca antes de desinstalar e instalar la nueva.'**
+  String get updateErrorConflict;
+
+  /// No description provided for @updateErrorStorage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay espacio suficiente para la actualización.'**
+  String get updateErrorStorage;
+
+  /// No description provided for @updateErrorPermission.
+  ///
+  /// In es, this message translates to:
+  /// **'Falta el permiso para instalar apps de esta fuente.'**
+  String get updateErrorPermission;
+
+  /// No description provided for @updateNoAsset.
+  ///
+  /// In es, this message translates to:
+  /// **'Este release no tiene descarga para tu sistema.'**
+  String get updateNoAsset;
+
+  /// No description provided for @updateRetry.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get updateRetry;
 }
 
 class _AppLocalizationsDelegate
