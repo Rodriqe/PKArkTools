@@ -208,7 +208,7 @@ abstract final class ArcaMigration {
         await folder.readVerified(dest, meta.sha256);
         final side = ArcaLayout.sidecarFor(dest);
         try {
-          // Se reescribe con el esquema actual (un .json de PokeSavTool queda
+          // Se reescribe con el esquema actual (un .json con el nombre anterior de la app queda
           // como uno de PKArkTools con los mismos datos).
           await folder.writeNew(side, Uint8List.fromList(utf8.encode(meta.encode())));
         } on FsExistsException {

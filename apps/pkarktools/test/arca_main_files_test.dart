@@ -301,8 +301,8 @@ void main() {
       expect(fs.files[key]!.$1, bad, reason: 'nunca se borra');
     });
 
-    test('.json de PokeSavTool (esquema anterior al cambio de nombre): se lee, se migra y se normaliza', () async {
-      // Caso real: Arca creada con la app aún llamada PokeSavTool y abierta
+    test('.json con el esquema del nombre anterior de la app: se lee, se migra y se normaliza', () async {
+      // Caso real: Arca creada con la app aún con su nombre anterior y abierta
       // con PKArkTools 0.1.1. Antes, cada .json salía como «dañado» y la
       // migración a historial/ fallaba en todas las copias.
       final fs = MemoryFolderFs();
@@ -311,7 +311,7 @@ void main() {
       await repo.importBytes(emerald(hours: 60), fileName: 'e.sav', origin: ImportOrigin.file, now: DateTime(2026, 1, 2));
       toLegacy(fs);
       for (final k in fs.files.keys.where((k) => k.endsWith('.sav.json')).toList()) {
-        final text = utf8.decode(fs.files[k]!.$1).replaceFirst('"pkarktools-snapshot"', '"pokesavtool-snapshot"');
+        final text = utf8.decode(fs.files[k]!.$1).replaceFirst('"pkarktools-snapshot"', '"oldname-snapshot"');
         fs.files[k] = (Uint8List.fromList(utf8.encode(text)), DateTime(2026, 1, 3));
       }
       final b = device(fs, 'B');

@@ -29,11 +29,12 @@ abstract final class ArcaLayout {
   static const sidecarExt = '.json';
   static const schema = 'pkarktools-snapshot';
 
-  /// Esquemas anteriores al cambio de nombre de la app (PokeSavTool): mismo
-  /// formato, se leen igual y se reescriben con [schema] al migrar o arreglar.
-  static const legacySchemas = {'pokesavtool-snapshot'};
+  /// Esquemas de versiones con el nombre anterior de la app
+  /// (`<nombre>-snapshot`): mismo formato, se leen igual (el resto de campos
+  /// se valida como siempre) y se reescriben con [schema] al migrar o arreglar.
+  static final legacySchema = RegExp(r'^[a-z][a-z0-9]*-snapshot$');
 
-  static bool isSnapshotSchema(Object? s) => s == schema || legacySchemas.contains(s);
+  static bool isSnapshotSchema(Object? s) => s == schema || (s is String && legacySchema.hasMatch(s));
 
   /// Carpeta (en la raíz del Arca) donde «Arreglar» aparta lo irreparable.
   /// Nunca se indexa ni se ofrece para adoptar.

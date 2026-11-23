@@ -234,6 +234,7 @@ explicación corta y la ruta de cada archivo dentro de la carpeta:
 | Última versión sin actualizar | Reconstruye el archivo principal y `ultima.json` desde el historial. |
 | Última versión cambiada a mano | La guarda como copia nueva; el archivo se queda. |
 | Copia de conflicto de la nube | Si su contenido ya está en el historial, la retira; si no, la adopta. |
+| Copias duplicadas en el historial (mismo SHA-256 en la misma partida) | Conserva la más antigua y mueve las demás, con su `.json`, a `PKArkTools/_cuarentena/duplicados/` con una nota. Las restauraciones no cuentan: repiten contenido a propósito. |
 | Save suelto / bandeja | Lo adopta en su partida; si no es un save legible, va a la cuarentena. |
 
 Se puede arreglar cada archivo, un grupo entero o **Arreglar todo**, que pide
@@ -252,8 +253,8 @@ vuelve a avisar mientras el archivo no cambie (se reconoce por su ruta,
 tamaño y fecha). Se guarda **solo en este dispositivo**, nunca en la carpeta
 del Arca. **Mostrar ignorados (N)** los lista para dejar de ignorarlos.
 
-> Arcas creadas cuando la app aún se llamaba PokeSavTool: sus `.json` usan el
-> esquema `pokesavtool-snapshot`. Desde esta versión se leen como propios y se
+> Arcas creadas cuando la app aún tenía su nombre anterior: sus `.json` usan
+> el esquema `<nombre anterior>-snapshot`. Desde esta versión se leen como propios y se
 > reescriben con el actual al pasar las copias a `historial/`; antes salían
 > todos como «.json dañado».
 
