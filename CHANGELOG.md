@@ -11,6 +11,16 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [0.1.3] — 2026-11-23
+
+The Ark can live in a network folder (NAS): on a Mac with an SMB share
+(also AFP/NFS/WebDAV) and on Android through an SMB documents provider.
+The app detects the share, says clearly when it is not mounted instead of
+treating it as an empty Ark, polls for other devices' changes while open,
+retries transient network errors and handles accented names the way macOS
+SMB returns them. Tested on a real SMB NAS from a Mac; **Android over
+SMB/SAF has not been tested on a device yet**.
+
 ### Added
 - **Ark in a network folder (NAS)** on macOS (SMB, also AFP/NFS/WebDAV) and
   Android (SAF with an SMB documents provider). The folder is detected as a

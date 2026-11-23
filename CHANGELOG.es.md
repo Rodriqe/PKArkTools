@@ -11,6 +11,16 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [0.1.3] — 2026-11-23
+
+El Arca puede estar en una carpeta de red (NAS): en un Mac con un recurso SMB
+(también AFP/NFS/WebDAV) y en Android con un proveedor de documentos SMB. La
+app detecta el recurso, avisa claramente cuando no está montado en vez de
+tratarlo como un Arca vacía, sondea los cambios de otros dispositivos mientras
+está abierta, reintenta los errores pasajeros de red y trata los nombres con
+acentos tal como los devuelve SMB en macOS. Probado en un NAS SMB real desde un
+Mac; **Android sobre SMB/SAF aún no se ha probado en un dispositivo**.
+
 ### Añadido
 - **Arca en una carpeta de red (NAS)** en macOS (SMB, también AFP/NFS/WebDAV)
   y Android (SAF con un proveedor de documentos SMB). La carpeta se detecta
