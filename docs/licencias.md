@@ -31,7 +31,7 @@ distribuirse también bajo GPL-3.0 (con su código fuente).
 | Legalidad | Ideas y tablas de `PKHeX.Core/Legality` (orígenes, Balls, habilidad oculta, variocolor bloqueado, encuentros, `RibbonVerifier`/`MarkRules` simplificados) | `packages/pkcore/lib/src/legal/` |
 | Cadenas | `StringConverter*` (Gen 1–4 y coreano), `SpeciesConverter`, `ItemConverter` | `packages/pkcore/lib/src/strings/`, `data/` |
 | Tablas generadas | `PKHeX.Core/Resources` (movimientos, objetos, habilidades, datos personales, learnsets, encuentros, lugares, cintas, etiquetas de eventos) | `packages/pkcore/lib/src/data/generated/` (con los scripts de `tool/`) |
-| Nombres de iconos | `SpriteName` | `apps/pkarktools/lib/data/sprites/` |
+| Nombres de iconos de objetos, Balls, tipos y cintas | `SpriteName` | `apps/pkarktools/lib/data/sprites/` |
 
 Además, `tools/pkhex_oracle/` es un pequeño programa .NET que **enlaza**
 PKHeX.Core (clonado aparte en `.ref/PKHeX`, no incluido en el repositorio) solo
@@ -50,10 +50,19 @@ para comparar resultados en desarrollo. No forma parte de la app.
 
 Los sprites de Pokémon, objetos, Balls, tipos y cintas son **© Nintendo /
 Game Freak / The Pokémon Company**. **No se empaquetan** con la app ni están en
-este repositorio: la app los descarga bajo demanda del repositorio de PKHeX en
-GitHub (commit fijo, índice en
-`apps/pkarktools/lib/data/sprites/sprite_manifest.g.dart`) y los guarda en su
-caché. Ver [Iconos](usuario/iconos.md).
+este repositorio: la app los descarga bajo demanda de GitHub, cada fuente en un commit
+fijo (índice en `apps/pkarktools/lib/data/sprites/sprite_manifest.g.dart`), y
+los guarda en su caché:
+
+* **Pokémon**: iconos de caja de Pokémon HOME del repositorio de sprites de
+  Smogon / Pokémon Showdown ([smogon/sprites](https://github.com/smogon/sprites),
+  carpeta `src/minisprites/pokemon/home`). El código de ese repositorio es MIT;
+  los sprites son de Nintendo / Game Freak / The Pokémon Company (solo se usa
+  esa carpeta de iconos oficiales, no los sprites hechos por la comunidad).
+* **Objetos, Balls, tipos y cintas**: recursos de
+  [PKHeX](https://github.com/kwsch/PKHeX) (`PKHeX.Drawing.*`).
+
+Ver [Iconos](usuario/iconos.md).
 
 ## Marcas
 

@@ -16,6 +16,24 @@ que la siguen son los hitos internos de desarrollo que llevaron a ella.
   (`integration_test/demo_video_test.dart`, `tool/record_demo_video.sh`) y se
   monta con ffmpeg (`tool/make_demo_video.sh`), también en versiones vertical
   y cuadrada en español para redes.
+- **Iconos de Gen 9 y Leyendas Z-A**: los Pokémon usan ahora los iconos de
+  caja de Pokémon HOME del repositorio de sprites de Smogon / Pokémon Showdown
+  (`smogon/sprites`, commit fijo): las **1025 especies** y 330 formas
+  (regionales, Paldea, Ogerpon, Urshifu, Alcremie, Vivillon…) con un mapeo
+  explícito especie-forma → archivo. Antes, de la 906 en adelante salían
+  iniciales. Objetos, Balls, tipos y cintas siguen saliendo de PKHeX.
+
+### Cambiado
+- **Iconos más grandes**: la escala de cada grupo se calcula a partir del
+  contenido no transparente de todo el set (percentil 92) para que llene el
+  88 % del hueco, igual para todos los iconos del grupo, sin recortes ni
+  deformación; antes se escalaba el lienzo entero y el Pokémon ocupaba ~40 %.
+  Arte de píxeles con escala entera o vecino más próximo. Ver
+  [antes/después](docs/screenshots/iconos_antes_despues.png).
+- Variocolor: la nueva fuente no tiene iconos variocolor, así que se mantiene
+  la insignia y el borde dorado.
+- «Descargar todos los iconos» pasa a ~17 MB (2168 archivos); la caché de la
+  versión anterior se borra sola. Ajustes › Acerca de indica ambas fuentes.
 
 ## [0.1.0] — 2026-11-23
 
