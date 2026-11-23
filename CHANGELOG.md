@@ -11,6 +11,39 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [0.1.4] — 2026-11-23
+
+PKArkTools can check for new versions and update itself: on Android it
+downloads the APK, checks it is signed with the same certificate as the
+installed app and opens the system installer; on desktop it downloads the
+release file where you choose; on iOS it opens the release page.
+
+### Added
+- **Check for updates** in Settings › About, with the installed version, and
+  **Check for updates automatically** (on by default): on startup at most once
+  every 24 hours. The only new connection is
+  `api.github.com/repos/Rodriqe/PKArkTools/releases/latest`, without a token,
+  with the stored ETag (an unchanged answer is a 304 and doesn't count against
+  GitHub's limit). Automatic checks fail silently; the button explains why a
+  check failed (no network, GitHub's rate limit).
+- **Update notice**: a discreet card at the top of Settings and a dot on the
+  Settings icon, "PKArkTools 0.1.x available". It opens a sheet with the
+  release notes and **Update** and **Skip this version**.
+- **Android**: downloads the APK with progress and cancel, checks its size
+  and that its package name and signing certificates (SHA-256) match the
+  installed app's before handing it to the system installer; if they don't,
+  nothing is installed and the app says why. It takes you to "Install unknown
+  apps" with an explanation the first time. The APK is deleted after
+  installing or cancelling. New permission: `REQUEST_INSTALL_PACKAGES`.
+- **macOS, Windows and Linux**: downloads the release zip, installer or
+  tar.gz with a Save dialog that starts in Downloads and explains the manual
+  step; **Open the release page** is always there. **iOS** opens the release
+  page.
+- Downloads only follow HTTPS links to this repository on GitHub's domains,
+  every redirect included. See
+  [Getting started › Updating the app](docs/usuario/primeros-pasos.md#7-actualizar-la-app)
+  and [Data security](docs/seguridad-datos.md) (Spanish).
+
 ## [0.1.3] — 2026-11-23
 
 The Ark can live in a network folder (NAS): on a Mac with an SMB share
@@ -22,11 +55,6 @@ SMB returns them. Tested on a real SMB NAS from a Mac; **Android over
 SMB/SAF has not been tested on a device yet**.
 
 ### Added
-- **Check for updates** in Settings: shows the latest GitHub release and its
-  notes. On Android it downloads the APK inside the app and hands it to the
-  system installer (one confirmation; data and settings are kept), asking
-  once for "Install unknown apps". On desktop it opens the download page.
-  See [Getting started › Updating](docs/usuario/primeros-pasos.md#7-actualizar-la-app) (Spanish).
 - **Ark in a network folder (NAS)** on macOS (SMB, also AFP/NFS/WebDAV) and
   Android (SAF with an SMB documents provider). The folder is detected as a
   network folder (mount table via `getfsstat`, never blocking on an

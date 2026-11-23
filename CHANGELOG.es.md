@@ -11,6 +11,39 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [0.1.4] — 2026-11-23
+
+PKArkTools puede buscar versiones nuevas y actualizarse: en Android descarga
+el APK, comprueba que está firmado con el mismo certificado que la app
+instalada y abre el instalador del sistema; en escritorio descarga el archivo
+del release donde elijas; en iOS abre la página del release.
+
+### Añadido
+- **Buscar actualizaciones** en Ajustes › Acerca de, con la versión
+  instalada, y **Buscar actualizaciones automáticamente** (activada por
+  defecto): al abrir, como mucho una vez cada 24 horas. La única conexión nueva
+  es `api.github.com/repos/Rodriqe/PKArkTools/releases/latest`, sin token y
+  con el ETag guardado (una respuesta sin cambios es un 304 y no cuenta para el
+  límite de GitHub). La búsqueda automática falla en silencio; el botón explica
+  por qué no se pudo comprobar (sin red, límite de GitHub).
+- **Aviso de versión nueva**: una tarjeta discreta arriba de Ajustes y un punto
+  en el icono de Ajustes, «PKArkTools 0.1.x disponible». Abre una hoja con las
+  novedades del release y **Actualizar** y **Omitir esta versión**.
+- **Android**: descarga el APK con progreso y cancelable, comprueba su tamaño
+  y que su nombre de paquete y sus certificados de firma (SHA-256) coinciden
+  con los de la app instalada antes de entregarlo al instalador del sistema;
+  si no, no instala nada y lo explica. La primera vez lleva a «Instalar apps
+  desconocidas» con una explicación. El APK se borra tras instalar o al
+  cancelar. Permiso nuevo: `REQUEST_INSTALL_PACKAGES`.
+- **macOS, Windows y Linux**: descarga el zip, el instalador o el tar.gz del
+  release con un diálogo «Guardar» que empieza en Descargas y explica el paso
+  manual; **Abrir la página del release** está siempre. **iOS** abre la página
+  del release.
+- Las descargas solo siguen enlaces HTTPS a este repositorio en los dominios
+  de GitHub, redirecciones incluidas. Ver
+  [Primeros pasos › Actualizar la app](docs/usuario/primeros-pasos.md#7-actualizar-la-app)
+  y [Seguridad de datos](docs/seguridad-datos.md).
+
 ## [0.1.3] — 2026-11-23
 
 El Arca puede estar en una carpeta de red (NAS): en un Mac con un recurso SMB
@@ -22,11 +55,6 @@ acentos tal como los devuelve SMB en macOS. Probado en un NAS SMB real desde un
 Mac; **Android sobre SMB/SAF aún no se ha probado en un dispositivo**.
 
 ### Añadido
-- **Buscar actualizaciones** en Ajustes: muestra el último release de GitHub
-  y sus novedades. En Android descarga el APK dentro de la app y lo entrega al
-  instalador del sistema (una confirmación; datos y ajustes se conservan),
-  pidiendo una vez «Instalar apps desconocidas». En escritorio abre la página
-  de descarga. Ver [Primeros pasos › Actualizar la app](docs/usuario/primeros-pasos.md#7-actualizar-la-app).
 - **Arca en una carpeta de red (NAS)** en macOS (SMB, también AFP/NFS/WebDAV)
   y Android (SAF con un proveedor de documentos SMB). La carpeta se detecta
   como de red (tabla de montajes con `getfsstat`, sin bloquearse nunca en un
