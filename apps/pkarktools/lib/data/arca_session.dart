@@ -106,6 +106,10 @@ final arcaRepositoryProvider = Provider<ArcaRepository>((ref) {
 
 final arcaSetupProvider = NotifierProvider<ArcaController, ArcaSetup>(ArcaController.new);
 
+/// Cada cuánto se reindexa una carpeta de red mientras la app está en primer
+/// plano (FSEvents no ve los cambios que otros equipos hacen en un recurso SMB).
+final networkPollIntervalProvider = Provider<Duration>((ref) => const Duration(seconds: 60));
+
 /// `true` cuando hay que preguntar (una sola vez, tras elegir la carpeta en el
 /// primer arranque) si se crean las carpetas de los juegos.
 final gameFoldersPromptProvider = NotifierProvider<GameFoldersPrompt, bool>(GameFoldersPrompt.new);
@@ -145,6 +149,14 @@ class ArcaController extends Notifier<ArcaSetup> {
   StreamSubscription<FileSystemEvent>? _watch;
   Timer? _debounce;
   Timer? _inboxRetry;
+  Timer? _poll;
+  bool _foreground = true;
+
+  /// Reindexados periódicos hechos en la carpeta de red (diagnóstico y pruebas).
+  int networkPolls = 0;
+
+  /// `true` si la carpeta actual se vigila sondeando (carpeta de red).
+  bool get polling => _poll != null;
 
   @override
   ArcaSetup build() {
@@ -185,6 +197,35 @@ class ArcaController extends Notifier<ArcaSetup> {
     _startWatching(folder.fs);
   }
 
+  /// Estado «sin acceso» para [e]: si es un recurso de red no disponible se
+  /// recuerda en la ubicación (pantalla «Carpeta de red no disponible»).
+  static SetupAccessLost lostFor(ArcaLocation loc, FolderAccessLostException e) => SetupAccessLost(
+        e is NetworkFolderUnavailableException && !loc.network
+            ? ArcaLocation(loc.kind, value: loc.value, label: loc.label, network: true, volume: loc.volume)
+            : loc,
+        e.message,
+      );
+
+  /// La app vuelve a primer plano: reindexa (o reintenta abrir una carpeta de
+  /// red que no estaba disponible) y reanuda el sondeo.
+  Future<void> appResumed() async {
+    _foreground = true;
+    final s = state;
+    if (s is SetupAccessLost && s.location.network) {
+      await retry();
+    } else {
+      await reindex();
+    }
+    if (state is SetupReady && _repo.hasFolder && _repo.folder.fs.isNetwork) _schedulePoll();
+  }
+
+  /// La app pasa a segundo plano: se deja de sondear la red.
+  void appPaused() {
+    _foreground = false;
+    _poll?.cancel();
+    _poll = null;
+  }
+
   /// Reintenta abrir la carpeta guardada (tras perder el acceso).
   Future<bool> retry() async {
     final loc = switch (state) {
@@ -204,7 +245,7 @@ class ArcaController extends Notifier<ArcaSetup> {
       _startWatching(folder.fs);
       return true;
     } on FolderAccessLostException catch (e) {
-      state = SetupAccessLost(loc, e.message);
+      state = lostFor(loc, e);
       return false;
     }
   }
@@ -214,7 +255,10 @@ class ArcaController extends Notifier<ArcaSetup> {
     final current = state;
     if (current is! SetupReady || !_repo.hasFolder) return null;
     try {
-      if (!await _repo.folder.fs.checkAccess()) {
+      final fs = _repo.folder.fs;
+      // En red no se escribe una sonda en cada sondeo: el listado ya comprueba
+      // que el recurso está montado y que la carpeta existe.
+      if (!fs.isNetwork && !await fs.checkAccess()) {
         throw FolderAccessLostException('La carpeta ${_repo.folder.label} no está disponible');
       }
       final r = await _repo.reindex();
@@ -228,7 +272,7 @@ class ArcaController extends Notifier<ArcaSetup> {
       return r;
     } on FolderAccessLostException catch (e) {
       _stopWatching();
-      state = SetupAccessLost(current.location, e.message);
+      state = lostFor(current.location, e);
       return null;
     } on FileSystemException catch (e) {
       _stopWatching();
@@ -241,6 +285,12 @@ class ArcaController extends Notifier<ArcaSetup> {
   /// dispositivo sincronizó copias nuevas).
   void _startWatching(FolderFs fs) {
     _stopWatching();
+    if (fs.isNetwork) {
+      // FSEvents/inotify no ven lo que otros equipos escriben en un recurso
+      // SMB/NFS: reindexado ligero periódico (solo lista y lee lo nuevo).
+      _schedulePoll();
+      return;
+    }
     final path = fs.nativePath;
     if (path == null || kIsWeb || !(Platform.isMacOS || Platform.isWindows || Platform.isLinux)) return;
     try {
@@ -255,7 +305,30 @@ class ArcaController extends Notifier<ArcaSetup> {
     }
   }
 
+  /// Programa el siguiente sondeo de la carpeta de red. Nunca se solapan: el
+  /// siguiente se programa al terminar el anterior, y si un reindexado tarda
+  /// mucho (red lenta, Arca grande) se espacian para no saturar la red.
+  void _schedulePoll([Duration? after]) {
+    _poll?.cancel();
+    if (!_foreground) {
+      _poll = null;
+      return;
+    }
+    final interval = ref.read(networkPollIntervalProvider);
+    _poll = Timer(after ?? interval, () async {
+      if (!_foreground || state is! SetupReady) return;
+      final sw = Stopwatch()..start();
+      networkPolls++;
+      final r = await reindex();
+      if (r == null || state is! SetupReady || !_foreground) return;
+      final took = sw.elapsed * 3;
+      _schedulePoll(took > interval ? took : interval);
+    });
+  }
+
   void _stopWatching() {
+    _poll?.cancel();
+    _poll = null;
     _debounce?.cancel();
     _inboxRetry?.cancel();
     unawaited(_watch?.cancel());
@@ -297,7 +370,7 @@ Future<ArcaBootstrap> bootstrapArca({
     repo.replaceFolder(folder);
     return ArcaBootstrap(repo, SetupReady(opened.location), legacyPresent ? legacy : null);
   } on FolderAccessLostException catch (e) {
-    return ArcaBootstrap(repo, SetupAccessLost(location, e.message), legacyPresent ? legacy : null);
+    return ArcaBootstrap(repo, ArcaController.lostFor(location, e), legacyPresent ? legacy : null);
   } on Exception catch (e) {
     return ArcaBootstrap(repo, SetupAccessLost(location, '$e'), legacyPresent ? legacy : null);
   }

@@ -72,7 +72,13 @@ class _PKArkToolsAppState extends ConsumerState<PKArkToolsApp> {
     super.initState();
     // Al volver a primer plano: reindexado incremental (otro dispositivo pudo
     // sincronizar copias nuevas mientras tanto).
-    _lifecycle = AppLifecycleListener(onResume: () => ref.read(arcaSetupProvider.notifier).reindex());
+    // En una carpeta de red además se sondea cada minuto solo mientras la app
+    // está en primer plano.
+    _lifecycle = AppLifecycleListener(
+      onResume: () => ref.read(arcaSetupProvider.notifier).appResumed(),
+      onInactive: () => ref.read(arcaSetupProvider.notifier).appPaused(),
+      onHide: () => ref.read(arcaSetupProvider.notifier).appPaused(),
+    );
   }
 
   @override
