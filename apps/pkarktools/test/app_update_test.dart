@@ -114,9 +114,9 @@ void main() {
     });
 
     test('notas: markdown sencillo', () {
-      final blocks = ReleaseNotes.parse(releaseJson('v0.9.0')['body']! as String);
+      final blocks = ReleaseNotes.parse(releaseJson('v9.0.0')['body']! as String);
       expect(blocks, [
-        ('h2', 'PKArkTools v0.9.0'),
+        ('h2', 'PKArkTools v9.0.0'),
         ('p', 'Un párrafo partido en dos líneas.'),
         ('h3', 'Added'),
         ('li', '**Algo nuevo** con `código` y [un enlace](https://example.com), que sigue aquí.'),
@@ -154,7 +154,7 @@ void main() {
               return;
             }
             r.response.headers.set(HttpHeaders.etagHeader, '"abc"');
-            r.response.write(jsonEncode(releaseJson('v0.9.0')));
+            r.response.write(jsonEncode(releaseJson('v9.0.0')));
           case '404':
             r.response.statusCode = 404;
           case '500':
@@ -169,7 +169,7 @@ void main() {
       final store = MemoryUpdateStore();
       final u = AppUpdater(api: Uri.parse('http://127.0.0.1:${s.port}/latest'), platform: UpdatePlatform.android, store: store);
       final r = await u.latest();
-      expect(r!.version, const AppVersion(0, 9, 0));
+      expect(r!.version, const AppVersion(9, 0, 0));
       expect(r.isNewer, isTrue);
       expect(seen.last, ('PKArkTools/$kAppVersion', null));
       expect(store.values[AppUpdater.kEtag], '"abc"');
@@ -196,7 +196,7 @@ void main() {
 
     test('autoCheck: una consulta cada 24 h, desactivable, omitir versión y en silencio sin red', () async {
       var hits = 0;
-      var tag = 'v0.9.0';
+      var tag = 'v9.0.0';
       final s = await serve((r) {
         hits++;
         final etag = '"$tag"';
@@ -217,21 +217,21 @@ void main() {
           now: () => now);
       final u = updater();
 
-      expect((await u.autoCheck())!.version.toString(), '0.9.0');
+      expect((await u.autoCheck())!.version.toString(), '9.0.0');
       expect(hits, 1);
       now = now.add(const Duration(hours: 23));
-      expect((await u.autoCheck())!.version.toString(), '0.9.0', reason: 'de la caché, sin red');
+      expect((await u.autoCheck())!.version.toString(), '9.0.0', reason: 'de la caché, sin red');
       expect(hits, 1);
       now = now.add(const Duration(hours: 2));
       expect(await u.autoCheck(), isNotNull);
       expect(hits, 2, reason: 'pasadas 24 h vuelve a preguntar (con ETag → 304)');
 
-      // Omitir 0.9.0: no vuelve a avisar de ella, sí de la siguiente.
-      await u.skip(const AppVersion(0, 9, 0));
+      // Omitir 9.0.0: no vuelve a avisar de ella, sí de la siguiente.
+      await u.skip(const AppVersion(9, 0, 0));
       expect(await u.autoCheck(), isNull);
-      tag = 'v0.9.1';
+      tag = 'v9.0.1';
       now = now.add(const Duration(days: 1));
-      expect((await u.autoCheck())!.version.toString(), '0.9.1');
+      expect((await u.autoCheck())!.version.toString(), '9.0.1');
       expect(hits, 3);
 
       // Desactivado: ni consulta ni aviso.
@@ -245,7 +245,7 @@ void main() {
       final port = s.port;
       await s.close(force: true);
       now = now.add(const Duration(days: 2));
-      expect((await updater(port).autoCheck())!.version.toString(), '0.9.1');
+      expect((await updater(port).autoCheck())!.version.toString(), '9.0.1');
       expect(await AppUpdater(api: Uri.parse('http://127.0.0.1:$port/x'), platform: UpdatePlatform.android).autoCheck(),
           isNull);
     });
@@ -268,7 +268,7 @@ void main() {
       final dir = Directory(p.join(tmp.path, 'dl'))..createSync();
       File(p.join(dir.path, 'PKArkTools-v0.1.1.apk')).writeAsStringSync('viejo');
       final u = AppUpdater(platform: UpdatePlatform.android, downloadDir: dir, trusted: _local);
-      final r = ReleaseInfo.fromGitHub(releaseJson('v0.9.0', apkSize: apk.length, host: 'http://127.0.0.1:${s.port}'),
+      final r = ReleaseInfo.fromGitHub(releaseJson('v9.0.0', apkSize: apk.length, host: 'http://127.0.0.1:${s.port}'),
           UpdatePlatform.android)!;
       final progress = <int>[];
       final f = await u.download(r, onProgress: (done, total) {
@@ -278,7 +278,7 @@ void main() {
       expect(await f.readAsBytes(), apk);
       expect(progress.last, apk.length);
       expect(progress, orderedEquals([...progress]..sort()));
-      expect(dir.listSync().map((e) => p.basename(e.path)), ['PKArkTools-v0.9.0.apk']);
+      expect(dir.listSync().map((e) => p.basename(e.path)), ['PKArkTools-v9.0.0.apk']);
       await u.deleteDownload(f);
       expect(dir.listSync(), isEmpty);
       await u.cleanDownloads();
@@ -313,7 +313,7 @@ void main() {
       addTearDown(() => s.close(force: true));
       final dir = Directory(p.join(tmp.path, 'dl'));
       final u = AppUpdater(platform: UpdatePlatform.android, downloadDir: dir, trusted: _local);
-      final r = ReleaseInfo.fromGitHub(releaseJson('v0.9.0', apkSize: 5000, host: 'http://127.0.0.1:${s.port}'),
+      final r = ReleaseInfo.fromGitHub(releaseJson('v9.0.0', apkSize: 5000, host: 'http://127.0.0.1:${s.port}'),
           UpdatePlatform.android)!;
       await expectLater(u.download(r), throwsA(isA<UpdateException>().having((e) => e.code, 'code', 'size')));
       expect(dir.listSync(), isEmpty);
@@ -389,14 +389,14 @@ void main() {
     }
 
     testWidgets('al abrir: aviso, hoja con notas y «Omitir esta versión»', (tester) async {
-      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v0.9.0'));
+      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v9.0.0'));
       final c = await pump(tester, u);
-      expect(find.text('PKArkTools 0.9.0 disponible'), findsNothing);
+      expect(find.text('PKArkTools 9.0.0 disponible'), findsNothing);
       await c.read(updateNoticeProvider.notifier).startup();
       await tester.pumpAndSettle();
       expect(u.cleaned, 1, reason: 'borra APKs que quedaran de otra vez');
-      expect(find.text('PKArkTools 0.9.0 disponible'), findsNWidgets(2)); // tarjeta y chip
-      await tester.tap(find.text('PKArkTools 0.9.0 disponible').first);
+      expect(find.text('PKArkTools 9.0.0 disponible'), findsNWidgets(2)); // tarjeta y chip
+      await tester.tap(find.text('PKArkTools 9.0.0 disponible').first);
       await tester.pumpAndSettle();
       expect(find.byType(UpdateSheet), findsOneWidget);
       expect(find.text('Novedades'), findsOneWidget);
@@ -405,16 +405,16 @@ void main() {
       await tester.tap(find.text('Omitir esta versión'));
       await tester.pumpAndSettle();
       expect(find.byType(UpdateSheet), findsNothing);
-      expect(find.text('PKArkTools 0.9.0 disponible'), findsNothing);
-      expect(await u.skippedVersion(), const AppVersion(0, 9, 0));
+      expect(find.text('PKArkTools 9.0.0 disponible'), findsNothing);
+      expect(await u.skippedVersion(), const AppVersion(9, 0, 0));
       // Al volver a abrir la app, no avisa de la omitida.
       await c.read(updateNoticeProvider.notifier).startup();
       await tester.pumpAndSettle();
-      expect(find.text('PKArkTools 0.9.0 disponible'), findsNothing);
+      expect(find.text('PKArkTools 9.0.0 disponible'), findsNothing);
     });
 
     testWidgets('Android: descarga con progreso, comprueba la firma, instala y borra el APK', (tester) async {
-      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v0.9.0'));
+      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v9.0.0'));
       await pump(tester, u);
       await tester.tap(find.text('Buscar actualizaciones'));
       await tester.pumpAndSettle();
@@ -428,22 +428,22 @@ void main() {
       u.finishDownload();
       await tester.pump();
       await tester.pump();
-      expect(u.installed, ['/cache/PKArkTools-v0.9.0.apk']);
+      expect(u.installed, ['/cache/PKArkTools-v9.0.0.apk']);
       expect(find.textContaining('Confirma la instalación'), findsOneWidget);
       // El usuario cancela en la ventana de Android: el APK se borra.
       u.installResult.completeError(const UpdateException('aborted'));
       await tester.pumpAndSettle();
-      expect(u.deleted, ['/cache/PKArkTools-v0.9.0.apk']);
+      expect(u.deleted, ['/cache/PKArkTools-v9.0.0.apk']);
       expect(find.text('Actualizar'), findsOneWidget);
       expect(find.text('Actualización cancelada.'), findsOneWidget);
     });
 
     testWidgets('Android: cancelar la descarga', (tester) async {
-      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v0.9.0'));
+      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v9.0.0'));
       final c = await pump(tester, u);
       await c.read(updateNoticeProvider.notifier).checkNow();
       await tester.pump();
-      await tester.tap(find.text('PKArkTools 0.9.0 disponible').first);
+      await tester.tap(find.text('PKArkTools 9.0.0 disponible').first);
       await tester.pumpAndSettle();
       await tester.tap(find.text('Actualizar'));
       await tester.pump();
@@ -455,7 +455,7 @@ void main() {
     });
 
     testWidgets('Android: firma distinta → no instala, avisa y borra el APK', (tester) async {
-      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v0.9.0'))
+      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v9.0.0'))
         ..apk = const ApkSignature('dev.pkarktools.app', {'release'});
       await pump(tester, u);
       await tester.tap(find.text('Buscar actualizaciones'));
@@ -465,13 +465,13 @@ void main() {
       u.finishDownload();
       await tester.pumpAndSettle();
       expect(u.installed, isEmpty);
-      expect(u.deleted, ['/cache/PKArkTools-v0.9.0.apk']);
+      expect(u.deleted, ['/cache/PKArkTools-v9.0.0.apk']);
       expect(find.textContaining('no está firmado con el mismo certificado'), findsOneWidget);
       expect(find.text('Reintentar'), findsOneWidget);
     });
 
     testWidgets('Android sin «instalar apps desconocidas»: explica y abre el ajuste, sin descargar', (tester) async {
-      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v0.9.0'))..allowed = false;
+      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v9.0.0'))..allowed = false;
       await pump(tester, u);
       await tester.tap(find.text('Buscar actualizaciones'));
       await tester.pumpAndSettle();
@@ -502,7 +502,7 @@ void main() {
     });
 
     testWidgets('«Buscar automáticamente» se guarda', (tester) async {
-      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v0.9.0'));
+      final u = FakeUpdater(UpdatePlatform.android, releaseJson('v9.0.0'));
       final c = await pump(tester, u);
       await c.read(updateNoticeProvider.notifier).startup();
       await tester.pumpAndSettle();
@@ -514,7 +514,7 @@ void main() {
     });
 
     testWidgets('escritorio: descarga, guarda y explica el paso manual', (tester) async {
-      final u = FakeUpdater(UpdatePlatform.macos, releaseJson('v0.9.0'));
+      final u = FakeUpdater(UpdatePlatform.macos, releaseJson('v9.0.0'));
       await pump(tester, u);
       await tester.tap(find.text('Buscar actualizaciones'));
       await tester.pumpAndSettle();
@@ -523,27 +523,27 @@ void main() {
       await tester.pump();
       u.finishDownload();
       await tester.pumpAndSettle();
-      expect(u.saved, ['PKArkTools-v0.9.0-macos.zip']);
-      expect(find.text('Guardado en /Users/ash/Downloads/PKArkTools-v0.9.0-macos.zip'), findsOneWidget);
+      expect(u.saved, ['PKArkTools-v9.0.0-macos.zip']);
+      expect(find.text('Guardado en /Users/ash/Downloads/PKArkTools-v9.0.0-macos.zip'), findsOneWidget);
       expect(find.textContaining('arrastra PKArkTools.app a Aplicaciones'), findsOneWidget);
       await tester.tap(find.text('Mostrar en la carpeta'));
-      expect(u.revealed, ['/Users/ash/Downloads/PKArkTools-v0.9.0-macos.zip']);
+      expect(u.revealed, ['/Users/ash/Downloads/PKArkTools-v9.0.0-macos.zip']);
       await tester.ensureVisible(find.text('Abrir la página del release'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Abrir la página del release'));
-      expect(u.opened.single.toString(), 'https://github.com/Rodriqe/PKArkTools/releases/tag/v0.9.0');
+      expect(u.opened.single.toString(), 'https://github.com/Rodriqe/PKArkTools/releases/tag/v9.0.0');
       expect(u.installed, isEmpty);
     });
 
     testWidgets('iOS: abre la página del release', (tester) async {
-      final u = FakeUpdater(UpdatePlatform.ios, releaseJson('v0.9.0'));
+      final u = FakeUpdater(UpdatePlatform.ios, releaseJson('v9.0.0'));
       await pump(tester, u);
       await tester.tap(find.text('Buscar actualizaciones'));
       await tester.pumpAndSettle();
       expect(find.textContaining('En iPhone y iPad'), findsOneWidget);
       await tester.tap(find.widgetWithText(FilledButton, 'Abrir la página del release'));
       await tester.pumpAndSettle();
-      expect(u.opened.single.toString(), 'https://github.com/Rodriqe/PKArkTools/releases/tag/v0.9.0');
+      expect(u.opened.single.toString(), 'https://github.com/Rodriqe/PKArkTools/releases/tag/v9.0.0');
       expect(u.downloads, 0);
     });
   });
@@ -578,7 +578,7 @@ void main() {
           addTearDown(tester.view.reset);
           addTearDown(tester.platformDispatcher.clearLocalesTestValue);
           await tester.runAsync(() => repo.setSetting('locale', locale));
-          final u = FakeUpdater(UpdatePlatform.android, releaseJson('v0.9.0'));
+          final u = FakeUpdater(UpdatePlatform.android, releaseJson('v9.0.0'));
           await tester.pumpWidget(ProviderScope(
             overrides: [arcaRepositoryProvider.overrideWithValue(repo), appUpdaterProvider.overrideWithValue(u)],
             child: const PKArkToolsApp(initialLocation: '/ajustes'),
@@ -594,7 +594,7 @@ void main() {
           // Punto en el icono de Ajustes (barra inferior o rail).
           expect(find.byType(Badge), findsOneWidget);
           expect(find.byType(UpdateBanner), findsOneWidget);
-          final title = locale == 'es' ? 'PKArkTools 0.9.0 disponible' : 'PKArkTools 0.9.0 available';
+          final title = locale == 'es' ? 'PKArkTools 9.0.0 disponible' : 'PKArkTools 9.0.0 available';
           // Ajustes › Acerca de, hasta el final.
           final check = find.text(locale == 'es' ? 'Buscar actualizaciones' : 'Check for updates');
           await tester.scrollUntilVisible(check, 300, scrollable: find.byType(Scrollable).first);
@@ -641,7 +641,7 @@ class FakeUpdater extends AppUpdater {
   ApkSignature? apk = const ApkSignature('dev.pkarktools.app', {'debug'});
 
   void finishDownload() => _download!.complete(File(platform == UpdatePlatform.android
-      ? '/cache/PKArkTools-v0.9.0.apk'
+      ? '/cache/PKArkTools-v9.0.0.apk'
       : '/tmp/${ReleaseInfo.fromGitHub(json, platform)!.asset!.name}'));
 
   @override
