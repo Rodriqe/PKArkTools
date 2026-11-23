@@ -1,3 +1,4 @@
+import '../data/forms.dart';
 import '../data/game_data.dart';
 import '../data/species.dart';
 import '../model/game.dart';
@@ -290,13 +291,20 @@ abstract final class Legality {
     final table = GameDataTable.forGame(game);
     final ctx = table.context;
     final species = pk.species;
-    final speciesName = GameStrings.species(species, lang);
     final f = pk.format;
+    // «Decidueye (Hisui)»: los avisos nombran la forma, no solo la especie.
+    final speciesName = f.generation >= 3
+        ? SpeciesForms.displayName(species, pk.form, game, lang)
+        : GameStrings.species(species, lang);
 
-    // Especie
+    // Especie y forma (PKHeX `IsPresentInGame`: Decidueye normal no está en
+    // Leyendas Arceus; Pikachu compañero solo en Let's Go).
     if (!Species.isValid(species) || !table.hasSpecies(species)) {
       issues.add(LegalityIssue(LegalityCode.speciesNotInGame, LegalitySeverity.warning,
           field: 'species', args: {'species': speciesName}));
+    } else if (f.generation >= 3 && !pk.isEgg && !SpeciesForms.isPresent(species, pk.form, game)) {
+      issues.add(LegalityIssue(LegalityCode.speciesNotInGame, LegalitySeverity.warning,
+          field: 'form', args: {'species': speciesName}));
     }
 
     // Nivel
@@ -460,15 +468,16 @@ abstract final class Legality {
   /// (nivel, huevo, MT y tutores) en los juegos de [_moveGames] (p. ej. MT de
   /// Gen 3 en un Pokémon de Pal Park o MO de Gen 4 en uno llegado por HOME).
   static Set<int> learnableMoves(Pkm pk, GameVersion game) {
-    final chain = EncounterTables.evolutionChain(pk.species);
+    // Cadena con forma: Sandslash de Alola aprende lo de Sandshrew de Alola.
+    final chain = SpeciesForms.evolutionChain(pk.species, pk.form, game);
     // Shedinja nace como copia de Nincada al evolucionar a Ninjask y conserva lo que este aprende al evolucionar.
-    if (pk.species == 292) chain.add(291);
+    if (pk.species == 292) chain.add((291, 0));
     final gen3Origin = OriginGames.generation(pk.version) == 3;
     return {
       for (final g in _moveGames(pk, game))
-        for (final s in chain) ...GameDataTable.forGame(g).learnableMoves(s, s == pk.species ? pk.form : 0),
+        for (final (s, f) in chain) ...GameDataTable.forGame(g).learnableMoves(s, f),
       if (gen3Origin && pk.format.generation >= 3)
-        for (final s in chain) ...?_gen3GiftEggMoves[s],
+        for (final (s, _) in chain) ...?_gen3GiftEggMoves[s],
     };
   }
 
@@ -476,12 +485,12 @@ abstract final class Legality {
   /// especie y sus preevoluciones (un huevo recuerda los de la forma base) en
   /// el juego actual y en los de origen.
   static Set<int> relearnableMoves(Pkm pk, GameVersion game) {
-    final chain = EncounterTables.evolutionChain(pk.species);
+    final chain = SpeciesForms.evolutionChain(pk.species, pk.form, game);
     return {
       for (final g in _moveGames(pk, game))
-        for (final s in chain) ...[
-          for (final m in GameDataTable.forGame(g).levelUpMoves(s, s == pk.species ? pk.form : 0)) m.move,
-          ...GameDataTable.forGame(g).eggMoves(s, s == pk.species ? pk.form : 0),
+        for (final (s, f) in chain) ...[
+          for (final m in GameDataTable.forGame(g).levelUpMoves(s, f)) m.move,
+          ...GameDataTable.forGame(g).eggMoves(s, f),
         ],
     };
   }

@@ -8,6 +8,7 @@ export 'src/crypto/pk_crypto.dart' show PkCrypto;
 export 'src/crypto/sc_block.dart' show SCBlock, SCBlockSet, SCTypeCode, SCXorShift32;
 export 'src/crypto/meme_crypto.dart' show MemeCrypto;
 export 'src/crypto/swish_crypto.dart' show SwishCrypto;
+export 'src/data/forms.dart';
 export 'src/data/game_data.dart';
 export 'src/data/species.dart';
 export 'src/data/species_convert.dart';

@@ -1,9 +1,11 @@
 import 'dart:convert';
+import '../data/forms.dart';
 import '../data/game_data.dart';
 import '../data/generated/encounter_data.dart';
 import '../pkm/pk_format.dart';
 import '../pkm/pkm.dart';
 import '../util/bytes.dart';
+import 'origin.dart';
 
 /// Tipo de encuentro (PKHeX `EncounterSlot*`, `EncounterStatic*`, `EncounterTrade*`).
 enum EncounterKind { wild, static, gift, trade, raid }
@@ -183,7 +185,18 @@ class EncounterCheck {
     final gen3Origin = (v >= 1 && v <= 5) || v == 15;
     if (gen3Origin && pk.format.generation >= 4) return skip();
     final chain = EncounterTables.evolutionChain(pk.species);
-    final candidates = [for (final e in table) if (chain.contains(e.species)) e];
+    // Con forma: un Growlithe de Hisui no sale de un encuentro de Growlithe
+    // normal. Solo cuentan las formas con otros tipos o stats (regionales,
+    // Rotom…); las de aspecto (Unown, Vivillon) se aceptan en cualquier forma.
+    final origin = OriginPlace.gameOf(v);
+    final formChain = origin == null ? null : SpeciesForms.evolutionChain(pk.species, pk.form, origin);
+    bool formMatches(EncounterSlot e) {
+      if (formChain == null || e.form >= 30) return true; // 30/31: forma aleatoria o dinámica
+      final want = formChain.where((c) => c.$1 == e.species).firstOrNull;
+      return want == null || !SpeciesForms.formsDiffer(e.species, e.form, want.$2, origin);
+    }
+
+    final candidates = [for (final e in table) if (chain.contains(e.species) && formMatches(e)) e];
     // Errantes: se pueden encontrar en cualquier ruta, el lugar registrado varía.
     final roamer = EncounterTables.isRoamer(v, pk.species);
     final atLocation = [for (final e in candidates) if (e.acceptsLocation(loc) || (roamer && e.species == pk.species)) e];

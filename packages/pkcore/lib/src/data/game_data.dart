@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import '../model/game.dart';
 import '../util/bytes.dart';
 import 'generated/game_binaries.dart';
+import 'generated/form_names.dart';
 import 'generated/game_text.dart';
 import 'generated/learn_extra.dart';
 import 'species.dart';
@@ -116,11 +117,22 @@ class GameDataTable {
     return idx < _count ? idx : species;
   }
 
-  /// `true` si la especie existe en el juego (aparece en sus datos personales).
+  /// Última especie (Pokédex Nacional) de los datos personales; las entradas
+  /// siguientes son formas alternativas, no especies.
+  int get maxSpecies => switch (key) {
+        'rb' || 'y' => 151,
+        'gs' || 'c' => 251,
+        _ => kGameMaxSpecies[key] ?? _count - 1,
+      };
+
+  /// `true` si la especie existe en el juego, en alguna forma (PKHeX
+  /// `IsPresentInGame`): Growlithe solo está en Leyendas Arceus como forma de
+  /// Hisui; Caterpie tiene datos en Escarlata/Púrpura pero no está en el juego.
   bool hasSpecies(int species) {
-    if (species <= 0 || species >= _count) return false;
-    final e = _entryAt(species);
-    return e.baseStatTotal > 0;
+    if (species <= 0 || species > maxSpecies || species >= _count) return false;
+    final mask = kFormPresence[key]?[species];
+    if (mask != null) return mask != 0;
+    return _entryAt(species).baseStatTotal > 0;
   }
 
   PersonalEntry? entry(int species, [int form = 0]) {
