@@ -5,6 +5,7 @@ import '../detect/save_detector.dart';
 import '../edit/save_editor.dart';
 import '../model/game.dart';
 import '../model/save.dart';
+import '../legal/ribbons.dart';
 import '../pkm/pkm.dart';
 import 'special_forms.dart';
 
@@ -21,6 +22,7 @@ class DexSpecimen {
     this.slot = 0,
     this.heldItem = 0,
     this.nickname,
+    this.ribbons = const [],
   });
 
   final int species;
@@ -40,6 +42,9 @@ class DexSpecimen {
   /// Apodo, si lo tiene.
   final String? nickname;
 
+  /// Cintas y marcas que tiene (claves de PKHeX, p. ej. `RibbonChampionKalos`).
+  final List<String> ribbons;
+
   bool get inParty => box < 0;
 
   List<Object?> toJson() => [
@@ -50,7 +55,8 @@ class DexSpecimen {
         box,
         slot,
         heldItem,
-        if (nickname != null) nickname,
+        if (nickname != null || ribbons.isNotEmpty) nickname,
+        if (ribbons.isNotEmpty) ribbons.map((k) => k.replaceFirst('Ribbon', '')).join(' '),
       ];
 
   static DexSpecimen fromJson(List<dynamic> j) {
@@ -66,6 +72,7 @@ class DexSpecimen {
       slot: j[5] as int,
       heldItem: j[6] as int,
       nickname: j.length > 7 ? j[7] as String? : null,
+      ribbons: j.length > 8 ? [for (final k in (j[8] as String).split(' ')) if (k.isNotEmpty) 'Ribbon$k'] : const [],
     );
   }
 
@@ -92,7 +99,7 @@ class SaveDexScan {
   });
 
   /// Versión del formato de caché: si cambia, se recalcula.
-  static const int formatVersion = 1;
+  static const int formatVersion = 2; // 2: cintas de cada ejemplar
 
   final GameVersion game;
   final int? versionId;
@@ -140,6 +147,7 @@ class SaveDexScan {
           slot: slot,
           heldItem: pk.heldItem,
           nickname: nick,
+          ribbons: _ribbons(pk),
         ));
       } catch (_) {}
     }
@@ -209,6 +217,24 @@ class SaveDexScan {
       specimens: specimens,
       items: items,
     );
+  }
+
+  static List<String> _ribbons(Pkm pk) {
+    try {
+      if (!Ribbons.supports(pk.format)) return const [];
+      const ranks = ['', 'Super', 'Hyper', 'Master'];
+      return [
+        for (final r in Ribbons.of(pk))
+          if (r.has)
+            // Gen 3 guarda los rangos de concurso como contador: se expanden a sus cintas.
+            if (r.info.key.startsWith('RibbonCountG3'))
+              for (var i = 0; i < r.value.clamp(0, 4); i++) 'RibbonG3${r.info.key.substring(13)}${ranks[i]}'
+            else
+              r.info.key,
+      ];
+    } catch (_) {
+      return const [];
+    }
   }
 
   static SaveDexScan _fromSummary(SaveFile s) => SaveDexScan(

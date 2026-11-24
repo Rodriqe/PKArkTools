@@ -83,6 +83,25 @@ enum RibbonGame {
     return null;
   }
 
+  /// Juego del grafo donde está una partida de pkcore.
+  static RibbonGame? fromGameVersion(GameVersion g) => switch (g) {
+        GameVersion.redBlue || GameVersion.yellow || GameVersion.goldSilver || GameVersion.crystal => vc,
+        GameVersion.rubySapphire || GameVersion.emerald => rse,
+        GameVersion.fireRedLeafGreen => frlg,
+        GameVersion.diamondPearl || GameVersion.platinum => dppt,
+        GameVersion.heartGoldSoulSilver => hgss,
+        GameVersion.blackWhite || GameVersion.black2White2 => bw,
+        GameVersion.xy => xy,
+        GameVersion.omegaRubyAlphaSapphire => oras,
+        GameVersion.sunMoon || GameVersion.ultraSunUltraMoon => smusum,
+        GameVersion.letsGo => lgpe,
+        GameVersion.swordShield => swsh,
+        GameVersion.brilliantDiamondShiningPearl => bdsp,
+        GameVersion.legendsArceus => pla,
+        GameVersion.scarletViolet => sv,
+        GameVersion.legendsZA => za,
+      };
+
   /// Juego de origen a partir de la versión de PKHeX (`GameVersion`).
   static RibbonGame? fromPkhexVersion(String v) => switch (v) {
         'RD' || 'GN' || 'BU' || 'YW' || 'RBY' || 'GD' || 'SI' || 'C' || 'GS' || 'GSC' => vc,
@@ -590,6 +609,19 @@ class RibbonRoute {
       ];
   static const _swsh = GameVersion.swordShield;
   static const _sv = GameVersion.scarletViolet;
+
+  /// Cintas de la ruta (que se pueden conseguir hoy) que le faltan a un ejemplar con
+  /// [owned] que está en [current]: solo las de los juegos a los que aún puede ir.
+  List<RibbonGuideEntry> missingFor(Iterable<String> owned, RibbonGame current) {
+    final have = owned.toSet();
+    final reach = RibbonGraph.reachable(current);
+    return [
+      for (final s in steps)
+        if (reach.contains(s.game))
+          for (final e in [...s.ribbons, ...s.alsoHere])
+            if (e.counts && !have.contains(e.key)) e,
+    ].fold<List<RibbonGuideEntry>>([], (l, e) => l.contains(e) ? l : (l..add(e)));
+  }
 
   /// Juego donde aparece por primera vez la forma de la especie.
   RibbonGame? get formFirstGame {

@@ -156,6 +156,16 @@ void main() {
       expect(_r(1).visibleInFinalGame, lessThan(_r(1).total));
     });
 
+    test('lo que le falta a un ejemplar según su juego actual', () {
+      final r = _r(1);
+      final inSv = r.missingFor(const ['RibbonChampionPaldea'], RibbonGame.sv);
+      expect(inSv.map((e) => e.key), containsAll(['RibbonEffort', 'RibbonBestFriends', 'RibbonChampionGalar', 'RibbonTwinklingStar']));
+      expect(inSv.map((e) => e.key), isNot(contains('RibbonChampionPaldea')));
+      expect(inSv.map((e) => e.key), isNot(contains('RibbonChampionKalos'))); // Gen 6 ya no es alcanzable
+      expect(r.missingFor(const [], RibbonGame.rse).length, r.total);
+      expect(RibbonGame.fromGameVersion(GameVersion.emerald), RibbonGame.rse);
+    });
+
     test('texto para foros', () {
       final t = _r(1).toText(DataLanguage.en);
       expect(t, contains('Ribbon Master: Bulbasaur'));
