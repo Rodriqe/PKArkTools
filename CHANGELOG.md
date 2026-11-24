@@ -11,6 +11,18 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [1.0.1] — 2026-11-23
+
+### Changed
+- New app icon: bigger logo on the app's dark background. On every platform
+  (Android adaptive, legacy and round icons, iOS, macOS, Windows and Linux)
+  the full logo now fills ~84 % of the icon on the app's night blue
+  (`#151927`), with no shadow; on Android it is as large as the 66 dp safe
+  zone allows, so circle and squircle masks never crop it.
+- Bigger logo inside the app: the logo is now cropped to its content and
+  shown larger in the side bar (48 px tall), on the welcome screen (128 px on
+  phones, 160 px on desktop) and in Settings › About (88 px).
+
 ## [1.0.0] — 2026-11-23
 
 **PKArkTools 1.0: the official Ark.** This release adds the **Dex**, a global

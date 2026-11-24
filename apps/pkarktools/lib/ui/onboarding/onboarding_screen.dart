@@ -78,7 +78,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             : l10n.folderPickFailed(_error!);
 
     final hero = Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-      const _Mark(),
+      _Mark(size: compact ? 128 : 160),
       const SizedBox(height: 28),
       Text(
         (lost != null ? l10n.folderSection : l10n.onbEyebrow).toUpperCase(),
@@ -202,10 +202,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 }
 
 class _Mark extends StatelessWidget {
-  const _Mark();
+  const _Mark({required this.size});
+  final double size;
 
   @override
-  Widget build(BuildContext context) => const BrandMark(size: 88);
+  Widget build(BuildContext context) => BrandMark(size: size);
 }
 
 class _Note extends StatelessWidget {

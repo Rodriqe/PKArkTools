@@ -176,22 +176,26 @@ The video is rebuilt from the recordings with `tool/record_demo_video.sh` and
 |---|---|---|---|---|---|
 | <img src="docs/screenshots/ios/v2_pro_02_arca_colores.png" alt="iPhone: Ark"> | <img src="docs/screenshots/ios/v2_pro_05_ficha_iconos.png" alt="iPhone: Pokémon"> | <img src="docs/screenshots/ios/v2_pro_06_origen.png" alt="iPhone: origin"> | <img src="docs/screenshots/android/v2_02_arca_colores.png" alt="Android: Ark"> | <img src="docs/screenshots/android/v2_04_cajas_iconos.png" alt="Android: boxes"> | <img src="docs/screenshots/android/v2_07_cintas.png" alt="Android: ribbons"> |
 
+| App icon | |
+|---|---|
+| <img src="docs/screenshots/v2/mac_00_icono.png" width="160" alt="macOS icon"> | <img src="docs/screenshots/android/v2_09_lanzador.png" width="160" alt="Android launcher"> |
+
 All screenshots use synthetic saves.
 
 ## Install
 
-The current version is **v1.0.0**. Download it from the
+The current version is **v1.0.1**. Download it from the
 [latest release](https://github.com/Rodriqe/PKArkTools/releases/latest)
 ([all releases](https://github.com/Rodriqe/PKArkTools/releases),
 [changelog](CHANGELOG.md)).
 
 | Platform | How |
 |---|---|
-| Android | `PKArkTools-v1.0.0.apk`: open it on the phone and allow installing from that source when Android asks. |
-| macOS | `PKArkTools-v1.0.0-macos.zip`: unzip it and move `PKArkTools.app` to Applications. It is not notarized, so the first time **right-click → Open → Open**. |
+| Android | `PKArkTools-v1.0.1.apk`: open it on the phone and allow installing from that source when Android asks. |
+| macOS | `PKArkTools-v1.0.1-macos.zip`: unzip it and move `PKArkTools.app` to Applications. It is not notarized, so the first time **right-click → Open → Open**. |
 | iPhone / iPad | No downloadable build yet: compile it from source with Xcode (below). |
-| Windows | `PKArkTools-v1.0.0-windows-x64-setup.exe` (installer) or `PKArkTools-v1.0.0-windows-x64.zip` (portable: unzip and run `PKArkTools.exe`). It is not signed: if SmartScreen warns, click **More info → Run anyway**. |
-| Linux | `PKArkTools-v1.0.0-linux-x64.tar.gz`: extract it and run `PKArkTools/pkarktools` (GTK 3; the folder picker needs `zenity` or `kdialog`). |
+| Windows | `PKArkTools-v1.0.1-windows-x64-setup.exe` (installer) or `PKArkTools-v1.0.1-windows-x64.zip` (portable: unzip and run `PKArkTools.exe`). It is not signed: if SmartScreen warns, click **More info → Run anyway**. |
+| Linux | `PKArkTools-v1.0.1-linux-x64.tar.gz`: extract it and run `PKArkTools/pkarktools` (GTK 3; the folder picker needs `zenity` or `kdialog`). |
 
 Once installed, the app checks for new versions itself (**Settings › About**) and on
 Android installs them after checking the APK signature.

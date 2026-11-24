@@ -11,6 +11,19 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [1.0.1] — 2026-11-23
+
+### Cambiado
+- Nuevo icono de la app: logo más grande sobre el fondo oscuro de la app. En
+  todas las plataformas (icono adaptativo, antiguo y redondo de Android, iOS,
+  macOS, Windows y Linux) el logo completo ocupa ~84 % del icono sobre el
+  azul noche de la app (`#151927`), sin sombra; en Android es tan grande como
+  permite la zona segura de 66 dp, así que ni el círculo ni el squircle lo
+  recortan.
+- Logo más grande dentro de la app: ahora se recorta a su contenido y se ve
+  mayor en la barra lateral (48 px de alto), en la bienvenida (128 px en
+  teléfono, 160 px en escritorio) y en Ajustes › Acerca de (88 px).
+
 ## [1.0.0] — 2026-11-23
 
 **PKArkTools 1.0: el Arca oficial.** Esta versión añade la **Dex**, una

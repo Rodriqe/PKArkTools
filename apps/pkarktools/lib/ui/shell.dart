@@ -75,7 +75,7 @@ class _Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const mark = BrandMark(size: 40);
+    const mark = BrandMark(size: 48);
     if (!extended) return mark;
     return Row(mainAxisSize: MainAxisSize.min, children: [
       mark,

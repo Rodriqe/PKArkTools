@@ -14,18 +14,24 @@ Pasos:
      el borde, más los huecos blancos interiores grandes, se vuelve
      transparente. En el borde del logo se «desmezcla» el blanco (alfa por
      píxel y color sin halo).
-  2. Derivados en apps/pkarktools/assets/branding/ (logo, marca para la barra
-     lateral, monocromo).
-  3. Iconos de Android (adaptativo con fondo blanco + monocromo
+  2. Derivados en apps/pkarktools/assets/branding/ (logo, marca recortada para
+     la interfaz, monocromo).
+  3. Iconos de Android (adaptativo con fondo azul noche + monocromo
      para Android 13+ y PNG antiguos), iOS, macOS, Windows y Linux, y splash
      nativo (Android y iOS).
+
+Iconos de la app (variante C): el logo completo, recortado a su contenido, a
+~84 % del lado y centrado sobre el fondo azul noche de la app
+(ArcaTokens.dark.base), sin sombra. Donde una máscara circular puede recortarlo
+(zona segura del icono adaptativo, icono redondo antiguo) se reduce lo justo
+para que todo el contenido quepa en el círculo.
 """
 import json
 import os
 import sys
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw
 from scipy import ndimage
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
@@ -35,9 +41,8 @@ BRAND_DIR = os.path.join(APP, 'assets', 'branding')
 # Fondo oscuro de la marca (= ArcaTokens.dark.base) y un tono algo más claro para el degradado.
 BRAND_DARK = (0x15, 0x19, 0x27)
 BRAND_DARK_2 = (0x24, 0x2A, 0x42)
-# Fondo de los iconos de la app (lanzador): blanco con un toque gris en los bordes.
-ICON_BG = (0xFF, 0xFF, 0xFF)
-ICON_BG_2 = (0xEE, 0xF0, 0xF4)
+# Proporción del lado del icono que ocupa el logo (lado mayor de su contenido).
+ICON_LOGO = 0.84
 
 
 def transparent(src):
@@ -116,46 +121,51 @@ def square(img, size, pad=0.0):
     return canvas
 
 
-def brand_bg(size, radius=0.0):
-    """Fondo de los iconos: blanco con un degradado radial muy suave."""
-    y, x = np.mgrid[0:size, 0:size].astype(np.float32)
-    cx, cy = size * 0.5, size * 0.42
-    d = np.sqrt((x - cx) ** 2 + (y - cy) ** 2) / (size * 0.75)
-    t = np.clip(1 - d, 0, 1)[..., None]
-    c1, c2 = np.array(ICON_BG_2, np.float32), np.array(ICON_BG, np.float32)
-    rgb = c1 + (c2 - c1) * t
-    a = np.full((size, size, 1), 255, np.float32)
-    bg = Image.fromarray(np.concatenate([rgb, a], 2).astype(np.uint8), 'RGBA')
-    if radius > 0:
-        mask = Image.new('L', (size, size), 0)
-        ImageDraw.Draw(mask).rounded_rectangle([0, 0, size - 1, size - 1], radius=int(size * radius), fill=255)
-        bg.putalpha(mask)
-    return bg
-
-
-def shadowed(logo):
-    """Logo con una sombra muy sutil para que los bordes plateados se lean sobre blanco."""
+def place(logo, size, side):
+    """Centra [logo] en un lienzo transparente de [size] px con su lado mayor a [side] px."""
     w, h = logo.size
-    m = int(max(w, h) * 0.04)
-    canvas = Image.new('RGBA', (w + 2 * m, h + 2 * m), (0, 0, 0, 0))
-    a = logo.getchannel('A').point(lambda v: int(v * 0.30))
-    shadow = Image.new('RGBA', logo.size, (20, 24, 40, 0))
-    shadow.putalpha(a)
-    canvas.alpha_composite(shadow, (m, m + int(max(w, h) * 0.012)))
-    canvas = canvas.filter(ImageFilter.GaussianBlur(max(w, h) * 0.012))
-    canvas.alpha_composite(logo, (m, m))
+    s = side / max(w, h)
+    r = logo.resize((max(1, round(w * s)), max(1, round(h * s))), Image.LANCZOS)
+    canvas = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+    canvas.paste(r, ((size - r.width) // 2, (size - r.height) // 2), r)
     return canvas
 
 
-def icon(logo, size, pad, radius=0.0, inset=0.0):
-    """Icono con fondo blanco (opcionalmente redondeado y con margen exterior, estilo macOS)."""
+def circle_side(logo, radius):
+    """Lado mayor máximo del logo (centrado) para que todo su contenido quepa en un círculo de [radius]."""
+    a = np.asarray(logo.getchannel('A'))
+    h, w = a.shape
+    ys, xs = np.nonzero(a > 16)
+    d = np.sqrt((xs + 0.5 - w / 2) ** 2 + (ys + 0.5 - h / 2) ** 2).max()
+    return radius * max(w, h) / d
+
+
+def dark_bg(size, radius=0.0, circle=False):
+    """Fondo azul noche liso (opcionalmente cuadrado redondeado o círculo)."""
+    bg = Image.new('RGBA', (size, size), BRAND_DARK + (255,))
+    if radius > 0 or circle:
+        # Máscara con supermuestreo para un borde suave.
+        k = 4
+        mask = Image.new('L', (size * k, size * k), 0)
+        d = ImageDraw.Draw(mask)
+        if circle:
+            d.ellipse([0, 0, size * k - 1, size * k - 1], fill=255)
+        else:
+            d.rounded_rectangle([0, 0, size * k - 1, size * k - 1], radius=radius * size * k, fill=255)
+        bg.putalpha(mask.resize((size, size), Image.LANCZOS))
+    return bg
+
+
+def icon(logo, size, radius=0.0, inset=0.0, circle=False):
+    """Icono: logo a ICON_LOGO del lado sobre azul noche (con margen exterior [inset], estilo macOS)."""
     canvas = Image.new('RGBA', (size, size), (0, 0, 0, 0))
     inner = int(round(size * (1 - 2 * inset)))
-    bg = brand_bg(inner, radius)
     off = (size - inner) // 2
-    canvas.paste(bg, (off, off), bg)
-    mark = square(shadowed(logo), inner, pad)
-    canvas.alpha_composite(mark, (off, off))
+    canvas.alpha_composite(dark_bg(inner, radius, circle), (off, off))
+    side = inner * ICON_LOGO
+    if circle:
+        side = min(side, circle_side(logo, inner * 0.5 * 0.98))
+    canvas.alpha_composite(place(logo, inner, side), (off, off))
     return canvas
 
 
@@ -177,7 +187,7 @@ def save(img, *parts, opaque=False):
     path = os.path.join(*parts)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     if opaque:
-        bg = Image.new('RGB', img.size, ICON_BG)
+        bg = Image.new('RGB', img.size, BRAND_DARK)
         bg.paste(img, (0, 0), img)
         bg.save(path, optimize=True)
     else:
@@ -192,20 +202,23 @@ def main():
     # 1. Derivados versionados.
     save(square(logo, 1024, 0.04), BRAND_DIR, 'logo.png')
     save(square(logo, 256, 0.02), BRAND_DIR, 'logo_256.png')
+    # Logo de la interfaz (BrandMark): recortado a su contenido, sin margen, 512 px de alto.
+    save(logo.resize((round(logo.width * 512 / logo.height), 512), Image.LANCZOS), BRAND_DIR, 'logo_mark.png')
     save(square(mono(logo), 512, 0.04), BRAND_DIR, 'logo_mono.png')
-    save(icon(logo, 1024, 0.14, radius=0.22), BRAND_DIR, 'app_icon_1024.png')
+    save(icon(logo, 1024, radius=0.22), BRAND_DIR, 'app_icon_1024.png')
 
     # 2. Android: adaptativo (108 dp; zona segura 66 dp) + monocromo + PNG antiguos.
     res = os.path.join(APP, 'android', 'app', 'src', 'main', 'res')
     densities = {'mdpi': 1, 'hdpi': 1.5, 'xhdpi': 2, 'xxhdpi': 3, 'xxxhdpi': 4}
     for name, k in densities.items():
         fg = int(108 * k)
-        # El logo ocupa ~58 dp dentro de los 66 dp seguros.
-        save(square(shadowed(logo), fg, 0.21), res, f'mipmap-{name}', 'ic_launcher_foreground.png')
+        # Lo más grande posible sin salir del círculo seguro de 66 dp (ni pasar del 84 % de los 72 dp visibles).
+        side = min(circle_side(logo, 33 * k), 72 * k * ICON_LOGO)
+        save(place(logo, fg, side), res, f'mipmap-{name}', 'ic_launcher_foreground.png')
         save(square(mono(logo), fg, 0.25), res, f'mipmap-{name}', 'ic_launcher_monochrome.png')
         legacy = int(48 * k)
-        save(icon(logo, legacy, 0.12, radius=0.2), res, f'mipmap-{name}', 'ic_launcher.png')
-        save(icon(logo, legacy, 0.12, radius=0.5), res, f'mipmap-{name}', 'ic_launcher_round.png')
+        save(icon(logo, legacy, radius=0.2), res, f'mipmap-{name}', 'ic_launcher.png')
+        save(icon(logo, legacy, circle=True), res, f'mipmap-{name}', 'ic_launcher_round.png')
         # Splash (Android < 12): logo de 160 dp.
         save(square(logo, int(160 * k), 0.0), res, f'drawable-{name}', 'splash_logo.png')
     os.makedirs(os.path.join(res, 'mipmap-anydpi-v26'), exist_ok=True)
@@ -219,10 +232,9 @@ def main():
     for n in ('ic_launcher.xml', 'ic_launcher_round.xml'):
         open(os.path.join(res, 'mipmap-anydpi-v26', n), 'w').write(adaptive)
     hexc = '#%02X%02X%02X' % BRAND_DARK
-    hexw = '#%02X%02X%02X' % ICON_BG
     open(os.path.join(res, 'values', 'colors.xml'), 'w').write(f'''<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">{hexw}</color>
+    <color name="ic_launcher_background">{hexc}</color>
     <color name="splash_background">{hexc}</color>
 </resources>
 ''')
@@ -271,20 +283,20 @@ def main():
         pt = float(e['size'].split('x')[0])
         sc = int(e['scale'].replace('x', ''))
         px = int(round(pt * sc))
-        save(icon(logo, px, 0.14), ios, 'AppIcon.appiconset', fn, opaque=True)
+        save(icon(logo, px), ios, 'AppIcon.appiconset', fn, opaque=True)
     for fn, k in (('LaunchImage.png', 1), ('LaunchImage@2x.png', 2), ('LaunchImage@3x.png', 3)):
         save(square(logo, 160 * k, 0.0), ios, 'LaunchImage.imageset', fn)
 
-    # 4. macOS: cuadrado redondeado con margen (rejilla de iconos de macOS).
+    # 4. macOS: rejilla de Apple (cuadrado redondeado de 824/1024 con 100 px de margen y radio ~185 px).
     mac = os.path.join(APP, 'macos', 'Runner', 'Assets.xcassets', 'AppIcon.appiconset')
     for px in (16, 32, 64, 128, 256, 512, 1024):
-        save(icon(logo, px, 0.13, radius=0.225, inset=0.098), mac, f'app_icon_{px}.png')
+        save(icon(logo, px, radius=0.225, inset=100 / 1024), mac, f'app_icon_{px}.png')
 
     # 5. Windows (.ico multi-tamaño) y Linux (PNG que carga la ventana GTK).
-    win = icon(logo, 256, 0.10, radius=0.2)
+    win = icon(logo, 256, radius=0.2)
     win.save(os.path.join(APP, 'windows', 'runner', 'resources', 'app_icon.ico'),
              sizes=[(16, 16), (24, 24), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])
-    save(icon(logo, 512, 0.10, radius=0.2), APP, 'linux', 'runner', 'app_icon.png')
+    save(icon(logo, 512, radius=0.2), APP, 'linux', 'runner', 'app_icon.png')
     print('OK')
 
 

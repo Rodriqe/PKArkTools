@@ -1,7 +1,7 @@
 name: pkarktools
 description: "PKArkTools — el Arca de tus partidas guardadas."
 publish_to: 'none'
-version: 1.0.0+7
+version: 1.0.1+8
 resolution: workspace
 
 environment:
@@ -45,7 +45,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - assets/branding/logo_256.png
+    - assets/branding/logo_mark.png
   fonts:
     - family: Manrope
       fonts:

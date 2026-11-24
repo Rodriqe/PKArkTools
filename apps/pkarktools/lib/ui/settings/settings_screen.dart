@@ -103,7 +103,7 @@ class SettingsScreen extends ConsumerWidget {
                   l10n.about,
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Row(children: [
-                      const BrandMark(size: 64),
+                      const BrandMark(size: 88),
                       const SizedBox(width: 14),
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -126,7 +126,7 @@ class SettingsScreen extends ConsumerWidget {
                         context: context,
                         applicationName: l10n.appTitle,
                         applicationVersion: kAppVersion,
-                        applicationIcon: const Padding(padding: EdgeInsets.all(8), child: BrandMark(size: 72)),
+                        applicationIcon: const Padding(padding: EdgeInsets.all(8), child: BrandMark(size: 96)),
                       ),
                       child: Text(l10n.licenses),
                     ),
