@@ -8,7 +8,7 @@ import 'pokedex.dart';
 import 'save_editor.dart';
 
 /// Tipo de edición (para que la interfaz genere descripciones localizadas).
-enum SaveEditKind { setSlot, clearSlot, swapSlots, trainer, inventory, boxName, pokedex, events }
+enum SaveEditKind { setSlot, clearSlot, swapSlots, trainer, inventory, boxName, pokedex, events, rearrange }
 
 /// Edición aplicable sobre un [SaveEditor]. Inmutable: guarda copias de los datos.
 sealed class SaveEditOp implements SaveEdit {
@@ -181,6 +181,32 @@ class EventEdit extends SaveEditOp {
 
   @override
   String get description => 'Eventos: ${flags.length + work.length} cambio(s)';
+}
+
+/// Recoloca muchos huecos de caja de una vez (ordenar cajas): un solo paso de
+/// deshacer. Los Pokémon se guardan como copias.
+class RearrangeSlotsEdit extends SaveEditOp {
+  RearrangeSlotsEdit(Map<SlotRef, Pkm?> layout, {this.label = 'Cajas ordenadas'})
+      : layout = Map.unmodifiable({for (final e in layout.entries) e.key: e.value?.clone()});
+
+  final Map<SlotRef, Pkm?> layout;
+  final String label;
+
+  @override
+  SaveEditKind get kind => SaveEditKind.rearrange;
+
+  @override
+  void applyTo(SaveEditor editor) {
+    if (layout.keys.any((r) => r.isParty)) throw const SaveEditException('Solo se pueden recolocar huecos de caja.');
+    editor.checkWritable();
+    if (!editor.canEditStorage) throw const SaveEditException('Este save no permite editar Pokémon.');
+    for (final e in layout.entries) {
+      editor.writeBoxSlot(e.key.box, e.key.slot, e.value?.clone());
+    }
+  }
+
+  @override
+  String get description => '$label (${layout.length} huecos)';
 }
 
 /// Implementación de [SaveWriter] basada en [SaveEditor].
