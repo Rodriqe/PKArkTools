@@ -111,7 +111,7 @@ static class RibbonTable
     static readonly bool Debug = Environment.GetEnvironmentVariable("RIBBON_DEBUG") == "1";
     static readonly int OnlySpecies = int.TryParse(Environment.GetEnvironmentVariable("RIBBON_ONLY"), out var o) ? o : 0;
 
-    sealed record Result(string Row, int Score, int Generation, bool Event);
+    sealed record Result(string Row, int Score, int Generation, bool Event, bool Go);
 
     static string? Best(ushort species, byte form)
     {
@@ -142,6 +142,8 @@ static class RibbonTable
             return !a.Event; // un origen jugable gana a uno de evento
         if (a.Score != b.Score)
             return a.Score > b.Score;
+        if (a.Go != b.Go)
+            return !a.Go; // a igualdad, un juego principal antes que GO
         return a.Generation < b.Generation;
     }
 
@@ -275,7 +277,7 @@ static class RibbonTable
         var ev = IsEvent(enc);
         var row = $"{species},{form},{type.Name},{enc.Generation},{enc.Version},{enc.GetType().Name},{(ev ? 1 : 0)},{shadow},{enc.LevelMin},"
                   + $"{chains},{string.Join('|', ribbons)},{memContest},{memBattle},{flags}";
-        return new Result(row, score, enc.Generation, ev);
+        return new Result(row, score, enc.Generation, ev, enc.Version == GameVersion.GO);
     }
 
     static void Prepare(PKM pk, ushort species, byte form)

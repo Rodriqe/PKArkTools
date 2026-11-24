@@ -177,15 +177,15 @@ abstract final class RibbonGraph {
   static bool isOneWayExit(RibbonGame game) => switch (game) {
         RibbonGame.colosseum || RibbonGame.xd || RibbonGame.rse || RibbonGame.frlg => true,
         RibbonGame.dppt || RibbonGame.hgss || RibbonGame.bw => true,
-        RibbonGame.xy || RibbonGame.oras || RibbonGame.smusum => true,
+        // Gen 6 ↔ Gen 7 se pueden mover por el Banco en los dos sentidos; Banco → HOME no.
+        RibbonGame.smusum => true,
         RibbonGame.vc || RibbonGame.lgpe || RibbonGame.go => true,
         _ => false,
       };
 
   /// Enlace de salida de un juego (para los avisos de la guía).
   static TransferLink? exitLink(RibbonGame game) => switch (game) {
-        RibbonGame.colosseum || RibbonGame.xd => TransferLink.trade,
-        RibbonGame.rse || RibbonGame.frlg => TransferLink.palPark,
+        RibbonGame.colosseum || RibbonGame.xd || RibbonGame.rse || RibbonGame.frlg => TransferLink.palPark,
         RibbonGame.dppt || RibbonGame.hgss => TransferLink.pokeTransfer,
         RibbonGame.bw => TransferLink.bank,
         RibbonGame.xy || RibbonGame.oras || RibbonGame.smusum => TransferLink.bankToHome,
@@ -481,7 +481,7 @@ class RibbonSpeciesData {
 }
 
 /// Aviso de un tramo de la ruta.
-enum RouteNoteKind { oneWay, formAppears, evolveHere, homeFree }
+enum RouteNoteKind { oneWay, formAppears, evolveHere, beforeEvolving, homeFree }
 
 class RouteNote {
   const RouteNote(this.kind, {this.link, this.game, this.stage});
@@ -501,6 +501,9 @@ class RouteNote {
           ? '$st no existe antes de ${game?.name(lang) ?? ''}: hasta entonces viaja como su preevolución.'
           : "$st doesn't exist before ${game?.name(lang) ?? ''}: until then it travels as its pre-evolution.",
       RouteNoteKind.evolveHere => es ? 'Aquí ya puede ser $st.' : 'From here it can be $st.',
+      RouteNoteKind.beforeEvolving => es
+          ? 'Aquí solo puede estar como $st: visita este juego antes de evolucionarlo.'
+          : 'It can only be $st here: visit this game before evolving it.',
       RouteNoteKind.homeFree => es
           ? 'Desde aquí puedes ir y volver entre juegos de Switch con Pokémon HOME.'
           : 'From here you can move back and forth between Switch games with Pokémon HOME.',
@@ -640,10 +643,14 @@ class RibbonRankEntry {
 abstract final class RibbonMaster {
   static Map<(int, int), RibbonSpeciesData>? _data;
 
-  static Map<(int, int), RibbonSpeciesData> get _table => _data ??= {
-        for (final line in kRibbonRoutes.split('\n'))
-          if (RibbonSpeciesData._parse(line) case final d?) (d.species, d.form): d,
-      };
+  static Map<(int, int), RibbonSpeciesData> get _table => _data ??= () {
+        final out = <(int, int), RibbonSpeciesData>{};
+        for (final line in kRibbonRoutes.split('\n')) {
+          final d = RibbonSpeciesData._parse(line);
+          if (d != null) out[(d.species, d.form)] = d;
+        }
+        return out;
+      }();
 
   /// Especies y formas con guía, en orden de Dex.
   static List<(int, int)> get targets => _table.keys.toList()..sort((a, b) => a.$1 != b.$1 ? a.$1 - b.$1 : a.$2 - b.$2);
@@ -810,15 +817,6 @@ abstract final class RibbonMaster {
         if (g == RibbonGame.za && keys.isEmpty && !d.visited(RibbonContext.gen9a)) continue;
       }
       final step = RouteStep(g, stages);
-      for (final k in keys) {
-        final e = RibbonGuide.entry(k);
-        if (e == null) continue;
-        if (earned.add(k)) {
-          step.ribbons.add(e);
-        } else if (!step.alsoHere.contains(e)) {
-          step.alsoHere.add(e);
-        }
-      }
       if (g == RibbonGame.sv) step.marks.addAll(RibbonGuide.postCaptureMarks);
       steps.add(step);
     }
@@ -828,6 +826,21 @@ abstract final class RibbonMaster {
       final gc = steps.removeAt(gcIndex);
       final after = steps.lastIndexWhere((s) => s.game == RibbonGame.rse || s.game == RibbonGame.frlg);
       steps.insert(after + 1, gc);
+    }
+    // El juego de origen va primero (p. ej. Rojo Fuego antes que Esmeralda).
+    final oi = steps.indexWhere((s) => s.game == origin);
+    if (oi > 0) steps.insert(0, steps.removeAt(oi));
+    // Las cintas se asignan al primer juego de la ruta donde se pueden ganar.
+    for (final s in steps) {
+      s.ribbons.clear();
+      s.alsoHere.clear();
+      for (final e in [for (final k in byGame[s.game] ?? const <String>[]) ?RibbonGuide.entry(k)]) {
+        if (earned.add(e.key)) {
+          s.ribbons.add(e);
+        } else if (!s.alsoHere.contains(e)) {
+          s.alsoHere.add(e);
+        }
+      }
     }
     // Avisos.
     (int, int)? prevHead;
@@ -840,6 +853,8 @@ abstract final class RibbonMaster {
         if (i > 0) {
           s.notes.add(RouteNote(RouteNoteKind.formAppears, game: s.game, stage: target));
         }
+      } else if (formShown && head != null && head != target) {
+        s.notes.add(RouteNote(RouteNoteKind.beforeEvolving, stage: head));
       } else if (head != null && prevHead != null && head != prevHead && head != target) {
         s.notes.add(RouteNote(RouteNoteKind.evolveHere, stage: head));
       }
