@@ -146,3 +146,80 @@ static class TransferTables
         sb.AppendLine();
     }
 }
+
+// Orígenes legales para los casos de transferencia de pkcore.
+//   transfersrc <cases.json> <outdir>
+// cases.json: [{ "id", "version" (GameVersion de PKHeX, p. ej. "E"), "species", "form", "ext" }]
+// Para cada caso busca un encuentro (salvaje o estático, sin regalos ni huevos)
+// de esa especie en ese juego, lo convierte con el entrenador «ASH» y guarda
+// el primero que PKHeX da por legal como <id>.src.<ext>.
+static class TransferSources
+{
+    public static int Run(string casesPath, string outDir)
+    {
+        Directory.CreateDirectory(outDir);
+        var cases = JsonNode.Parse(File.ReadAllText(casesPath))!.AsArray();
+        var failed = 0;
+        foreach (var c in cases)
+        {
+            var id = c!["id"]!.GetValue<string>();
+            var version = Enum.Parse<GameVersion>(c["version"]!.GetValue<string>());
+            var species = c["species"]!.GetValue<ushort>();
+            var form = c["form"]?.GetValue<byte>() ?? 0;
+            var ext = c["ext"]!.GetValue<string>();
+            var tr = new SimpleTrainerInfo(version)
+            {
+                OT = "ASH", TID16 = 24680, SID16 = 13579, Gender = 0, Language = (int)LanguageID.English,
+            };
+            var blank = EntityBlank.GetBlank(TypeOf(ext));
+            blank.Species = species;
+            blank.Form = form;
+            PKM? found = null;
+            foreach (var enc in EncounterMovesetGenerator.GenerateEncounters(blank, tr, ReadOnlyMemory<ushort>.Empty, version))
+            {
+                if (enc is MysteryGift || enc.IsEgg || enc.Species != species || enc.Form != form) continue;
+                var pk = enc.ConvertToPKM(tr);
+                if (pk.GetType() != blank.GetType()) continue;
+                if (!new LegalityAnalysis(pk).Valid) continue;
+                found = pk;
+                break;
+            }
+            if (found is null)
+            {
+                Console.Error.WriteLine($"{id}: sin encuentro legal de {species}-{form} en {version}");
+                failed++;
+                continue;
+            }
+            File.WriteAllBytes(Path.Combine(outDir, $"{id}.src.{ext}"), Bytes(found));
+        }
+        return failed == 0 ? 0 : 1;
+    }
+
+    static byte[] Bytes(PKM pk)
+    {
+        if (pk is PK1 pk1)
+        {
+            var buf = new byte[PokeList1.GetListLengthSingle(pk1.Japanese)];
+            PokeList1.WriteToList(buf, pk1);
+            return buf;
+        }
+        if (pk is PK2 pk2)
+        {
+            var buf = new byte[PokeList2.GetListLengthSingle(pk2.Japanese)];
+            PokeList2.WriteToList(buf, pk2);
+            return buf;
+        }
+        var data = new byte[pk.SIZE_PARTY];
+        pk.WriteDecryptedDataParty(data);
+        return data;
+    }
+
+    static Type TypeOf(string ext) => ext switch
+    {
+        "pk1" => typeof(PK1), "pk2" => typeof(PK2), "pk3" => typeof(PK3), "pk4" => typeof(PK4),
+        "pk5" => typeof(PK5), "pk6" => typeof(PK6), "pk7" => typeof(PK7), "pb7" => typeof(PB7),
+        "pk8" => typeof(PK8), "pb8" => typeof(PB8), "pa8" => typeof(PA8), "pk9" => typeof(PK9),
+        "pa9" => typeof(PA9),
+        _ => throw new ArgumentException(ext),
+    };
+}

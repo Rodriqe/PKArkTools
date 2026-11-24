@@ -104,6 +104,9 @@ abstract final class PkTransfer {
       return TransferBlock.formNotAllowed;
     }
     if (dest == PkFormat.pb8 && (species == 327 || species == 290)) return TransferBlock.bdspLocked;
+    // Leyendas Z-A: se puede llevar allí, pero PKHeX no reconoce como legal nada
+    // que salga de Z-A hacia otro juego (movimientos y medidas sin origen válido).
+    if (src == PkFormat.pa9) return TransferBlock.noRoute;
 
     if (src.isGameBoy) {
       if (dest.isGameBoy) {
@@ -558,6 +561,13 @@ abstract final class PkTransfer {
     d.data[0x3E] = sd[0x3C];
     // Geo1 = país/región de quien lo recibe.
     _setFirstGeo(d);
+    // Un Pokémon que llega de otra generación siempre tiene último entrenador (PKHeX TransferHandlerFlagRequired).
+    d.currentHandler = 1;
+    if (d.htName.isEmpty) {
+      d.htName = ctx.trainer.name;
+      d.htGender = ctx.trainer.gender;
+      d.htFriendship = baseFriendship(d.species);
+    }
     d.healPp('7');
     d.refreshChecksum();
     return d;
@@ -619,10 +629,14 @@ abstract final class PkTransfer {
 
   /// En Switch, quien recibe un Pokémon de otro entrenador pasa a ser su
   /// último entrenador (PKHeX `PKH.UpdateHandler`).
+  ///
+  /// Si viene de otro juego (contexto distinto del de su origen), el último
+  /// entrenador es obligatorio aunque sea el mismo que el original
+  /// (PKHeX `TransferHandlerFlagRequired`).
   static void _updateHandler(Pkm pk, _Ctx ctx) {
     final t = ctx.trainer;
     final isOt = pk.otName == t.name && pk.tid == t.tid && pk.sid == t.sid && pk.otGender == t.gender;
-    if (isOt) {
+    if (isOt && _nativeFormat(pk.version) == pk.format) {
       pk.currentHandler = 0;
       return;
     }
@@ -634,6 +648,15 @@ abstract final class PkTransfer {
     pk.htGender = t.gender;
     pk.htFriendship = baseFriendship(pk.species);
   }
+
+  static PkFormat? _nativeFormat(int version) => switch (version) {
+        44 || 45 => PkFormat.pk8,
+        47 => PkFormat.pa8,
+        48 || 49 => PkFormat.pb8,
+        50 || 51 => PkFormat.pk9,
+        52 => PkFormat.pa9,
+        _ => null,
+      };
 
   static int _rand32(Random r) => (r.nextInt(0x10000) << 16) | r.nextInt(0x10000);
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);

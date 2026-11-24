@@ -268,7 +268,7 @@ abstract final class TransferNames {
 
   static String _get(String table, Map<int, String> src, int species, int language) {
     final l = _list(table, src, language == 6 || language == 11 || language == 0 ? (language == 11 ? 7 : 2) : language);
-    return species < l.length ? l[species] : Species.name(species);
+    return species < l.length ? l[species] : '';
   }
 
   /// Nombre que pone el juego de Gen 4 (mayúsculas en idiomas latinos).
@@ -281,7 +281,10 @@ abstract final class TransferNames {
   static String gen7(int species, int language) => _get('g7', kTransferNamesG7, species, language);
 
   /// Nombre que pone HOME al importar.
-  static String home(int species, int language) => _get('home', kTransferNamesHome, species, language);
+  static String home(int species, int language) {
+    final n = _get('home', kTransferNamesHome, species, language);
+    return n.isEmpty ? Species.name(species, SpeciesLanguage.en) : n;
+  }
 
   /// Idioma cuyo nombre de especie (Gen 5) coincide con [nickname]; 0 si ninguno.
   static int languageOf(int species, String nickname) {

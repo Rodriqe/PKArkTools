@@ -1,0 +1,1651 @@
+[
+  {
+    "id": "rb-gs",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": true,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [],
+    "ours": {
+      "species": 16,
+      "form": 0,
+      "level": 3,
+      "ability": -1,
+      "ball": 0,
+      "metLocation": 0,
+      "metLevel": 0,
+      "version": 61,
+      "moves": [
+        16,
+        0,
+        0,
+        0
+      ],
+      "nickname": "PIDGEY",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 173,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 16,
+      "form": 0,
+      "level": 3,
+      "ability": -1,
+      "ball": 0,
+      "metLocation": 0,
+      "metLevel": 0,
+      "version": 61,
+      "moves": [
+        16,
+        0,
+        0,
+        0
+      ],
+      "nickname": "PIDGEY",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 173,
+      "shiny": false
+    }
+  },
+  {
+    "id": "gs-rb",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": true,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [],
+    "ours": {
+      "species": 19,
+      "form": 0,
+      "level": 4,
+      "ability": -1,
+      "ball": 0,
+      "metLocation": 0,
+      "metLevel": 0,
+      "version": 59,
+      "moves": [
+        33,
+        39,
+        0,
+        0
+      ],
+      "nickname": "RATTATA",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 19,
+      "form": 0,
+      "level": 4,
+      "ability": -1,
+      "ball": 0,
+      "metLocation": 0,
+      "metLevel": 0,
+      "version": 59,
+      "moves": [
+        33,
+        39,
+        0,
+        0
+      ],
+      "nickname": "RATTATA",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "rb-us",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Language:OTLanguageCannotTransferToConsoleRegion_0",
+      "Memory:GeoMemoryMissing",
+      "Geography:GeoHardwareInvalid"
+    ],
+    "ours": {
+      "species": 16,
+      "form": 0,
+      "level": 3,
+      "ability": 145,
+      "ball": 4,
+      "metLocation": 30013,
+      "metLevel": 3,
+      "version": 35,
+      "moves": [
+        16,
+        0,
+        0,
+        0
+      ],
+      "nickname": "Pidgey",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 16,
+      "form": 0,
+      "level": 3,
+      "ability": 145,
+      "ball": 4,
+      "metLocation": 30013,
+      "metLevel": 3,
+      "version": 35,
+      "moves": [
+        16,
+        0,
+        0,
+        0
+      ],
+      "nickname": "Pidgey",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "y-sm",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Language:OTLanguageCannotTransferToConsoleRegion_0",
+      "Memory:GeoMemoryMissing",
+      "Geography:GeoHardwareInvalid"
+    ],
+    "ours": {
+      "species": 19,
+      "form": 0,
+      "level": 2,
+      "ability": 55,
+      "ball": 4,
+      "metLocation": 30013,
+      "metLevel": 2,
+      "version": 35,
+      "moves": [
+        33,
+        39,
+        0,
+        0
+      ],
+      "nickname": "Rattata",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 19,
+      "form": 0,
+      "level": 2,
+      "ability": 55,
+      "ball": 4,
+      "metLocation": 30013,
+      "metLevel": 2,
+      "version": 35,
+      "moves": [
+        33,
+        39,
+        0,
+        0
+      ],
+      "nickname": "Rattata",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "c-us",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Language:OTLanguageCannotTransferToConsoleRegion_0",
+      "Memory:GeoMemoryMissing",
+      "Geography:GeoHardwareInvalid"
+    ],
+    "ours": {
+      "species": 161,
+      "form": 0,
+      "level": 2,
+      "ability": 119,
+      "ball": 4,
+      "metLocation": 30017,
+      "metLevel": 2,
+      "version": 41,
+      "moves": [
+        33,
+        0,
+        0,
+        0
+      ],
+      "nickname": "Sentret",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 161,
+      "form": 0,
+      "level": 2,
+      "ability": 119,
+      "ball": 4,
+      "metLocation": 30017,
+      "metLevel": 2,
+      "version": 41,
+      "moves": [
+        33,
+        0,
+        0,
+        0
+      ],
+      "nickname": "Sentret",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "e-dp",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": true,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [],
+    "ours": {
+      "species": 263,
+      "form": 0,
+      "level": 2,
+      "ability": 53,
+      "ball": 4,
+      "metLocation": 55,
+      "metLevel": 2,
+      "version": 3,
+      "moves": [
+        33,
+        45,
+        0,
+        0
+      ],
+      "nickname": "ZIGZAGOON",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 263,
+      "form": 0,
+      "level": 2,
+      "ability": 53,
+      "ball": 4,
+      "metLocation": 55,
+      "metLevel": 2,
+      "version": 3,
+      "moves": [
+        33,
+        45,
+        0,
+        0
+      ],
+      "nickname": "ZIGZAGOON",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "fr-hg",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": true,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [],
+    "ours": {
+      "species": 16,
+      "form": 0,
+      "level": 3,
+      "ability": 51,
+      "ball": 4,
+      "metLocation": 55,
+      "metLevel": 3,
+      "version": 4,
+      "moves": [
+        33,
+        0,
+        0,
+        0
+      ],
+      "nickname": "PIDGEY",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 16,
+      "form": 0,
+      "level": 3,
+      "ability": 51,
+      "ball": 4,
+      "metLocation": 55,
+      "metLevel": 3,
+      "version": 4,
+      "moves": [
+        33,
+        0,
+        0,
+        0
+      ],
+      "nickname": "PIDGEY",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "rs-pt",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": true,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [],
+    "ours": {
+      "species": 263,
+      "form": 0,
+      "level": 2,
+      "ability": 53,
+      "ball": 4,
+      "metLocation": 55,
+      "metLevel": 2,
+      "version": 2,
+      "moves": [
+        33,
+        45,
+        0,
+        0
+      ],
+      "nickname": "ZIGZAGOON",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 263,
+      "form": 0,
+      "level": 2,
+      "ability": 53,
+      "ball": 4,
+      "metLocation": 55,
+      "metLevel": 2,
+      "version": 2,
+      "moves": [
+        33,
+        45,
+        0,
+        0
+      ],
+      "nickname": "ZIGZAGOON",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "dp-bw",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": true,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [],
+    "ours": {
+      "species": 396,
+      "form": 0,
+      "level": 2,
+      "ability": 51,
+      "ball": 4,
+      "metLocation": 30001,
+      "metLevel": 2,
+      "version": 10,
+      "moves": [
+        33,
+        45,
+        0,
+        0
+      ],
+      "nickname": "STARLY",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 396,
+      "form": 0,
+      "level": 2,
+      "ability": 51,
+      "ball": 4,
+      "metLocation": 30001,
+      "metLevel": 2,
+      "version": 10,
+      "moves": [
+        33,
+        45,
+        0,
+        0
+      ],
+      "nickname": "STARLY",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "hg-b2",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": true,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [],
+    "ours": {
+      "species": 161,
+      "form": 0,
+      "level": 5,
+      "ability": 50,
+      "ball": 4,
+      "metLocation": 30001,
+      "metLevel": 5,
+      "version": 7,
+      "moves": [
+        10,
+        193,
+        111,
+        0
+      ],
+      "nickname": "SENTRET",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 161,
+      "form": 0,
+      "level": 5,
+      "ability": 50,
+      "ball": 4,
+      "metLocation": 30001,
+      "metLevel": 5,
+      "version": 7,
+      "moves": [
+        10,
+        193,
+        111,
+        0
+      ],
+      "nickname": "SENTRET",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "bw-xy",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Geography:GeoHardwareInvalid"
+    ],
+    "ours": {
+      "species": 504,
+      "form": 0,
+      "level": 8,
+      "ability": 51,
+      "ball": 4,
+      "metLocation": 32,
+      "metLevel": 8,
+      "version": 21,
+      "moves": [
+        33,
+        43,
+        44,
+        117
+      ],
+      "nickname": "Patrat",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 504,
+      "form": 0,
+      "level": 8,
+      "ability": 51,
+      "ball": 4,
+      "metLocation": 32,
+      "metLevel": 8,
+      "version": 21,
+      "moves": [
+        33,
+        43,
+        44,
+        117
+      ],
+      "nickname": "Patrat",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "b2-or",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Geography:GeoHardwareInvalid"
+    ],
+    "ours": {
+      "species": 504,
+      "form": 0,
+      "level": 5,
+      "ability": 51,
+      "ball": 4,
+      "metLocation": 130,
+      "metLevel": 5,
+      "version": 23,
+      "moves": [
+        33,
+        43,
+        0,
+        0
+      ],
+      "nickname": "Patrat",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 504,
+      "form": 0,
+      "level": 5,
+      "ability": 51,
+      "ball": 4,
+      "metLocation": 130,
+      "metLevel": 5,
+      "version": 23,
+      "moves": [
+        33,
+        43,
+        0,
+        0
+      ],
+      "nickname": "Patrat",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "xy-sm",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired"
+    ],
+    "ours": {
+      "species": 661,
+      "form": 0,
+      "level": 2,
+      "ability": 145,
+      "ball": 4,
+      "metLocation": 12,
+      "metLevel": 2,
+      "version": 24,
+      "moves": [
+        33,
+        45,
+        0,
+        0
+      ],
+      "nickname": "Fletchling",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 661,
+      "form": 0,
+      "level": 2,
+      "ability": 145,
+      "ball": 4,
+      "metLocation": 12,
+      "metLevel": 2,
+      "version": 24,
+      "moves": [
+        33,
+        45,
+        0,
+        0
+      ],
+      "nickname": "Fletchling",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "or-us",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired"
+    ],
+    "ours": {
+      "species": 263,
+      "form": 0,
+      "level": 2,
+      "ability": 95,
+      "ball": 4,
+      "metLocation": 204,
+      "metLevel": 2,
+      "version": 27,
+      "moves": [
+        33,
+        45,
+        0,
+        0
+      ],
+      "nickname": "Zigzagoon",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 263,
+      "form": 0,
+      "level": 2,
+      "ability": 95,
+      "ball": 4,
+      "metLocation": 204,
+      "metLevel": 2,
+      "version": 27,
+      "moves": [
+        33,
+        45,
+        0,
+        0
+      ],
+      "nickname": "Zigzagoon",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "us-sw",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 40,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 70,
+      "metLevel": 40,
+      "version": 32,
+      "moves": [
+        57,
+        0,
+        0,
+        0
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 40,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 70,
+      "metLevel": 40,
+      "version": 32,
+      "moves": [
+        57,
+        0,
+        0,
+        0
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "us-sv",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 731,
+      "form": 0,
+      "level": 2,
+      "ability": 92,
+      "ball": 4,
+      "metLocation": 8,
+      "metLevel": 2,
+      "version": 32,
+      "moves": [
+        64,
+        0,
+        0,
+        0
+      ],
+      "nickname": "Pikipek",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 731,
+      "form": 0,
+      "level": 2,
+      "ability": 92,
+      "ball": 4,
+      "metLocation": 8,
+      "metLevel": 2,
+      "version": 32,
+      "moves": [
+        64,
+        0,
+        0,
+        0
+      ],
+      "nickname": "Pikipek",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "us-bd",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 40,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 70,
+      "metLevel": 40,
+      "version": 32,
+      "moves": [
+        21,
+        435,
+        85,
+        113
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 40,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 70,
+      "metLevel": 40,
+      "version": 32,
+      "moves": [
+        21,
+        435,
+        85,
+        113
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "us-la",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 40,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 70,
+      "metLevel": 40,
+      "version": 32,
+      "moves": [
+        129,
+        209,
+        85,
+        231
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 40,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 70,
+      "metLevel": 40,
+      "version": 32,
+      "moves": [
+        129,
+        209,
+        85,
+        231
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "us-za",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 40,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 70,
+      "metLevel": 40,
+      "version": 32,
+      "moves": [
+        85,
+        268,
+        113,
+        87
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 40,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 70,
+      "metLevel": 40,
+      "version": 32,
+      "moves": [
+        85,
+        268,
+        113,
+        87
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "gg-sw",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 3,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 39,
+      "metLevel": 3,
+      "version": 42,
+      "moves": [
+        84,
+        45,
+        39,
+        0
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 3,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 39,
+      "metLevel": 3,
+      "version": 42,
+      "moves": [
+        84,
+        45,
+        39,
+        0
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "gg-sv",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 3,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 39,
+      "metLevel": 3,
+      "version": 42,
+      "moves": [
+        98,
+        39,
+        84,
+        45
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 3,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 39,
+      "metLevel": 3,
+      "version": 42,
+      "moves": [
+        98,
+        39,
+        84,
+        45
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "sw-sv",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 819,
+      "form": 0,
+      "level": 15,
+      "ability": 167,
+      "ball": 4,
+      "metLocation": 162,
+      "metLevel": 15,
+      "version": 44,
+      "moves": [
+        747,
+        254,
+        255,
+        256
+      ],
+      "nickname": "Skwovet",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 819,
+      "form": 0,
+      "level": 15,
+      "ability": 167,
+      "ball": 4,
+      "metLocation": 162,
+      "metLevel": 15,
+      "version": 44,
+      "moves": [
+        747,
+        254,
+        255,
+        256
+      ],
+      "nickname": "Skwovet",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "sv-sw",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 819,
+      "form": 0,
+      "level": 5,
+      "ability": 167,
+      "ball": 4,
+      "metLocation": 59997,
+      "metLevel": 5,
+      "version": 44,
+      "moves": [
+        33,
+        39,
+        44,
+        0
+      ],
+      "nickname": "Skwovet",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 819,
+      "form": 0,
+      "level": 5,
+      "ability": 167,
+      "ball": 4,
+      "metLocation": 59997,
+      "metLevel": 5,
+      "version": 44,
+      "moves": [
+        33,
+        39,
+        44,
+        0
+      ],
+      "nickname": "Skwovet",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "bd-sv",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 396,
+      "form": 0,
+      "level": 26,
+      "ability": 51,
+      "ball": 5,
+      "metLocation": 219,
+      "metLevel": 26,
+      "version": 48,
+      "moves": [
+        104,
+        283,
+        18,
+        332
+      ],
+      "nickname": "Starly",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 396,
+      "form": 0,
+      "level": 26,
+      "ability": 51,
+      "ball": 5,
+      "metLocation": 219,
+      "metLevel": 26,
+      "version": 48,
+      "moves": [
+        104,
+        283,
+        18,
+        332
+      ],
+      "nickname": "Starly",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "la-sv",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 11,
+      "ability": 9,
+      "ball": 28,
+      "metLocation": 7,
+      "metLevel": 11,
+      "version": 47,
+      "moves": [
+        84,
+        45,
+        86,
+        104
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 11,
+      "ability": 9,
+      "ball": 28,
+      "metLocation": 7,
+      "metLevel": 11,
+      "version": 47,
+      "moves": [
+        84,
+        45,
+        86,
+        104
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "sv-za",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 10,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 12,
+      "metLevel": 10,
+      "version": 50,
+      "moves": [
+        45,
+        84,
+        98,
+        86
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 10,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 12,
+      "metLevel": 10,
+      "version": 50,
+      "moves": [
+        45,
+        84,
+        98,
+        86
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "sw-bd",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 10,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 156,
+      "metLevel": 10,
+      "version": 44,
+      "moves": [
+        45,
+        98,
+        86,
+        104
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 10,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 156,
+      "metLevel": 10,
+      "version": 44,
+      "moves": [
+        45,
+        98,
+        86,
+        104
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "sv-la",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Memory:TransferHandlerFlagRequired",
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 10,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 12,
+      "metLevel": 10,
+      "version": 50,
+      "moves": [
+        84,
+        98,
+        86,
+        0
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 10,
+      "ability": 9,
+      "ball": 4,
+      "metLocation": 12,
+      "metLevel": 10,
+      "version": 50,
+      "moves": [
+        84,
+        98,
+        86,
+        0
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "e-sv",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 25,
+      "ability": 9,
+      "ball": 5,
+      "metLocation": 30001,
+      "metLevel": 25,
+      "version": 3,
+      "moves": [
+        486,
+        364,
+        209,
+        97
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 25,
+      "ability": 9,
+      "ball": 5,
+      "metLocation": 30001,
+      "metLevel": 25,
+      "version": 3,
+      "moves": [
+        486,
+        364,
+        209,
+        97
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "dp-sw",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 54,
+      "form": 0,
+      "level": 25,
+      "ability": 13,
+      "ball": 4,
+      "metLocation": 30001,
+      "metLevel": 25,
+      "version": 10,
+      "moves": [
+        39,
+        55,
+        50,
+        93
+      ],
+      "nickname": "Psyduck",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 54,
+      "form": 0,
+      "level": 25,
+      "ability": 13,
+      "ball": 4,
+      "metLocation": 30001,
+      "metLevel": 25,
+      "version": 10,
+      "moves": [
+        39,
+        55,
+        50,
+        93
+      ],
+      "nickname": "Psyduck",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  },
+  {
+    "id": "rb-sv",
+    "sourceLegal": true,
+    "pkhexResult": "Success",
+    "pkhexLegal": false,
+    "oursLegal": true,
+    "oursIssues": [],
+    "pkhexIssues": [
+      "Encounter:TransferTrackerMissing"
+    ],
+    "ours": {
+      "species": 25,
+      "form": 0,
+      "level": 3,
+      "ability": 31,
+      "ball": 4,
+      "metLocation": 30013,
+      "metLevel": 3,
+      "version": 35,
+      "moves": [
+        98,
+        39,
+        84,
+        45
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    },
+    "pkhex": {
+      "species": 25,
+      "form": 0,
+      "level": 3,
+      "ability": 31,
+      "ball": 4,
+      "metLocation": 30013,
+      "metLevel": 3,
+      "version": 35,
+      "moves": [
+        98,
+        39,
+        84,
+        45
+      ],
+      "nickname": "Pikachu",
+      "ot": "ASH",
+      "isNicknamed": false,
+      "heldItem": 0,
+      "shiny": false
+    }
+  }
+]

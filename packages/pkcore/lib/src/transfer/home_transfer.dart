@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import '../data/forms.dart';
 import '../data/game_data.dart';
 import '../data/generated/transfer_data.dart';
 import '../data/species.dart';
@@ -178,7 +177,8 @@ abstract final class HomeTransfer {
         d.scale = side.scale ?? d.heightScalar;
         if (src.format != PkFormat.pk9) {
           d.data[0x11F] = d.metLevel; // obediencia
-          final t = SpeciesForms.defaultTeraType(species, form, GameVersion.scarletViolet);
+          // PKHeX TeraTypeUtil.GetTeraTypeImport: primer tipo, o el segundo si el primero es Normal.
+          final t = p == null ? 0 : (p.type1 != 0 ? p.type1 : p.type2);
           d.data[0x94] = t;
           d.data[0x95] = t;
         }
