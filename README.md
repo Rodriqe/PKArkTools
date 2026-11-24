@@ -49,6 +49,24 @@ file back to your console or emulator.
 No accounts, no servers, no telemetry: put the Ark in iCloud Drive, Google
 Drive, OneDrive, Dropbox or Syncthing and all your devices share it.
 
+## New in 1.1: Ribbon Master
+
+<p align="center">
+  <img src="docs/screenshots/ribbons/03_guide_bulbasaur.png" width="100%" alt="Ribbon Master: Bulbasaur's route from FireRed/LeafGreen to Scarlet/Violet">
+</p>
+
+A **ribbon guide for every species**: pick any Pokémon (species and form) and
+see **every ribbon a single specimen can earn**, game by game, from its oldest
+possible origin (Pokémon XD and Colosseum included) to Scarlet/Violet: how to
+get each one in a line, its requirement, when to transfer (Pal Park, Bank and
+HOME are one-way), when a regional form appears, what isn't available today
+(events, closed online services) and which marks it can carry. A **Top 50**
+ranks the species that can earn the most ribbons (ties share their place),
+your own specimens show what they're still missing, and the guide can be
+copied as text for forums or saved as an image. Every species/form's route is
+checked against PKHeX's ribbon verifier: **0 contradictions** across 1333
+species and forms. [Ribbon Master guide](docs/usuario/ribbon-master.md).
+
 ## New in 1.0: the Dex
 
 <p align="center">
@@ -166,6 +184,7 @@ The video is rebuilt from the recordings with `tool/record_demo_video.sh` and
 
 | Desktop | | |
 |---|---|---|
+| <img src="docs/screenshots/ribbons/02_top50.png" alt="Ribbon Master Top 50"> | <img src="docs/screenshots/ribbons/04_guide_alolan_raichu.png" alt="Ribbon Master: Alolan Raichu"> | <img src="docs/screenshots/ribbons/06_guide_shadow_origin.png" alt="Ribbon Master: Shadow Pokémon origin"> |
 | <img src="docs/screenshots/dex/01_grid.png" alt="Dex grid"> | <img src="docs/screenshots/dex/03_locked_forms.png" alt="Dex: locked special forms"> | <img src="docs/screenshots/dex/05_progress.png" alt="Dex progress"> |
 | <img src="docs/screenshots/v2/mac_03_arca_colores_pareja.png" alt="Ark with version colours"> | <img src="docs/screenshots/v2/mac_04_cajas_iconos.png" alt="Boxes"> | <img src="docs/screenshots/v2/mac_05_ficha_iconos.png" alt="Pokémon editor"> |
 | <img src="docs/screenshots/v2/mac_07_cintas.png" alt="Ribbons"> | <img src="docs/screenshots/20_legalidad_detallada.png" alt="Legality"> | <img src="docs/screenshots/22_comparar_copias.png" alt="Compare copies"> |
@@ -184,18 +203,18 @@ All screenshots use synthetic saves.
 
 ## Install
 
-The current version is **v1.0.4**. Download it from the
+The current version is **v1.1.0**. Download it from the
 [latest release](https://github.com/Rodriqe/PKArkTools/releases/latest)
 ([all releases](https://github.com/Rodriqe/PKArkTools/releases),
 [changelog](CHANGELOG.md)).
 
 | Platform | How |
 |---|---|
-| Android | `PKArkTools-v1.0.4.apk`: open it on the phone and allow installing from that source when Android asks. |
-| macOS | `PKArkTools-v1.0.4-macos.zip`: unzip it and move `PKArkTools.app` to Applications. It is not notarized, so the first time **right-click → Open → Open**. |
+| Android | `PKArkTools-v1.1.0.apk`: open it on the phone and allow installing from that source when Android asks. |
+| macOS | `PKArkTools-v1.1.0-macos.zip`: unzip it and move `PKArkTools.app` to Applications. It is not notarized, so the first time **right-click → Open → Open**. |
 | iPhone / iPad | No downloadable build yet: compile it from source with Xcode (below). |
-| Windows | `PKArkTools-v1.0.4-windows-x64-setup.exe` (installer) or `PKArkTools-v1.0.4-windows-x64.zip` (portable: unzip and run `PKArkTools.exe`). It is not signed: if SmartScreen warns, click **More info → Run anyway**. |
-| Linux | `PKArkTools-v1.0.4-linux-x64.tar.gz`: extract it and run `PKArkTools/pkarktools` (GTK 3; the folder picker needs `zenity` or `kdialog`). |
+| Windows | `PKArkTools-v1.1.0-windows-x64-setup.exe` (installer) or `PKArkTools-v1.1.0-windows-x64.zip` (portable: unzip and run `PKArkTools.exe`). It is not signed: if SmartScreen warns, click **More info → Run anyway**. |
+| Linux | `PKArkTools-v1.1.0-linux-x64.tar.gz`: extract it and run `PKArkTools/pkarktools` (GTK 3; the folder picker needs `zenity` or `kdialog`). |
 
 Once installed, the app checks for new versions itself (**Settings › About**) and on
 Android installs them after checking the APK signature.
@@ -233,6 +252,7 @@ Read [Data safety and privacy](docs/seguridad-datos.md).
 Full documentation (in Spanish) lives in [`docs/`](docs/README.md):
 [user guide](docs/usuario/README.md) ·
 [Dex](docs/usuario/dex.md) ·
+[Ribbon Master](docs/usuario/ribbon-master.md) ·
 [supported formats](docs/formatos.md) ·
 [data safety](docs/seguridad-datos.md) ·
 [architecture](docs/arquitectura.md) ·

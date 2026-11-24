@@ -11,6 +11,39 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-11-24
+
+### Añadido
+- Pestaña **Ribbon Master**: una guía de cintas por especie, no por ejemplar.
+  Eliges cualquier especie y forma y ves todas las cintas que puede ganar un
+  ejemplar, juego a juego de Gen 3 a Gen 9, con cómo conseguir cada una, su
+  requisito, el origen recomendado (el más antiguo posible) y el máximo que se
+  puede conseguir hoy.
+- Grafo de transferencias solo hacia adelante con ids de juego estables:
+  Colosseum y XD (por intercambio con Rubí/Zafiro/Esmeralda y Rojo Fuego/Verde
+  Hoja), Parque Compi, Pokétransfer, Poké Transporter/Banco, Consola Virtual →
+  Gen 7, HOME y Let's Go/GO de ida a HOME. Los avisos dicen cuándo transferir,
+  cuándo existe por primera vez una forma regional y cuándo un juego solo admite
+  la preevolución.
+- La Cinta Nacional (purificar un Pokémon oscuro) y la Cinta Tierra (Monte
+  Batalla) cuentan como cintas de juego de Colosseum/XD; los Pokémon oscuros son
+  orígenes válidos.
+- Sección «No disponibles hoy» (cintas de evento y la Torre Batalla Wi-Fi
+  cerrada), marcas aparte (las que se ganan ya capturado en Escarlata/Púrpura y
+  una marca de encuentro si se captura en Espada/Escudo o Escarlata/Púrpura) y
+  los Recuerdos de Concurso/Combate de Gen 3–4.
+- **Top 50** de las especies y formas que pueden ganar más cintas; los empates
+  comparten puesto y se ordenan por número de Dex.
+- «Tus ejemplares de esta especie»: las cintas de cada uno y las que aún puede
+  ganar desde su juego actual. El índice de la Dex guarda ahora las cintas de
+  cada ejemplar (se reconstruye una vez).
+- Compartir una guía como texto para foros o guardarla como imagen.
+- Botón «Guía Ribbon Master» en la ficha de cada especie de la Dex.
+- Verificado contra PKHeX: el oráculo construye cada especie/forma desde su
+  mejor origen, la transfiere hacia adelante y le aplica todas las cintas
+  válidas; las rutas de la app coinciden con 0 contradicciones en 1333 especies
+  y formas (`tool/gen_ribbon_master_data.sh`, tabla de test versionada).
+
 ## [1.0.4] — 2026-11-24
 
 ### Corregido

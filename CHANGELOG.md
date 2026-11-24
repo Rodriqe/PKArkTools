@@ -11,6 +11,37 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-11-24
+
+### Added
+- **Ribbon Master** tab: a ribbon guide per species, not per specimen. Pick
+  any species and form and see every ribbon one specimen can earn, game by
+  game from Gen 3 to Gen 9, with how to get each one, its requirement, the
+  recommended (oldest possible) origin and the max obtainable today.
+- Forward-only transfer graph with stable game ids: Colosseum and XD (traded
+  to/from Ruby/Sapphire/Emerald and FireRed/LeafGreen), Pal Park, Poké
+  Transfer, Poké Transporter/Bank, Virtual Console → Gen 7, HOME, and
+  Let's Go/GO one-way into HOME. Notes tell you when to transfer, when a
+  regional form first exists and when a game only takes the pre-evolution.
+- National Ribbon (purifying a Shadow Pokémon) and Earth Ribbon (Mt. Battle)
+  count as in-game ribbons from Colosseum/XD; Shadow Pokémon are valid
+  origins.
+- "Not available today" section (event ribbons and the closed Wi-Fi Battle
+  Tower), marks shown apart (post-capture marks in Scarlet/Violet and one
+  encounter mark if caught in Sword/Shield or Scarlet/Violet), and the Gen 3–4
+  Contest/Battle Memory counts.
+- **Top 50** of the species and forms that can earn the most ribbons; ties
+  share their place and are ordered by Dex number.
+- "Your specimens of this species": ribbons each one has and the ones it can
+  still earn from its current game. The Dex index now stores each specimen's
+  ribbons (the index rebuilds once).
+- Share a guide as text for forums or save it as an image.
+- "Ribbon Master guide" button on every Dex species page.
+- Verified against PKHeX: the PKHeX oracle builds every species/form from its
+  best origin, transfers it forward and applies all valid ribbons; the app's
+  routes match it with 0 contradictions across 1333 species and forms
+  (`tool/gen_ribbon_master_data.sh`, versioned test table).
+
 ## [1.0.4] — 2026-11-24
 
 ### Fixed
