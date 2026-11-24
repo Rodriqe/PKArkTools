@@ -224,6 +224,32 @@ void main() {
     });
   });
 
+  group('Vista previa', () {
+    test('Gen 3 → 4: MO borradas, objeto convertido, cintas de concurso conservadas', () {
+      final pk3 = _mon(GameVersion.emerald, 25, item: 13)
+        ..setMove(0, 57)
+        ..setMove(1, 84);
+      Ribbons.set(pk3, 'RibbonCountG3Cool', 2);
+      final r = PkTransfer.convert(pk3, GameVersion.emerald, GameVersion.diamondPearl, today: transferDay);
+      final d = TransferDiff.of(pk3, r.pk!);
+      expect(d.movesChanged, isTrue);
+      expect(d.itemChanged, isTrue);
+      expect(d.ribbonsKept, greaterThan(0));
+      expect(d.ribbonsLost, isEmpty);
+      expect(r.viaHome, isFalse);
+    });
+    test('USUM → SV pasa por HOME y se puede parar en Alola; SV → SwSh no', () {
+      final us = transferCases.firstWhere((c) => c.id == 'us-sv').convert();
+      expect(us.viaHome, isTrue);
+      expect(us.canStopAtAlola, isTrue);
+      final sv = transferCases.firstWhere((c) => c.id == 'sv-sw').convert();
+      expect(sv.viaHome, isTrue);
+      expect(sv.canStopAtAlola, isFalse);
+      final d = TransferDiff.of(transferCases.firstWhere((c) => c.id == 'us-sv').source(), us.pk!);
+      expect(d.itemRemoved || d.itemBefore == 0, isTrue); // HOME no guarda objetos
+    });
+  });
+
   group('Clones por rastreador de HOME', () {
     test('detecta el mismo rastreador en dos partidas', () {
       final a = transferCases.firstWhere((c) => c.id == 'us-sw').convert().pk!;

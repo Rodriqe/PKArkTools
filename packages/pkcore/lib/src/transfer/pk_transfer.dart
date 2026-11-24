@@ -72,6 +72,14 @@ class TransferResult {
   final List<PkFormat> route;
 
   bool get ok => pk != null;
+
+  /// La ruta pasa por Pokémon HOME (destino de Switch desde otro formato):
+  /// el rastreador de HOME lo genera la app, no los servidores de HOME.
+  bool get viaHome => route.length > 1 && route.last.generation >= 8;
+
+  /// La ruta llega a Gen 7 (Alola) antes de pasar por HOME: se puede parar
+  /// ahí y seguir con Pokémon Bank y HOME oficiales.
+  bool get canStopAtAlola => viaHome && route.first.generation <= 7 && route.first != PkFormat.pb7;
 }
 
 /// Conversión de Pokémon entre juegos, como Pal Park, Poké Transfer, Poké
