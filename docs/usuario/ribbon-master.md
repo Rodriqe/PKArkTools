@@ -28,6 +28,15 @@ formas que pueden ganar más cintas.
   <img src="../screenshots/ribbons/08_phone_guide_sylveon.png" width="200" alt="Guía de Sylveon en el teléfono">
 </p>
 
+En Android (emulador):
+
+<p>
+  <img src="../screenshots/android/ribbons_01_home.png" width="180" alt="Ribbon Master en Android">
+  <img src="../screenshots/android/ribbons_04_guide_contests.png" width="180" alt="Concursos de Sinnoh agrupados">
+  <img src="../screenshots/android/ribbons_05_regional_form.png" width="180" alt="Raichu de Alola: la forma aparece en Sol/Luna">
+  <img src="../screenshots/android/ribbons_06_your_specimens.png" width="180" alt="Tus ejemplares">
+</p>
+
 ## La guía de una especie
 
 * **Cabecera**: icono, **máximo de cintas hoy**, puesto en el ranking y el
