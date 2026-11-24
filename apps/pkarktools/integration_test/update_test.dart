@@ -19,7 +19,7 @@ import 'package:pkarktools/l10n/app_localizations.dart';
 import 'package:pkarktools/ui/settings/update_section.dart';
 
 /// Actualizar desde la app en Android, contra el release REAL publicado en
-/// GitHub, simulando que está instalada la 0.1.0 (emulador headless):
+/// GitHub, simulando que está instalada la 1.0.0 (emulador headless):
 ///
 ///   flutter drive -d emulator-5554 --driver test_driver/screenshot_driver.dart \
 ///     --target integration_test/update_test.dart --dart-define=SHOTS=android/v2 \
@@ -77,7 +77,7 @@ void main() {
     tester.platformDispatcher.localesTestValue = [locale];
     tester.platformDispatcher.localeTestValue = locale;
     final l10n = lookupAppLocalizations(locale);
-    AppVersion.current = const AppVersion(0, 1, 0);
+    AppVersion.current = const AppVersion(1, 0, 0);
 
     final db = ArcaDatabase(DatabaseConnection(NativeDatabase.memory(), closeStreamsSynchronously: true));
     final repo = ArcaRepository(db, ArcaFolder(MemoryFolderFs(label: 'PKArkTools')), inboxSettle: Duration.zero);
@@ -122,7 +122,7 @@ void main() {
     await tester.runAsync(() => c.read(updateNoticeProvider.notifier).startup());
     await settle();
     final release = c.read(updateNoticeProvider).available;
-    expect(release, isNotNull, reason: 'el release publicado es más nuevo que 0.1.0');
+    expect(release, isNotNull, reason: 'el release publicado es más nuevo que 1.0.0');
     final title = l10n.updateBannerTitle(release!.version.toString());
     debugPrint('release: ${release.tag} ${release.asset?.name} ${release.asset?.size} B');
     expect(find.text(title), findsWidgets);

@@ -51,13 +51,12 @@ void main() {
 
     final db = memoryDb();
     final repo = ArcaRepository(db, ArcaFolder(MemoryFolderFs(label: 'PKArkTools')));
-    final json = releaseJson('v0.1.4')
-      ..['body'] = '## PKArkTools 0.1.4\n\nCheck for updates and install them from the app.\n\n### Added\n'
-          '- **Check for updates** in Settings › About, at most once a day, with a discreet notice.\n'
-          '- **Android**: the APK is downloaded, its signing certificate is checked and the system installer opens.\n'
-          '- **macOS, Windows and Linux**: the release file is downloaded where you choose.';
+    final json = releaseJson('v1.0.2')
+      ..['body'] = '## PKArkTools 1.0.2\n\nScreenshots and demo refreshed; save card overflow fix.\n\n### Changed\n'
+          '- **Screenshots and demo refreshed**: every image in the READMEs and the guide now shows 1.0.\n\n### Fixed\n'
+          '- **Save card overflow**: with a full party, the Ark card no longer overflows in a 1000×700 window.';
     final u = FakeUpdater(UpdatePlatform.macos, json);
-    AppVersion.current = const AppVersion(0, 1, 3);
+    AppVersion.current = const AppVersion(1, 0, 1);
     addTearDown(() => AppVersion.current = AppVersion.tryParse(kAppVersion)!);
 
     final boundary = GlobalKey();
@@ -78,7 +77,7 @@ void main() {
     final c = ProviderScope.containerOf(tester.element(find.byType(PKArkToolsApp)));
     await tester.runAsync(() => c.read(updateNoticeProvider.notifier).startup());
     await settle();
-    await tester.tap(find.text(tr('PKArkTools 0.1.4 disponible', 'PKArkTools 0.1.4 available')).first);
+    await tester.tap(find.text(tr('PKArkTools 1.0.2 disponible', 'PKArkTools 1.0.2 available')).first);
     await settle();
     await tester.tap(find.text(tr('Descargar')));
     await tester.pump();
