@@ -76,7 +76,20 @@ GoRouter buildRouter({String initialLocation = '/arca', ValueNotifier<ArcaSetup>
                 path: '/cintas',
                 builder: (_, _) => const RibbonMasterScreen(),
                 routes: [
-                  GoRoute(path: 'top', builder: (_, _) => const RibbonTopScreen()),
+                  GoRoute(path: 'top', redirect: (_, _) => '/cintas/ranking'),
+                  GoRoute(
+                    path: 'ranking',
+                    builder: (_, _) => const RibbonRankingScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':total',
+                        builder: (_, state) => RibbonTierScreen(
+                          key: ValueKey(state.uri.toString()),
+                          total: int.tryParse(state.pathParameters['total']!) ?? -1,
+                        ),
+                      ),
+                    ],
+                  ),
                   GoRoute(
                     path: 'guia/:species',
                     builder: (_, state) => RibbonGuideScreen(

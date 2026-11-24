@@ -32,8 +32,12 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   cerrada), marcas aparte (las que se ganan ya capturado en Escarlata/Púrpura y
   una marca de encuentro si se captura en Espada/Escudo o Escarlata/Púrpura) y
   los Recuerdos de Concurso/Combate de Gen 3–4.
-- **Top 50** de las especies y formas que pueden ganar más cintas; los empates
-  comparten puesto y se ordenan por número de Dex.
+- **Ranking por niveles**: las especies y formas se agrupan por el máximo de
+  cintas que pueden ganar («87 cintas · 33 especies y formas», «86 cintas · 107
+  especies y formas»…), con todos los niveles, iconos de muestra y el origen
+  común destacado («Pokémon oscuro en Colosseum / XD»). Al entrar en un nivel
+  se ve la lista completa, filtrable y en orden de Dex, y cada especie abre su
+  guía.
 - «Tus ejemplares de esta especie»: las cintas de cada uno y las que aún puede
   ganar desde su juego actual. El índice de la Dex guarda ahora las cintas de
   cada ejemplar (se reconstruye una vez).

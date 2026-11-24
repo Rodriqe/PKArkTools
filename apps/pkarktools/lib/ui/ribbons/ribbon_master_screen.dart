@@ -68,7 +68,7 @@ String _fold(String s) {
 
 // =========================================================================== Inicio
 
-/// Pestaña Ribbon Master: buscador de especie y forma, acceso al Top 50.
+/// Pestaña Ribbon Master: buscador de especie y forma, acceso al ranking por niveles.
 class RibbonMasterScreen extends StatefulWidget {
   const RibbonMasterScreen({super.key});
 
@@ -111,7 +111,7 @@ class _RibbonMasterScreenState extends State<RibbonMasterScreen> {
     final compact = width < 720;
     final pad = compact ? 16.0 : 32.0;
     final results = _results(context);
-    final top = RibbonMaster.top(10);
+    final tiers = RibbonMaster.tiers();
 
     return Scaffold(
       body: SafeArea(
@@ -180,7 +180,7 @@ class _RibbonMasterScreenState extends State<RibbonMasterScreen> {
                 ] else ...[
                   SliverPadding(
                     padding: EdgeInsets.fromLTRB(pad, 22, pad, 0),
-                    sliver: SliverToBoxAdapter(child: _TopTeaser(entries: top)),
+                    sliver: SliverToBoxAdapter(child: _RankingTeaser(tiers: tiers.length <= 8 ? tiers : tiers.sublist(0, 8))),
                   ),
                   SliverPadding(
                     padding: EdgeInsets.fromLTRB(pad, 18, pad, 120),
@@ -197,26 +197,30 @@ class _RibbonMasterScreenState extends State<RibbonMasterScreen> {
 }
 
 class _SpeciesRow extends StatelessWidget {
-  const _SpeciesRow({super.key, required this.species, required this.form});
+  const _SpeciesRow({super.key, required this.species, required this.form, this.push = false});
   final int species, form;
+
+  /// Abre la guía encima (para volver al nivel) en vez de sustituir la ruta.
+  final bool push;
 
   @override
   Widget build(BuildContext context) {
     final r = RibbonMaster.route(species, form)!;
     final tokens = context.tokens;
+    final origin = r.data.originGame;
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: DexIcon(species: species, form: form, status: DexStatus.caught, size: 40),
         title: Text(_name(context, species, form), maxLines: 1, overflow: TextOverflow.ellipsis),
         subtitle: Text(
-          '${dexNumber(species)} · ${r.data.originGame.name(context.dexLang)}',
+          '${dexNumber(species)} · ${origin.name(context.dexLang)} · ${_originKind(context.l10n, r.data.kind)}',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: tokens.muted),
         ),
         trailing: _TotalBadge(total: r.total),
-        onTap: () => context.go(ribbonGuidePath(species, form)),
+        onTap: () => push ? context.push(ribbonGuidePath(species, form)) : context.go(ribbonGuidePath(species, form)),
       ),
     );
   }
@@ -255,9 +259,82 @@ class _TotalBadge extends StatelessWidget {
   }
 }
 
-class _TopTeaser extends StatelessWidget {
-  const _TopTeaser({required this.entries});
-  final List<RibbonRankEntry> entries;
+/// Iconos de muestra de un nivel, solapados, con "+N" si quedan más.
+class _TierSample extends StatelessWidget {
+  const _TierSample({required this.tier, required this.max, this.size = 40});
+  final RibbonTier tier;
+  final int max;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.tokens;
+    final shown = tier.sample(tier.length > max ? max - 1 : max);
+    final rest = tier.length - shown.length;
+    final step = size * 0.72;
+    final count = shown.length + (rest > 0 ? 1 : 0);
+    return SizedBox(
+      height: size,
+      width: step * (count - 1) + size,
+      child: Stack(
+        children: [
+          for (final (i, r) in shown.indexed)
+            Positioned(
+              left: i * step,
+              child: Container(
+                width: size,
+                height: size,
+                decoration: BoxDecoration(
+                  color: tokens.base,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: tokens.hairline),
+                ),
+                child: Center(
+                  child: DexIcon(species: r.species, form: r.form, status: DexStatus.caught, size: size - 4),
+                ),
+              ),
+            ),
+          if (rest > 0)
+            Positioned(
+              left: shown.length * step,
+              child: Container(
+                width: size,
+                height: size,
+                decoration: BoxDecoration(
+                  color: Color.alphaBlend(context.colors.primary.withValues(alpha: 0.16), tokens.base),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: tokens.hairline),
+                ),
+                child: Center(
+                  child: FittedBox(
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Text('+$rest', style: context.text.labelMedium!.copyWith(fontWeight: FontWeight.w800)),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Texto del origen común destacado de un nivel.
+String _tierOrigin(BuildContext context, RibbonTier t) {
+  final l10n = context.l10n;
+  final o = t.mainOrigin;
+  final kind = _originKind(l10n, o.kind);
+  final games = o.gamesLabel(context.dexLang);
+  return o.count == t.length ? l10n.rmTierOriginAll(kind, games) : l10n.rmTierOriginMost(kind, games, o.count, t.length);
+}
+
+String _tierPath(RibbonTier t) => '/cintas/ranking/${t.total}';
+
+class _RankingTeaser extends StatelessWidget {
+  const _RankingTeaser({required this.tiers});
+  final List<RibbonTier> tiers;
 
   @override
   Widget build(BuildContext context) {
@@ -281,44 +358,47 @@ class _TopTeaser extends StatelessWidget {
             children: [
               Icon(Icons.emoji_events_rounded, color: tokens.shiny),
               const SizedBox(width: 10),
-              Expanded(child: Text(l10n.rmTop50, style: context.text.titleLarge)),
+              Expanded(child: Text(l10n.rmRanking, style: context.text.titleLarge)),
             ],
           ),
           const SizedBox(height: 4),
-          Text(l10n.rmTop50Subtitle, style: context.text.bodyMedium!.copyWith(color: tokens.muted)),
+          Text(l10n.rmRankingSubtitle, style: context.text.bodyMedium!.copyWith(color: tokens.muted)),
           const SizedBox(height: 14),
           SizedBox(
-            height: 118,
+            height: 128,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: entries.length,
+              itemCount: tiers.length,
               separatorBuilder: (_, _) => const SizedBox(width: 10),
               itemBuilder: (context, i) {
-                final e = entries[i];
+                final t = tiers[i];
                 return InkWell(
-                  key: ValueKey('rm-top-${e.route.species}-${e.route.form}'),
+                  key: ValueKey('rm-teaser-tier-${t.total}'),
                   borderRadius: BorderRadius.circular(18),
-                  onTap: () => context.go(ribbonGuidePath(e.route.species, e.route.form)),
+                  onTap: () => context.go(_tierPath(t)),
                   child: Container(
-                    width: 96,
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+                    width: 132,
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     decoration: BoxDecoration(
                       color: tokens.base.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(color: tokens.hairline),
                     ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('#${e.position}', style: context.text.labelMedium!.copyWith(color: tokens.muted)),
-                        DexIcon(species: e.route.species, form: e.route.form, status: DexStatus.caught, size: 44),
+                        Text(l10n.rmTierPos(t.position), style: context.text.labelSmall!.copyWith(color: tokens.muted)),
                         Text(
-                          _name(context, e.route.species, e.route.form),
+                          l10n.rmRibbons(t.total),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: context.text.labelMedium,
+                          style: context.text.titleMedium!.copyWith(fontWeight: FontWeight.w800),
                         ),
+                        const Spacer(),
+                        _TierSample(tier: t, max: 4, size: 32),
+                        const SizedBox(height: 6),
                         Text(
-                          l10n.rmRibbons(e.route.total),
+                          l10n.rmTierCount(t.length),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: context.text.labelSmall!.copyWith(color: tokens.muted),
@@ -334,10 +414,10 @@ class _TopTeaser extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: FilledButton.icon(
-              key: const ValueKey('rm-see-top'),
-              onPressed: () => context.go('/cintas/top'),
+              key: const ValueKey('rm-see-ranking'),
+              onPressed: () => context.go('/cintas/ranking'),
               icon: const Icon(Icons.leaderboard_rounded),
-              label: Text(l10n.rmSeeTop),
+              label: Text(l10n.rmSeeRanking),
             ),
           ),
         ],
@@ -378,10 +458,21 @@ class _HowCard extends StatelessWidget {
   }
 }
 
-// =========================================================================== Top 50
+// =========================================================================== Ranking por niveles
 
-class RibbonTopScreen extends StatelessWidget {
-  const RibbonTopScreen({super.key});
+AppBar _subAppBar(BuildContext context, String title, String fallback) => AppBar(
+  backgroundColor: Colors.transparent,
+  leading: IconButton(
+    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+    icon: const Icon(Icons.arrow_back_rounded),
+    onPressed: () => context.canPop() ? context.pop() : context.go(fallback),
+  ),
+  title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
+);
+
+/// Ranking agrupado por niveles: un nivel por cada máximo de cintas.
+class RibbonRankingScreen extends StatelessWidget {
+  const RibbonRankingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -389,18 +480,9 @@ class RibbonTopScreen extends StatelessWidget {
     final tokens = context.tokens;
     final compact = MediaQuery.sizeOf(context).width < 720;
     final pad = compact ? 16.0 : 32.0;
-    final top = RibbonMaster.top(50);
-    final beyond = RibbonMaster.tiedBeyond(50);
+    final tiers = RibbonMaster.tiers();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => context.canPop() ? context.pop() : context.go('/cintas'),
-        ),
-        title: Text(l10n.rmTop50),
-      ),
+      appBar: _subAppBar(context, l10n.rmRanking, '/cintas'),
       body: SafeArea(
         top: false,
         bottom: false,
@@ -408,84 +490,232 @@ class RibbonTopScreen extends StatelessWidget {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 900),
             child: ListView.builder(
-              key: const PageStorageKey('rm-top'),
+              key: const PageStorageKey('rm-ranking'),
               padding: EdgeInsets.fromLTRB(pad, 4, pad, 96),
-              itemCount: top.length + 2,
+              itemCount: tiers.length + 1,
               itemBuilder: (context, i) {
                 if (i == 0) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 14),
-                    child: Text(l10n.rmTop50Subtitle, style: context.text.bodyMedium!.copyWith(color: tokens.muted)),
+                    child: Text(l10n.rmRankingSubtitle, style: context.text.bodyMedium!.copyWith(color: tokens.muted)),
                   );
                 }
-                if (i == top.length + 1) {
-                  return beyond == 0
-                      ? const SizedBox.shrink()
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            l10n.rmTiedBeyond(beyond, '${top.last.route.total}'),
-                            key: const ValueKey('rm-tied-beyond'),
-                            style: context.text.bodyMedium!.copyWith(color: tokens.muted),
-                          ),
-                        );
-                }
-                final e = top[i - 1];
-                final r = e.route;
-                return Card(
-                  key: ValueKey('rm-rank-${r.species}-${r.form}'),
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    onTap: () => context.go(ribbonGuidePath(r.species, r.form)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 44,
-                            child: Column(
-                              children: [
-                                Text(
-                                  '#${e.position}',
-                                  style: context.text.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    fontFeatures: const [FontFeature.tabularFigures()],
-                                  ),
-                                ),
-                                if (e.tied) Text(l10n.rmTie, style: context.text.labelSmall!.copyWith(color: tokens.muted)),
-                              ],
-                            ),
-                          ),
-                          DexIcon(species: r.species, form: r.form, status: DexStatus.caught, size: 44),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _name(context, r.species, r.form),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: context.text.titleSmall,
-                                ),
-                                Text(
-                                  '${dexNumber(r.species)} · ${l10n.rmGen('${r.data.originGame.generation}')} · ${r.data.originGame.name(context.dexLang)}',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: context.text.bodySmall!.copyWith(color: tokens.muted),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          _TotalBadge(total: r.total),
-                        ],
-                      ),
+                return _TierCard(tier: tiers[i - 1]);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TierCard extends StatelessWidget {
+  const _TierCard({required this.tier});
+  final RibbonTier tier;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final tokens = context.tokens;
+    final t = tier;
+    final originColor = ribbonGameColor(t.mainOrigin.games.first);
+    return Card(
+      key: ValueKey('rm-tier-${t.total}'),
+      margin: const EdgeInsets.only(bottom: 10),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () => context.go(_tierPath(t)),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  _TotalBadge(total: t.total),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${l10n.rmRibbons(t.total)} · ${l10n.rmTierCount(t.length)}',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: context.text.titleSmall!.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        Text(l10n.rmTierPos(t.position), style: context.text.labelSmall!.copyWith(color: tokens.muted)),
+                      ],
                     ),
                   ),
-                );
-              },
+                  Icon(Icons.chevron_right_rounded, color: tokens.muted),
+                ],
+              ),
+              const SizedBox(height: 10),
+              LayoutBuilder(
+                builder: (context, c) {
+                  const size = 36.0;
+                  final fit = ((c.maxWidth - size) / (size * 0.72)).floor() + 1;
+                  return _TierSample(tier: t, max: fit.clamp(2, 14), size: size);
+                },
+              ),
+              const SizedBox(height: 10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 1),
+                    child: Icon(Icons.flag_rounded, size: 16, color: originColor),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      _tierOrigin(context, t),
+                      key: ValueKey('rm-tier-origin-${t.total}'),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.text.bodySmall!.copyWith(color: tokens.muted),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Un nivel del ranking: todas sus especies y formas en orden de Dex, con filtro.
+class RibbonTierScreen extends StatefulWidget {
+  const RibbonTierScreen({super.key, required this.total});
+  final int total;
+
+  @override
+  State<RibbonTierScreen> createState() => _RibbonTierScreenState();
+}
+
+class _RibbonTierScreenState extends State<RibbonTierScreen> {
+  final _filter = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _filter.dispose();
+    super.dispose();
+  }
+
+  List<RibbonRoute> _visible(RibbonTier t) {
+    final q = _fold(_query.trim());
+    if (q.isEmpty) return t.routes;
+    final number = int.tryParse(q.replaceFirst('#', ''));
+    return [
+      for (final r in t.routes)
+        if (number != null
+            ? r.species == number
+            : _fold(SpeciesForms.displayName(r.species, r.form, null, DataLanguage.es)).contains(q) ||
+                  _fold(SpeciesForms.displayName(r.species, r.form, null, DataLanguage.en)).contains(q))
+          r,
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final tokens = context.tokens;
+    final compact = MediaQuery.sizeOf(context).width < 720;
+    final pad = compact ? 16.0 : 32.0;
+    final t = RibbonMaster.tier(widget.total);
+    if (t == null) {
+      return Scaffold(
+        appBar: _subAppBar(context, l10n.rmRanking, '/cintas/ranking'),
+        body: Center(child: Text(l10n.rmTierNotFound)),
+      );
+    }
+    final list = _visible(t);
+    return Scaffold(
+      appBar: _subAppBar(context, '${l10n.rmTierPos(t.position)} · ${l10n.rmRibbons(t.total)}', '/cintas/ranking'),
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 900),
+            child: CustomScrollView(
+              key: PageStorageKey('rm-tier-${t.total}'),
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(pad, 4, pad, 0),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            _TotalBadge(total: t.total),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(l10n.rmTierCount(t.length), key: const ValueKey('rm-tier-count'), style: context.text.titleMedium),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (final o in t.origins)
+                              Chip(
+                                visualDensity: VisualDensity.compact,
+                                avatar: Icon(Icons.flag_rounded, size: 16, color: ribbonGameColor(o.games.first)),
+                                label: Text('${_originKind(l10n, o.kind)} · ${o.gamesLabel(context.dexLang)} · ${o.count}', overflow: TextOverflow.ellipsis),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 14),
+                        TextField(
+                          key: const ValueKey('rm-tier-filter'),
+                          controller: _filter,
+                          onChanged: (v) => setState(() => _query = v),
+                          textInputAction: TextInputAction.search,
+                          decoration: InputDecoration(
+                            hintText: l10n.rmTierFilterHint,
+                            prefixIcon: const Icon(Icons.filter_list_rounded),
+                            suffixIcon: _query.isEmpty
+                                ? null
+                                : IconButton(
+                                    tooltip: l10n.dexClear,
+                                    icon: const Icon(Icons.close_rounded),
+                                    onPressed: () => setState(() {
+                                      _filter.clear();
+                                      _query = '';
+                                    }),
+                                  ),
+                          ),
+                        ),
+                        if (_query.trim().isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Text(l10n.rmResults(list.length), style: context.text.labelLarge!.copyWith(color: tokens.muted)),
+                          ),
+                        const SizedBox(height: 12),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(pad, 0, pad, 96),
+                  sliver: SliverList.builder(
+                    itemCount: list.length,
+                    itemBuilder: (context, i) {
+                      final r = list[i];
+                      return _SpeciesRow(key: ValueKey('rm-tier-row-${r.species}-${r.form}'), species: r.species, form: r.form, push: true);
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -620,7 +850,7 @@ class _GuideHeader extends StatelessWidget {
     final compact = MediaQuery.sizeOf(context).width < 520;
     final iconSize = compact ? 84.0 : 120.0;
     final origin = r.data.originGame;
-    final rank = RibbonMaster.ranking().firstWhere((e) => e.route.species == r.species && e.route.form == r.form);
+    final tier = RibbonMaster.tierOf(r.species, r.form)!;
     return Container(
       padding: EdgeInsets.all(compact ? 16 : 22),
       decoration: BoxDecoration(
@@ -659,7 +889,15 @@ class _GuideHeader extends StatelessWidget {
                       style: (compact ? context.text.headlineSmall : context.text.displaySmall)!.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 6),
-                    Text(l10n.rmRankPos(rank.position), key: const ValueKey('rm-rank-pos'), style: context.text.labelMedium!.copyWith(color: tokens.muted)),
+                    InkWell(
+                      key: const ValueKey('rm-rank-pos'),
+                      borderRadius: BorderRadius.circular(6),
+                      onTap: () => context.go(_tierPath(tier)),
+                      child: Text(
+                        l10n.rmTierOfRanking(tier.position, RibbonMaster.tiers().length, l10n.rmTierCount(tier.length)),
+                        style: context.text.labelMedium!.copyWith(color: tokens.muted, decoration: TextDecoration.underline, decorationColor: tokens.muted),
+                      ),
+                    ),
                   ],
                 ),
               ),

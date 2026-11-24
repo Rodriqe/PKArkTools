@@ -2997,14 +2997,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rmSearchHint => 'Search a species or form (name or number)';
 
   @override
-  String get rmTop50 => 'Top 50';
+  String get rmRanking => 'Ranking by tiers';
 
   @override
-  String get rmTop50Subtitle =>
-      'The species and forms that can earn the most ribbons by playing today.';
+  String get rmRankingShort => 'Ranking';
 
   @override
-  String get rmSeeTop => 'See the Top 50';
+  String get rmRankingSubtitle =>
+      'Species and forms grouped by the most ribbons they can earn by playing today. Open a tier to see every one in it.';
+
+  @override
+  String get rmSeeRanking => 'See the ranking';
+
+  @override
+  String rmTierCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n species & forms',
+      one: '1 species or form',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rmTierPos(int n) {
+    return 'Tier $n';
+  }
+
+  @override
+  String rmTierOriginAll(String kind, String games) {
+    return 'Common origin: $kind in $games';
+  }
+
+  @override
+  String rmTierOriginMost(String kind, String games, int n, int total) {
+    return 'Most common origin: $kind in $games ($n of $total)';
+  }
+
+  @override
+  String get rmTierFilterHint => 'Filter this tier (name or number)';
+
+  @override
+  String rmTierOfRanking(int n, int count, String species) {
+    return 'Tier $n of $count in the ranking · $species';
+  }
+
+  @override
+  String get rmTierNotFound => 'That tier doesn\'t exist.';
 
   @override
   String rmRibbons(int n) {
@@ -3141,14 +3181,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rmKindEvent => 'event';
 
   @override
-  String rmTiedBeyond(int n, String total) {
-    return 'And $n more tied at $total ribbons.';
-  }
-
-  @override
-  String get rmTie => 'tie';
-
-  @override
   String get rmNoGuide => 'There\'s no guide for this form.';
 
   @override
@@ -3179,11 +3211,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rmMemoryTitle => 'Gen 3–4 memories';
-
-  @override
-  String rmRankPos(int n) {
-    return 'Rank #$n overall';
-  }
 
   @override
   String rmContestG3(int n) {

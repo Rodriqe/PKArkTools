@@ -2157,9 +2157,70 @@
   "navRibbonsShort": "Cintas",
   "rmSubtitle": "Elige cualquier Pokémon y mira todas las cintas que puede ganar un mismo ejemplar, de la generación más antigua a la más nueva.",
   "rmSearchHint": "Busca una especie o forma (nombre o número)",
-  "rmTop50": "Top 50",
-  "rmTop50Subtitle": "Las especies y formas que pueden ganar más cintas jugando hoy.",
-  "rmSeeTop": "Ver el Top 50",
+  "rmRanking": "Ranking por niveles",
+  "rmRankingShort": "Ranking",
+  "rmRankingSubtitle": "Especies y formas agrupadas por el máximo de cintas que pueden ganar jugando hoy. Entra en un nivel para ver todas las de ese nivel.",
+  "rmSeeRanking": "Ver el ranking",
+  "rmTierCount": "{n, plural, =1{1 especie o forma} other{{n} especies y formas}}",
+  "@rmTierCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rmTierPos": "Nivel {n}",
+  "@rmTierPos": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rmTierOriginAll": "Origen común: {kind} en {games}",
+  "@rmTierOriginAll": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      },
+      "games": {
+        "type": "String"
+      }
+    }
+  },
+  "rmTierOriginMost": "Origen más común: {kind} en {games} ({n} de {total})",
+  "@rmTierOriginMost": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      },
+      "games": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "rmTierFilterHint": "Filtrar este nivel (nombre o número)",
+  "rmTierOfRanking": "Nivel {n} de {count} del ranking · {species}",
+  "@rmTierOfRanking": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      },
+      "species": {
+        "type": "String"
+      }
+    }
+  },
+  "rmTierNotFound": "Ese nivel no existe.",
   "rmRibbons": "{n} cintas",
   "@rmRibbons": {
     "placeholders": {
@@ -2279,18 +2340,6 @@
   "rmKindRaid": "incursión",
   "rmKindGo": "Pokémon GO",
   "rmKindEvent": "evento",
-  "rmTiedBeyond": "Y {n} más empatadas con {total} cintas.",
-  "@rmTiedBeyond": {
-    "placeholders": {
-      "n": {
-        "type": "int"
-      },
-      "total": {
-        "type": "String"
-      }
-    }
-  },
-  "rmTie": "empate",
   "rmNoGuide": "No hay guía para esta forma.",
   "rmResults": "{n} resultados",
   "@rmResults": {
@@ -2320,14 +2369,6 @@
     }
   },
   "rmMemoryTitle": "Recuerdos de Gen 3 y 4",
-  "rmRankPos": "Puesto #{n} del ranking",
-  "@rmRankPos": {
-    "placeholders": {
-      "n": {
-        "type": "int"
-      }
-    }
-  },
   "rmContestG3": "Concursos de Hoenn ({n})",
   "@rmContestG3": {
     "placeholders": {

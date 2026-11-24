@@ -76,8 +76,10 @@ void main() {
 
     await open('/cintas');
     await shot('home');
-    await open('/cintas/top');
-    await shot('top50');
+    await open('/cintas/ranking');
+    await shot('ranking');
+    await open('/cintas/ranking/${RibbonMaster.tiers().first.total}');
+    await shot('ranking_tier');
     await open('/cintas/guia/1');
     await shot('guide');
     await scrollTo(find.byKey(const ValueKey('rm-step-dppt')));

@@ -14,6 +14,7 @@ import 'package:pkarktools/data/folder/arca_folder.dart';
 import 'package:pkarktools/data/folder/folder_fs.dart';
 import 'package:pkarktools/data/sprites/sprite_cache.dart';
 import 'package:pkarktools/providers.dart';
+import 'package:pkcore/pkcore.dart' show RibbonMaster;
 
 import 'arca_folder_test.dart' show memoryDb;
 import 'dex_demo.dart';
@@ -93,8 +94,8 @@ void main() {
     const desktop = Size(1440, 900);
     await open('/cintas', desktop);
     await write('01_home');
-    await open('/cintas/top', const Size(1440, 1500));
-    await write('02_top50');
+    await open('/cintas/ranking', const Size(1440, 1500));
+    await write('02_ranking');
     await open('/cintas/guia/1', const Size(1440, 4200));
     await write('03_guide_bulbasaur');
     await open('/cintas/guia/26?forma=1', const Size(1440, 2400));
@@ -107,10 +108,14 @@ void main() {
     await write('07_phone_home');
     await open('/cintas/guia/700', const Size(390, 2400), phone: true);
     await write('08_phone_guide_sylveon');
-    await open('/cintas/top', const Size(390, 844), phone: true);
-    await write('09_phone_top50');
+    await open('/cintas/ranking', const Size(390, 844), phone: true);
+    await write('09_phone_ranking');
     await open('/dex/especie/700', const Size(1440, 1100));
     await write('10_dex_button');
+    await open('/cintas/ranking/${RibbonMaster.tiers().first.total}', const Size(1440, 1300));
+    await write('11_ranking_tier');
+    await open('/cintas/ranking/${RibbonMaster.tiers()[1].total}', const Size(390, 844), phone: true);
+    await write('12_phone_ranking_tier');
     tester.platformDispatcher.clearLocalesTestValue();
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 1));

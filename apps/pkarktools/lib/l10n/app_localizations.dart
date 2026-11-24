@@ -4861,23 +4861,71 @@ abstract class AppLocalizations {
   /// **'Busca una especie o forma (nombre o número)'**
   String get rmSearchHint;
 
-  /// No description provided for @rmTop50.
+  /// No description provided for @rmRanking.
   ///
   /// In es, this message translates to:
-  /// **'Top 50'**
-  String get rmTop50;
+  /// **'Ranking por niveles'**
+  String get rmRanking;
 
-  /// No description provided for @rmTop50Subtitle.
+  /// No description provided for @rmRankingShort.
   ///
   /// In es, this message translates to:
-  /// **'Las especies y formas que pueden ganar más cintas jugando hoy.'**
-  String get rmTop50Subtitle;
+  /// **'Ranking'**
+  String get rmRankingShort;
 
-  /// No description provided for @rmSeeTop.
+  /// No description provided for @rmRankingSubtitle.
   ///
   /// In es, this message translates to:
-  /// **'Ver el Top 50'**
-  String get rmSeeTop;
+  /// **'Especies y formas agrupadas por el máximo de cintas que pueden ganar jugando hoy. Entra en un nivel para ver todas las de ese nivel.'**
+  String get rmRankingSubtitle;
+
+  /// No description provided for @rmSeeRanking.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver el ranking'**
+  String get rmSeeRanking;
+
+  /// No description provided for @rmTierCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =1{1 especie o forma} other{{n} especies y formas}}'**
+  String rmTierCount(int n);
+
+  /// No description provided for @rmTierPos.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel {n}'**
+  String rmTierPos(int n);
+
+  /// No description provided for @rmTierOriginAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Origen común: {kind} en {games}'**
+  String rmTierOriginAll(String kind, String games);
+
+  /// No description provided for @rmTierOriginMost.
+  ///
+  /// In es, this message translates to:
+  /// **'Origen más común: {kind} en {games} ({n} de {total})'**
+  String rmTierOriginMost(String kind, String games, int n, int total);
+
+  /// No description provided for @rmTierFilterHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar este nivel (nombre o número)'**
+  String get rmTierFilterHint;
+
+  /// No description provided for @rmTierOfRanking.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel {n} de {count} del ranking · {species}'**
+  String rmTierOfRanking(int n, int count, String species);
+
+  /// No description provided for @rmTierNotFound.
+  ///
+  /// In es, this message translates to:
+  /// **'Ese nivel no existe.'**
+  String get rmTierNotFound;
 
   /// No description provided for @rmRibbons.
   ///
@@ -5101,18 +5149,6 @@ abstract class AppLocalizations {
   /// **'evento'**
   String get rmKindEvent;
 
-  /// No description provided for @rmTiedBeyond.
-  ///
-  /// In es, this message translates to:
-  /// **'Y {n} más empatadas con {total} cintas.'**
-  String rmTiedBeyond(int n, String total);
-
-  /// No description provided for @rmTie.
-  ///
-  /// In es, this message translates to:
-  /// **'empate'**
-  String get rmTie;
-
   /// No description provided for @rmNoGuide.
   ///
   /// In es, this message translates to:
@@ -5160,12 +5196,6 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Recuerdos de Gen 3 y 4'**
   String get rmMemoryTitle;
-
-  /// No description provided for @rmRankPos.
-  ///
-  /// In es, this message translates to:
-  /// **'Puesto #{n} del ranking'**
-  String rmRankPos(int n);
 
   /// No description provided for @rmContestG3.
   ///

@@ -192,11 +192,46 @@ void main() {
       expect(all.first.position, 1);
     });
 
-    test('Top 50', () {
-      final top = RibbonMaster.top(50);
-      expect(top.length, 50);
-      expect(top.first.route.total, greaterThanOrEqualTo(85));
-      expect(RibbonMaster.tiedBeyond(50), greaterThanOrEqualTo(0));
+    test('niveles: uno por total, ordenados, con todas las especies y en orden de Dex', () {
+      final tiers = RibbonMaster.tiers();
+      final all = RibbonMaster.ranking();
+      expect(tiers.map((t) => t.length).fold(0, (a, b) => a + b), all.length);
+      expect(tiers.map((t) => t.total).toSet().length, tiers.length);
+      for (final (i, t) in tiers.indexed) {
+        expect(t.position, i + 1);
+        if (i > 0) expect(tiers[i - 1].total, greaterThan(t.total));
+        expect(t.routes.every((r) => r.total == t.total), isTrue);
+        for (var j = 1; j < t.routes.length; j++) {
+          final a = t.routes[j - 1], b = t.routes[j];
+          expect(a.species < b.species || (a.species == b.species && a.form < b.form), isTrue);
+        }
+        expect(t.length, all.where((e) => e.route.total == t.total).length);
+        expect(t.speciesCount, lessThanOrEqualTo(t.length));
+        expect(t.origins.fold(0, (a, o) => a + o.count), t.length);
+        for (var j = 1; j < t.origins.length; j++) {
+          expect(t.origins[j - 1].count, greaterThanOrEqualTo(t.origins[j].count));
+        }
+        expect(t.sample(6).length, t.length < 6 ? t.length : 6);
+      }
+      expect(tiers.first.total, greaterThanOrEqualTo(85));
+      expect(tiers.first.length, greaterThan(1));
+    });
+
+    test('nivel más alto: origen oscuro en Colosseum / XD', () {
+      final top = RibbonMaster.tiers().first;
+      expect(top.mainOrigin.kind, OriginKind.shadow);
+      expect(top.mainOrigin.games.every((g) => g == RibbonGame.colosseum || g == RibbonGame.xd), isTrue);
+      expect(top.origins.length, 1); // Colosseum y XD van juntos
+      expect(top.mainOrigin.gamesLabel(DataLanguage.en), 'Colosseum / XD');
+    });
+
+    test('nivel de una especie', () {
+      final t = RibbonMaster.tierOf(1, 0)!;
+      expect(t.total, RibbonMaster.route(1, 0)!.total);
+      expect(t.routes.any((r) => r.species == 1 && r.form == 0), isTrue);
+      expect(RibbonMaster.tier(t.total), same(t));
+      expect(RibbonMaster.tier(-1), isNull);
+      expect(RibbonMaster.tierOf(0, 0), isNull);
     });
   });
 }

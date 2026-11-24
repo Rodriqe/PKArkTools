@@ -929,17 +929,89 @@ abstract final class RibbonMaster {
         return out;
       }();
 
-  /// Las [n] primeras entradas del ranking (con su puesto compartido si hay empate).
-  static List<RibbonRankEntry> top(int n) {
-    final all = ranking();
-    return all.length <= n ? all : all.sublist(0, n);
+  static List<RibbonTier>? _tiers;
+
+  /// Ranking por niveles: un nivel por cada máximo de cintas distinto, del más alto al más bajo.
+  /// Cada nivel lista sus especies/formas en orden de Dex.
+  static List<RibbonTier> tiers() => _tiers ??= () {
+        final byTotal = <int, List<RibbonRoute>>{};
+        for (final e in ranking()) {
+          byTotal.putIfAbsent(e.route.total, () => []).add(e.route);
+        }
+        final totals = byTotal.keys.toList()..sort((a, b) => b - a);
+        return [for (final (i, t) in totals.indexed) RibbonTier._(i + 1, t, byTotal[t]!)];
+      }();
+
+  /// Nivel con [total] cintas (null si no hay ninguno).
+  static RibbonTier? tier(int total) {
+    for (final t in tiers()) {
+      if (t.total == total) return t;
+    }
+    return null;
   }
 
-  /// Cuántas especies/formas más empatan con la última de [top] y quedan fuera.
-  static int tiedBeyond(int n) {
-    final all = ranking();
-    if (all.length <= n) return 0;
-    final last = all[n - 1].route.total;
-    return all.skip(n).takeWhile((e) => e.route.total == last).length;
+  /// Nivel de la especie/forma.
+  static RibbonTier? tierOf(int species, int form) {
+    final r = route(species, form);
+    return r == null ? null : tier(r.total);
   }
+}
+
+/// Nivel del ranking: todas las especies/formas con el mismo máximo de cintas.
+class RibbonTier {
+  RibbonTier._(this.position, this.total, List<RibbonRoute> routes)
+      : routes = List<RibbonRoute>.unmodifiable(<RibbonRoute>[...routes]..sort((a, b) => a.species != b.species ? a.species - b.species : a.form - b.form));
+
+  /// Puesto del nivel (1 = el de más cintas).
+  final int position;
+
+  /// Máximo de cintas que comparten.
+  final int total;
+
+  /// Especies/formas del nivel, en orden de Dex.
+  final List<RibbonRoute> routes;
+
+  int get length => routes.length;
+
+  /// Especies distintas (sin contar formas).
+  int get speciesCount => routes.map((r) => r.species).toSet().length;
+
+  /// Orígenes del nivel agrupados (Colosseum y XD juntos), del más común al menos.
+  late final List<RibbonTierOrigin> origins = () {
+    final counts = <(String, OriginKind), (Set<RibbonGame>, int)>{};
+    for (final r in routes) {
+      final g = r.data.originGame;
+      final key = (g == RibbonGame.colosseum || g == RibbonGame.xd ? 'gc' : g.id, r.data.kind);
+      final prev = counts[key];
+      counts[key] = ({...?prev?.$1, g}, (prev?.$2 ?? 0) + 1);
+    }
+    final out = [
+      for (final MapEntry(key: k, value: v) in counts.entries)
+        RibbonTierOrigin(RibbonGame.values.where(v.$1.contains).toList(), k.$2, v.$2),
+    ];
+    out.sort((a, b) => b.count != a.count ? b.count - a.count : a.games.first.index - b.games.first.index);
+    return out;
+  }();
+
+  /// Origen más común (el que se destaca).
+  RibbonTierOrigin get mainOrigin => origins.first;
+
+  /// Especies/formas de muestra para el resumen (las primeras en orden de Dex).
+  List<RibbonRoute> sample(int n) => routes.length <= n ? routes : routes.sublist(0, n);
+}
+
+/// Origen compartido por varias especies/formas de un nivel.
+class RibbonTierOrigin {
+  const RibbonTierOrigin(this.games, this.kind, this.count);
+
+  /// Juegos de origen (Colosseum y XD van juntos).
+  final List<RibbonGame> games;
+  final OriginKind kind;
+  final int count;
+
+  /// Nombre corto de los juegos ("Colosseum / XD" para la GameCube).
+  String gamesLabel(DataLanguage lang) =>
+      games.length > 1 && games.every((g) => g == RibbonGame.colosseum || g == RibbonGame.xd)
+          ? 'Colosseum / XD'
+          : games.map((g) => g.name(lang)).join(' · ');
 }

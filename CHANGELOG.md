@@ -30,8 +30,11 @@ developer documentation in `docs/` is in Spanish.
   Tower), marks shown apart (post-capture marks in Scarlet/Violet and one
   encounter mark if caught in Sword/Shield or Scarlet/Violet), and the Gen 3–4
   Contest/Battle Memory counts.
-- **Top 50** of the species and forms that can earn the most ribbons; ties
-  share their place and are ordered by Dex number.
+- **Ranking by tiers**: species and forms are grouped by the most ribbons they
+  can earn ("87 ribbons · 33 species & forms", "86 ribbons · 107 species &
+  forms"…), with every tier, sample icons and the common origin highlighted
+  ("Shadow Pokémon in Colosseum / XD"). Opening a tier shows its full list,
+  filterable and in Dex order, and each species opens its guide.
 - "Your specimens of this species": ribbons each one has and the ones it can
   still earn from its current game. The Dex index now stores each specimen's
   ribbons (the index rebuilds once).

@@ -63,8 +63,9 @@ juego, desde su origen más antiguo posible (Pokémon XD y Colosseum incluidos)
 hasta Escarlata/Púrpura: cómo conseguir cada una en una línea, su requisito,
 cuándo transferir (el Parque Compi, el Banco y HOME son de ida), cuándo
 aparece una forma regional, qué no se puede conseguir hoy (eventos, servicios
-en línea cerrados) y qué marcas puede llevar. Un **Top 50** ordena las especies
-que pueden ganar más cintas (los empates comparten puesto), tus ejemplares
+en línea cerrados) y qué marcas puede llevar. Un **ranking por niveles** agrupa las
+especies según el máximo de cintas que pueden ganar (al entrar en un nivel se
+ven todas), tus ejemplares
 muestran lo que les falta y la guía se copia como texto para foros o se guarda
 como imagen. La ruta de cada especie y forma está comprobada con el verificador
 de cintas de PKHeX: **0 contradicciones** en 1333 especies y formas.
@@ -194,7 +195,7 @@ El vídeo se reconstruye a partir de las grabaciones con
 
 | Escritorio | | |
 |---|---|---|
-| <img src="docs/screenshots/ribbons/02_top50.png" alt="Top 50 de Ribbon Master"> | <img src="docs/screenshots/ribbons/04_guide_alolan_raichu.png" alt="Ribbon Master: Raichu de Alola"> | <img src="docs/screenshots/ribbons/06_guide_shadow_origin.png" alt="Ribbon Master: origen Pokémon oscuro"> |
+| <img src="docs/screenshots/ribbons/02_ranking.png" alt="Ranking por niveles de Ribbon Master"> | <img src="docs/screenshots/ribbons/04_guide_alolan_raichu.png" alt="Ribbon Master: Raichu de Alola"> | <img src="docs/screenshots/ribbons/06_guide_shadow_origin.png" alt="Ribbon Master: origen Pokémon oscuro"> |
 | <img src="docs/screenshots/dex/01_grid.png" alt="Cuadrícula de la Dex"> | <img src="docs/screenshots/dex/03_locked_forms.png" alt="Dex: formas especiales bloqueadas"> | <img src="docs/screenshots/dex/05_progress.png" alt="Progreso de la Dex"> |
 | <img src="docs/screenshots/v2/mac_03_arca_colores_pareja.png" alt="Arca con colores por versión"> | <img src="docs/screenshots/v2/mac_04_cajas_iconos.png" alt="Cajas"> | <img src="docs/screenshots/v2/mac_05_ficha_iconos.png" alt="Editor de Pokémon"> |
 | <img src="docs/screenshots/v2/mac_07_cintas.png" alt="Cintas"> | <img src="docs/screenshots/20_legalidad_detallada.png" alt="Legalidad"> | <img src="docs/screenshots/22_comparar_copias.png" alt="Comparar copias"> |
