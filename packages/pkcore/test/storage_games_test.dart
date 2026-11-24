@@ -214,4 +214,24 @@ void main() {
       expect(SaveDetector.read(out).warnings.single, contains('Dawn'), reason: 'los otros perfiles se conservan');
     });
   });
+
+  test('Pokémon sueltos: .sk2, .bk4 y .rk4 ida y vuelta', () {
+    final cases = {
+      GameVersion.stadium2: SyntheticSaves.stadium(layout: StadiumLayout.stadium2U, boxes: const {0: [SynthMon(152, level: 30)]}),
+      GameVersion.battleRevolution: SyntheticSaves.battleRevolution(boxes: const {0: [SynthMon(25, level: 10)]}),
+      GameVersion.ranch: SyntheticSaves.ranch(mons: const [SynthMon(393, level: 5)]),
+    };
+    cases.forEach((game, bytes) {
+      final ed = SaveEditor.open(bytes);
+      final pk = ed.get(const SlotRef.box(0, 0))!;
+      final ext = StoragePkm.extensionFor(game)!;
+      final file = StoragePkm.toFile(pk, game);
+      expect(file, pk.nativeRaw!.sublist(0, file.length), reason: ext);
+      final back = StoragePkm.fromFile(ext, file)!;
+      expect(back.species, pk.species);
+      expect(back.nickname, pk.nickname);
+      ed.set(const SlotRef.box(1, 0), back);
+      expect(SaveEditor.open(ed.buildVerified()).get(const SlotRef.box(1, 0))!.species, pk.species);
+    });
+  });
 }

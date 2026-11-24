@@ -198,11 +198,14 @@ class StadiumEditor extends StorageEditor {
     return (layout.count(_d, box, _base) ?? layout.slotsPerBox).clamp(0, layout.slotsPerBox);
   }
 
-  Pkm? _readAt(int ofs) {
-    final raw = _d.copyRange(ofs, layout.slotSize);
+  Pkm? _readAt(int ofs) => decodeSlot(layout, _d.copyRange(ofs, layout.slotSize));
+
+  /// Pokémon de un hueco de Stadium ([raw] con el tamaño de hueco de [layout]).
+  static Pkm? decodeSlot(StadiumLayout layout, Uint8List raw) {
     if (raw[0] == 0) return null;
     final jp = layout.japanese;
-    if (_g1) {
+    final g1 = layout.generation == 1;
+    if (g1) {
       return Pkm.fromGb(PkFormat.pk1, raw.copyRange(0, 33),
           nickname: StringCodec.decodeGb(raw, 33, layout.strLen, japanese: jp),
           otName: StringCodec.decodeGb(raw, 33 + layout.strLen, layout.strLen, japanese: jp),
@@ -231,10 +234,13 @@ class StadiumEditor extends StorageEditor {
     return pk;
   }
 
-  Uint8List _encode(Pkm pk) {
+  Uint8List _encode(Pkm pk) => encodeSlot(layout, pk);
+
+  /// Bytes de hueco de Stadium de [pk] (Stadium 2: SK2, partiendo de [Pkm.nativeRaw]).
+  static Uint8List encodeSlot(StadiumLayout layout, Pkm pk) {
     final jp = layout.japanese;
     final out = Uint8List(layout.slotSize);
-    if (_g1) {
+    if (layout.generation == 1) {
       out.setRange(0, 33, pk.data);
       out[3] = pk.level; // nivel de caja (PKHeX `Stat_LevelBox`)
       out.setRange(33, 33 + layout.strLen, StringCodec.encodeGb(pk.nickname, layout.strLen, japanese: jp));
@@ -613,5 +619,55 @@ class BrEditor extends StorageEditor {
     }
     if (!changed) return Uint8List.fromList(_br.encrypted);
     return _br.build({profileIndex: _p});
+  }
+}
+
+/// Pokémon sueltos de los juegos de almacenamiento: `.sk2` (Stadium 2),
+/// `.bk4` (Battle Revolution) y `.rk4` (Rancho). Stadium usa `.pk1` y Box `.pk3`.
+abstract final class StoragePkm {
+  /// Extensión del formato propio del juego, o null si usa el del juego principal.
+  static String? extensionFor(GameVersion game) => switch (game) {
+        GameVersion.stadium2 => 'sk2',
+        GameVersion.battleRevolution => 'bk4',
+        GameVersion.ranch => 'rk4',
+        _ => null,
+      };
+
+  static Uint8List toFile(Pkm pk, GameVersion game) => switch (game) {
+        GameVersion.stadium2 => StadiumEditor.encodeSlot(pk.japanese ? StadiumLayout.stadium2J : StadiumLayout.stadium2U, pk),
+        GameVersion.battleRevolution => Bk4.fromPk4(pk.data, base: pk.nativeRaw, size: 136),
+        GameVersion.ranch => () {
+            final out = Uint8List(RanchLayout.slotSize);
+            final n = pk.nativeRaw;
+            if (n != null && n.length == RanchLayout.slotSize) out.setRange(0, RanchLayout.slotSize, n);
+            out.setRange(0, 136, pk.encryptStored());
+            if (out[0x88] == 0) out[0x88] = 4;
+            return out;
+          }(),
+        _ => pk.toFile(),
+      };
+
+  /// Importa un `.sk2`/`.bk4`/`.rk4`; null si no tiene el tamaño o no es válido.
+  static Pkm? fromFile(String ext, Uint8List bytes) {
+    switch (ext.toLowerCase().replaceFirst('.', '')) {
+      case 'sk2':
+        if (bytes.length != 60) return null;
+        // Las cadenas se leen con la tabla internacional (PKHeX deduce el japonés
+        // por las cadenas; un .sk2 japonés suelto es raro).
+        return StadiumEditor.decodeSlot(StadiumLayout.stadium2U, bytes);
+      case 'bk4':
+        if (bytes.length != 136 && bytes.length != 220) return null;
+        final pk = Pkm.fromDecrypted(PkFormat.pk4, Bk4.toPk4(bytes))..refreshChecksum();
+        pk.nativeRaw = Uint8List.fromList(bytes);
+        return pk;
+      case 'rk4':
+        if (bytes.length != RanchLayout.slotSize) return null;
+        final pk4 = bytes.copyRange(0, 136);
+        final pk = pk4.u32le(0x64) != 0 ? Pkm.fromEncrypted(PkFormat.pk4, pk4) : Pkm.fromDecrypted(PkFormat.pk4, pk4);
+        if (pk == null || !pk.checksumValid) return null;
+        pk.nativeRaw = Uint8List.fromList(bytes);
+        return pk;
+    }
+    return null;
   }
 }
