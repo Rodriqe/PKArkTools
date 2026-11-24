@@ -2984,7 +2984,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dexCaughtSpecies => 'Caught';
 
   @override
-  String get navRibbonMaster => 'Ribbon Master';
+  String get navRibbonHunter => 'Ribbon Hunter';
 
   @override
   String get navRibbonsShort => 'Ribbons';
@@ -3063,7 +3063,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get rmTimeline => 'Route, game by game';
+  String get rmTimeline => 'Route to Ribbon Master, game by game';
 
   @override
   String get rmTransferOnly => 'No new ribbons here: it\'s a transfer step.';
@@ -3151,7 +3151,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get rmOpenGuide => 'Ribbon Master guide';
+  String get rmOpenGuide => 'Ribbon Hunter guide';
 
   @override
   String get rmKindEgg => 'egg';

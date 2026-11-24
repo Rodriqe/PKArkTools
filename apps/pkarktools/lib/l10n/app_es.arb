@@ -2153,7 +2153,7 @@
   "dexAllSpecies": "Todos",
   "dexMissingSpecies": "Faltantes",
   "dexCaughtSpecies": "Capturados",
-  "navRibbonMaster": "Ribbon Master",
+  "navRibbonHunter": "Ribbon Hunter",
   "navRibbonsShort": "Cintas",
   "rmSubtitle": "Elige cualquier Pokémon y mira todas las cintas que puede ganar un mismo ejemplar, de la generación más antigua a la más nueva.",
   "rmSearchHint": "Busca una especie o forma (nombre o número)",
@@ -2239,7 +2239,7 @@
       }
     }
   },
-  "rmTimeline": "Ruta, juego a juego",
+  "rmTimeline": "Ruta para convertirlo en Ribbon Master, juego a juego",
   "rmTransferOnly": "Aquí no se gana ninguna cinta nueva: es un paso de la transferencia.",
   "rmAlsoHere": "También aquí: {list}",
   "@rmAlsoHere": {
@@ -2330,7 +2330,7 @@
       }
     }
   },
-  "rmOpenGuide": "Guía Ribbon Master",
+  "rmOpenGuide": "Guía Ribbon Hunter",
   "rmKindEgg": "huevo",
   "rmKindWild": "salvaje",
   "rmKindStatic": "encuentro fijo",

@@ -1,4 +1,4 @@
-// Ribbon Master: navegación (pestaña, buscador, ranking por niveles, nivel, guía, botón desde la Dex)
+// Ribbon Hunter: navegación (pestaña, buscador, ranking por niveles, nivel, guía, botón desde la Dex)
 // y ningún desbordamiento en teléfono (320×568, 360×800, 430×932) ni escritorio.
 import 'dart:io';
 
@@ -51,7 +51,7 @@ void main() {
 
   testWidgets('pestaña, buscador y guía', (tester) async {
     await open(tester, '/cintas', const Size(1280, 900));
-    expect(find.text('Ribbon Master'), findsWidgets);
+    expect(find.text('Ribbon Hunter'), findsWidgets);
     expect(find.text('Ranking por niveles'), findsWidgets);
     expect(find.byKey(ValueKey('rm-teaser-tier-${RibbonMaster.tiers().first.total}')), findsOneWidget);
     await tester.enterText(find.byKey(const ValueKey('rm-search')), 'raichu');

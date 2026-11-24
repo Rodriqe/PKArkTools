@@ -636,7 +636,7 @@ class RibbonRoute {
     final es = lang == DataLanguage.es;
     final b = StringBuffer();
     final name = SpeciesForms.displayName(species, form, null, lang);
-    b.writeln(es ? 'Ribbon Master: $name' : 'Ribbon Master: $name');
+    b.writeln(es ? 'Ribbon Hunter · $name: ruta para convertirlo en Ribbon Master' : 'Ribbon Hunter · $name: route to Ribbon Master');
     b.writeln(es
         ? 'Máximo de cintas hoy: $total · Origen recomendado: ${data.originGame.name(lang)} (Gen ${data.originGame.generation})'
         : 'Max ribbons today: $total · Recommended origin: ${data.originGame.name(lang)} (Gen ${data.originGame.generation})');

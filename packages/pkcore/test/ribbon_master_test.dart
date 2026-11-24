@@ -168,9 +168,10 @@ void main() {
 
     test('texto para foros', () {
       final t = _r(1).toText(DataLanguage.en);
-      expect(t, contains('Ribbon Master: Bulbasaur'));
+      expect(t, contains('Ribbon Hunter · Bulbasaur: route to Ribbon Master'));
       expect(t, contains('Max ribbons today: 85'));
       expect(_r(1).toText(DataLanguage.es), contains('No disponibles hoy'));
+      expect(_r(1).toText(DataLanguage.es), contains('Ribbon Hunter · Bulbasaur: ruta para convertirlo en Ribbon Master'));
     });
   });
 

@@ -4837,11 +4837,11 @@ abstract class AppLocalizations {
   /// **'Capturados'**
   String get dexCaughtSpecies;
 
-  /// No description provided for @navRibbonMaster.
+  /// No description provided for @navRibbonHunter.
   ///
   /// In es, this message translates to:
-  /// **'Ribbon Master'**
-  String get navRibbonMaster;
+  /// **'Ribbon Hunter'**
+  String get navRibbonHunter;
 
   /// No description provided for @navRibbonsShort.
   ///
@@ -4954,7 +4954,7 @@ abstract class AppLocalizations {
   /// No description provided for @rmTimeline.
   ///
   /// In es, this message translates to:
-  /// **'Ruta, juego a juego'**
+  /// **'Ruta para convertirlo en Ribbon Master, juego a juego'**
   String get rmTimeline;
 
   /// No description provided for @rmTransferOnly.
@@ -5092,7 +5092,7 @@ abstract class AppLocalizations {
   /// No description provided for @rmOpenGuide.
   ///
   /// In es, this message translates to:
-  /// **'Guía Ribbon Master'**
+  /// **'Guía Ribbon Hunter'**
   String get rmOpenGuide;
 
   /// No description provided for @rmKindEgg.

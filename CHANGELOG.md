@@ -14,10 +14,11 @@ developer documentation in `docs/` is in Spanish.
 ## [1.1.0] — 2026-11-24
 
 ### Added
-- **Ribbon Master** tab: a ribbon guide per species, not per specimen. Pick
+- **Ribbon Hunter** tab: a ribbon guide per species, not per specimen. Pick
   any species and form and see every ribbon one specimen can earn, game by
-  game from Gen 3 to Gen 9, with how to get each one, its requirement, the
-  recommended (oldest possible) origin and the max obtainable today.
+  game from Gen 3 to Gen 9 (the route to make it a Ribbon Master), with how
+  to get each one, its requirement, the recommended (oldest possible) origin
+  and the max obtainable today.
 - Forward-only transfer graph with stable game ids: Colosseum and XD (traded
   to/from Ruby/Sapphire/Emerald and FireRed/LeafGreen), Pal Park, Poké
   Transfer, Poké Transporter/Bank, Virtual Console → Gen 7, HOME, and
@@ -39,7 +40,7 @@ developer documentation in `docs/` is in Spanish.
   still earn from its current game. The Dex index now stores each specimen's
   ribbons (the index rebuilds once).
 - Share a guide as text for forums or save it as an image.
-- "Ribbon Master guide" button on every Dex species page.
+- "Ribbon Hunter guide" button on every Dex species page.
 - Verified against PKHeX: the PKHeX oracle builds every species/form from its
   best origin, transfers it forward and applies all valid ribbons; the app's
   routes match it with 0 contradictions across 1333 species and forms

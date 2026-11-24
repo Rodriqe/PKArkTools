@@ -15,7 +15,7 @@ import 'ui/dex/dex_progress_screen.dart';
 import 'ui/dex/dex_screen.dart';
 import 'ui/dex/dex_species_screen.dart';
 import 'ui/onboarding/onboarding_screen.dart';
-import 'ui/ribbons/ribbon_master_screen.dart';
+import 'ui/ribbons/ribbon_hunter_screen.dart';
 import 'ui/settings/settings_screen.dart';
 import 'ui/shell.dart';
 
@@ -74,7 +74,7 @@ GoRouter buildRouter({String initialLocation = '/arca', ValueNotifier<ArcaSetup>
             StatefulShellBranch(routes: [
               GoRoute(
                 path: '/cintas',
-                builder: (_, _) => const RibbonMasterScreen(),
+                builder: (_, _) => const RibbonHunterScreen(),
                 routes: [
                   GoRoute(path: 'top', redirect: (_, _) => '/cintas/ranking'),
                   GoRoute(

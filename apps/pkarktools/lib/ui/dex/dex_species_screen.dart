@@ -7,7 +7,7 @@ import '../../providers.dart';
 import '../../theme/app_theme.dart';
 import '../../theme/game_palette.dart';
 import '../common/format.dart';
-import '../ribbons/ribbon_master_screen.dart';
+import '../ribbons/ribbon_hunter_screen.dart';
 import 'dex_screen.dart';
 import 'dex_special_forms.dart';
 import 'dex_text.dart';

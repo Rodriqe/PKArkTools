@@ -43,7 +43,7 @@ Future<void> _loadFonts() async {
 }
 
 void main() {
-  testWidgets('capturas de Ribbon Master', skip: !_enabled, (tester) async {
+  testWidgets('capturas de Ribbon Hunter', skip: !_enabled, (tester) async {
     await _loadFonts();
     HttpOverrides.global = null;
     final cacheDir = Directory('../../.scratch/sprite-cache')..createSync(recursive: true);

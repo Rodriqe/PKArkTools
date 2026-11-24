@@ -26,7 +26,7 @@ class AppShell extends ConsumerWidget {
     final destinations = [
       (Icons.inventory_2_outlined, Icons.inventory_2_rounded, l10n.navArca),
       (Icons.catching_pokemon_outlined, Icons.catching_pokemon_rounded, l10n.navDex),
-      (Icons.military_tech_outlined, Icons.military_tech_rounded, l10n.navRibbonMaster),
+      (Icons.military_tech_outlined, Icons.military_tech_rounded, l10n.navRibbonHunter),
       (Icons.history_rounded, Icons.history_rounded, l10n.navActivity),
       (Icons.tune_outlined, Icons.tune_rounded, l10n.navSettings),
     ];

@@ -14,11 +14,11 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 ## [1.1.0] — 2026-11-24
 
 ### Añadido
-- Pestaña **Ribbon Master**: una guía de cintas por especie, no por ejemplar.
+- Pestaña **Ribbon Hunter**: una guía de cintas por especie, no por ejemplar.
   Eliges cualquier especie y forma y ves todas las cintas que puede ganar un
-  ejemplar, juego a juego de Gen 3 a Gen 9, con cómo conseguir cada una, su
-  requisito, el origen recomendado (el más antiguo posible) y el máximo que se
-  puede conseguir hoy.
+  ejemplar, juego a juego de Gen 3 a Gen 9 (la ruta para convertirlo en Ribbon
+  Master), con cómo conseguir cada una, su requisito, el origen recomendado (el
+  más antiguo posible) y el máximo que se puede conseguir hoy.
 - Grafo de transferencias solo hacia adelante con ids de juego estables:
   Colosseum y XD (por intercambio con Rubí/Zafiro/Esmeralda y Rojo Fuego/Verde
   Hoja), Parque Compi, Pokétransfer, Poké Transporter/Banco, Consola Virtual →
@@ -42,7 +42,7 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   ganar desde su juego actual. El índice de la Dex guarda ahora las cintas de
   cada ejemplar (se reconstruye una vez).
 - Compartir una guía como texto para foros o guardarla como imagen.
-- Botón «Guía Ribbon Master» en la ficha de cada especie de la Dex.
+- Botón «Guía Ribbon Hunter» en la ficha de cada especie de la Dex.
 - Verificado contra PKHeX: el oráculo construye cada especie/forma desde su
   mejor origen, la transfiere hacia adelante y le aplica todas las cintas
   válidas; las rutas de la app coinciden con 0 contradicciones en 1333 especies

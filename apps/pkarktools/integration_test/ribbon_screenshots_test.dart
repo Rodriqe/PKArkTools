@@ -17,7 +17,7 @@ import 'package:pkarktools/providers.dart';
 
 import '../test/dex_demo.dart';
 
-/// Capturas de Ribbon Master en un teléfono real (emulador -no-window o simulador
+/// Capturas de Ribbon Hunter en un teléfono real (emulador -no-window o simulador
 /// headless), con la misma Dex sintética que las offscreen:
 ///
 ///   flutter drive -d DISPOSITIVO --driver test_driver/screenshot_driver.dart \
@@ -28,7 +28,7 @@ const _lang = String.fromEnvironment('SHOTS_LANG', defaultValue: 'en');
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('capturas de Ribbon Master', skip: io.Platform.isMacOS || io.Platform.isWindows || io.Platform.isLinux, (tester) async {
+  testWidgets('capturas de Ribbon Hunter', skip: io.Platform.isMacOS || io.Platform.isWindows || io.Platform.isLinux, (tester) async {
     final locale = _lang == 'es' ? const Locale('es', 'ES') : const Locale('en', 'US');
     tester.platformDispatcher.localesTestValue = [locale];
     tester.platformDispatcher.localeTestValue = locale;

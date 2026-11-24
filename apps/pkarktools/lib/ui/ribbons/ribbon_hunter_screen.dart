@@ -68,15 +68,15 @@ String _fold(String s) {
 
 // =========================================================================== Inicio
 
-/// Pestaña Ribbon Master: buscador de especie y forma, acceso al ranking por niveles.
-class RibbonMasterScreen extends StatefulWidget {
-  const RibbonMasterScreen({super.key});
+/// Pestaña Ribbon Hunter: buscador de especie y forma, acceso al ranking por niveles.
+class RibbonHunterScreen extends StatefulWidget {
+  const RibbonHunterScreen({super.key});
 
   @override
-  State<RibbonMasterScreen> createState() => _RibbonMasterScreenState();
+  State<RibbonHunterScreen> createState() => _RibbonHunterScreenState();
 }
 
-class _RibbonMasterScreenState extends State<RibbonMasterScreen> {
+class _RibbonHunterScreenState extends State<RibbonHunterScreen> {
   final _search = TextEditingController();
   String _query = '';
 
@@ -120,7 +120,7 @@ class _RibbonMasterScreenState extends State<RibbonMasterScreen> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1100),
             child: CustomScrollView(
-              key: const PageStorageKey('ribbon-master'),
+              key: const PageStorageKey('ribbon-hunter'),
               slivers: [
                 SliverPadding(
                   padding: EdgeInsets.fromLTRB(pad, compact ? 20 : 36, pad, 4),
@@ -128,7 +128,7 @@ class _RibbonMasterScreenState extends State<RibbonMasterScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(l10n.navRibbonMaster, style: compact ? context.text.displaySmall : context.text.displayMedium),
+                        Text(l10n.navRibbonHunter, style: compact ? context.text.displaySmall : context.text.displayMedium),
                         const SizedBox(height: 6),
                         Text(l10n.rmSubtitle, style: context.text.bodyMedium!.copyWith(color: tokens.muted)),
                       ],
@@ -751,7 +751,7 @@ class _RibbonGuideScreenState extends ConsumerState<RibbonGuideScreen> {
     final image = await boundary.toImage(pixelRatio: 2);
     final data = await image.toByteData(format: ui.ImageByteFormat.png);
     if (data == null) return;
-    final name = 'ribbon-master-${r.species}${r.form == 0 ? '' : '-${r.form}'}.png';
+    final name = 'ribbon-hunter-${r.species}${r.form == 0 ? '' : '-${r.form}'}.png';
     final path = await ref.read(fileSourcesProvider).exportBytes(name, data.buffer.asUint8List());
     if (path != null) messenger.showSnackBar(SnackBar(content: Text(l10n.rmImageSaved(path))));
   }
@@ -770,7 +770,7 @@ class _RibbonGuideScreenState extends ConsumerState<RibbonGuideScreen> {
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () => context.canPop() ? context.pop() : context.go('/cintas'),
         ),
-        title: Text(l10n.navRibbonMaster),
+        title: Text(l10n.navRibbonHunter),
         actions: [
           if (r != null)
             PopupMenuButton<String>(

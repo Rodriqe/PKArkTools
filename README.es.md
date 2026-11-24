@@ -51,16 +51,17 @@ Sin cuentas, sin servidores, sin telemetría: pon el Arca en iCloud Drive,
 Google Drive, OneDrive, Dropbox o Syncthing y todos tus dispositivos la
 comparten.
 
-## Novedad de la 1.1: Ribbon Master
+## Novedad de la 1.1: Ribbon Hunter
 
 <p align="center">
-  <img src="docs/screenshots/ribbons/03_guide_bulbasaur.png" width="100%" alt="Ribbon Master: ruta de Bulbasaur de Rojo Fuego/Verde Hoja a Escarlata/Púrpura">
+  <img src="docs/screenshots/ribbons/03_guide_bulbasaur.png" width="100%" alt="Ribbon Hunter: ruta de Bulbasaur de Rojo Fuego/Verde Hoja a Escarlata/Púrpura">
 </p>
 
 Una **guía de cintas para cada especie**: eliges cualquier Pokémon (especie y
 forma) y ves **todas las cintas que puede ganar un mismo ejemplar**, juego a
 juego, desde su origen más antiguo posible (Pokémon XD y Colosseum incluidos)
-hasta Escarlata/Púrpura: cómo conseguir cada una en una línea, su requisito,
+hasta Escarlata/Púrpura (la ruta para convertirlo en **Ribbon Master**): cómo
+conseguir cada una en una línea, su requisito,
 cuándo transferir (el Parque Compi, el Banco y HOME son de ida), cuándo
 aparece una forma regional, qué no se puede conseguir hoy (eventos, servicios
 en línea cerrados) y qué marcas puede llevar. Un **ranking por niveles** agrupa las
@@ -69,7 +70,7 @@ ven todas), tus ejemplares
 muestran lo que les falta y la guía se copia como texto para foros o se guarda
 como imagen. La ruta de cada especie y forma está comprobada con el verificador
 de cintas de PKHeX: **0 contradicciones** en 1333 especies y formas.
-[Guía de Ribbon Master](docs/usuario/ribbon-master.md).
+[Guía de Ribbon Hunter](docs/usuario/ribbon-hunter.md).
 
 ## Novedad de la 1.0: la Dex
 
@@ -195,7 +196,7 @@ El vídeo se reconstruye a partir de las grabaciones con
 
 | Escritorio | | |
 |---|---|---|
-| <img src="docs/screenshots/ribbons/02_ranking.png" alt="Ranking por niveles de Ribbon Master"> | <img src="docs/screenshots/ribbons/04_guide_alolan_raichu.png" alt="Ribbon Master: Raichu de Alola"> | <img src="docs/screenshots/ribbons/06_guide_shadow_origin.png" alt="Ribbon Master: origen Pokémon oscuro"> |
+| <img src="docs/screenshots/ribbons/02_ranking.png" alt="Ranking por niveles de Ribbon Hunter"> | <img src="docs/screenshots/ribbons/04_guide_alolan_raichu.png" alt="Ribbon Hunter: Raichu de Alola"> | <img src="docs/screenshots/ribbons/06_guide_shadow_origin.png" alt="Ribbon Hunter: origen Pokémon oscuro"> |
 | <img src="docs/screenshots/dex/01_grid.png" alt="Cuadrícula de la Dex"> | <img src="docs/screenshots/dex/03_locked_forms.png" alt="Dex: formas especiales bloqueadas"> | <img src="docs/screenshots/dex/05_progress.png" alt="Progreso de la Dex"> |
 | <img src="docs/screenshots/v2/mac_03_arca_colores_pareja.png" alt="Arca con colores por versión"> | <img src="docs/screenshots/v2/mac_04_cajas_iconos.png" alt="Cajas"> | <img src="docs/screenshots/v2/mac_05_ficha_iconos.png" alt="Editor de Pokémon"> |
 | <img src="docs/screenshots/v2/mac_07_cintas.png" alt="Cintas"> | <img src="docs/screenshots/20_legalidad_detallada.png" alt="Legalidad"> | <img src="docs/screenshots/22_comparar_copias.png" alt="Comparar copias"> |
@@ -264,7 +265,7 @@ iconos. Lee [Seguridad de datos y privacidad](docs/seguridad-datos.md).
 Toda la documentación está en [`docs/`](docs/README.md):
 [guía de usuario](docs/usuario/README.md) ·
 [Dex](docs/usuario/dex.md) ·
-[Ribbon Master](docs/usuario/ribbon-master.md) ·
+[Ribbon Hunter](docs/usuario/ribbon-hunter.md) ·
 [formatos soportados](docs/formatos.md) ·
 [seguridad de datos](docs/seguridad-datos.md) ·
 [arquitectura](docs/arquitectura.md) ·
