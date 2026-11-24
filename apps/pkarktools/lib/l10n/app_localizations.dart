@@ -5140,14 +5140,14 @@ abstract class AppLocalizations {
   /// No description provided for @rmSpecimenLine.
   ///
   /// In es, this message translates to:
-  /// **'{have} cintas · le faltan {missing} que aún puede ganar'**
-  String rmSpecimenLine(String have, String missing);
+  /// **'{have, plural, =1{1 cinta} other{{have} cintas}} · {missing, plural, =1{le falta 1 que aún puede ganar} other{le faltan {missing} que aún puede ganar}}'**
+  String rmSpecimenLine(int have, int missing);
 
   /// No description provided for @rmSpecimenComplete.
   ///
   /// In es, this message translates to:
-  /// **'{have} cintas · nada pendiente desde su juego'**
-  String rmSpecimenComplete(String have);
+  /// **'{have, plural, =1{1 cinta} other{{have} cintas}} · nada pendiente desde su juego'**
+  String rmSpecimenComplete(int have);
 
   /// No description provided for @rmSpecimensEmpty.
   ///

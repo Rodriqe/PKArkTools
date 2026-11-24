@@ -3200,13 +3200,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get rmYourSpecimens => 'Tus ejemplares de esta especie';
 
   @override
-  String rmSpecimenLine(String have, String missing) {
-    return '$have cintas · le faltan $missing que aún puede ganar';
+  String rmSpecimenLine(int have, int missing) {
+    String _temp0 = intl.Intl.pluralLogic(
+      have,
+      locale: localeName,
+      other: '$have cintas',
+      one: '1 cinta',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      missing,
+      locale: localeName,
+      other: 'le faltan $missing que aún puede ganar',
+      one: 'le falta 1 que aún puede ganar',
+    );
+    return '$_temp0 · $_temp1';
   }
 
   @override
-  String rmSpecimenComplete(String have) {
-    return '$have cintas · nada pendiente desde su juego';
+  String rmSpecimenComplete(int have) {
+    String _temp0 = intl.Intl.pluralLogic(
+      have,
+      locale: localeName,
+      other: '$have cintas',
+      one: '1 cinta',
+    );
+    return '$_temp0 · nada pendiente desde su juego';
   }
 
   @override

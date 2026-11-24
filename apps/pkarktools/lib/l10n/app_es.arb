@@ -2321,22 +2321,22 @@
     }
   },
   "rmYourSpecimens": "Tus ejemplares de esta especie",
-  "rmSpecimenLine": "{have} cintas · le faltan {missing} que aún puede ganar",
+  "rmSpecimenLine": "{have, plural, =1{1 cinta} other{{have} cintas}} · {missing, plural, =1{le falta 1 que aún puede ganar} other{le faltan {missing} que aún puede ganar}}",
   "@rmSpecimenLine": {
     "placeholders": {
       "have": {
-        "type": "String"
+        "type": "int"
       },
       "missing": {
-        "type": "String"
+        "type": "int"
       }
     }
   },
-  "rmSpecimenComplete": "{have} cintas · nada pendiente desde su juego",
+  "rmSpecimenComplete": "{have, plural, =1{1 cinta} other{{have} cintas}} · nada pendiente desde su juego",
   "@rmSpecimenComplete": {
     "placeholders": {
       "have": {
-        "type": "String"
+        "type": "int"
       }
     }
   },

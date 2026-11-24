@@ -1444,7 +1444,7 @@ class _YourSpecimens extends ConsumerWidget {
                         leading: DexIcon(species: p.species, form: p.form, status: DexStatus.caught, size: 40, shiny: p.shiny),
                         title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
                         subtitle: Text(
-                          '${src.trainer} · ${shortGame(context, src.game)}\n${missing.isEmpty ? l10n.rmSpecimenComplete('$have') : l10n.rmSpecimenLine('$have', '${missing.length}')}',
+                          '${src.trainer} · ${shortGame(context, src.game)}\n${missing.isEmpty ? l10n.rmSpecimenComplete(have) : l10n.rmSpecimenLine(have, missing.length)}',
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: context.text.bodySmall!.copyWith(color: tokens.muted),
