@@ -69,6 +69,23 @@ copied as text for forums or saved as an image. Every species/form's route is
 checked against PKHeX's ribbon verifier: **0 contradictions** across 1333
 species and forms. [Ribbon Hunter guide](docs/usuario/ribbon-hunter.md).
 
+## New in 1.1: GameCube, Nintendo 64 and Wii games
+
+<p align="center">
+  <img src="docs/screenshots/gamecube/03_xd_shadow_pokemon.png" width="100%" alt="Pokémon XD: a Shadow Pokémon with its shadow ID and heart gauge">
+</p>
+
+**Pokémon Colosseum** and **Pokémon XD: Gale of Darkness** (`.gci` from
+Dolphin or whole Memory Card images) are read and written with their Shadow
+Pokémon (shadow ID, heart gauge, *Mark as purified* with the National
+Ribbon), Strategy Memo and bag. The storage games join them: **Pokémon
+Stadium** and **Stadium 2** (N64), **Pokémon Box: Ruby & Sapphire**
+(GameCube), **Pokémon Battle Revolution** and **My Pokémon Ranch** (Wii).
+Every specimen in them shows up in the Dex and in Ribbon Hunter's "Your
+specimens": a purified Pokémon already counts its National Ribbon. How to
+export each save: [import guide](docs/usuario/importar.md); known limits:
+[formats](docs/formatos.md#limitaciones-conocidas).
+
 ## New in 1.0: the Dex
 
 <p align="center">
@@ -123,6 +140,8 @@ background and cached, it opens instantly. [Dex guide](docs/usuario/dex.md).
 **Reading — all generations**
 * Every main-series game from Red/Blue to Legends: Z-A: trainer, party, boxes,
   play time, money, badges, checksum status.
+* GameCube, N64 and Wii: Colosseum and XD (Shadow Pokémon, Strategy Memo),
+  Stadium 1/2, Box: Ruby & Sapphire, Battle Revolution and My Pokémon Ranch.
 
 **Editor**
 * Draft with undo/redo; nothing is written until you **Save to the Ark**
@@ -192,6 +211,7 @@ The video is rebuilt from the recordings with `tool/record_demo_video.sh` and
 | Desktop | | |
 |---|---|---|
 | <img src="docs/screenshots/ribbons/02_ranking.png" alt="Ribbon Hunter ranking by tiers"> | <img src="docs/screenshots/ribbons/04_guide_alolan_raichu.png" alt="Ribbon Hunter: Alolan Raichu"> | <img src="docs/screenshots/ribbons/06_guide_shadow_origin.png" alt="Ribbon Hunter: Shadow Pokémon origin"> |
+| <img src="docs/screenshots/gamecube/02_xd_save.png" alt="Pokémon XD save"> | <img src="docs/screenshots/gamecube/06_ribbon_hunter_purified.png" alt="Ribbon Hunter: purified Colosseum specimen with the National Ribbon"> | <img src="docs/screenshots/storage/06_battle_revolution.png" alt="Pokémon Battle Revolution"> |
 | <img src="docs/screenshots/dex/01_grid.png" alt="Dex grid"> | <img src="docs/screenshots/dex/03_locked_forms.png" alt="Dex: locked special forms"> | <img src="docs/screenshots/dex/05_progress.png" alt="Dex progress"> |
 | <img src="docs/screenshots/v2/mac_03_arca_colores_pareja.png" alt="Ark with version colours"> | <img src="docs/screenshots/v2/mac_04_cajas_iconos.png" alt="Boxes"> | <img src="docs/screenshots/v2/mac_05_ficha_iconos.png" alt="Pokémon editor"> |
 | <img src="docs/screenshots/v2/mac_07_cintas.png" alt="Ribbons"> | <img src="docs/screenshots/20_legalidad_detallada.png" alt="Legality"> | <img src="docs/screenshots/22_comparar_copias.png" alt="Compare copies"> |

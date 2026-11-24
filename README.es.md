@@ -72,6 +72,23 @@ como imagen. La ruta de cada especie y forma está comprobada con el verificador
 de cintas de PKHeX: **0 contradicciones** en 1333 especies y formas.
 [Guía de Ribbon Hunter](docs/usuario/ribbon-hunter.md).
 
+## Novedad de la 1.1: juegos de GameCube, Nintendo 64 y Wii
+
+<p align="center">
+  <img src="docs/screenshots/gamecube/03_xd_shadow_pokemon.png" width="100%" alt="Pokémon XD: un Pokémon oscuro con su id oscuro y medidor de corazón">
+</p>
+
+**Pokémon Colosseum** y **Pokémon XD: Tempestad Oscura** (`.gci` de Dolphin o
+imágenes completas de Memory Card) se leen y se escriben con sus Pokémon
+oscuros (id oscuro, medidor de corazón, *Marcar como purificado* con la Cinta
+Nacional), Strategy Memo y bolsa. Se suman los juegos de almacenamiento:
+**Pokémon Stadium** y **Stadium 2** (N64), **Pokémon Box: Rubí y Zafiro**
+(GameCube), **Pokémon Battle Revolution** y **My Pokémon Ranch** (Wii). Cada
+ejemplar aparece en la Dex y en «Tus ejemplares» de Ribbon Hunter: un
+purificado ya cuenta su Cinta Nacional. Cómo exportar cada save:
+[guía de importación](docs/usuario/importar.md); límites conocidos:
+[formatos](docs/formatos.md#limitaciones-conocidas).
+
 ## Novedad de la 1.0: la Dex
 
 <p align="center">
@@ -130,6 +147,8 @@ opcional. Se indexa en segundo plano y se cachea: abre al instante.
 **Lectura de todas las generaciones**
 * Todos los juegos principales de Rojo/Azul a Leyendas Z-A: entrenador,
   equipo, cajas, tiempo de juego, dinero, medallas y estado de los checksums.
+* GameCube, N64 y Wii: Colosseum y XD (Pokémon oscuros, Strategy Memo),
+  Stadium 1/2, Box: Rubí y Zafiro, Battle Revolution y My Pokémon Ranch.
 
 **Editor**
 * Borrador con deshacer/rehacer; no se escribe nada hasta **Guardar en el
@@ -202,6 +221,7 @@ El vídeo se reconstruye a partir de las grabaciones con
 | Escritorio | | |
 |---|---|---|
 | <img src="docs/screenshots/ribbons/02_ranking.png" alt="Ranking por niveles de Ribbon Hunter"> | <img src="docs/screenshots/ribbons/04_guide_alolan_raichu.png" alt="Ribbon Hunter: Raichu de Alola"> | <img src="docs/screenshots/ribbons/06_guide_shadow_origin.png" alt="Ribbon Hunter: origen Pokémon oscuro"> |
+| <img src="docs/screenshots/gamecube/02_xd_save.png" alt="Partida de Pokémon XD"> | <img src="docs/screenshots/gamecube/06_ribbon_hunter_purified.png" alt="Ribbon Hunter: ejemplar purificado de Colosseum con la Cinta Nacional"> | <img src="docs/screenshots/storage/06_battle_revolution.png" alt="Pokémon Battle Revolution"> |
 | <img src="docs/screenshots/dex/01_grid.png" alt="Cuadrícula de la Dex"> | <img src="docs/screenshots/dex/03_locked_forms.png" alt="Dex: formas especiales bloqueadas"> | <img src="docs/screenshots/dex/05_progress.png" alt="Progreso de la Dex"> |
 | <img src="docs/screenshots/v2/mac_03_arca_colores_pareja.png" alt="Arca con colores por versión"> | <img src="docs/screenshots/v2/mac_04_cajas_iconos.png" alt="Cajas"> | <img src="docs/screenshots/v2/mac_05_ficha_iconos.png" alt="Editor de Pokémon"> |
 | <img src="docs/screenshots/v2/mac_07_cintas.png" alt="Cintas"> | <img src="docs/screenshots/20_legalidad_detallada.png" alt="Legalidad"> | <img src="docs/screenshots/22_comparar_copias.png" alt="Comparar copias"> |

@@ -89,6 +89,12 @@ En Android (emulador):
   cuántas cintas tienen y, al desplegarlos, **las que les faltan y aún pueden
   ganar** desde el juego donde están (solo juegos a los que todavía pueden
   ir).
+  También cuentan los de Colosseum y XD (un Pokémon oscuro purificado ya
+  tiene la Cinta Nacional; uno sin purificar todavía la tiene pendiente) y
+  los de los juegos de almacenamiento, que se sitúan en el juego al que
+  vuelven: Stadium 1/2 en los de Game Boy, Box: Rubí y Zafiro en
+  Rubí/Zafiro/Esmeralda, y Battle Revolution y el Rancho en
+  Diamante/Perla/Platino.
 * **Compartir**: copia la guía como **texto para foros** o guárdala como
   **imagen** (cabecera y ruta).
 
