@@ -26,7 +26,7 @@ enum GameVersion {
   rubySapphire(3, Platform.gameBoyAdvance, 'rs', 'Pokémon Rubí / Zafiro', 'Pokémon Ruby / Sapphire'),
   emerald(3, Platform.gameBoyAdvance, 'emerald', 'Pokémon Esmeralda', 'Pokémon Emerald'),
   fireRedLeafGreen(3, Platform.gameBoyAdvance, 'frlg', 'Pokémon Rojo Fuego / Verde Hoja', 'Pokémon FireRed / LeafGreen'),
-  colosseum(3, Platform.gameCube, 'colo', 'Pokémon Colosseum', 'Pokémon Colosseum'),
+  colosseum(3, Platform.gameCube, 'colosseum', 'Pokémon Colosseum', 'Pokémon Colosseum'),
   xd(3, Platform.gameCube, 'xd', 'Pokémon XD: Tempestad Oscura', 'Pokémon XD: Gale of Darkness'),
   boxRS(3, Platform.gameCube, 'rsbox', 'Pokémon Box: Rubí y Zafiro', 'Pokémon Box: Ruby & Sapphire'),
   diamondPearl(4, Platform.nintendoDs, 'dp', 'Pokémon Diamante / Perla', 'Pokémon Diamond / Pearl'),
