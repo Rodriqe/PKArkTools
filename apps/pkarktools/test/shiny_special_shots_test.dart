@@ -8,7 +8,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart' show FontLoader;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pkcore/pkcore.dart';
 import 'package:pkarktools/app.dart';
 import 'package:pkarktools/data/arca_repository.dart';
 import 'package:pkarktools/data/folder/arca_folder.dart';
@@ -17,6 +16,7 @@ import 'package:pkarktools/data/sprites/sprite_cache.dart';
 import 'package:pkarktools/providers.dart';
 
 import 'arca_folder_test.dart' show memoryDb;
+import 'dex_demo.dart';
 import 'shots_i18n.dart';
 
 /// Captura de prueba de los iconos variocolor de las formas especiales
@@ -28,30 +28,6 @@ import 'shots_i18n.dart';
 ///
 /// Descarga solo los iconos que se ven (caché en `.scratch/sprite-cache`).
 const _enabled = bool.fromEnvironment('SHOTS_SHINY');
-
-/// Charizard Gigamax normal y variocolor (Espada) y Charizard normal y
-/// variocolor en Leyendas Z-A (Megas X/Y en sus dos variantes).
-GlobalDex shinySpecialDex() => GlobalDex.build([
-      DexSource(
-        id: 1,
-        game: GameVersion.swordShield,
-        versionId: 44,
-        trainer: 'Gloria',
-        scan: SaveDexScan(game: GameVersion.swordShield, hasPokedex: true, seen: const {4, 5, 6}, caught: const {4, 5, 6}, specimens: const [
-          DexSpecimen(species: 6, level: 50, shiny: true, gigantamax: true, box: 0, slot: 3, nickname: 'Blaze'),
-          DexSpecimen(species: 6, level: 47, gigantamax: true, box: 0, slot: 4),
-        ]),
-      ),
-      DexSource(
-        id: 5,
-        game: GameVersion.legendsZA,
-        trainer: 'Urbain',
-        scan: SaveDexScan(game: GameVersion.legendsZA, hasPokedex: true, seen: const {6}, caught: const {6}, specimens: const [
-          DexSpecimen(species: 6, level: 55, shiny: true, box: 2, slot: 6, nickname: 'Ember'),
-          DexSpecimen(species: 6, level: 38, box: 2, slot: 7),
-        ]),
-      ),
-    ]);
 
 Future<void> _loadFonts() async {
   final flutterRoot = io.Platform.environment['FLUTTER_ROOT'];

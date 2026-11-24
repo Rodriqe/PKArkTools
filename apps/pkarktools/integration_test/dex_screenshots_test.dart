@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:pkcore/pkcore.dart';
 import 'package:pkarktools/app.dart';
 import 'package:pkarktools/data/arca_repository.dart';
 import 'package:pkarktools/data/db/arca_database.dart';
@@ -50,14 +51,14 @@ void main() {
       await binding.takeScreenshot('${_prefix}_${n.toString().padLeft(2, '0')}_$name');
     }
 
-    Future<void> open(String location) async {
+    Future<void> open(String location, {GlobalDex? using}) async {
       await tester.pumpWidget(const SizedBox());
       await settle(3);
       await tester.pumpWidget(ProviderScope(
         key: UniqueKey(),
         overrides: [
           arcaRepositoryProvider.overrideWithValue(repo),
-          globalDexProvider.overrideWith((ref) async => dex),
+          globalDexProvider.overrideWith((ref) async => using ?? dex),
         ],
         child: PKArkToolsApp(initialLocation: location),
       ));
@@ -88,6 +89,13 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('dex-shiny')));
     await settle(10);
     await shot('filter_shiny');
+    // Variocolor de las formas especiales: Mega Charizard X variocolor y
+    // Charizard Gigamax normal y variocolor (tarjeta, pastillas y ejemplares).
+    await open('/dex/especie/6', using: shinySpecialDex());
+    await scrollTo(find.byKey(const ValueKey('dex-special-mega:6:1')));
+    await shot('shiny_mega_x');
+    await scrollTo(find.byKey(const ValueKey('dex-special-gmax:6:*')));
+    await shot('shiny_gigantamax');
 
     await tester.pumpWidget(const SizedBox());
     await settle(5);

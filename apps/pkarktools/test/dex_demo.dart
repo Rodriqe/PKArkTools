@@ -60,3 +60,27 @@ GlobalDex demoDex() {
     DexSource(id: 5, game: GameVersion.legendsZA, trainer: 'Urbain', scan: za),
   ]);
 }
+
+/// Charizard Gigamax normal y variocolor (Espada) y Charizard normal y
+/// variocolor en Leyendas Z-A (Megas X/Y en sus dos variantes).
+GlobalDex shinySpecialDex() => GlobalDex.build([
+      DexSource(
+        id: 1,
+        game: GameVersion.swordShield,
+        versionId: 44,
+        trainer: 'Gloria',
+        scan: SaveDexScan(game: GameVersion.swordShield, hasPokedex: true, seen: const {4, 5, 6}, caught: const {4, 5, 6}, specimens: const [
+          DexSpecimen(species: 6, level: 50, shiny: true, gigantamax: true, box: 0, slot: 3, nickname: 'Blaze'),
+          DexSpecimen(species: 6, level: 47, gigantamax: true, box: 0, slot: 4),
+        ]),
+      ),
+      DexSource(
+        id: 5,
+        game: GameVersion.legendsZA,
+        trainer: 'Urbain',
+        scan: SaveDexScan(game: GameVersion.legendsZA, hasPokedex: true, seen: const {6}, caught: const {6}, specimens: const [
+          DexSpecimen(species: 6, level: 55, shiny: true, box: 2, slot: 6, nickname: 'Ember'),
+          DexSpecimen(species: 6, level: 38, box: 2, slot: 7),
+        ]),
+      ),
+    ]);
