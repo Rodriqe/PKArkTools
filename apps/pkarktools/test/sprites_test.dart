@@ -25,8 +25,11 @@ void main() {
   group('resolución de nombres', () {
     test('Pokémon: especie, forma, hembra, huevo y caídas a la especie', () {
       expect(Sprites.pokemon(25)!.key, 'pokemon/spikachu');
-      // Sin iconos variocolor en la fuente: mismo icono (la interfaz pone la insignia).
+      // Sin iconos variocolor de las formas normales: mismo icono (la interfaz pone la insignia).
       expect(Sprites.pokemon(25, shiny: true)!.key, 'pokemon/spikachu');
+      // Las formas especiales sí tienen variocolor.
+      expect(Sprites.pokemon(3, form: 1, shiny: true)!.key, 'pokemon_small_shiny/0003-001-Venusaur-Mega');
+      expect(Sprites.pokemon(36, form: 1, shiny: true)!.key, 'pokemon_champions/sclefable-omega-s');
       expect(Sprites.pokemon(479, form: 2)!.key, 'pokemon/srotom-owash'); // Rotom Lavado
       expect(Sprites.pokemon(25, form: 99)!.key, 'pokemon/spikachu'); // forma sin icono → especie
       expect(Sprites.pokemon(592, female: true)!.key, 'pokemon/sfrillish-f');
@@ -101,16 +104,63 @@ void main() {
       for (final MapEntry(key: (sp, f), :value) in cases.entries) {
         expect(Sprites.pokemon(sp, form: f)?.name, value, reason: '$sp-$f');
       }
-      // Formas sin icono propio en HOME (megas nuevas de Leyendas Z-A, Teraforma,
-      // Silvally…): icono de la especie, nunca iniciales.
-      for (final (sp, f) in [(36, 1), (149, 1), (773, 5), (1024, 2), (1007, 1)]) {
+      // Formas que no están en la carpeta principal: otras carpetas del mismo commit.
+      const extra = {
+        (36, 1): 'pokemon_champions/sclefable-omega',
+        (26, 2): 'pokemon_champions/sraichu-omega_x',
+        (678, 3): 'pokemon_champions/smeowstic-of_mega',
+        (491, 1): 'pokemon_preview/sdarkrai-omega',
+        (978, 5): 'pokemon_preview/statsugiri-ostretchy_mega',
+        (773, 5): 'pokemon_small/0773-005-Silvally-Rock',
+        (1024, 1): 'pokemon_preview/sterapagos-oterastal',
+        (1024, 2): 'pokemon_preview/sterapagos-ostellar',
+      };
+      for (final MapEntry(key: (sp, f), :value) in extra.entries) {
+        expect(Sprites.pokemon(sp, form: f)?.key, value, reason: '$sp-$f');
+      }
+      // Sin icono propio en ninguna fuente (modos de Koraidon/Miraidon, Pichu
+      // picoreja): icono de la especie, nunca iniciales (docs/usuario/iconos.md).
+      for (final (sp, f) in [(1007, 1), (1008, 4), (172, 1)]) {
         expect(Sprites.pokemon(sp, form: f)?.name, Sprites.pokemon(sp)!.name, reason: '$sp-$f');
       }
+    });
+
+    test('Gigamax: icono propio por especie y por forma, normal y variocolor', () {
+      expect(Sprites.pokemon(6, gigantamax: true)!.key, 'pokemon_small/0006-000-Charizard-Gmax');
+      expect(Sprites.pokemon(6, gigantamax: true, shiny: true)!.key, 'pokemon_small_shiny/0006-000-Charizard-Gmax');
+      expect(Sprites.pokemon(812, gigantamax: true)!.key, 'pokemon_preview/srillaboom-g');
+      expect(Sprites.pokemon(849, form: 1, gigantamax: true)!.key, 'pokemon_preview/stoxtricity-olow_key-g');
+      expect(Sprites.pokemon(892, form: 1, gigantamax: true, shiny: true)!.key, 'pokemon_preview/surshifu-orapid_strike-g-s');
+      expect(Sprites.pokemon(869, form: 5, gigantamax: true)!.key, 'pokemon_small/0869-000-Alcremie-Gmax');
+      // Sin Gigamax: el icono normal de la forma.
+      expect(Sprites.pokemon(1, gigantamax: true)!.key, 'pokemon/sbulbasaur');
+    });
+
+    test('todas las formas especiales de SpecialForms tienen icono propio y variocolor en la fuente fijada', () {
+      final names = <String>{};
+      for (final f in SpecialForms.all) {
+        final normal = Sprites.special(f), shiny = Sprites.special(f, shiny: true);
+        expect(normal, isNotNull, reason: f.key);
+        expect(Sprites.hasSpecialIcon(f), isTrue, reason: '${f.key} usa el icono de la especie');
+        expect(Sprites.hasSpecialShinyIcon(f), isTrue, reason: '${f.key} sin variocolor');
+        expect(Sprites.exists(normal!.group, normal.name), isTrue, reason: f.key);
+        expect(Sprites.exists(shiny!.group, shiny.name), isTrue, reason: f.key);
+        expect(Sprites.bytesOfRef(normal), greaterThan(0), reason: f.key);
+        expect(SpriteCache.urlOf(normal).toString(), contains('/smogon/sprites/${kSpriteCommits['smogon/sprites']}/src/'));
+        names.add(normal.key);
+      }
+      // Cada forma tiene el suyo (Toxtricity y Urshifu: uno por forma).
+      expect(names.length, SpecialForms.all.length);
     });
 
     test('todas las formas del índice apuntan a un archivo que existe', () {
       for (final e in kPokemonIconForms.entries) {
         expect(Sprites.exists('pokemon', e.value), isTrue, reason: e.key);
+      }
+      for (final t in [kPokemonIconFormsExtra, kPokemonIconShinyForms, kPokemonIconGmax, kPokemonIconGmaxShiny]) {
+        for (final e in t.entries) {
+          expect(Sprites.exists(e.value.$1, e.value.$2), isTrue, reason: '${e.key} → ${e.value}');
+        }
       }
       for (final sp in kPokemonIconFemale) {
         expect(Sprites.exists('pokemon', '${kPokemonIconBase[sp]}-f'), isTrue, reason: '$sp');
@@ -136,6 +186,10 @@ void main() {
       final i = SpriteCache.urlOf(const SpriteRef('item', 'bitem_1'), SpriteCache.mirrorUrl).toString();
       expect(i, contains('cdn.jsdelivr.net/gh/kwsch/PKHeX@${kSpriteCommits['kwsch/PKHeX']}/'));
       expect(i, endsWith('Big%20Items/bitem_1.png'));
+      final g = SpriteCache.urlOf(const SpriteRef('pokemon_small', '0006-000-Charizard-Gmax')).toString();
+      expect(g, endsWith('/src/_uncategorized/canonical/home/small/0006-000-Charizard-Gmax.png'));
+      final m = SpriteCache.urlOf(const SpriteRef('pokemon_small_shiny', '0006-001-Charizard-Mega~X')).toString();
+      expect(m, endsWith('/small-shiny/0006-001-Charizard-Mega~X.png'));
     });
   });
 

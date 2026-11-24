@@ -12,7 +12,18 @@ descargados (basta un clon parcial con «sparse-checkout» de esas carpetas):
   de Gen 2/3 → Gen 4 de `ItemConverter`. También aporta los nombres de especie
   en inglés (`text_Species_en.txt`) para el mapeo especie → archivo.
 * smogon/sprites: iconos de Pokémon de HOME (`src/minisprites/pokemon/home`),
-  que cubren las especies 1–1025 y sus formas. El índice de formas por número
+  que cubren las especies 1–1025 y sus formas. Las formas especiales que esa
+  carpeta no tiene (Gigamax, Megas de Leyendas Z-A, tipos de Silvally,
+  Terapagos) y las versiones variocolor de las formas especiales salen de
+  otras carpetas del MISMO commit, en grupos aparte que solo listan los
+  archivos usados (ver `EXTRA_SETS`):
+  - `src/_uncategorized/canonical/home/small[-shiny]`: volcado de los iconos
+    de caja de HOME (Gigamax, Silvally, variocolor de las Megas de Gen 6/7).
+  - `src/champions`: iconos de Pokémon Champions, mismo estilo que HOME
+    (Megas de Z-A con su variocolor «-s»).
+  - `src/previews/gen9`: renders de HOME (lo que no está en las anteriores:
+    Gigamax de la Isla de la Armadura / Nieves de la Corona, algunas Megas de
+    Z-A, Terapagos). El índice de formas por número
   de PKHeX sale de los volcados de HOME del mismo repositorio
   (`src/_uncategorized/canonical/home/small*`, «0052-002-Meowth-Galar») y de
   la tabla explícita `HAND_FORMS` para lo que no recogen (Gen 9, Hisui…).
@@ -42,6 +53,47 @@ SETS = {
     'ribbon': ('kwsch/PKHeX', PKHEX, 'PKHeX.Drawing.Misc/Resources/img/ribbons'),
     'type': ('kwsch/PKHeX', PKHEX, 'PKHeX.Drawing.Misc/Resources/img/types/square'),
 }
+
+# Grupos de formas especiales: carpetas del mismo repositorio y commit de las
+# que solo se listan los archivos que usan las tablas de abajo.
+EXTRA_SETS = {
+    'pokemon_small': 'src/_uncategorized/canonical/home/small',
+    'pokemon_small_shiny': 'src/_uncategorized/canonical/home/small-shiny',
+    'pokemon_champions': 'src/champions',
+    'pokemon_preview': 'src/previews/gen9',
+}
+
+# Megas de Leyendas Z-A (y Mega Dimensión): (especie, forma de PKHeX) → forma
+# en smogon (sin la «-o»). Se busca en champions y, si no, en previews/gen9;
+# el variocolor es el mismo nombre con «-s».
+ZA_MEGAS = {
+    (26, 2): 'mega_x', (26, 3): 'mega_y', (36, 1): 'mega', (71, 1): 'mega', (121, 1): 'mega',
+    (149, 1): 'mega', (154, 1): 'mega', (160, 1): 'mega', (227, 1): 'mega', (358, 1): 'mega',
+    (359, 2): 'mega_z', (398, 1): 'mega', (445, 2): 'mega_z', (448, 2): 'mega_z', (478, 1): 'mega',
+    (485, 1): 'mega', (491, 1): 'mega', (500, 1): 'mega', (530, 1): 'mega', (545, 1): 'mega',
+    (560, 1): 'mega', (604, 1): 'mega', (609, 1): 'mega', (623, 1): 'mega', (652, 1): 'mega',
+    (655, 1): 'mega', (658, 3): 'mega', (668, 1): 'mega', (670, 6): 'mega', (678, 2): 'm_mega',
+    (678, 3): 'f_mega', (687, 1): 'mega', (689, 1): 'mega', (691, 1): 'mega', (701, 1): 'mega',
+    (718, 5): 'mega', (740, 1): 'mega', (768, 1): 'mega', (780, 1): 'mega', (801, 2): 'mega',
+    (801, 3): 'original_mega', (807, 1): 'mega', (870, 1): 'mega', (952, 1): 'mega', (970, 1): 'mega',
+    (978, 3): 'curly_mega', (978, 4): 'droopy_mega', (978, 5): 'stretchy_mega', (998, 1): 'mega',
+}
+
+# Otras formas sin icono en la carpeta principal: (especie, forma) → (grupo, archivo).
+OTHER_FORMS = {
+    **{(773, f): ('pokemon_small', f'0773-{f:03d}-Silvally-{t}') for f, t in enumerate(
+        ['', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water',
+         'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark', 'Fairy']) if f},
+    (1024, 1): ('pokemon_preview', 'sterapagos-oterastal'),
+    (1024, 2): ('pokemon_preview', 'sterapagos-ostellar'),
+}
+
+# Gigamax: especie (o especie y forma del ejemplar) → nombre en el volcado de HOME
+# («NNNN-000-Especie-Gmax») o, si no está, en previews/gen9 («<base>[-oforma]-g»).
+# Toxtricity y Urshifu tienen una Gigamax por forma.
+GMAX_SPECIES = [3, 6, 9, 12, 25, 52, 68, 94, 99, 131, 133, 143, 569, 809, 812, 815, 818, 823, 826, 834,
+                839, 841, 842, 844, 851, 858, 861, 869, 879, 884]
+GMAX_FORMS = {(849, 0): None, (849, 1): 'low_key', (892, 0): None, (892, 1): 'rapid_strike'}
 
 # Percentil del «tamaño necesario» de cada sprite que se toma como referencia
 # del grupo: los pocos que lo superan se reducen solo lo justo al dibujarlos.
@@ -152,20 +204,87 @@ def pokemon_tables(files):
     return base, forms, female
 
 
+def special_tables(base, forms, files):
+    """Tablas de formas especiales y variocolor → (grupo, archivo), y los
+    archivos que usan de cada grupo extra."""
+    def ls(d):
+        return {os.path.basename(p)[:-4] for p in git(SMOGON, 'ls-tree', '--name-only', 'HEAD', d + '/').splitlines() if p.endswith('.png')}
+    avail = {g: ls(d) for g, d in EXTRA_SETS.items()}
+    dump_by_form = {}
+    for n in avail['pokemon_small']:
+        m = re.match(r'(\d{4})-(\d{3})-', n)
+        if m:
+            dump_by_form.setdefault((int(m[1]), int(m[2])), []).append(n)
+
+    def pick(name, groups=('pokemon_champions', 'pokemon_preview')):
+        for g in groups:
+            if name in avail[g]:
+                return (g, name)
+        return None
+
+    extra, shiny, gmax, gmax_shiny = {}, {}, {}, {}
+    for (sp, f), suf in ZA_MEGAS.items():
+        n = pick(f'{base[sp]}-o{suf}')
+        assert n, (sp, f, suf)
+        extra[(sp, f)] = n
+        s = (n[0], n[1] + '-s')
+        assert s[1] in avail[s[0]], s
+        shiny[(sp, f)] = s
+    for k, v in OTHER_FORMS.items():
+        assert v[1] in avail[v[0]], v
+        extra[k] = v
+    # Variocolor de las Megas, Primigenias y Ultra del set principal: el volcado de HOME.
+    for (sp, f), name in forms.items():
+        if re.search(r'-o(mega|primal|ultra)', name):
+            hits = [n for n in avail['pokemon_small_shiny'] if n.startswith(f'{sp:04d}-{f:03d}-')]
+            assert len(hits) == 1, (sp, f, hits)
+            shiny[(sp, f)] = ('pokemon_small_shiny', hits[0])
+
+    def gmax_ref(sp, form_suffix):
+        hits = [n for n in avail['pokemon_small'] if n.startswith(f'{sp:04d}-000-') and n.endswith('-Gmax')]
+        if form_suffix is None and len(hits) == 1:
+            n = hits[0]
+            assert n in avail['pokemon_small_shiny'], n
+            return ('pokemon_small', n), ('pokemon_small_shiny', n)
+        n = base[sp] + (f'-o{form_suffix}' if form_suffix else '') + '-g'
+        assert n in avail['pokemon_preview'] and n + '-s' in avail['pokemon_preview'], n
+        return ('pokemon_preview', n), ('pokemon_preview', n + '-s')
+    for sp in GMAX_SPECIES:
+        gmax[str(sp)], gmax_shiny[str(sp)] = gmax_ref(sp, None)
+    for (sp, f), suf in GMAX_FORMS.items():
+        # Urshifu Brusco (0) no está en el volcado: previews/gen9 para las dos.
+        key = f'{sp}-{f}'
+        if sp == 892:
+            gmax[key], gmax_shiny[key] = gmax_ref(sp, suf or '')
+        else:
+            gmax[key], gmax_shiny[key] = gmax_ref(sp, suf)
+    used = {g: set() for g in EXTRA_SETS}
+    for t in (extra, shiny, gmax, gmax_shiny):
+        for g, n in t.values():
+            used[g].add(n)
+    return extra, shiny, gmax, gmax_shiny, used
+
+
 def main():
     commits = {}
     files = {}
     metrics = {}
-    for group, (repo, clone, d) in SETS.items():
-        commits[repo] = git(clone, 'rev-parse', 'HEAD')
-        names = sorted(f for f in os.listdir(os.path.join(clone, d)) if f.endswith('.png'))
+    def measure(group, clone, d, names):
         files[group] = [(f[:-4], os.path.getsize(os.path.join(clone, d, f))) for f in names]
         needs = {f[:-4]: need(os.path.join(clone, d, f)) for f in names}
         vals = sorted(v for v in needs.values() if v > 0)
         ref = vals[min(len(vals) - 1, int(len(vals) * PERCENTILE))]
         over = {n: v for n, v in needs.items() if v > ref}
         metrics[group] = (ref, over)
+
+    for group, (repo, clone, d) in SETS.items():
+        commits[repo] = git(clone, 'rev-parse', 'HEAD')
+        measure(group, clone, d, sorted(f for f in os.listdir(os.path.join(clone, d)) if f.endswith('.png')))
     base, forms, female = pokemon_tables({n for n, _ in files['pokemon']})
+    extra, shiny, gmax, gmax_shiny, used = special_tables(base, forms, {n for n, _ in files['pokemon']})
+    for group, d in EXTRA_SETS.items():
+        SETS[group] = ('smogon/sprites', SMOGON, d)
+        measure(group, SMOGON, d, sorted(f'{n}.png' for n in used[group]))
 
     out = [
         '// GENERADO por tool/gen_sprite_manifest.py. No editar a mano.',
@@ -210,6 +329,21 @@ def main():
         out.append(f"  '{sp}-{f}': '{name}',")
     out.append('};')
     out.append('')
+    def rec_map(doc, name, table):
+        out.extend(doc)
+        out.append(f'const Map<String, (String, String)> {name} = {{')
+        for k, (g, n) in sorted(table.items(), key=lambda e: tuple(int(x) for x in str(e[0]).replace('-', ' ').split()) if not isinstance(e[0], tuple) else e[0]):
+            key = k if isinstance(k, str) else f'{k[0]}-{k[1]}'
+            out.append(f"  '{key}': ('{g}', '{n}'),")
+        out.extend(['};', ''])
+
+    rec_map(['/// Formas sin icono en la carpeta principal («especie-forma» → (grupo, archivo)):',
+             '/// Megas de Leyendas Z-A, tipos de Silvally, Terapagos.'], 'kPokemonIconFormsExtra', extra)
+    rec_map(['/// Icono variocolor de las formas especiales (Mega, Primigenia, Ultra) por «especie-forma».'],
+            'kPokemonIconShinyForms', shiny)
+    rec_map(['/// Icono Gigamax por «especie» o, si cambia con la forma, «especie-forma» del ejemplar.'],
+            'kPokemonIconGmax', gmax)
+    rec_map(['/// Icono Gigamax variocolor (mismas claves que [kPokemonIconGmax]).'], 'kPokemonIconGmaxShiny', gmax_shiny)
     out.append('/// Especies con icono propio de hembra («<base>-f»).')
     out.append('const Set<int> kPokemonIconFemale = {' + ', '.join(map(str, sorted(female))) + '};')
     out.append('')
@@ -226,6 +360,7 @@ def main():
     mapped = set(forms.values()) | set(base) | {f'{base[s]}-f' for s in female} | {'xegg'}
     unmapped = sorted(n for n, _ in files['pokemon'] if n not in mapped)
     print(commits, total, {g: m[0] for g, m in metrics.items()}, {g: len(m[1]) for g, m in metrics.items()})
+    print('formas extra', len(extra), 'variocolor', len(shiny), 'gigamax', len(gmax), {g: len(v) for g, v in used.items()})
     print('formas mapeadas', len(forms), 'hembras', len(female), 'archivos sin mapear', len(unmapped), unmapped)
 
 

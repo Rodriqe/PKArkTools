@@ -35,7 +35,14 @@ abstract final class Sprites {
   /// Fracción del hueco que llena el recuadro de referencia de cada grupo.
   /// Los Pokémon y los objetos dejan un margen; tipos, cintas y Balls ya
   /// ocupan su lienzo entero.
-  static const Map<String, double> fill = {'pokemon': 0.88, 'item': 0.88};
+  static const Map<String, double> fill = {
+    'pokemon': 0.88,
+    'pokemon_small': 0.88,
+    'pokemon_small_shiny': 0.88,
+    'pokemon_champions': 0.88,
+    'pokemon_preview': 0.88,
+    'item': 0.88,
+  };
 
   /// Grupos de arte de píxeles (se amplían con vecino más próximo). Los
   /// iconos de HOME, tipos y cintas son ilustraciones y se suavizan.
@@ -67,18 +74,60 @@ abstract final class Sprites {
       kSpriteFiles[group]!.split(',').fold(0, (a, f) => a + int.parse(f.substring(f.lastIndexOf(':') + 1)));
 
   /// Icono de un Pokémon (iconos de HOME). Una forma sin icono propio usa el
-  /// de la especie; con hembra, el de hembra si lo hay. No hay iconos
-  /// variocolor: [shiny] no cambia el archivo (la interfaz pone la insignia).
-  static SpriteRef? pokemon(int species, {int form = 0, bool female = false, bool shiny = false, bool egg = false}) {
+  /// de la especie; con hembra, el de hembra si lo hay.
+  ///
+  /// [gigantamax] da el icono Gigamax de la especie (y de la forma, en
+  /// Toxtricity y Urshifu) si existe. [shiny] solo cambia el archivo en las
+  /// formas especiales (Mega, Primigenia, Ultra, Gigamax), que tienen icono
+  /// variocolor; el resto usa el normal (la interfaz pone la insignia).
+  static SpriteRef? pokemon(int species,
+      {int form = 0, bool female = false, bool shiny = false, bool egg = false, bool gigantamax = false}) {
     if (egg) return exists('pokemon', kPokemonIconEgg) ? const SpriteRef('pokemon', kPokemonIconEgg) : null;
     if (species <= 0 || species >= kPokemonIconBase.length) return null;
+    if (gigantamax) {
+      final g = gmax(species, form: form, shiny: shiny);
+      if (g != null) return g;
+    }
+    if (shiny) {
+      final s = _ref(kPokemonIconShinyForms['$species-$form']);
+      if (s != null) return s;
+    }
     final byForm = kPokemonIconForms['$species-$form'];
     if (byForm != null && byForm != kPokemonIconBase[species]) return SpriteRef('pokemon', byForm);
+    final extra = _ref(kPokemonIconFormsExtra['$species-$form']);
+    if (extra != null) return extra;
     final base = kPokemonIconBase[species];
     if (female && kPokemonIconFemale.contains(species) && exists('pokemon', '$base-f')) {
       return SpriteRef('pokemon', '$base-f');
     }
     return exists('pokemon', base) ? SpriteRef('pokemon', base) : null;
+  }
+
+  static SpriteRef? _ref((String, String)? e) => e != null && exists(e.$1, e.$2) ? SpriteRef(e.$1, e.$2) : null;
+
+  /// Icono Gigamax de [species] (con [form], la del ejemplar: Toxtricity y
+  /// Urshifu tienen uno por forma), o null si no hay.
+  static SpriteRef? gmax(int species, {int form = 0, bool shiny = false}) {
+    final t = shiny ? kPokemonIconGmaxShiny : kPokemonIconGmax;
+    return _ref(t['$species-$form'] ?? t['$species']);
+  }
+
+  /// Icono de una forma especial de la Dex (variocolor con [shiny]), o null.
+  static SpriteRef? special(SpecialForm f, {bool shiny = false}) => switch (f.kind) {
+        SpecialFormKind.gigantamax => gmax(f.species, form: f.baseForms?.first ?? 0, shiny: shiny),
+        _ => pokemon(f.species, form: f.form!, shiny: shiny),
+      };
+
+  /// `true` si la forma especial tiene icono propio (no el de la especie).
+  static bool hasSpecialIcon(SpecialForm f) {
+    final r = special(f);
+    return r != null && r != pokemon(f.species, form: f.baseForms?.first ?? 0);
+  }
+
+  /// `true` si la forma especial tiene icono variocolor propio.
+  static bool hasSpecialShinyIcon(SpecialForm f) {
+    final r = special(f, shiny: true);
+    return r != null && r != special(f);
   }
 
   /// Icono de un objeto. [generation] indica en qué numeración está [item]
