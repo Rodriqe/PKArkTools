@@ -94,13 +94,22 @@ class _SaveCardState extends State<SaveCard> {
                                     ),
                                   ]),
                                 )
-                              : Row(children: [
-                                  for (final p in party)
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 8),
-                                      child: SpeciesAvatar(species: p.species, form: p.form, game: e.game, shiny: p.shiny, egg: p.egg, size: 32),
-                                    ),
-                                ]),
+                              // Seis iconos de 32 con 8 de separación ocupan 232 px: en
+                              // tarjetas más estrechas (p. ej. ventana de 1000×700) el
+                              // icono se reduce para que el equipo quepa siempre.
+                              : LayoutBuilder(builder: (context, c) {
+                                  const gap = 8.0;
+                                  final n = party.length;
+                                  final size = ((c.maxWidth - gap * (n - 1)) / n).clamp(16.0, 32.0).floorToDouble();
+                                  return Row(children: [
+                                    for (final (i, p) in party.indexed)
+                                      Padding(
+                                        padding: EdgeInsets.only(right: i == n - 1 ? 0 : gap),
+                                        child: SpeciesAvatar(
+                                            species: p.species, form: p.form, game: e.game, shiny: p.shiny, egg: p.egg, size: size),
+                                      ),
+                                  ]);
+                                }),
                         ),
                         const SizedBox(height: 10),
                         Text(l10n.lastCopy(formatDate(context, e.latest.importedAt)),
