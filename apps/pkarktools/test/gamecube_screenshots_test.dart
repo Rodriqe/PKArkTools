@@ -151,6 +151,16 @@ void main() {
     await reveal(find.byKey(const ValueKey('shadow-state')), alignment: 0.05);
     await shot('colosseum_purified');
 
+    // Ribbon Hunter: el Quilava purificado aparece en «Tus ejemplares» con su
+    // Cinta Nacional ya contada.
+    await open('/cintas/guia/156');
+    final specimen = find.byWidgetPredicate(
+        (w) => w.key is ValueKey<String> && (w.key! as ValueKey<String>).value.startsWith('rm-specimen-'));
+    await reveal(specimen.first, alignment: 0.05);
+    await tester.tap(specimen.first);
+    await settle(15);
+    await shot('ribbon_hunter_purified');
+
     await tester.pumpWidget(const SizedBox());
     await settle(5);
     await tester.runAsync(db.close);
