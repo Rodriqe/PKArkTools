@@ -42,7 +42,7 @@ class AppShell extends ConsumerWidget {
               onDestinationSelected: _go,
               labelType: extended ? NavigationRailLabelType.none : NavigationRailLabelType.all,
               leading: Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 28),
+                padding: EdgeInsets.only(top: 20, bottom: extended ? 28 : 20),
                 child: _Logo(extended: extended),
               ),
               destinations: [
@@ -71,19 +71,36 @@ class AppShell extends ConsumerWidget {
   }
 }
 
+/// Cabecera de la barra lateral: el logo ocupa el ancho útil del rail y el
+/// nombre va debajo (en el rail compacto, en letra pequeña y ajustado al ancho).
 class _Logo extends StatelessWidget {
   const _Logo({required this.extended});
   final bool extended;
 
+  /// Alto del logo en el rail extendido (≥ 1280 px) y en el compacto.
+  static const double extendedHeight = 96;
+  static const double compactHeight = 72;
+
   @override
   Widget build(BuildContext context) {
-    const mark = BrandMark(size: 48);
-    if (!extended) return mark;
-    return Row(mainAxisSize: MainAxisSize.min, children: [
-      mark,
-      const SizedBox(width: 12),
-      Text('PKArkTools', style: context.text.titleLarge!.copyWith(fontFamily: AppTheme.display)),
-      const SizedBox(width: 16),
-    ]);
+    final name = Text(
+      'PKArkTools',
+      key: const ValueKey('rail-logo-name'),
+      maxLines: 1,
+      softWrap: false,
+      style: extended
+          ? context.text.titleLarge!.copyWith(fontFamily: AppTheme.display, fontWeight: FontWeight.w700)
+          : context.text.labelMedium!.copyWith(fontFamily: AppTheme.display, fontWeight: FontWeight.w700),
+    );
+    return SizedBox(
+      key: const ValueKey('rail-logo'),
+      // Ancho útil: el del rail (220 extendido, 80 compacto) menos el margen.
+      width: extended ? 196 : 76,
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        BrandMark(size: extended ? extendedHeight : compactHeight),
+        SizedBox(height: extended ? 10 : 6),
+        FittedBox(fit: BoxFit.scaleDown, child: name),
+      ]),
+    );
   }
 }
