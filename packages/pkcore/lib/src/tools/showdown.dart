@@ -472,6 +472,10 @@ abstract final class Showdown {
           warnings.add(ShowdownWarning(ShowdownWarningCode.abilityNotAvailable, GameStrings.ability(id, lang)));
         } else {
           pk.setAbilitySlot(slot);
+          // Gen 3–5: la ranura sale de un bit del PID; la naturaleza, el
+          // género y el variocolor regeneran el PID conservando ese bit.
+          if (gen <= 4 && slot < 2 && (pk.pid & 1) != slot) pk.pid = pk.pid ^ 1;
+          if (gen == 5 && slot < 2 && (pk.pid >> 16 & 1) != slot) pk.pid = pk.pid ^ 0x10000;
         }
       }
     }
@@ -547,7 +551,10 @@ abstract final class Showdown {
     }
 
     // Movimientos.
-    final learnable = table.learnableMoves(species, form);
+    final learnable = <int>{
+      for (final (sp, fo) in SpeciesForms.evolutionChain(species, form, game)) ...table.learnableMoves(sp, fo),
+      ...?_formMoves[species * 100 + form],
+    };
     final ids = <int>[];
     for (final m in set.moves) {
       if (ids.length == 4) {
@@ -563,6 +570,9 @@ abstract final class Showdown {
         warnings.add(ShowdownWarning(ShowdownWarningCode.moveNotInGame, GameStrings.move(id, lang)));
         continue;
       }
+      // Aviso suave: [Legality.check] decide si es imposible; aquí se avisa
+      // si ni la especie ni sus preevoluciones lo aprenden por nivel, MT o
+      // huevo en este juego (p. ej. un movimiento huevo en uno salvaje).
       if (!learnable.contains(id)) {
         warnings.add(ShowdownWarning(ShowdownWarningCode.moveNotLearnable, GameStrings.move(id, lang)));
       }
@@ -609,12 +619,45 @@ abstract final class Showdown {
     pk.refreshPartyStats();
     pk.refreshChecksum();
 
-    for (final issue in Legality.check(pk, game, lang: lang)) {
+    // Datos de origen (lugar y nivel de encuentro, fechas…): el texto de
+    // Showdown no los trae, así que se aplican las correcciones seguras del
+    // comprobador. Nunca se tocan las que cambiarían lo que pide el texto
+    // (variocolor, habilidad, movimientos).
+    var fixed = pk;
+    for (var round = 0; round < 3; round++) {
+      final pending = [
+        for (final i in Legality.check(fixed, game))
+          if (i.fix != null &&
+              (i.area == LegalityArea.origin || i.area == LegalityArea.encounter) &&
+              i.code != LegalityCode.shinyLocked &&
+              i.code != LegalityCode.hiddenAbilityOldOrigin)
+            i,
+      ];
+      if (pending.isEmpty) break;
+      for (final i in pending) {
+        fixed = Legality.applyFix(fixed, i, game) ?? fixed;
+      }
+    }
+    fixed
+      ..dataGame = game
+      ..refreshPartyStats()
+      ..refreshChecksum();
+
+    for (final issue in Legality.check(fixed, game, lang: lang)) {
       if (issue.severity != LegalitySeverity.warning) continue;
       warnings.add(ShowdownWarning(ShowdownWarningCode.legality, issue.message(lang)));
     }
-    return ShowdownImport(set, pk, warnings);
+    return ShowdownImport(set, fixed, warnings);
   }
+
+  /// Movimientos que da el cambio de forma (Rotom).
+  static const _formMoves = {
+    47901: {315}, // Calor: Sofoco
+    47902: {56}, // Lavado: Hidrobomba
+    47903: {59}, // Frío: Ventisca
+    47904: {403}, // Ventilador: Tajo Aéreo
+    47905: {437}, // Corte: Lluevehojas
+  };
 
   static bool _speciesInGame(int species, int form, GameVersion game) {
     final p = GameDataTable.forGame(game).entry(species, form);
