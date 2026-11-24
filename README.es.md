@@ -193,18 +193,18 @@ Todas las capturas usan saves sintéticos.
 
 ## Instalar
 
-La versión actual es la **v1.0.1**. Descárgala desde el
+La versión actual es la **v1.0.2**. Descárgala desde el
 [último release](https://github.com/Rodriqe/PKArkTools/releases/latest)
 ([todos los releases](https://github.com/Rodriqe/PKArkTools/releases),
 [CHANGELOG](CHANGELOG.es.md)).
 
 | Plataforma | Cómo |
 |---|---|
-| Android | `PKArkTools-v1.0.1.apk`: ábrelo en el teléfono y permite instalar desde ese origen cuando Android lo pida. |
-| macOS | `PKArkTools-v1.0.1-macos.zip`: descomprímelo y mueve `PKArkTools.app` a Aplicaciones. No está notarizada: la primera vez, **clic derecho → Abrir → Abrir**. |
+| Android | `PKArkTools-v1.0.2.apk`: ábrelo en el teléfono y permite instalar desde ese origen cuando Android lo pida. |
+| macOS | `PKArkTools-v1.0.2-macos.zip`: descomprímelo y mueve `PKArkTools.app` a Aplicaciones. No está notarizada: la primera vez, **clic derecho → Abrir → Abrir**. |
 | iPhone / iPad | Aún sin build descargable: compílala desde el código con Xcode (abajo). |
-| Windows | `PKArkTools-v1.0.1-windows-x64-setup.exe` (instalador) o `PKArkTools-v1.0.1-windows-x64.zip` (portátil: descomprímelo y abre `PKArkTools.exe`). No está firmado: si SmartScreen avisa, pulsa **Más información → Ejecutar de todas formas**. |
-| Linux | `PKArkTools-v1.0.1-linux-x64.tar.gz`: extráelo y ejecuta `PKArkTools/pkarktools` (GTK 3; el selector de carpetas necesita `zenity` o `kdialog`). |
+| Windows | `PKArkTools-v1.0.2-windows-x64-setup.exe` (instalador) o `PKArkTools-v1.0.2-windows-x64.zip` (portátil: descomprímelo y abre `PKArkTools.exe`). No está firmado: si SmartScreen avisa, pulsa **Más información → Ejecutar de todas formas**. |
+| Linux | `PKArkTools-v1.0.2-linux-x64.tar.gz`: extráelo y ejecuta `PKArkTools/pkarktools` (GTK 3; el selector de carpetas necesita `zenity` o `kdialog`). |
 
 Una vez instalada, la app busca versiones nuevas sola (**Ajustes › Acerca de**) y en
 Android las instala tras comprobar la firma del APK.

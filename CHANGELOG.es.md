@@ -11,6 +11,20 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [1.0.2] — 2026-11-23
+
+### Cambiado
+- Capturas y demo renovadas: todas las imágenes de los README y de `docs/`
+  muestran ya la 1.0 (pestaña Dex, iconos HOME grandes, logo nuevo, versión
+  actual e historial plegado en el Arca, NAS y actualizaciones), y el vídeo de
+  demostración y su vista previa del README incluyen la Dex con una forma
+  Gigamax desbloqueada.
+
+### Corregido
+- Desborde de la tarjeta de partida: con el equipo completo, la tarjeta del
+  Arca se desbordaba ~4 px en una ventana de 1000×700; ahora los iconos del
+  equipo se reducen para caber en tarjetas estrechas.
+
 ## [1.0.1] — 2026-11-23
 
 ### Cambiado

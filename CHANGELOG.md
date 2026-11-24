@@ -11,6 +11,18 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [1.0.2] — 2026-11-23
+
+### Changed
+- Screenshots and demo refreshed: every image in the READMEs and `docs/`
+  now shows 1.0 (Dex tab, large HOME icons, new logo, current version and
+  folded history in the Ark, NAS and updates), and the demo video and its
+  README preview include the Dex with an unlocked Gigantamax form.
+
+### Fixed
+- Save card overflow: with a full party, the Ark card overflowed by ~4 px in
+  a 1000×700 window; the party icons now shrink to fit narrow cards.
+
 ## [1.0.1] — 2026-11-23
 
 ### Changed
