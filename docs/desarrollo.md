@@ -256,8 +256,11 @@ se reconstruyen en dos pasos, sin abrir ventanas en el Mac:
    `integration_test/demo_video_test.dart` en perfil en el emulador headless
    (`emulator-5554`, Pixel 8 1080×2400, tema oscuro) y lo graba con
    `adb shell screenrecord`. La prueba importa partidas sintéticas a un Arca en
-   memoria, precarga los iconos, dibuja un círculo en cada toque y marca cada
-   escena con `DEMO_SCENE`; el script guarda la toma y los tiempos de las
+   memoria y usa la Dex sintética de `test/dex_demo.dart`, precarga los iconos,
+   dibuja un círculo en cada toque y marca cada escena con `DEMO_SCENE`
+   (bienvenida, Arca, filtros, partida con versión actual e historial,
+   editor, origen, legalidad, guardar, comparar, Dex y ficha de Charizard con
+   la forma Gigamax); el script guarda la toma y los tiempos de las
    escenas en `.scratch/video/takes/`.
 2. **Montaje**: `tool/make_demo_video.sh` recorta y acelera cada escena según
    esas marcas, la encaja en un marco de teléfono sobre el fondo de la marca
@@ -265,7 +268,9 @@ se reconstruyen en dos pasos, sin abrir ventanas en el Mac:
    logo, y une todo con fundidos. Sin música (pista AAC en silencio) y sin
    metadatos. Además de los archivos del repo, deja las versiones en español
    para redes (vertical 1080×1920 y cuadrada 1080×1080) en
-   `.scratch/video/fb/`, fuera de git.
+   `.scratch/video/fb/`, fuera de git. La vista previa (~13 s) es un montaje
+   aparte, sin tarjetas: Arca, partida, Dex y forma Gigamax; con
+   `PREVIEW_ONLY=1` se rehace solo ella.
 
 Necesita un ffmpeg estático con libx264, libfreetype y libwebp en
 `.ref/ffmpeg/bin/` y las instancias estáticas de Manrope (OFL) en

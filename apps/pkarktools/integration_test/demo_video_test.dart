@@ -17,7 +17,10 @@ import 'package:pkarktools/data/folder/arca_folder.dart';
 import 'package:pkarktools/data/folder/memory_folder_fs.dart';
 import 'package:pkarktools/data/sprites/sprite_cache.dart';
 import 'package:pkarktools/l10n/app_localizations.dart';
+import 'package:pkarktools/providers.dart';
 import 'package:pkarktools/ui/editor/pokemon_editor.dart';
+
+import '../test/dex_demo.dart';
 
 /// Recorrido del vídeo de demostración, en tiempo real y con datos sintéticos.
 /// No captura nada: el vídeo lo graba `adb shell screenrecord` mientras corre
@@ -48,6 +51,8 @@ void main() {
     final db = ArcaDatabase(DatabaseConnection(NativeDatabase.memory(), closeStreamsSynchronously: true));
     final repo = ArcaRepository(db, ArcaFolder(MemoryFolderFs(label: 'PKArkTools')));
     final ids = <String, int>{};
+    // Dex sintética (Pokédex medio llenas, Charizard con factor Gigamax).
+    final dex = demoDex();
     final demo = SyntheticSaves.demoSet();
     // Espada con un Pokémon «sospechoso» para los avisos de legalidad.
     final sv = SaveEditor.open(demo['Espada_main']!);
@@ -87,6 +92,7 @@ void main() {
           key: UniqueKey(),
           overrides: [
             arcaRepositoryProvider.overrideWithValue(repo),
+            globalDexProvider.overrideWith((ref) async => dex),
             if (setup != null) initialArcaSetupProvider.overrideWithValue(setup),
           ],
           child: PKArkToolsApp(initialLocation: location),
@@ -176,6 +182,9 @@ void main() {
       await tester.scrollUntilVisible(scarletCard, 250, scrollable: grid, maxScrolls: 40);
     }
     await tap(scarletCard, after: 1400);
+    // Versión actual (el archivo principal) y el historial plegado debajo.
+    await glide(find.byKey(const ValueKey('history-fold')), alignment: 0.35, ms: 600);
+    await tap(find.byKey(const ValueKey('history-fold')), after: 1100);
     await glide(find.text(l10n.boxes), alignment: 0.1, ms: 1100);
     await hold(900);
     await toTop(ms: 700);
@@ -240,8 +249,29 @@ void main() {
     await hold(500);
     await tap(find.text(l10n.saveToArca).last, after: 1800);
     scene('compare');
+    await toTop(ms: 500);
+    if (find.text(l10n.compareAction).evaluate().isEmpty) {
+      await glide(find.byKey(const ValueKey('history-fold')), alignment: 0.3, ms: 500);
+      await tap(find.byKey(const ValueKey('history-fold')), after: 700);
+    }
     await glide(find.text(l10n.compareAction), alignment: 0.4, ms: 900);
     await tap(find.text(l10n.compareAction), after: 2200);
+    await hold(2200);
+
+    // 9. La Dex: todas las especies de todas las partidas.
+    await open('/arca');
+    scene('dex');
+    await tap(find.text(l10n.navDex).last, after: 1600);
+    final dexGrid = tester.state<ScrollableState>(find.byType(Scrollable).first).position;
+    unawaited(dexGrid.animateTo(dexGrid.pixels + 900, duration: const Duration(milliseconds: 1300), curve: Curves.easeInOutCubic));
+    await hold(1500);
+    unawaited(dexGrid.animateTo(0, duration: const Duration(milliseconds: 700), curve: Curves.easeInOutCubic));
+    await hold(900);
+
+    // 10. Ficha de Charizard: formas especiales, Gigamax desbloqueada.
+    scene('dex_species');
+    await tap(find.byKey(const ValueKey('dex-6')), after: 1500);
+    await glide(find.byKey(const ValueKey('dex-special-gmax:6:*')), alignment: 0.3, ms: 1200);
     await hold(2200);
 
     scene('end');

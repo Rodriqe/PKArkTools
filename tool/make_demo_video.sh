@@ -11,7 +11,7 @@
 #
 # Salidas:
 #   docs/media/pkarktools-demo.mp4    inglés, 1920×1080 (repo, ≤ 10 MB)
-#   docs/media/pkarktools-demo.webp   inglés, 600 px, ~12 s (vista previa del README)
+#   docs/media/pkarktools-demo.webp   inglés, 600 px, ~13 s (vista previa del README)
 #   .scratch/video/fb/pkarktools-demo-es-vertical.mp4   español, 1080×1920 (Reels/historias)
 #   .scratch/video/fb/pkarktools-demo-es-cuadrado.mp4   español, 1080×1080 (feed)
 #
@@ -55,14 +55,16 @@ REPO_URL="github.com/Rodriqe/PKArkTools"
 # siguiente; negativo = antes), velocidad.
 SCENES=(
   "welcome  1.00 -0.10 1.00"
-  "arca     0.90 -0.05 1.25"
-  "filters  0.00 -1.00 1.30"
-  "save     0.00  0.00 1.25"
-  "editor   0.00  0.00 1.60"
-  "origin   0.00  0.00 1.40"
-  "legality 0.00  0.00 1.30"
-  "save_arca 0.00 0.00 1.50"
-  "compare  0.00  0.00 1.15"
+  "arca     0.90 -0.05 1.30"
+  "filters  0.00 -1.00 1.35"
+  "save     0.00  0.00 1.35"
+  "editor   0.00  0.00 1.70"
+  "origin   0.00  0.00 1.50"
+  "legality 0.00  0.00 1.35"
+  "save_arca 0.00 0.00 1.55"
+  "compare  0.00 -1.10 1.20"
+  "dex      0.00  0.00 1.20"
+  "dex_species 0.00 0.00 1.15"
 )
 
 caption() { # $1 = lang, $2 = escena
@@ -70,21 +72,25 @@ caption() { # $1 = lang, $2 = escena
     en:welcome) echo "Your saves, safe in your own folder" ;;
     en:arca) echo "Every save in one Ark, colored by version" ;;
     en:filters) echo "Filter by console, game or play time" ;;
-    en:save) echo "Party and boxes, with icons" ;;
+    en:save) echo "Current version, history, party and boxes" ;;
     en:editor) echo "Edit level, shiny and moves" ;;
     en:origin) echo "Origin, ribbons and marks" ;;
     en:legality) echo "Legality warnings, with safe fixes" ;;
     en:save_arca) echo "Save a new copy to the Ark" ;;
     en:compare) echo "Compare any two copies" ;;
+    en:dex) echo "The Dex: every species in all your saves" ;;
+    en:dex_species) echo "Special forms, like Gigantamax, unlocked" ;;
     es:welcome) echo "Tus partidas, a salvo en tu propia carpeta" ;;
     es:arca) echo "Todas tus partidas en un Arca, con el color de cada versión" ;;
     es:filters) echo "Filtra por consola, juego u horas de juego" ;;
-    es:save) echo "Equipo y cajas, con iconos" ;;
+    es:save) echo "Versión actual, historial, equipo y cajas" ;;
     es:editor) echo "Edita nivel, variocolor y movimientos" ;;
     es:origin) echo "Origen, cintas y marcas" ;;
     es:legality) echo "Avisos de legalidad y corrección segura" ;;
     es:save_arca) echo "Guarda una copia nueva en el Arca" ;;
     es:compare) echo "Compara dos copias cuando quieras" ;;
+    es:dex) echo "La Dex: todas las especies de todas tus partidas" ;;
+    es:dex_species) echo "Formas especiales, como Gigamax, desbloqueadas" ;;
   esac
 }
 tagline() { [ "$1" = es ] && echo "Copias versionadas, lector y editor de tus partidas guardadas" || echo "Versioned backups, a reader and an editor for your game saves"; }
@@ -228,19 +234,20 @@ assemble() { # $1 = salida, resto = piezas; usa ENC (array) para el códec final
     "${ENC[@]}" -c:a aac -b:a 64k -map_metadata -1 -map_chapters -1 -movflags +faststart "$out"
 }
 
-build() { # $1 = lang, $2 = layout, $3 = salida
+build() { # $1 = lang, $2 = layout, $3 = salida, $4 = «nocards» (sin tarjetas); escenas de PLAY
   LAYOUT="$2"; layout "$2"; assets "$2"
-  local parts=() k=0
-  card "$1" title "p_${1}_${2}_00.mp4" 3.0; parts+=("p_${1}_${2}_00.mp4")
-  for s in "${SCENES[@]}"; do
+  local parts=() k=0 cards=1 tag="${2}${4:+_$4}"
+  [ "${4:-}" = nocards ] && cards=0
+  [ $cards = 1 ] && { card "$1" title "p_${1}_${tag}_00.mp4" 3.0; parts+=("p_${1}_${tag}_00.mp4"); }
+  for s in "${PLAY[@]}"; do
     # shellcheck disable=SC2086
     set -- "$1" "$2" "$3" $s
     k=$((k + 1))
-    local out; out="p_${1}_${2}_$(printf %02d $k).mp4"
+    local out; out="p_${1}_${tag}_$(printf %02d $k).mp4"
     clip_scene "$1" "$4" "$5" "$6" "$7" "$out"
     parts+=("$out")
   done
-  card "$1" end "p_${1}_${2}_99.mp4" 4.0; parts+=("p_${1}_${2}_99.mp4")
+  [ $cards = 1 ] && { card "$1" end "p_${1}_${tag}_99.mp4" 4.0; parts+=("p_${1}_${tag}_99.mp4"); }
   assemble "$3" "${parts[@]}"
   printf '%s  %s s  %s\n' "$3" "$(dur "$3")" "$(du -h "$3" | cut -f1)"
 }
@@ -249,6 +256,8 @@ for l in en es; do
   [ -s "$TAKES/demo_$l.mp4" ] && [ -s "$TAKES/demo_$l.scenes" ] || { echo "faltan las tomas «$l»: tool/record_demo_video.sh $l" >&2; exit 1; }
 done
 
+PLAY=("${SCENES[@]}")
+if [ "${PREVIEW_ONLY:-0}" != 1 ]; then  # PREVIEW_ONLY=1: solo la vista previa del README
 # Facebook (español): H.264 High, 30 fps, ≤ 60 s, ≤ 30 MB.
 ENC=(-c:v libx264 -preset slow -crf 20 -maxrate 4M -bufsize 8M -pix_fmt yuv420p -profile:v high -r 30)
 build es vertical "$FB/pkarktools-demo-es-vertical.mp4"
@@ -257,12 +266,20 @@ build es square "$FB/pkarktools-demo-es-cuadrado.mp4"
 # Repo (inglés): 1080p ≤ 10 MB.
 ENC=(-c:v libx264 -preset slow -crf 21 -maxrate 3M -bufsize 6M -pix_fmt yuv420p -profile:v high -r 30)
 build en horizontal "$MEDIA/pkarktools-demo.mp4"
+fi
 
 # Vista previa animada del README: composición cuadrada en inglés, 600 px,
-# del Arca al editor (~12 s), en bucle.
+# ~13 s en bucle: el Arca, una partida con su versión actual y la Dex con la
+# forma Gigamax (más rápido que en el vídeo y sin tarjetas).
+PLAY=(
+  "arca     0.90 -0.05 1.30"
+  "save     0.00 -1.00 1.30"
+  "dex      0.00  0.00 1.20"
+  "dex_species 0.00 -0.60 1.15"
+)
 ENC=(-c:v libx264 -preset veryfast -crf 16 -pix_fmt yuv420p -r 30)
-build en square "$WORK/preview_square_en.mp4"
-ff -ss 2.6 -t 12 -i "$WORK/preview_square_en.mp4" -an \
+build en square "$WORK/preview_square_en.mp4" nocards
+ff -i "$WORK/preview_square_en.mp4" -an \
   -vf "fps=12,scale=600:600:flags=lanczos" -c:v libwebp_anim -lossless 0 -quality 62 -compression_level 6 \
   -loop 0 -map_metadata -1 "$MEDIA/pkarktools-demo.webp"
 printf '%s  %s\n' "$MEDIA/pkarktools-demo.webp" "$(du -h "$MEDIA/pkarktools-demo.webp" | cut -f1)"
