@@ -11,6 +11,27 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [1.0.3] — 2026-11-24
+
+### Added
+- Special forms have their own icon: all 34 Gigantamax forms (one per form
+  for Toxtricity and Urshifu), all 49 Legends: Z-A and Mega Dimension Megas,
+  plus the Gen 6/7 Megas, Primal Kyogre/Groudon and Ultra Necrozma, each with
+  its shiny version. They come from other folders of the same pinned
+  `smogon/sprites` commit (HOME box-icon dump, Pokémon Champions icons and
+  HOME renders), still downloaded on demand. Silvally types and Terapagos'
+  Terastal and Stellar forms get their own icon too.
+- Dex: special-form cards (and their locked silhouettes) use the form's icon
+  and show the shiny icon once the shiny variant is unlocked; "Your
+  specimens" draws a Pokémon with the Gigantamax Factor as Gigantamax. A
+  form with no icon keeps the species icon with a G / MEGA / P / ULTRA badge.
+
+### Changed
+- "Download all icons" is now ~22 MB (~2400 files); "Repair icons" covers
+  the new ones. The icons guide lists the sources and the forms with no icon
+  in any reliable source (Koraidon/Miraidon ride modes, Spiky-eared Pichu).
+- Dex screenshots (desktop, phone, Android and iOS) show the new icons.
+
 ## [1.0.2] — 2026-11-23
 
 ### Changed

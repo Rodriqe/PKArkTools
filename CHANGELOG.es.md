@@ -11,6 +11,30 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [1.0.3] — 2026-11-24
+
+### Añadido
+- Las formas especiales tienen icono propio: las 34 Gigamax (una por forma
+  en Toxtricity y Urshifu), las 49 Megas de Leyendas Z-A y Mega Dimensión,
+  además de las Megas de Gen 6/7, Kyogre/Groudon primigenios y Ultra
+  Necrozma, cada una con su variocolor. Salen de otras carpetas del mismo
+  commit fijado de `smogon/sprites` (volcado de iconos de caja de HOME,
+  iconos de Pokémon Champions y renders de HOME) y siguen descargándose bajo
+  demanda. Los tipos de Silvally y las formas Teracristal y Astral de
+  Terapagos también tienen el suyo.
+- Dex: las tarjetas de formas especiales (y sus siluetas bloqueadas) usan el
+  icono de la forma y muestran el variocolor cuando está desbloqueado; en
+  «Tus ejemplares», un Pokémon con el factor Gigamax se ve Gigamax. Una forma
+  sin icono mantiene el de la especie con una insignia G / MEGA / P / ULTRA.
+
+### Cambiado
+- «Descargar todos los iconos» pasa a ~22 MB (~2400 archivos); «Reparar
+  iconos» cubre los nuevos. La guía de iconos lista las fuentes y las formas
+  sin icono en ninguna fuente fiable (modos de Koraidon/Miraidon, Pichu
+  picoreja).
+- Capturas de la Dex (escritorio, teléfono, Android e iOS) con los iconos
+  nuevos.
+
 ## [1.0.2] — 2026-11-23
 
 ### Cambiado
