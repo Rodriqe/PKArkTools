@@ -1100,6 +1100,7 @@ abstract final class SyntheticSaves {
     }
     pk.setIvs([for (var i = 0; i < 6; i++) (salt * 7 + i * 5) % 32]);
     if (m.shadow == 2) Ribbons.set(pk, 'RibbonNational', 1);
+    if (!colo && enc != null) pk.fatefulEncounter = true; // XD: obediencia
     if (m.nickname != null) {
       pk.setNickname(m.nickname);
     } else {

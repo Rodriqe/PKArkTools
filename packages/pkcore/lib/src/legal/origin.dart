@@ -1,5 +1,6 @@
 import '../data/game_data.dart';
 import '../data/generated/encounter_data.dart';
+import '../data/generated/gc_data.dart';
 import '../model/game.dart';
 import '../pkm/pk_format.dart';
 import '../pkm/pkm.dart';
@@ -153,6 +154,9 @@ abstract final class OriginPlace {
         1 || 2 => GameVersion.rubySapphire,
         3 => GameVersion.emerald,
         4 || 5 => GameVersion.fireRedLeafGreen,
+        15 => GameVersion.colosseum,
+        66 => GameVersion.colosseum,
+        67 => GameVersion.xd,
         7 || 8 => GameVersion.heartGoldSoulSilver,
         10 || 11 => GameVersion.diamondPearl,
         12 => GameVersion.platinum,
@@ -205,7 +209,14 @@ abstract final class OriginPlace {
     final out = <LocationOption>[
       for (final id in valid) LocationOption(id, EncounterTables.locationName(version, id, lang), encounter: true),
     ]..sort((a, b) => a.name.compareTo(b.name));
-    if (all) {
+    if (all && version == EncounterTables.cxd) {
+      final names = lang == DataLanguage.es ? kGcLocationsEs : kGcLocationsEn;
+      final rest = <LocationOption>[
+        for (var id = 1; id < names.length; id++)
+          if (!valid.contains(id) && names[id].trim().isNotEmpty) LocationOption(id, names[id]),
+      ]..sort((a, b) => a.name.compareTo(b.name));
+      out.addAll(rest);
+    } else if (all) {
       final key = _key(version);
       final raw = kLocationNames['${key}_${lang.name}'] ?? '';
       final rest = <LocationOption>[];

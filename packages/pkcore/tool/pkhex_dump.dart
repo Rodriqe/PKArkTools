@@ -121,6 +121,9 @@ Map<String, Object?> _mon(String slot, Pkm pk, GameVersion game) {
     'version': pk.version,
     'fateful': pk.fatefulEncounter,
     'checksumValid': pk.checksumValid,
+    'shadowId': pk.gc?.shadowId,
+    'purification': pk.gc?.purification,
+    'isShadow': pk.gc?.isShadow,
     'legality': {
       'valid': issues.every((i) => i.severity != LegalitySeverity.warning),
       'issues': [

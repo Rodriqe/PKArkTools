@@ -1,10 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:pkcore/pkcore.dart';
-import 'package:pkcore/src/crypto/gc_crypto.dart';
-import 'package:pkcore/src/edit/gc_editor.dart';
-import 'package:pkcore/src/formats/gc_container.dart';
-import 'package:pkcore/src/pkm/gc_pkm.dart';
 import 'package:pkcore/testing.dart';
 import 'package:test/test.dart';
 
@@ -263,6 +259,85 @@ void main() {
       expect(back.gc!.shadowId, pk.gc!.shadowId);
       final x = SaveEditor.open(xd).get(const SlotRef.box(0, 0))!;
       expect(GcPkm.fromFile(GcKind.xk3, GcPkm.toFile(x, GcKind.xk3))!.species, 27);
+    });
+  });
+
+  group('legalidad', () {
+    List<LegalityCode> codes(Pkm pk, GameVersion g) => [for (final i in Legality.check(pk, g)) i.code];
+    const gcCodes = {
+      LegalityCode.shadowCannotLeave,
+      LegalityCode.shadowIdMismatch,
+      LegalityCode.shadowGaugeInvalid,
+      LegalityCode.shadowNationalRibbon,
+      LegalityCode.xdFatefulMissing,
+      LegalityCode.encounterNotInGame,
+      LegalityCode.encounterWrongLocation,
+      LegalityCode.encounterWrongLevel,
+    };
+
+    test('los saves de demostración no tienen avisos de Colosseum/XD ni de encuentro', () {
+      for (final bytes in [colo, xd]) {
+        final ed = SaveEditor.open(bytes);
+        for (final ref in [
+          for (var i = 0; i < ed.partyCount; i++) SlotRef.party(i),
+          for (var s = 0; s < 30; s++) SlotRef.box(0, s),
+        ]) {
+          final pk = ed.get(ref);
+          if (pk == null) continue;
+          expect(codes(pk, ed.game).where(gcCodes.contains), isEmpty, reason: '$ref #${pk.species}');
+        }
+      }
+    });
+
+    test('purificado sin Cinta Nacional: aviso y corrección', () {
+      final ed = SaveEditor.open(colo);
+      final pk = ed.get(const SlotRef.party(3))!;
+      Ribbons.set(pk, 'RibbonNational', 0);
+      final issue = Legality.check(pk, ed.game).firstWhere((i) => i.code == LegalityCode.shadowNationalRibbon);
+      expect(issue.args['required'], true);
+      final fixed = Legality.applyFix(pk, issue, ed.game)!;
+      expect(Ribbons.get(fixed, 'RibbonNational'), 1);
+      expect(codes(fixed, ed.game), isNot(contains(LegalityCode.shadowNationalRibbon)));
+    });
+
+    test('oscuro con Cinta Nacional: aviso', () {
+      final pk = SaveEditor.open(colo).get(const SlotRef.party(2))!;
+      Ribbons.set(pk, 'RibbonNational', 1);
+      expect(codes(pk, GameVersion.colosseum), contains(LegalityCode.shadowNationalRibbon));
+    });
+
+    test('XD sin marca de encuentro fatídico: aviso y corrección', () {
+      final ed = SaveEditor.open(xd);
+      final pk = ed.get(const SlotRef.box(0, 0))!; // Sandshrew de Poké Spot
+      pk.fatefulEncounter = false;
+      final issue = Legality.check(pk, ed.game).firstWhere((i) => i.code == LegalityCode.xdFatefulMissing);
+      expect(Legality.applyFix(pk, issue, ed.game)!.fatefulEncounter, isTrue);
+    });
+
+    test('un oscuro no puede salir del juego; uno purificado llega a GBA con su cinta', () {
+      final ed = SaveEditor.open(xd);
+      final shadow = ed.get(const SlotRef.party(2))!;
+      expect(codes(shadow, GameVersion.emerald), contains(LegalityCode.shadowCannotLeave));
+      final gba = SaveEditor.open(SyntheticSaves.gen3(party: const [SynthMon(25)]));
+      expect(() => gba.set(const SlotRef.box(0, 0), shadow), throwsA(isA<SaveEditException>()));
+      final purified = ed.get(const SlotRef.party(1))!; // Teddiursa purificado
+      gba.set(const SlotRef.box(0, 0), purified);
+      final got = SaveEditor.open(gba.buildVerified()).get(const SlotRef.box(0, 0))!;
+      expect(got.gc, isNull);
+      expect(got.fatefulEncounter, isTrue);
+      expect(Ribbons.get(got, 'RibbonNational'), 1);
+      expect(codes(got, GameVersion.emerald).where(gcCodes.contains), isEmpty);
+    });
+
+    test('id oscuro de otra especie', () {
+      final pk = SaveEditor.open(colo).get(const SlotRef.party(2))!;
+      pk.gc!.shadowId = 44; // Tyranitar
+      expect(codes(pk, GameVersion.colosseum), contains(LegalityCode.shadowIdMismatch));
+    });
+
+    test('lugares de Colosseum/XD con nombre', () {
+      expect(EncounterTables.locationName(15, 74, DataLanguage.en), contains('Citadark'));
+      expect(EncounterTables.forVersion(15).where((e) => e.species == 249), isNotEmpty);
     });
   });
 }

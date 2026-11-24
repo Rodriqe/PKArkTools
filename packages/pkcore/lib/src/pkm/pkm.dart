@@ -1100,11 +1100,28 @@ class Pkm {
 
   /// Encuentro fatídico (marca de evento).
   bool get fatefulEncounter => switch (format) {
+        PkFormat.pk3 => data.u32le(0x4C) >> 31 == 1,
         PkFormat.pk4 || PkFormat.pk5 => data[0x40] & 1 == 1,
         PkFormat.pk6 || PkFormat.pk7 || PkFormat.pb7 => data[0x1D] & 1 == 1,
-        PkFormat.pk1 || PkFormat.pk2 || PkFormat.pk3 => false,
+        PkFormat.pk1 || PkFormat.pk2 => false,
         _ => data[0x22] & 1 == 1,
       };
+
+  set fatefulEncounter(bool v) {
+    switch (format) {
+      case PkFormat.pk1 || PkFormat.pk2:
+        return;
+      case PkFormat.pk3:
+        final r = data.u32le(0x4C);
+        data.setU32le(0x4C, v ? r | 0x80000000 : r & 0x7FFFFFFF);
+      case PkFormat.pk4 || PkFormat.pk5:
+        data[0x40] = (data[0x40] & ~1) | (v ? 1 : 0);
+      case PkFormat.pk6 || PkFormat.pk7 || PkFormat.pb7:
+        data[0x1D] = (data[0x1D] & ~1) | (v ? 1 : 0);
+      default:
+        data[0x22] = (data[0x22] & ~1) | (v ? 1 : 0);
+    }
+  }
 
   /// Lugar de encuentro (id interno del juego de origen; -1 si el formato no lo guarda).
   ///

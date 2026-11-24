@@ -423,6 +423,23 @@ abstract final class GcPkm {
     return out;
   }
 
+  /// Copia de [pk] tal como llega a un juego de GBA (PKHeX `XK3.ConvertToPK3`):
+  /// sin datos de GameCube y, si viene de XD, con la marca de encuentro
+  /// fatídico (obediencia) y la Cinta Nacional si fue oscuro.
+  static Pkm toGba(Pkm pk) {
+    final gc = pk.gc;
+    final out = pk.clone()..gc = null;
+    if (gc == null || gc.kind != GcKind.xk3 || out.version != 15) return out;
+    final rib = out.data.u32le(0x4C);
+    if (gc.shadowId != 0) {
+      out.data.setU32le(0x4C, rib | (1 << 24) | 0x80000000);
+    } else if (const {0, 16, 90, 91, 92}.contains(out.metLocation)) {
+      out.data.setU32le(0x4C, rib | 0x80000000);
+    }
+    out.refreshChecksum();
+    return out;
+  }
+
   /// Archivo suelto `.ck3`/`.xk3` (bytes tal cual, big endian, sin cifrar).
   static Uint8List toFile(Pkm pk, GcKind kind, {GcRegion region = GcRegion.ntscU}) =>
       write(pk, kind, region: pk.gc?.currentRegion ?? region);

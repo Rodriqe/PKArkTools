@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import '../detect/save_detector.dart';
 import '../model/game.dart';
 import '../model/save.dart';
+import '../pkm/gc_pkm.dart';
 import '../pkm/pk_format.dart';
 import '../pkm/pkm.dart';
 import 'ctr_editors.dart';
@@ -394,6 +395,13 @@ abstract class SaveEditor {
   /// añadir más allá del final lo coloca al final.
   void set(SlotRef ref, Pkm? pk) {
     _checkStorage();
+    if (pk != null && pk.gc != null && !game.isGameCube) {
+      if (pk.gc!.isShadow) {
+        throw const SaveEditException(
+            'Un Pokémon oscuro no se puede llevar a otro juego: primero hay que purificarlo en Colosseum o XD.');
+      }
+      pk = GcPkm.toGba(pk);
+    }
     if (pk != null && pk.format != format) {
       throw SaveEditException('Formato ${pk.format.extension} no compatible con ${game.nameEs} (${format.extension}).');
     }

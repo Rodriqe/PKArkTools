@@ -21,6 +21,11 @@ Comandos de la consola (`dotnet <bin>/PkhexOracle.dll …`):
 - `dump <save> [out.json]`: entrenador, equipo y cajas (todos los campos),
   inventario, Pokédex y el veredicto de `LegalityAnalysis` con cada aviso.
 - `roundtrip <save>`: carga y reescribe sin cambios; cuenta bytes distintos.
+  Ojo: con Colosseum/XD PKHeX descifra el archivo de entrada en memoria, así
+  que el recuento sale alto aunque el resultado sea idéntico; usa `write`.
+- `write <in> <out>`: carga y escribe sin cambios (para comparar con `cmp`).
+- Las imágenes de Memory Card de GameCube se abren como en PKHeX.WinForms
+  (`SAV3GCMemoryCard`), si tienen un solo save de Pokémon.
 - `edit <in> <out>`: edición simple (dinero y primer Pokémon de la caja 1) para
   el round-trip cruzado con `pkhex_dump.dart --edit`.
 - `forms <dir>`: tabla (juego, especie, forma) de todos los juegos de Gen 3–9

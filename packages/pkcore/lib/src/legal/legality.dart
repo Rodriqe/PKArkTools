@@ -6,8 +6,10 @@ import '../pkm/pk_format.dart';
 import '../pkm/pkm.dart';
 import 'balls.dart';
 import 'encounters.dart';
+import 'gc_legality.dart';
 import 'origin.dart';
 import 'plus_moves.dart';
+import 'ribbons.dart';
 
 /// Gravedad de un aviso. Ninguno bloquea al usuario.
 enum LegalitySeverity {
@@ -57,13 +59,36 @@ enum LegalityCode {
   // ---- Leyendas Z-A: flags de movimientos «plus» (PKHeX `LegendsZAVerifier`)
   plusMoveMissing,
   plusMoveInvalid,
+  // ---- Colosseum / XD (PKHeX `RibbonRules`, `EncounterShadow3*`)
+  shadowCannotLeave,
+  shadowIdMismatch,
+  shadowGaugeInvalid,
+  shadowNationalRibbon,
+  xdFatefulMissing,
 }
 
 /// Agrupación de avisos en la vista detallada.
 enum LegalityArea { encounter, origin, moves, stats, misc }
 
 /// Corrección automática "segura": solo toca el campo del aviso.
-enum LegalityFix { ball, ability, shiny, relearn, moves, level, metLevel, evs, ivs, pp, duplicateMove, metDate, obedienceLevel, plusFlags }
+enum LegalityFix {
+  ball,
+  ability,
+  shiny,
+  relearn,
+  moves,
+  level,
+  metLevel,
+  evs,
+  ivs,
+  pp,
+  duplicateMove,
+  metDate,
+  obedienceLevel,
+  plusFlags,
+  nationalRibbon,
+  fateful,
+}
 
 /// Un aviso concreto sobre un Pokémon.
 class LegalityIssue {
@@ -91,8 +116,14 @@ class LegalityIssue {
         LegalityCode.levelBelowMet ||
         LegalityCode.ballInvalid =>
           LegalityArea.origin,
-        LegalityCode.encounterNotInGame || LegalityCode.encounterWrongLocation || LegalityCode.encounterWrongLevel =>
+        LegalityCode.encounterNotInGame ||
+        LegalityCode.encounterWrongLocation ||
+        LegalityCode.encounterWrongLevel ||
+        LegalityCode.shadowIdMismatch ||
+        LegalityCode.shadowGaugeInvalid ||
+        LegalityCode.shadowCannotLeave =>
           LegalityArea.encounter,
+        LegalityCode.shadowNationalRibbon || LegalityCode.xdFatefulMissing => LegalityArea.origin,
         LegalityCode.moveNotInGame ||
         LegalityCode.moveNotLearnable ||
         LegalityCode.moveDuplicate ||
@@ -169,6 +200,25 @@ class LegalityIssue {
       LegalityCode.plusMoveInvalid => es
           ? 'Tiene la marca «plus» de movimientos que no puede aprender en Leyendas Z-A a su nivel (ni por MT ni por nivel): ${a('moves')}. Corregir quita esas marcas.'
           : 'It has the Plus flag for moves it cannot learn in Legends: Z-A at its level (neither by TM nor by level-up): ${a('moves')}. Fixing clears those flags.',
+      LegalityCode.shadowCannotLeave => es
+          ? 'Un Pokémon oscuro no se puede intercambiar ni enviar a un juego de GBA: primero hay que purificarlo en Colosseum o XD (la Cámara de Purificación o el Altar). Al purificarlo recibe la Cinta Nacional.'
+          : 'A Shadow Pokémon cannot be traded or sent to a GBA game: it must be purified first in Colosseum or XD (Purify Chamber or Relic Stone). Purifying it grants the National Ribbon.',
+      LegalityCode.shadowIdMismatch => es
+          ? 'El id de Pokémon oscuro ${a('id')} corresponde a ${a('expected')} en este juego, no a ${a('species')}. El juego usa ese id para el medidor de corazón y el registro de capturas.'
+          : 'Shadow ID ${a('id')} belongs to ${a('expected')} in this game, not ${a('species')}. The game uses that ID for the heart gauge and the snag records.',
+      LegalityCode.shadowGaugeInvalid => es
+          ? 'El medidor de corazón (${a('value')}) está fuera del rango del juego (0–${a('max')}). No se corrige solo: purificar a la fuerza no es lo mismo que purificar en el juego.'
+          : 'The heart gauge (${a('value')}) is outside the game range (0–${a('max')}). It is not fixed automatically: forcing purification is not the same as purifying in-game.',
+      LegalityCode.shadowNationalRibbon => es
+          ? (args['required'] == true
+              ? '${a('species')} fue un Pokémon oscuro y ya está purificado: el juego le da la Cinta Nacional al purificarlo. Corregir la añade.'
+              : '${a('species')} no tiene la Cinta Nacional legítimamente: solo la recibe un Pokémon oscuro al purificarse. Corregir la quita.')
+          : (args['required'] == true
+              ? '${a('species')} was a Shadow Pokémon and is purified: the game grants the National Ribbon on purification. Fixing adds it.'
+              : '${a('species')} cannot legitimately have the National Ribbon: only a Shadow Pokémon receives it when purified. Fixing removes it.'),
+      LegalityCode.xdFatefulMissing => es
+          ? 'Todos los Pokémon obtenidos en XD (oscuros, regalos, intercambios y Poké Spots) llevan la marca de encuentro fatídico, que hace que obedezcan. Corregir la pone.'
+          : 'Every Pokémon obtained in XD (Shadow, gifts, trades and Poké Spots) carries the fateful-encounter flag, which makes it obey. Fixing sets it.',
       LegalityCode.moveNotLearnable => es
           ? '${message(lang)} Corregir sustituye los movimientos dudosos por los últimos que aprende por nivel.'
           : '${message(lang)} Fixing replaces the doubtful moves with the latest level-up moves.',
@@ -271,6 +321,14 @@ class LegalityIssue {
       LegalityCode.obedienceLevelInvalid => es ? 'Nivel de obediencia inválido.' : 'Invalid obedience level.',
       LegalityCode.plusMoveMissing => es ? 'Faltan marcas «plus»: ${a('moves')}.' : 'Missing Plus move flags: ${a('moves')}.',
       LegalityCode.plusMoveInvalid => es ? 'Marcas «plus» imposibles: ${a('moves')}.' : 'Impossible Plus move flags: ${a('moves')}.',
+      LegalityCode.shadowCannotLeave =>
+        es ? '${a('species')} es un Pokémon oscuro sin purificar.' : '${a('species')} is an unpurified Shadow Pokémon.',
+      LegalityCode.shadowIdMismatch => es ? 'Id de Pokémon oscuro de otra especie.' : 'Shadow ID of another species.',
+      LegalityCode.shadowGaugeInvalid => es ? 'Medidor de corazón fuera de rango.' : 'Heart gauge out of range.',
+      LegalityCode.shadowNationalRibbon => es
+          ? (args['required'] == true ? 'Falta la Cinta Nacional (purificado).' : 'Cinta Nacional imposible.')
+          : (args['required'] == true ? 'Missing National Ribbon (purified).' : 'Impossible National Ribbon.'),
+      LegalityCode.xdFatefulMissing => es ? 'Falta la marca de encuentro fatídico de XD.' : 'Missing XD fateful-encounter flag.',
     };
   }
 
@@ -438,6 +496,7 @@ abstract final class Legality {
     }
     _checkOrigin(pk, game, table, issues, lang, speciesName);
     _checkEncounter(pk, issues, lang, speciesName);
+    issues.addAll(GcLegality.check(pk, game, speciesName));
     return issues;
   }
 
@@ -716,6 +775,12 @@ abstract final class Legality {
         p.healPp(ctx);
       case LegalityFix.plusFlags:
         PlusMoves.sync(p);
+      case LegalityFix.nationalRibbon:
+        final want = GcLegality.nationalRibbonRequired(p);
+        if (want == null) return null;
+        Ribbons.set(p, 'RibbonNational', want ? 1 : 0);
+      case LegalityFix.fateful:
+        p.fatefulEncounter = true;
       case LegalityFix.duplicateMove:
         final seen = <int>{};
         final moves = [for (final m in p.moves) if (m != 0 && seen.add(m)) m];

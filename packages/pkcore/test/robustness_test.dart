@@ -10,7 +10,12 @@ const _box = {
   0: [SynthMon(1, level: 5), null, SynthMon(4, level: 7)],
 };
 
-/// Un save sintético por cada uno de los 22 formatos (GameVersion).
+const _gcTeam = [SynthGcMon(25, level: 30), SynthGcMon(133, level: 20)];
+const _gcBox = {
+  0: [SynthGcMon(1, level: 5), null, SynthGcMon(4, level: 7)],
+};
+
+/// Un save sintético por cada uno de los 24 formatos (GameVersion).
 final Map<GameVersion, Uint8List Function()> _fixtures = {
   GameVersion.redBlue: () => SyntheticSaves.gen1(party: _team),
   GameVersion.yellow: () => SyntheticSaves.gen1(party: _team, yellow: true),
@@ -19,6 +24,8 @@ final Map<GameVersion, Uint8List Function()> _fixtures = {
   GameVersion.rubySapphire: () => SyntheticSaves.gen3(game: GameVersion.rubySapphire, party: _team, boxes: _box),
   GameVersion.emerald: () => SyntheticSaves.gen3(party: _team, boxes: _box),
   GameVersion.fireRedLeafGreen: () => SyntheticSaves.gen3(game: GameVersion.fireRedLeafGreen, party: _team, boxes: _box),
+  GameVersion.colosseum: () => SyntheticSaves.gci(SyntheticSaves.colosseum(party: _gcTeam, boxes: _gcBox), GcTitle.colosseum),
+  GameVersion.xd: () => SyntheticSaves.memoryCard([(GcTitle.xd, SyntheticSaves.xd(party: _gcTeam, boxes: _gcBox))]),
   GameVersion.diamondPearl: () => SyntheticSaves.gen4(layout: Gen4Layout.dp, party: _team, boxes: _box),
   GameVersion.platinum: () => SyntheticSaves.gen4(party: _team, boxes: _box),
   GameVersion.heartGoldSoulSilver: () => SyntheticSaves.gen4(layout: Gen4Layout.hgss, party: _team, boxes: _box),
@@ -98,7 +105,7 @@ void main() {
     print('fuzzing: $byKind');
   });
 
-  test('hay un save sintético para cada uno de los 22 formatos', () {
+  test('hay un save sintético para cada uno de los 24 formatos', () {
     expect(_fixtures.keys.toSet(), GameVersion.values.toSet());
     for (final MapEntry(key: game, value: build) in _fixtures.entries) {
       expect(SaveDetector.detect(build()).game, game);

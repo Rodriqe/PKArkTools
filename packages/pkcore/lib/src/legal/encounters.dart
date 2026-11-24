@@ -2,6 +2,7 @@ import 'dart:convert';
 import '../data/forms.dart';
 import '../data/game_data.dart';
 import '../data/generated/encounter_data.dart';
+import '../data/generated/gc_data.dart';
 import '../pkm/pk_format.dart';
 import '../pkm/pkm.dart';
 import '../util/bytes.dart';
@@ -58,9 +59,25 @@ abstract final class EncounterTables {
   /// Juegos cuyas tablas cubren todas las fuentes normales de Pokémon
   /// (salvajes, estáticos, regalos e intercambios): ahí un desajuste es un
   /// aviso fuerte. En el resto es informativo.
-  static bool isComplete(int version) => const {24, 25, 26, 27, 30, 31, 32, 33, 42, 43}.contains(version);
+  static bool isComplete(int version) => const {15, 24, 25, 26, 27, 30, 31, 32, 33, 42, 43}.contains(version);
+
+  /// Versión de origen de Colosseum y XD (PKHeX `GameVersion.CXD`).
+  static const int cxd = 15;
+
+  /// Encuentros de Colosseum/XD (PKHeX `Encounters3Colo`/`Encounters3XD`):
+  /// oscuros (estáticos), iniciales y regalos, intercambios y Poké Spots.
+  static List<EncounterSlot> _gc() => [
+        for (final e in kGcEncounters)
+          EncounterSlot(e.$6, e.$3, 0, e.$4, e.$5, switch (e.$2) {
+            0 => EncounterKind.static,
+            1 || 2 => EncounterKind.gift,
+            3 => EncounterKind.trade,
+            _ => EncounterKind.wild,
+          }),
+      ];
 
   static List<EncounterSlot> forVersion(int version) => _cache.putIfAbsent(version, () {
+        if (version == cxd) return _gc();
         final raw = kEncounters[version];
         if (raw == null) return const [];
         final d = base64Decode(raw);
@@ -101,6 +118,12 @@ abstract final class EncounterTables {
   static String locationName(int version, int location, [DataLanguage lang = DataLanguage.es]) {
     if (location == EncounterSlot.anyLocation) return lang == DataLanguage.es ? 'intercambio' : 'trade';
     if (location == EncounterSlot.anyDen) return lang == DataLanguage.es ? 'incursión Dinamax' : 'Max Raid';
+    if (version == cxd) {
+      final list = lang == DataLanguage.es ? kGcLocationsEs : kGcLocationsEn;
+      if (location > 0 && location < list.length && list[location].trim().isNotEmpty) return list[location];
+      final es = lang == DataLanguage.es;
+      return location <= 0 ? (es ? 'un lugar desconocido' : 'an unknown place') : (es ? 'un lugar sin nombre (id $location)' : 'an unnamed place (id $location)');
+    }
     final key = '${_locKey(version)}_${lang.name}';
     final map = _names.putIfAbsent(key, () {
       final raw = kLocationNames[key] ?? '';
@@ -135,6 +158,7 @@ abstract final class EncounterTables {
   /// traspaso) que no aparece en las tablas de encuentros.
   static bool isSpecialLocation(PkFormat format, int version, int location) {
     if (location < 0) return true;
+    if (version == cxd) return false; // los lugares de Colosseum/XD están todos en las tablas
     final gen = switch (version) {
       >= 1 && <= 5 => 3,
       >= 7 && <= 12 => 4,

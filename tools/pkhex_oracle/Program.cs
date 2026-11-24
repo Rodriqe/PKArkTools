@@ -2,6 +2,7 @@
 //
 //   dump <save> [out.json]        vuelca el save a JSON (esquema común con tool/pkhex_dump.dart)
 //   roundtrip <save>              carga y vuelve a escribir sin cambios; cuenta bytes distintos
+//   write <in> <out>              carga y escribe sin cambios (para comparar el archivo resultante)
 //   edit <in> <out>               edición simple (dinero, nivel/movimiento del primer Pokémon de caja)
 //   forms <outdir>                tabla (especie, forma, juego) y nombres de forma (FormTable.cs)
 //   dex <outdir>                  formas especiales y evoluciones para la Dex global (DexTable.cs)
@@ -25,7 +26,9 @@ static class Program
             return 2;
         }
         var data = File.ReadAllBytes(args[1]);
-        if (!SaveUtil.TryGetSaveFile(data, out var sav, args[1]))
+        if (!SaveUtil.TryGetSaveFile(data, out var sav, args[1])
+            // Imagen de Memory Card de GameCube (como la abre PKHeX.WinForms).
+            && !(SAV3GCMemoryCard.IsMemoryCardSize(data) && SaveUtil.TryGetSaveFile(new SAV3GCMemoryCard(data), out sav)))
         {
             Console.Error.WriteLine($"PKHeX no reconoce el save: {args[1]}");
             return 1;
@@ -42,6 +45,9 @@ static class Program
                 for (var i = 0; i < Math.Min(output.Length, data.Length); i++)
                     if (output[i] != data[i]) diff++;
                 Console.WriteLine($"PKHeX round-trip: {output.Length} vs {data.Length} bytes, distintos={diff}");
+                return 0;
+            case "write":
+                File.WriteAllBytes(args[2], sav.Write().ToArray());
                 return 0;
             case "edit":
                 sav.Money = 123456;
@@ -179,6 +185,9 @@ static class Program
             ["version"] = (int)pk.Version,
             ["fateful"] = pk.FatefulEncounter,
             ["checksumValid"] = pk.ChecksumValid,
+            ["shadowId"] = pk is IShadowCapture sc ? sc.ShadowID : null,
+            ["purification"] = pk is IShadowCapture sp ? sp.Purification : null,
+            ["isShadow"] = pk is IShadowCapture ss ? ss.IsShadow : null,
             ["legality"] = new JsonObject
             {
                 ["valid"] = la.Valid,
