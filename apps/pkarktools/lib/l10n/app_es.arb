@@ -2319,5 +2319,31 @@
       }
     }
   },
-  "rmMemoryTitle": "Recuerdos de Gen 3 y 4"
+  "rmMemoryTitle": "Recuerdos de Gen 3 y 4",
+  "rmRankPos": "Puesto #{n} del ranking",
+  "@rmRankPos": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rmContestG3": "Concursos de Hoenn ({n})",
+  "@rmContestG3": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rmContestG4": "Superconcursos de Sinnoh ({n})",
+  "@rmContestG4": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rmContestOrderG3": "Cada categoría se gana en orden: Normal → Alto → Avanzado → Experto. Cualquier especie puede participar.",
+  "rmContestOrderG4": "Cada categoría se gana en orden: Normal → Difícil → Superior → Experto (Ciudad Corazón). Todas las especies menos Ditto y Unown."
 }

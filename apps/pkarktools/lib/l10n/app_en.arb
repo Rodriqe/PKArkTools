@@ -842,5 +842,10 @@
   "rmOriginEvent": "This species only comes from events or distributions.",
   "rmStepCount": "+{n}",
   "rmFormsLabel": "Can be: {list}",
-  "rmMemoryTitle": "Gen 3–4 memories"
+  "rmMemoryTitle": "Gen 3–4 memories",
+  "rmRankPos": "Rank #{n} overall",
+  "rmContestG3": "Hoenn contests ({n})",
+  "rmContestG4": "Sinnoh Super Contests ({n})",
+  "rmContestOrderG3": "Each condition is won in order: Normal → Super → Hyper → Master. Any species can enter.",
+  "rmContestOrderG4": "Each condition is won in order: Normal → Great → Ultra → Master (Hearthome City). Any species except Ditto and Unown."
 }

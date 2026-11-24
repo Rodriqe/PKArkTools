@@ -659,7 +659,7 @@ class _GuideHeader extends StatelessWidget {
                       style: (compact ? context.text.headlineSmall : context.text.displaySmall)!.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 6),
-                    Text('#${rank.position} · ${l10n.rmMaxToday}', style: context.text.labelMedium!.copyWith(color: tokens.muted)),
+                    Text(l10n.rmRankPos(rank.position), key: const ValueKey('rm-rank-pos'), style: context.text.labelMedium!.copyWith(color: tokens.muted)),
                   ],
                 ),
               ),
@@ -835,11 +835,18 @@ class _StepCard extends StatelessWidget {
                         spacing: 8,
                         runSpacing: 8,
                         children: [
+                          for (final g in const ['G3', 'G4'])
+                            if (step.ribbons.any((e) => _isContest(e, g)))
+                              SizedBox(
+                                width: c.maxWidth,
+                                child: _ContestGroup(gen: g, entries: [for (final e in step.ribbons) if (_isContest(e, g)) e]),
+                              ),
                           for (final e in step.ribbons)
-                            SizedBox(
-                              width: w,
-                              child: _RibbonCard(entry: e),
-                            ),
+                            if (!_isContest(e, 'G3') && !_isContest(e, 'G4'))
+                              SizedBox(
+                                width: w,
+                                child: _RibbonCard(entry: e),
+                              ),
                         ],
                       );
                     },
@@ -856,6 +863,72 @@ class _StepCard extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+bool _isContest(RibbonGuideEntry e, String gen) => e.key.startsWith('Ribbon$gen');
+
+/// Las 20 cintas de concurso de Gen 3 o Gen 4 en una tarjeta: una fila por
+/// categoría con sus cuatro rangos en orden.
+class _ContestGroup extends StatelessWidget {
+  const _ContestGroup({required this.gen, required this.entries});
+  final String gen;
+  final List<RibbonGuideEntry> entries;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final tokens = context.tokens;
+    final lang = context.dexLang;
+    final g3 = gen == 'G3';
+    final narrow = MediaQuery.sizeOf(context).width < 520;
+    final icon = narrow ? 24.0 : 30.0;
+    final byCat = <String, List<RibbonGuideEntry>>{};
+    for (final e in entries) {
+      final cat = RegExp('^Ribbon$gen(Cool|Beauty|Cute|Smart|Tough)').firstMatch(e.key)![1]!;
+      byCat.putIfAbsent(cat, () => []).add(e);
+    }
+    return Container(
+      key: ValueKey('rm-contests-$gen'),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: tokens.base.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: tokens.hairline),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(g3 ? l10n.rmContestG3(entries.length) : l10n.rmContestG4(entries.length), style: context.text.titleSmall),
+        const SizedBox(height: 2),
+        Text(g3 ? l10n.rmContestOrderG3 : l10n.rmContestOrderG4, style: context.text.bodySmall!.copyWith(color: tokens.muted)),
+        const SizedBox(height: 10),
+        for (final list in byCat.values)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Row(children: [
+              SizedBox(
+                width: narrow ? 64 : 92,
+                child: Text(
+                  list.first.name(lang).replaceAll(RegExp(r'\s*\(G[34]\)'), ''),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.text.labelLarge,
+                ),
+              ),
+              Expanded(
+                child: Wrap(spacing: narrow ? 1 : 4, runSpacing: 4, crossAxisAlignment: WrapCrossAlignment.center, children: [
+                  for (final (i, e) in list.indexed) ...[
+                    if (i > 0) Icon(Icons.chevron_right_rounded, size: narrow ? 10 : 16, color: tokens.muted),
+                    Tooltip(
+                      message: '${e.name(lang)} — ${e.how(lang)}',
+                      child: e.info == null ? SizedBox(width: icon) : RibbonIcon(ribbon: e.info!, size: icon),
+                    ),
+                  ],
+                ]),
+              ),
+            ]),
+          ),
+      ]),
     );
   }
 }

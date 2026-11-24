@@ -3202,4 +3202,27 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get rmMemoryTitle => 'Recuerdos de Gen 3 y 4';
+
+  @override
+  String rmRankPos(int n) {
+    return 'Puesto #$n del ranking';
+  }
+
+  @override
+  String rmContestG3(int n) {
+    return 'Concursos de Hoenn ($n)';
+  }
+
+  @override
+  String rmContestG4(int n) {
+    return 'Superconcursos de Sinnoh ($n)';
+  }
+
+  @override
+  String get rmContestOrderG3 =>
+      'Cada categoría se gana en orden: Normal → Alto → Avanzado → Experto. Cualquier especie puede participar.';
+
+  @override
+  String get rmContestOrderG4 =>
+      'Cada categoría se gana en orden: Normal → Difícil → Superior → Experto (Ciudad Corazón). Todas las especies menos Ditto y Unown.';
 }

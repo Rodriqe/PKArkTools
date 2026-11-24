@@ -3179,4 +3179,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rmMemoryTitle => 'Gen 3–4 memories';
+
+  @override
+  String rmRankPos(int n) {
+    return 'Rank #$n overall';
+  }
+
+  @override
+  String rmContestG3(int n) {
+    return 'Hoenn contests ($n)';
+  }
+
+  @override
+  String rmContestG4(int n) {
+    return 'Sinnoh Super Contests ($n)';
+  }
+
+  @override
+  String get rmContestOrderG3 =>
+      'Each condition is won in order: Normal → Super → Hyper → Master. Any species can enter.';
+
+  @override
+  String get rmContestOrderG4 =>
+      'Each condition is won in order: Normal → Great → Ultra → Master (Hearthome City). Any species except Ditto and Unown.';
 }

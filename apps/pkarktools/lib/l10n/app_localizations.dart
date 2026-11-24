@@ -5160,6 +5160,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Recuerdos de Gen 3 y 4'**
   String get rmMemoryTitle;
+
+  /// No description provided for @rmRankPos.
+  ///
+  /// In es, this message translates to:
+  /// **'Puesto #{n} del ranking'**
+  String rmRankPos(int n);
+
+  /// No description provided for @rmContestG3.
+  ///
+  /// In es, this message translates to:
+  /// **'Concursos de Hoenn ({n})'**
+  String rmContestG3(int n);
+
+  /// No description provided for @rmContestG4.
+  ///
+  /// In es, this message translates to:
+  /// **'Superconcursos de Sinnoh ({n})'**
+  String rmContestG4(int n);
+
+  /// No description provided for @rmContestOrderG3.
+  ///
+  /// In es, this message translates to:
+  /// **'Cada categoría se gana en orden: Normal → Alto → Avanzado → Experto. Cualquier especie puede participar.'**
+  String get rmContestOrderG3;
+
+  /// No description provided for @rmContestOrderG4.
+  ///
+  /// In es, this message translates to:
+  /// **'Cada categoría se gana en orden: Normal → Difícil → Superior → Experto (Ciudad Corazón). Todas las especies menos Ditto y Unown.'**
+  String get rmContestOrderG4;
 }
 
 class _AppLocalizationsDelegate
