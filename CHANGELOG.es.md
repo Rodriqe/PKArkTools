@@ -11,6 +11,30 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [1.0.4] — 2026-11-24
+
+### Corregido
+- Dex: una forma especial con la variante variocolor desbloqueada muestra el
+  icono variocolor también cuando la normal está desbloqueada. En la 1.0.3 la
+  tarjeta volvía al icono normal salvo que solo estuviera desbloqueada la
+  variocolor, así que un Charizard Gigamax (o cualquier Mega, Primigenio,
+  Ultra o Gigamax) con las dos variantes se veía sin variocolor. Afectaba a
+  las 134 formas especiales cuando tenían las dos variantes; los archivos de
+  iconos, el índice y la caché ya eran correctos.
+
+### Cambiado
+- Tarjetas de formas especiales: cada pastilla (Normal, Variocolor) muestra
+  el icono de su variante al desbloquearse, y una insignia ✦ marca la tarjeta
+  dibujada en variocolor. Si a una forma le faltara el variocolor en la
+  fuente, la variante variocolor usaría el icono normal con la insignia ✦ en
+  vez de pasar por normal sin avisar.
+- Los tests recorren las 134 formas especiales × {normal, variocolor}: iconos
+  distintos, en el índice, en «Descargar todos» / «Reparar iconos» y con su
+  propio archivo en la caché.
+- Capturas nuevas: Charizard Gigamax normal y variocolor lado a lado y Mega
+  Charizard X variocolor (escritorio y Android); la guía de iconos lista las
+  formas cuyo variocolor oficial apenas cambia respecto al normal.
+
 ## [1.0.3] — 2026-11-24
 
 ### Añadido

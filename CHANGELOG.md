@@ -11,6 +11,28 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [1.0.4] — 2026-11-24
+
+### Fixed
+- Dex: a special form with its shiny variant unlocked now shows the shiny
+  icon even when the normal variant is unlocked too. In 1.0.3 the card fell
+  back to the normal icon unless only the shiny one was unlocked, so a
+  Charizard Gigantamax (or any Mega, Primal, Ultra or Gigantamax form) with
+  both variants looked non-shiny. It affected all 134 special forms whenever
+  both variants were unlocked; the icon files, the manifest and the cache
+  were already correct.
+
+### Changed
+- Special-form cards: each variant pill (Normal, Shiny) shows its own icon
+  once unlocked, and a ✦ badge marks the card drawn shiny. If a form ever
+  lacks a shiny icon in the source, the shiny variant uses the normal icon
+  with the ✦ badge instead of passing silently as normal.
+- Tests walk the 134 special forms × {normal, shiny}: distinct icons, in the
+  manifest, in "Download all" / "Repair icons" and with their own cache file.
+- New screenshots: Charizard Gigantamax normal and shiny side by side and
+  shiny Mega Charizard X (desktop and Android); the icons guide lists the
+  forms whose official shiny barely differs from the normal one.
+
 ## [1.0.3] — 2026-11-24
 
 ### Added
