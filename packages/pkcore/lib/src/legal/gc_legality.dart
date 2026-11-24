@@ -50,7 +50,7 @@ abstract final class GcLegality {
   static List<LegalityIssue> check(Pkm pk, GameVersion game, String speciesName) {
     final out = <LegalityIssue>[];
     final gc = pk.gc;
-    if (gc != null && gc.isShadow && !game.isGameCube) {
+    if (gc != null && gc.isShadow && !game.isColosseumOrXd) {
       out.add(LegalityIssue(LegalityCode.shadowCannotLeave, LegalitySeverity.warning, args: {'species': speciesName}));
     }
     if (pk.isEgg || pk.version != EncounterTables.cxd || pk.format.generation != 3) return out;

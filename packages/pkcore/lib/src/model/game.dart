@@ -4,6 +4,8 @@ enum Platform {
   gameBoyColor('Game Boy Color', 'Game Boy Color'),
   gameBoyAdvance('Game Boy Advance', 'Game Boy Advance'),
   gameCube('GameCube', 'GameCube'),
+  nintendo64('Nintendo 64', 'Nintendo 64'),
+  wii('Wii', 'Wii'),
   nintendoDs('Nintendo DS', 'Nintendo DS'),
   nintendo3ds('Nintendo 3DS', 'Nintendo 3DS'),
   nintendoSwitch('Nintendo Switch', 'Nintendo Switch');
@@ -17,16 +19,21 @@ enum Platform {
 enum GameVersion {
   redBlue(1, Platform.gameBoy, 'rby', 'Pokémon Rojo / Azul', 'Pokémon Red / Blue'),
   yellow(1, Platform.gameBoy, 'yellow', 'Pokémon Amarillo', 'Pokémon Yellow'),
+  stadium(1, Platform.nintendo64, 'stadium', 'Pokémon Stadium', 'Pokémon Stadium'),
   goldSilver(2, Platform.gameBoyColor, 'gs', 'Pokémon Oro / Plata', 'Pokémon Gold / Silver'),
   crystal(2, Platform.gameBoyColor, 'crystal', 'Pokémon Cristal', 'Pokémon Crystal'),
+  stadium2(2, Platform.nintendo64, 'stadium2', 'Pokémon Stadium 2', 'Pokémon Stadium 2'),
   rubySapphire(3, Platform.gameBoyAdvance, 'rs', 'Pokémon Rubí / Zafiro', 'Pokémon Ruby / Sapphire'),
   emerald(3, Platform.gameBoyAdvance, 'emerald', 'Pokémon Esmeralda', 'Pokémon Emerald'),
   fireRedLeafGreen(3, Platform.gameBoyAdvance, 'frlg', 'Pokémon Rojo Fuego / Verde Hoja', 'Pokémon FireRed / LeafGreen'),
   colosseum(3, Platform.gameCube, 'colo', 'Pokémon Colosseum', 'Pokémon Colosseum'),
   xd(3, Platform.gameCube, 'xd', 'Pokémon XD: Tempestad Oscura', 'Pokémon XD: Gale of Darkness'),
+  boxRS(3, Platform.gameCube, 'rsbox', 'Pokémon Box: Rubí y Zafiro', 'Pokémon Box: Ruby & Sapphire'),
   diamondPearl(4, Platform.nintendoDs, 'dp', 'Pokémon Diamante / Perla', 'Pokémon Diamond / Pearl'),
   platinum(4, Platform.nintendoDs, 'pt', 'Pokémon Platino', 'Pokémon Platinum'),
   heartGoldSoulSilver(4, Platform.nintendoDs, 'hgss', 'Pokémon Oro HeartGold / Plata SoulSilver', 'Pokémon HeartGold / SoulSilver'),
+  battleRevolution(4, Platform.wii, 'batrev', 'Pokémon Battle Revolution', 'Pokémon Battle Revolution'),
+  ranch(4, Platform.wii, 'ranch', 'My Pokémon Ranch', 'My Pokémon Ranch'),
   blackWhite(5, Platform.nintendoDs, 'bw', 'Pokémon Negro / Blanco', 'Pokémon Black / White'),
   black2White2(5, Platform.nintendoDs, 'b2w2', 'Pokémon Negro 2 / Blanco 2', 'Pokémon Black 2 / White 2'),
   xy(6, Platform.nintendo3ds, 'xy', 'Pokémon X / Y', 'Pokémon X / Y'),
@@ -62,7 +69,11 @@ enum GameVersion {
   bool get usesSixDigitIds => generation >= 7;
 
   /// Pokémon Colosseum o XD (GameCube): Gen 3 con formatos CK3/XK3.
-  bool get isGameCube => platform == Platform.gameCube;
+  bool get isColosseumOrXd => this == colosseum || this == xd;
+
+  /// Juegos de almacenamiento o estadio (Stadium, Box, Battle Revolution,
+  /// Rancho): sin aventura propia, guardan Pokémon de los juegos principales.
+  bool get isStorage => this == stadium || this == stadium2 || this == boxRS || this == battleRevolution || this == ranch;
 }
 
 /// Título concreto (cartucho) cuando el save lo identifica, p. ej. Espada vs Escudo.
@@ -70,8 +81,12 @@ enum GameVersion {
 /// Los ids coinciden con `GameVersion` de PKHeX.
 abstract final class GameTitles {
   static const Map<int, (String es, String en)> _titles = {
+    16: ('Pokémon Battle Revolution', 'Pokémon Battle Revolution'),
+    65: ('Pokémon Box: Rubí y Zafiro', 'Pokémon Box: Ruby & Sapphire'),
     66: ('Pokémon Colosseum', 'Pokémon Colosseum'),
     67: ('Pokémon XD: Tempestad Oscura', 'Pokémon XD: Gale of Darkness'),
+    93: ('Pokémon Stadium', 'Pokémon Stadium'),
+    94: ('Pokémon Stadium 2', 'Pokémon Stadium 2'),
     7: ('Pokémon Oro HeartGold', 'Pokémon HeartGold'),
     8: ('Pokémon Plata SoulSilver', 'Pokémon SoulSilver'),
     10: ('Pokémon Diamante', 'Pokémon Diamond'),

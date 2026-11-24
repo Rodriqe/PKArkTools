@@ -10,6 +10,7 @@ import '../crypto/swish_crypto.dart';
 import '../edit/ctr_editors.dart';
 import '../edit/gb_editors.dart';
 import '../formats/gb_saves.dart';
+import '../formats/rsbox.dart';
 import '../formats/gc_container.dart';
 import '../data/generated/gc_data.dart';
 import '../pkm/gc_pkm.dart';
@@ -1304,6 +1305,49 @@ abstract final class SyntheticSaves {
       payload.setRange(XdCrypto.slotOffset(i), XdCrypto.slotOffset(i) + XdCrypto.slotSize, slot(20 + i));
     }
     return payload;
+  }
+
+
+  /// Save sintético de Pokémon Box: Rubí y Zafiro (datos de 0x76000 sin
+  /// cabecera). [boxes] usa las medias cajas de 30 huecos (0–49).
+  static Uint8List rsBox({
+    SynthTrainer trainer = const SynthTrainer(name: 'MAY', tid: 31415, sid: 9265),
+    Map<int, List<SynthMon?>> boxes = const {},
+    List<String> boxNames = const [],
+  }) {
+    final storage = Uint8List((RsBoxData.blockCount + RsBoxData.extraCount) * RsBoxData.blockSize);
+    boxes.forEach((b, mons) {
+      for (var s = 0; s < mons.length && s < 30; s++) {
+        final m = mons[s];
+        if (m == null) continue;
+        final o = RsBoxData.slotOffset(b, s);
+        storage.setRange(o, o + 80, _pk3(m, trainer.tid, trainer.sid, 300 + b * 30 + s, party: false));
+        storage.setU32le(o + 80, trainer.tid | (trainer.sid << 16));
+      }
+    });
+    for (var i = 0; i < boxNames.length && i < 25; i++) {
+      storage.setRange(RsBoxData.nameOffset(i * 2), RsBoxData.nameOffset(i * 2) + 9, StringCodec.encodeG3(boxNames[i], 9));
+    }
+    final d = Uint8List(RsBoxData.saveSize);
+    _banner(d, 'PKARK SYNTHETIC BOX');
+    const bs = RsBoxData.blockSize, copy = bs - 0x10;
+    void block(int index, int id, int counter, bool extra) {
+      final o = bs + index * bs;
+      _u32be(d, o + 4, id);
+      _u32be(d, o + 8, counter);
+      final src = id * copy + (extra ? RsBoxData.blockCount * bs : 0);
+      d.setRange(o + 0xC, o + 0xC + copy, storage, src);
+      _u32be(d, o, RsBoxData.checksum(d, o));
+    }
+
+    for (var i = 0; i < RsBoxData.blockCount; i++) {
+      block(i, i, 5, false); // copia antigua
+      block(RsBoxData.blockCount + (i + 7) % RsBoxData.blockCount, i, 6, false); // activa, rotada
+    }
+    for (var i = 0; i < RsBoxData.extraCount; i++) {
+      block(2 * RsBoxData.blockCount + i, i, 6, true);
+    }
+    return d;
   }
 
   /// Cabecera `DEntry` de un archivo de GameCube.

@@ -105,7 +105,7 @@ abstract final class PkmFactory {
 
   /// Primera versión de origen (id de PKHeX `GameVersion`) de [game].
   static int? defaultVersion(GameVersion game) {
-    if (game.isGameCube) return 15; // Colosseum y XD comparten la versión de origen CXD
+    if (game.isColosseumOrXd) return 15; // Colosseum y XD comparten la versión de origen CXD
     for (var v = 1; v <= 52; v++) {
       if (OriginPlace.gameOf(v) == game) return v;
     }

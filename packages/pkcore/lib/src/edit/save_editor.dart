@@ -10,6 +10,7 @@ import 'ctr_editors.dart';
 import 'gb_editors.dart';
 import 'gba_editor.dart';
 import 'gc_editor.dart';
+import 'storage_editors.dart';
 import '../formats/gc_container.dart';
 import 'events.dart';
 import 'nds_editors.dart';
@@ -175,6 +176,12 @@ abstract class SaveEditor {
         GameVersion.goldSilver || GameVersion.crystal => Gen2Editor.open(payload, det.game),
         GameVersion.rubySapphire || GameVersion.emerald || GameVersion.fireRedLeafGreen => Gen3Editor(payload, det.game),
         GameVersion.colosseum => GcEditor(payload, GcTitle.colosseum),
+        GameVersion.boxRS => RsBoxEditor(payload),
+        GameVersion.stadium ||
+        GameVersion.stadium2 ||
+        GameVersion.battleRevolution ||
+        GameVersion.ranch =>
+          throw UnsupportedSaveException('${det.game.nameEs}: editor pendiente.'),
         GameVersion.xd => GcEditor(payload, GcTitle.xd),
         GameVersion.diamondPearl || GameVersion.platinum || GameVersion.heartGoldSoulSilver => Gen4Editor(payload, det.game),
         GameVersion.blackWhite || GameVersion.black2White2 => Gen5Editor(payload, det.game, versionId: save.versionId),
@@ -395,7 +402,7 @@ abstract class SaveEditor {
   /// añadir más allá del final lo coloca al final.
   void set(SlotRef ref, Pkm? pk) {
     _checkStorage();
-    if (pk != null && pk.gc != null && !game.isGameCube) {
+    if (pk != null && pk.gc != null && !game.isColosseumOrXd) {
       if (pk.gc!.isShadow) {
         throw const SaveEditException(
             'Un Pokémon oscuro no se puede llevar a otro juego: primero hay que purificarlo en Colosseum o XD.');

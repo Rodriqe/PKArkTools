@@ -26,6 +26,13 @@ void main(List<String> args) {
     '01-GXXP-pokemon_xd.gci': SyntheticSaves.gci(xd, GcTitle.xd, region: GcRegion.pal),
     'MemoryCardA.raw': SyntheticSaves.memoryCard([(GcTitle.colosseum, colo), (GcTitle.xd, xd)], scatter: true),
     'MemoryCardB.raw': SyntheticSaves.memoryCard([(GcTitle.xd, xd)]),
+    '01-GPXE-pokemon_box.gci': SyntheticSaves.gci(
+        SyntheticSaves.rsBox(boxes: const {
+          0: [SynthMon(25, level: 20), null, SynthMon(252, level: 5, shiny: true)],
+          1: [SynthMon(280, level: 12)],
+          49: [SynthMon(384, level: 70)],
+        }, boxNames: const ['FAVS']),
+        GcTitle.rsBox),
   };
   files.forEach((name, bytes) => File('${dir.path}/$name').writeAsBytesSync(bytes));
   stdout.writeln('${files.length} archivos en ${dir.path}');

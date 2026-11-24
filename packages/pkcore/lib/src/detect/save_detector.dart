@@ -6,6 +6,8 @@ import '../formats/ctr_saves.dart';
 import '../formats/gb_saves.dart';
 import '../formats/gc_container.dart';
 import '../formats/gc_saves.dart';
+import '../formats/rsbox.dart';
+import '../edit/storage_editors.dart';
 import '../formats/gen3.dart';
 import '../formats/nds_saves.dart';
 import '../formats/switch_saves.dart';
@@ -169,7 +171,7 @@ abstract final class SaveDetector {
   }
 
   static Detection? _detectGameCube(Uint8List bytes) {
-    const titles = {GcTitle.colosseum, GcTitle.xd};
+    const titles = {GcTitle.colosseum, GcTitle.xd, GcTitle.rsBox};
     GcContainer? container;
     Uint8List? payload;
     final warnings = <String>[];
@@ -185,23 +187,34 @@ abstract final class SaveDetector {
               'se pueden importar por separado).');
         }
       }
+    } else if (RsBoxData.identify(bytes)) {
+      container = const GcContainer.raw();
+      payload = bytes;
     } else {
       final title = GcSaveData.identifyRaw(bytes);
       if (title == null) return null;
       container = const GcContainer.raw();
       payload = bytes;
     }
-    final title = container.entry?.title ?? GcSaveData.identifyRaw(payload);
+    final title = container.entry?.title ?? (RsBoxData.identify(payload) ? GcTitle.rsBox : GcSaveData.identifyRaw(payload));
     if (title == null || payload.length != title.saveSize) return null;
     final c = container;
     final p = payload;
-    final game = title == GcTitle.colosseum ? GameVersion.colosseum : GameVersion.xd;
+    final game = switch (title) {
+      GcTitle.colosseum => GameVersion.colosseum,
+      GcTitle.xd => GameVersion.xd,
+      GcTitle.rsBox => GameVersion.boxRS,
+    };
     return Detection._(
       game,
       c.kind == GcContainerKind.raw ? null : c.description,
       p,
       () {
-        final s = GcSaveReader.read(p, title, c);
+        final s = title == GcTitle.rsBox
+            ? storageSummary(RsBoxEditor(p), p,
+                format: 'GameCube Box Rubí/Zafiro ${c.entry?.region.label ?? ''}'.trim(),
+                checksumOk: RsBoxData.open(p).checksumsValid)
+            : GcSaveReader.read(p, title, c);
         if (warnings.isEmpty) return s;
         return SaveFile(
           game: s.game,

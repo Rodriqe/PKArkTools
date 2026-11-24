@@ -34,8 +34,10 @@ abstract final class SpeciesForms {
 
   /// Contexto de PKHeX (`EntityContext`) de los nombres de forma.
   static String _context(GameVersion game) => switch (game) {
-        GameVersion.redBlue || GameVersion.yellow => 'Gen1',
-        GameVersion.goldSilver || GameVersion.crystal => 'Gen2',
+        GameVersion.redBlue || GameVersion.yellow || GameVersion.stadium => 'Gen1',
+        GameVersion.goldSilver || GameVersion.crystal || GameVersion.stadium2 => 'Gen2',
+        GameVersion.boxRS => 'Gen3',
+        GameVersion.battleRevolution || GameVersion.ranch => 'Gen4',
         GameVersion.rubySapphire ||
         GameVersion.emerald ||
         GameVersion.fireRedLeafGreen ||

@@ -25,12 +25,22 @@ abstract final class BallTables {
   /// (Poké/Super/Ultra/Master primero, como en PKHeX).
   static List<int> forGame(GameVersion game) {
     final List<int> raw = switch (game) {
-      GameVersion.redBlue || GameVersion.yellow || GameVersion.goldSilver || GameVersion.crystal => const [4],
+      GameVersion.redBlue ||
+      GameVersion.yellow ||
+      GameVersion.goldSilver ||
+      GameVersion.crystal ||
+      GameVersion.stadium ||
+      GameVersion.stadium2 =>
+        const [4],
+      // Rancho: Pokémon de Diamante/Perla/Platino; Battle Revolution también de HGSS.
+      GameVersion.ranch => _range(1, 16),
+      GameVersion.battleRevolution => _range(1, 24),
       GameVersion.rubySapphire ||
       GameVersion.emerald ||
       GameVersion.fireRedLeafGreen ||
       GameVersion.colosseum ||
-      GameVersion.xd =>
+      GameVersion.xd ||
+      GameVersion.boxRS =>
         _range(1, 12),
       GameVersion.diamondPearl || GameVersion.platinum => _range(1, 16),
       // HGSS: Bonguri y Competi; los traspasos de Pal Park no traen otras.

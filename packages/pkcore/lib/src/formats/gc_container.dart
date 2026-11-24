@@ -234,7 +234,7 @@ class GcMemoryCard {
   static List<(String, Uint8List)>? splitPokemonSaves(Uint8List bytes) {
     final card = tryParse(bytes);
     if (card == null) return null;
-    final entries = [for (final e in card.pokemonEntries) if (e.title != GcTitle.rsBox) e];
+    final entries = card.pokemonEntries;
     if (entries.length < 2) return null;
     return [for (final e in entries) (e.standardFileName, card.exportGci(e))];
   }

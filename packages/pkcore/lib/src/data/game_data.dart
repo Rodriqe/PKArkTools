@@ -87,6 +87,12 @@ class GameDataTable {
       // Colosseum/XD usan los datos personales de RZ (PKHeX `PersonalTable.RS`)
       // y los movimientos por nivel de Esmeralda.
       GameVersion.colosseum || GameVersion.xd => ('e', '3'),
+      // Juegos de almacenamiento: datos del juego principal de su generación.
+      GameVersion.stadium => ('y', '1'),
+      GameVersion.stadium2 => ('c', '2'),
+      GameVersion.boxRS => ('rs', '3'),
+      GameVersion.battleRevolution => ('hgss', '4'),
+      GameVersion.ranch => ('pt', '4'),
       GameVersion.diamondPearl => ('dp', '4'),
       GameVersion.platinum => ('pt', '4'),
       GameVersion.heartGoldSoulSilver => ('hgss', '4'),
@@ -397,7 +403,7 @@ abstract final class GameStrings {
   /// Nombre de un objeto en [game]: igual que [item], salvo en Colosseum y XD,
   /// que tienen objetos propios desde el id 500 (llaves, colonias, discos).
   static String itemFor(int id, GameVersion game, [DataLanguage lang = DataLanguage.es]) {
-    if (game.isGameCube && id >= 500) {
+    if (game.isColosseumOrXd && id >= 500) {
       final es = lang == DataLanguage.es;
       final list = game == GameVersion.colosseum
           ? (es ? kGcItemsColoEs : kGcItemsColoEn)
@@ -431,7 +437,11 @@ abstract final class ItemTables {
         GameVersion.rubySapphire => 'rs',
         GameVersion.emerald => 'e',
         GameVersion.fireRedLeafGreen => 'frlg',
-        GameVersion.colosseum || GameVersion.xd => 'rs',
+        GameVersion.colosseum || GameVersion.xd || GameVersion.boxRS => 'rs',
+        GameVersion.stadium => 'g1',
+        GameVersion.stadium2 => 'c',
+        GameVersion.battleRevolution => 'hgss',
+        GameVersion.ranch => 'pt',
         GameVersion.diamondPearl => 'dp',
         GameVersion.platinum => 'pt',
         GameVersion.heartGoldSoulSilver => 'hgss',
