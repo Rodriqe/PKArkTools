@@ -85,12 +85,20 @@ variantes, **normal** y **variocolor**, que se desbloquean por separado: un
 ejemplar normal desbloquea la normal y uno variocolor, la variocolor.
 
 Cada forma se dibuja con **su propio icono** (Charizard Gigamax, Mega
-Clefable…), y la variante variocolor desbloqueada muestra el suyo
+Clefable…). Con la variocolor desbloqueada, la tarjeta usa el icono
+variocolor con la insignia ✦ (también si la normal está desbloqueada), y cada
+pastilla, «Normal» y «Variocolor», muestra el de su variante
 ([Iconos](iconos.md#formas-especiales)). Las bloqueadas se ven como silueta de
 ese icono con un candado y la explicación de cómo se desbloquean. Las
 desbloqueadas muestran qué ejemplares lo hacen (tócalos para ir a su caja). En
 «Tus ejemplares», un Pokémon con el factor Gigamax se ve con su icono Gigamax y
 la insignia «G».
+
+<p>
+  <img src="../screenshots/dex/10_shiny_special_forms.png" width="49%" alt="Charizard Gigamax normal y variocolor y Mega Charizard X variocolor">
+  <img src="../screenshots/android/dex_07_shiny_mega_x.png" width="24%" alt="Android: Mega Charizard X variocolor">
+  <img src="../screenshots/android/dex_08_shiny_gigantamax.png" width="24%" alt="Android: Charizard Gigamax normal y variocolor">
+</p>
 
 <p>
   <img src="../screenshots/dex/03_locked_forms.png" width="49%" alt="Formas bloqueadas de Venusaur">

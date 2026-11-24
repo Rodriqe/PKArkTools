@@ -35,9 +35,13 @@ Es la única conexión a internet que hace la app y no envía ningún dato tuyo.
   sus tarjetas de la ficha (en silueta si están bloqueadas) y, en «Tus
   ejemplares», un Pokémon con el factor Gigamax se dibuja Gigamax (con la
   insignia «G»).
-* **Variocolor**: solo las formas especiales tienen icono variocolor propio
-  (la tarjeta lo muestra en «Variocolor» cuando está desbloqueada). El resto
-  de Pokémon variocolor lleva el borde dorado y la insignia ✦.
+* **Variocolor**: solo las formas especiales tienen icono variocolor propio.
+  En cuanto la variante variocolor está desbloqueada, la tarjeta se dibuja
+  con él y una insignia ✦ (aunque la normal también lo esté), y cada pastilla
+  («Normal», «Variocolor») muestra el icono de su variante. En «Tus
+  ejemplares», un Pokémon variocolor con el factor Gigamax usa la Gigamax
+  variocolor. El resto de Pokémon variocolor lleva el borde dorado y la
+  insignia ✦.
 * **Tamaño**: todos los Pokémon se dibujan a la misma escala, la que hace que
   un icono típico llene casi todo el hueco (88 %), sin recortarse ni
   deformarse. Los objetos y Balls son arte de píxeles y se amplían sin
@@ -62,13 +66,29 @@ Es la única conexión a internet que hace la app y no envía ningún dato tuyo.
   <img src="../screenshots/dex/09_mega_za.png" width="49%" alt="Mega Clefable variocolor de Leyendas Z-A">
 </p>
 
-Las 134 formas especiales tienen icono propio normal y variocolor. Toxtricity
-y Urshifu tienen una Gigamax por forma; Alcremie, una sola para todas sus
-formas.
+<p>
+  <img src="../screenshots/dex/10_shiny_special_forms.png" width="49%" alt="Charizard Gigamax normal y variocolor y Mega Charizard X variocolor">
+  <img src="../screenshots/android/dex_08_shiny_gigantamax.png" width="24%" alt="Charizard Gigamax variocolor en Android">
+</p>
+
+Las 134 formas especiales tienen icono propio normal y variocolor: 268
+archivos distintos, todos en el índice, en «Descargar todos» y en «Reparar
+iconos», cada uno con su propio archivo en la caché (la Gigamax normal y la
+variocolor del volcado de HOME se llaman igual en `small` y `small-shiny`; en
+la caché son `pokemon_small_…` y `pokemon_small_shiny_…`). Un test lo
+comprueba para las 134 × {normal, variocolor}. Toxtricity y Urshifu tienen
+una Gigamax por forma; Alcremie, una sola para todas sus formas.
+
+En algunas el variocolor oficial apenas cambia unos detalles y se parece
+mucho al normal (no es un error de la app): Mega Clefable, Mega Froslass,
+Mega Floette, Mega Chesnaught, Mega Garchomp Z, Mega Scovillain, Mega
+Baxcalibur, Butterfree, Meowth, Melmetal y Hatterene Gigamax.
 
 Si en el futuro una forma especial no tuviera icono en la fuente, la tarjeta
 usaría el de la especie con una insignia clara (**G**, **MEGA**, **P**,
-**ULTRA**) en vez de parecer un error.
+**ULTRA**) en vez de parecer un error. Si le faltara solo el variocolor, la
+variante variocolor se dibujaría con el icono normal y la insignia ✦, nunca
+con el normal sin avisar.
 
 ### Sin icono propio en ninguna fuente fiable
 
