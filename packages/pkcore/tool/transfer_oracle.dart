@@ -60,19 +60,21 @@ void _gen(String dir) {
 void _collect(String oraclePath, String fixturePath) {
   final cases = jsonDecode(File(oraclePath).readAsStringSync()) as List;
   final out = <Map<String, Object?>>[];
+  bool? valid(Map<String, dynamic>? m) => (m?['legality'] as Map<String, dynamic>?)?['valid'] as bool?;
+  List<String> issues(Map<String, dynamic>? m) => [
+        for (final i in ((m?['legality'] as Map<String, dynamic>?)?['issues'] as List? ?? const [])
+            .cast<Map<String, dynamic>>())
+          if (i['severity'] == 'Invalid') '${i['id']}:${i['code']}',
+      ];
   for (final c in cases.cast<Map<String, dynamic>>()) {
-    List<String> issues(Map<String, dynamic>? m) => [
-          for (final i in (m?['legality']?['issues'] as List? ?? const []).cast<Map<String, dynamic>>())
-            if (i['severity'] == 'Invalid') '${i['id']}:${i['code']}',
-        ];
     final ours = c['ours'] as Map<String, dynamic>?;
     final pkhex = c['pkhex'] as Map<String, dynamic>?;
     out.add({
       'id': c['id'],
-      'sourceLegal': c['source']['legality']['valid'],
+      'sourceLegal': valid(c['source'] as Map<String, dynamic>),
       'pkhexResult': c['result'],
-      'pkhexLegal': pkhex?['legality']['valid'],
-      'oursLegal': ours?['legality']['valid'],
+      'pkhexLegal': valid(pkhex),
+      'oursLegal': valid(ours),
       'oursIssues': issues(ours),
       'pkhexIssues': issues(pkhex),
       if (ours != null)
