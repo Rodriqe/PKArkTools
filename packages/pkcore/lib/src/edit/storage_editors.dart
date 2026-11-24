@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import '../formats/rsbox.dart';
+import '../formats/ranch.dart';
 import '../formats/stadium.dart';
 import '../model/game.dart';
 import '../model/save.dart';
@@ -373,5 +374,108 @@ class StadiumEditor extends StorageEditor {
       if (boxChanged && boxInitialized(b)) layout.setBoxChecksum(out, b, _base);
     }
     return swapped ? StadiumLayout.swap32(out) : out;
+  }
+}
+
+/// Editor de My Pokémon Ranch: los Pokémon depositados (RK4 = PK4 + datos del
+/// rancho) en cajas de 30; los huecos por encima de la capacidad del nivel del
+/// rancho están bloqueados. Al guardar se actualizan el contador, el marcador
+/// de fin y el SHA-1 como PKHeX `SAV4Ranch.SetChecksums`.
+class RanchEditor extends StorageEditor {
+  RanchEditor(Uint8List payload)
+      : _orig = payload,
+        _d = Uint8List.fromList(payload),
+        super(GameVersion.ranch, versionId: 200) {
+    _pristine = Uint8List.fromList(_d);
+    _start = RanchLayout.pokemonStart(_d);
+    _capacity = RanchLayout.capacity(_d);
+  }
+
+  final Uint8List _orig, _d;
+  late final Uint8List _pristine;
+  late final int _start, _capacity;
+
+  bool get platinum => RanchLayout.platinum(_d);
+  int get capacity => _capacity;
+
+  @override
+  String get trainerLabel => RanchLayout.owner(_d);
+  @override
+  TrainerData readTrainer() => TrainerData(name: trainerLabel, tid: 0, playTime: RanchLayout.playTime(_d));
+  @override
+  int get boxCount => (_capacity + 29) ~/ 30;
+  @override
+  int get boxSlotCount => 30;
+
+  int _index(int box, int slot) => box * 30 + slot;
+  int _ofs(int i) => _start + i * RanchLayout.slotSize;
+
+  @override
+  bool isSlotLocked(SlotRef ref) => !ref.isParty && _index(ref.box, ref.slot) >= _capacity;
+
+  @override
+  Pkm? readBoxSlot(int box, int slot) {
+    final i = _index(box, slot);
+    if (i >= _capacity) return null;
+    final raw = _d.copyRange(_ofs(i), RanchLayout.slotSize);
+    if (raw.u32be(0) == 0x28) return null; // marcador de fin
+    final pk4 = raw.copyRange(0, 136);
+    final pk = pk4.u32le(0x64) != 0 ? Pkm.fromEncrypted(PkFormat.pk4, pk4) : Pkm.fromDecrypted(PkFormat.pk4, pk4);
+    if (pk == null || pk.species == 0 || !pk.checksumValid) return null;
+    pk.nativeRaw = raw;
+    return pk;
+  }
+
+  @override
+  void writeBoxSlot(int box, int slot, Pkm? pk) {
+    final i = _index(box, slot);
+    if (i >= _capacity) throw SaveEditException('El rancho solo admite $_capacity Pokémon con su nivel actual.');
+    if (pk != null && pk.format != PkFormat.pk4) throw SaveEditException('Formato no compatible con ${game.nameEs}.');
+    final o = _ofs(i);
+    if (pk == null) {
+      _d.fillRange(o, o + RanchLayout.slotSize, 0);
+      return;
+    }
+    final cur = readBoxSlot(box, slot);
+    if (cur != null) {
+      var same = true;
+      for (var j = 0; j < 136 && same; j++) {
+        if (cur.data[j] != pk.data[j]) same = false;
+      }
+      if (same) return;
+    }
+    final out = Uint8List(RanchLayout.slotSize);
+    final n = pk.nativeRaw;
+    if (n != null && n.length == RanchLayout.slotSize) out.setRange(0, RanchLayout.slotSize, n);
+    out.setRange(0, 136, pk.encryptStored());
+    // Sin dueño, el rancho borra el Pokémon al cargar: Hayley por defecto (PKHeX).
+    if (out[0x88] == 0) out[0x88] = 4;
+    _d.setRange(o, o + RanchLayout.slotSize, out);
+  }
+
+  @override
+  Uint8List buildPayload() {
+    var changed = forceChecksums;
+    for (var i = 0; i < _d.length && !changed; i++) {
+      if (_d[i] != _pristine[i]) changed = true;
+    }
+    if (!changed) return Uint8List.fromList(_orig);
+    final out = Uint8List.fromList(_d);
+    var occupied = 0;
+    for (var i = _capacity - 1; i >= 0; i--) {
+      if (out.u32le(_ofs(i) + 0x88) != 0 || out.u32le(_ofs(i) + 0x8C) != 0) {
+        occupied = i + 1;
+        break;
+      }
+    }
+    final end = _ofs(occupied);
+    final marker = _pristine.u32be(_pristine.u32be(0x3C));
+    void be(int at, int v) => out.setRange(at, at + 4, [v >> 24, (v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF]);
+    be(0x3C, end);
+    out.fillRange(end, out.length, 0);
+    be(end, marker);
+    be(RanchLayout.countOffset(out), occupied);
+    RanchLayout.setSha(out);
+    return out;
   }
 }

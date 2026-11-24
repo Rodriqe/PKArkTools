@@ -10,6 +10,7 @@ import '../crypto/swish_crypto.dart';
 import '../edit/ctr_editors.dart';
 import '../edit/gb_editors.dart';
 import '../formats/gb_saves.dart';
+import '../formats/ranch.dart';
 import '../formats/rsbox.dart';
 import '../formats/stadium.dart';
 import '../formats/gc_container.dart';
@@ -1424,6 +1425,51 @@ abstract final class SyntheticSaves {
       }
     }
     return swapped ? StadiumLayout.swap32(d) : d;
+  }
+
+
+  /// `pokemonranch.bin` sintético de My Pokémon Ranch ([platinum] = versión
+  /// actualizada para Platino, 0x7C000 bytes). [level] es el nivel del rancho.
+  static Uint8List ranch({
+    String owner = 'HAYLEY',
+    List<SynthMon> mons = const [],
+    bool platinum = false,
+    int level = 8,
+    int seconds = 3600 * 25 + 61,
+  }) {
+    final d = Uint8List(platinum ? RanchLayout.sizePt : RanchLayout.sizeDP);
+    void be(int at, int v) => _u32be(d, at, v);
+    const mii = 0x2800, trainerMii = 0x2900, pkm = 0x2A00;
+    for (var i = 0; i < 5; i++) {
+      be(0x18 + i * 8, i);
+    }
+    be(0x1C, 0x40);
+    be(0x24, mii);
+    be(0x2C, trainerMii);
+    be(0x34, pkm);
+    d[0x5A] = level - 1;
+    d[0x5B] = level - 1;
+    be(0x60, seconds);
+    for (var i = 0; i < owner.length && i < 8; i++) {
+      d.setU16be(0x770 + i * 2, owner.codeUnitAt(i));
+    }
+    d.setU16be(0x770 + owner.length * 2, 0xFFFF);
+    be(platinum ? 0x268C : 0x22AC, 0x01020304); // datos de juguetes (PKHeX lo usa para reconocerlo)
+    be(mii, 8);
+    be(trainerMii, 8);
+    be(pkm, 8 + mons.length * RanchLayout.slotSize);
+    be(pkm + 4, mons.length);
+    for (var i = 0; i < mons.length; i++) {
+      final o = pkm + 8 + i * RanchLayout.slotSize;
+      final pk4 = _pk45(mons[i], 3000 + i, 7000 + i, 500 + i, gen: 4, party: false);
+      d.setRange(o, o + 136, pk4);
+      d[o + 0x88] = i.isEven ? 1 : 4; // dueño: entrenador o Hayley
+    }
+    final end = pkm + 8 + mons.length * RanchLayout.slotSize;
+    be(0x3C, end);
+    be(end, 0x28);
+    RanchLayout.setSha(d);
+    return d;
   }
 
   /// Cabecera `DEntry` de un archivo de GameCube.

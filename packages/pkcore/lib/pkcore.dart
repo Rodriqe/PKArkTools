@@ -38,6 +38,7 @@ export 'src/edit/switch_editors.dart' show SCDexKeys;
 export 'src/edit/save_edits.dart';
 export 'src/edit/version_inference.dart';
 export 'src/formats/gc_container.dart';
+export 'src/formats/ranch.dart';
 export 'src/formats/rsbox.dart';
 export 'src/formats/stadium.dart';
 export 'src/formats/gc_saves.dart' show GcSaveData;

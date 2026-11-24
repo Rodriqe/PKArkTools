@@ -7,6 +7,7 @@ import '../formats/gb_saves.dart';
 import '../formats/gc_container.dart';
 import '../formats/gc_saves.dart';
 import '../formats/rsbox.dart';
+import '../formats/ranch.dart';
 import '../formats/stadium.dart';
 import '../edit/storage_editors.dart';
 import '../formats/gen3.dart';
@@ -141,6 +142,13 @@ abstract final class SaveDetector {
             checksumOk: ed.checksumsValid,
             warnings: [if (teams > 0) 'Equipos registrados: $teams (solo lectura).']);
       });
+    }
+
+    // My Pokémon Ranch (Wii): tamaño propio y tabla de bloques.
+    if (RanchLayout.identify(d)) {
+      return hit(GameVersion.ranch, () => storageSummary(RanchEditor(d), d,
+          format: 'Wii My Pokémon Ranch (${RanchLayout.platinum(d) ? 'versión Platino' : 'Diamante/Perla'})',
+          checksumOk: RanchLayout.shaValid(d)));
     }
 
     // 4) Nintendo DS.

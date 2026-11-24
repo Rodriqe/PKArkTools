@@ -123,4 +123,39 @@ void main() {
       }
     }
   });
+
+  group('My Pokémon Ranch', () {
+    for (final pt in [false, true]) {
+      test('${pt ? 'Platino' : 'Diamante/Perla'}: lectura, round-trip y edición', () {
+        final bytes = SyntheticSaves.ranch(
+            platinum: pt, mons: const [SynthMon(25, level: 20), SynthMon(393, level: 5, shiny: true), SynthMon(448, level: 40)]);
+        final s = SaveDetector.read(bytes);
+        expect(s.game, GameVersion.ranch);
+        expect(s.versionId, 200);
+        expect(s.checksum, ChecksumStatus.valid);
+        expect(s.trainer.name, 'HAYLEY');
+        expect(s.trainer.playTime.inHours, 25);
+        expect(s.boxes.length, 4, reason: 'nivel 8 = 100 huecos');
+        expect(s.boxes.first.slots.take(4).map((p) => p?.species), [25, 393, 448, null]);
+        expect(s.boxes.first.slots[1]!.isShiny, isTrue);
+
+        final ed = SaveEditor.open(bytes) as RanchEditor;
+        expect(ed.readOnly, isFalse, reason: ed.integrityIssues.join('; '));
+        expect(_same(ed.build(), bytes), isTrue);
+        expect(ed.isSlotLocked(const SlotRef.box(3, 10)), isTrue);
+        expect(() => ed.set(const SlotRef.box(3, 10), ed.get(const SlotRef.box(0, 0))), throwsA(isA<SaveEditException>()));
+        // Un Pokémon de Platino entra con Hayley como dueña.
+        final pt4 = SaveEditor.open(SyntheticSaves.gen4(party: const [SynthMon(150, level: 70)])).get(const SlotRef.party(0))!;
+        ed.set(const SlotRef.box(0, 3), pt4);
+        ed.set(const SlotRef.box(0, 0), null);
+        final out = ed.buildVerified();
+        expect(RanchLayout.shaValid(out), isTrue);
+        final re = SaveEditor.open(out) as RanchEditor;
+        expect(re.get(const SlotRef.box(0, 3))!.species, 150);
+        expect(re.get(const SlotRef.box(0, 3))!.nativeRaw![0x88], 4);
+        expect(re.get(const SlotRef.box(0, 0)), isNull);
+        expect(out.buffer.asByteData().getUint32(RanchLayout.countOffset(out)), 4);
+      });
+    }
+  });
 }

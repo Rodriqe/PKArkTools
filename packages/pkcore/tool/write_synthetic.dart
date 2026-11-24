@@ -49,6 +49,10 @@ void main(List<String> args) {
       );
     }
   }
+  for (final pt in [false, true]) {
+    files['pokemonranch${pt ? '_pt' : ''}.bin'] = SyntheticSaves.ranch(
+        platinum: pt, mons: const [SynthMon(25, level: 20), SynthMon(393, level: 5, shiny: true), SynthMon(448, level: 40)]);
+  }
   files.forEach((name, bytes) => File('${dir.path}/$name').writeAsBytesSync(bytes));
   stdout.writeln('${files.length} archivos en ${dir.path}');
 }
