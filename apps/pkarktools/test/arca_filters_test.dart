@@ -100,7 +100,7 @@ void main() {
       expect(back.to, DateTime(2026, 3, 4));
       expect(back.sort, ArcaSort.playTime);
       expect(back.activeCount, 7);
-      final odd = ArcaFilter.fromJson({'sort': 'nope', 'gen': [0, 3, 'x', 12], 'platform': ['wii'], 'preset': 'week'});
+      final odd = ArcaFilter.fromJson({'sort': 'nope', 'gen': [0, 3, 'x', 12], 'platform': ['virtualBoy'], 'preset': 'week'});
       expect(odd.sort, ArcaSort.recent);
       expect(odd.generations, {3});
       expect(odd.platforms, isEmpty);

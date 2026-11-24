@@ -65,7 +65,7 @@ void main() {
       await tester.ensureVisible(find.byKey(const ValueKey('gen-4')));
       await tester.tap(find.byKey(const ValueKey('gen-4')));
       await tester.pump();
-      expect(find.text('Crear 3 carpetas'), findsOneWidget);
+      expect(find.text('Crear 5 carpetas'), findsOneWidget); // DP, Pt, HGSS, Battle Revolution, Rancho
 
       await tester.tap(find.text('Todos'));
       await tester.pump();
