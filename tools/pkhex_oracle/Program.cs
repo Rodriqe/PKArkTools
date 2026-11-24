@@ -7,6 +7,7 @@
 //   forms <outdir>                tabla (especie, forma, juego) y nombres de forma (FormTable.cs)
 //   dex <outdir>                  formas especiales y evoluciones para la Dex global (DexTable.cs)
 //   ribbons <outdir>              origen, juegos y cintas válidas por especie/forma (RibbonTable.cs)
+//   transfer <manifest> <out>     conversión entre formatos y legalidad (TransferOracle.cs)
 //
 // Los volcados de saves reales contienen datos personales: guárdalos en .scratch/.
 using System.Text.Json;
@@ -23,6 +24,8 @@ static class Program
             return DexTable.Run(args[1]);
         if (args.Length == 2 && args[0] == "ribbons")
             return RibbonTable.Run(args[1]);
+        if (args.Length == 3 && args[0] == "transfer")
+            return TransferOracle.Run(args[1], args[2]);
         if (args.Length < 2)
         {
             Console.Error.WriteLine("uso: dump <save> [out.json] | roundtrip <save> | edit <in> <out> | forms <outdir>");
@@ -133,7 +136,7 @@ static class Program
         return a;
     }
 
-    static JsonObject Mon(string slot, PKM pk, SaveFile sav)
+    internal static JsonObject Mon(string slot, PKM pk, SaveFile? sav)
     {
         var la = new LegalityAnalysis(pk);
         var issues = new JsonArray();
