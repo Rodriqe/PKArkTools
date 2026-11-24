@@ -369,61 +369,73 @@ Bashful Nature
     });
   });
 
-  group('TournamentFormats', () {
-    test('tabla versionada y formatos por juego', () {
-      expect(TournamentFormats.dataVersion, isNotEmpty);
-      expect({for (final f in TournamentFormats.all) f.id}.length, TournamentFormats.all.length);
-      final list = TournamentFormats.forGame(GameVersion.scarletViolet, today: DateTime(2024, 6, 1));
-      expect(list.first.id, anyOf('sv-reg-g', 'sv-bss-reg-g'));
-      expect(TournamentFormats.forGame(GameVersion.emerald), isEmpty);
+  group('ChampionsFormat', () {
+    test('la tabla generada se traduce entera a especie y forma', () {
+      expect(ChampionsFormat.unresolved, isEmpty);
+      expect(ChampionsFormat.allowed.length, greaterThan(200));
+      expect(ChampionsFormat.formatName, contains('Reg M-'));
+      expect(ChampionsFormat.level, 50);
+      expect(ChampionsFormat.itemClause, 1);
+      expect(ChampionsFormat.speciesClause, isTrue);
+      expect(ChampionsFormat.sourceCommit, hasLength(40));
+      expect(ChampionsFormat.allowed, containsAll([(479, 2), (128, 2), (876, 1), (711, 3), (445, 0)]));
+      expect(ChampionsFormat.megaSpecies, contains(445));
     });
 
-    test('equipo válido y equipo con problemas', () {
-      const t = TrainerData(name: 'Juliana', tid: 12345, sid: 54321);
-      Pkm mon(String s) =>
-          Showdown.toPkm(Showdown.parse(s).single, GameVersion.scarletViolet, t, random: Random(1)).pkm!;
-      final good = [
-        mon('Garchomp @ Life Orb\nLevel: 50\n- Earthquake'),
-        mon('Rotom-Wash @ Sitrus Berry\nLevel: 50\n- Thunderbolt'),
-        mon('Pikachu @ Light Ball\nLevel: 50\n- Thunderbolt'),
-        mon('Koraidon @ Choice Band\nLevel: 50\n- Collision Course'),
-      ];
-      final regG = TournamentFormats.byId('sv-reg-g')!;
-      final ok = TournamentFormats.validate(good, GameVersion.scarletViolet, regG);
-      expect(
-        ok.issues.where((i) => i.blocking && i.code != TournamentIssueCode.illegal),
-        isEmpty,
-        reason: [for (final i in ok.issues) i.message(es: true)].join('\n'),
-      );
+    const t = TrainerData(name: 'Juliana', tid: 12345, sid: 54321);
+    Pkm mon(String s, [GameVersion g = GameVersion.scarletViolet]) =>
+        Showdown.toPkm(Showdown.parse(s).single, g, t, random: Random(1)).pkm!;
 
-      final bad = [
-        ...good,
-        mon('Miraidon @ Life Orb\nLevel: 100\n- Electro Drift'),
-        mon('Garchomp @ Leftovers\nLevel: 50\n- Earthquake'),
-      ];
-      final r = TournamentFormats.validate(bad, GameVersion.scarletViolet, regG);
-      final codes = {for (final i in r.issues) i.code};
+    test('elegibilidad y motivos', () {
+      final chomp = ChampionsFormat.check(mon('Garchomp\nLevel: 50\n- Earthquake'), GameVersion.scarletViolet);
+      expect(chomp.eligible, isTrue);
+      expect(chomp.canMega, isTrue);
+      expect(ChampionsFormat.check(mon('Koraidon\nLevel: 70'), GameVersion.scarletViolet).reasons, [
+        ChampionsReason.restricted,
+      ]);
+      expect(ChampionsFormat.check(mon('Pecharunt\nLevel: 70'), GameVersion.scarletViolet).reasons, [
+        ChampionsReason.mythical,
+      ]);
+      expect(ChampionsFormat.check(mon('Bulbasaur'), GameVersion.scarletViolet).reasons, [
+        ChampionsReason.speciesNotAllowed,
+      ]);
+      // Meowth de Galar no está; Persian de Alola sí.
+      expect(ChampionsFormat.check(mon('Persian-Alola'), GameVersion.scarletViolet).eligible, isTrue);
+      expect(ChampionsFormat.check(mon('Wooper'), GameVersion.scarletViolet).reasons, [
+        ChampionsReason.speciesNotAllowed,
+      ]);
+      final egg = mon('Garchomp')..isEgg = true;
+      expect(ChampionsFormat.check(egg, GameVersion.scarletViolet).reasons, contains(ChampionsReason.egg));
+      // Un Pokémon de Esmeralda también puede llegar por HOME.
       expect(
-        codes,
-        containsAll([
-          TournamentIssueCode.tooManyRestricted,
-          TournamentIssueCode.duplicateItem,
-          TournamentIssueCode.duplicateSpecies,
-          TournamentIssueCode.levelScaled,
-        ]),
-      );
-      expect(r.valid, isFalse);
-      expect(r.forSlot(4).any((i) => i.code == TournamentIssueCode.levelScaled && !i.blocking), isTrue);
-
-      final regH = TournamentFormats.byId('sv-reg-h')!;
-      expect(
-        TournamentFormats.validate(good, GameVersion.scarletViolet, regH).issues.map((i) => i.code),
-        contains(TournamentIssueCode.banned),
-      );
-      expect(
-        TournamentFormats.validate(good.take(2).toList(), GameVersion.scarletViolet, regG).issues.map((i) => i.code),
-        contains(TournamentIssueCode.teamTooSmall),
+        ChampionsFormat.check(mon('Swampert\nLevel: 60', GameVersion.emerald), GameVersion.emerald).reasons,
+        isNot(contains(ChampionsReason.speciesNotAllowed)),
       );
     });
+
+    test('forma no permitida frente a forma estética', () {
+      final tauros = mon('Tauros-Paldea-Aqua');
+      expect(ChampionsFormat.check(tauros, GameVersion.scarletViolet).eligible, isTrue);
+      // Vivillon no está, pero si una forma estética de una especie permitida
+      // (Squawkabilly está con sus 4 plumajes) cuenta como permitida.
+      final sq = mon('Squawkabilly-Yellow');
+      expect(ChampionsFormat.check(sq, GameVersion.scarletViolet).eligible, isTrue);
+    });
+
+    test('cláusulas del equipo', () {
+      final team = [mon('Garchomp @ Life Orb'), mon('Garchomp @ Leftovers'), mon('Rotom-Wash @ Life Orb')];
+      final issues = {for (final i in ChampionsFormat.teamIssues(team, GameVersion.scarletViolet)) i.$1};
+      expect(issues, {
+        ChampionsTeamIssue.tooFew,
+        ChampionsTeamIssue.duplicateSpecies,
+        ChampionsTeamIssue.duplicateItem,
+      });
+      expect(ChampionsFormat.teamIssueText((ChampionsTeamIssue.tooFew, '4'), es: true), contains('4'));
+    });
+  });
+
+  test('Showdown: Gourgeist-Super es la forma Jumbo de PKHeX', () {
+    expect(Showdown.resolveSpecies('Gourgeist-Super', GameVersion.scarletViolet)!.form, 3);
+    expect(Showdown.speciesName(711, 3, GameVersion.scarletViolet), 'Gourgeist-Super');
   });
 }

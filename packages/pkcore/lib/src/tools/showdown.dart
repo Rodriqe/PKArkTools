@@ -355,10 +355,28 @@ abstract final class Showdown {
     return null;
   }
 
+  /// Nombres de forma de Showdown que PKHeX llama distinto.
+  static const _formAliases = {'super': 'jumbo'};
+
+  /// Especie y forma de un id de Showdown sin separadores («rotomwash»,
+  /// «taurospaldeablaze», «indeedeef»). null si no se reconoce.
+  static (int, int)? resolveId(String id, GameVersion game) {
+    final n = norm(id);
+    for (var k = n.length; k >= 1; k--) {
+      final sp = _speciesByName[n.substring(0, k)];
+      if (sp == null) continue;
+      if (k == n.length) return (sp, 0);
+      final r = _resolveForm(sp, n.substring(k), game);
+      if (r == null || r.$2) return null;
+      return (sp, r.$1);
+    }
+    return null;
+  }
+
   /// Forma de [species] cuyo nombre encaja con [suffix]. El segundo valor es
   /// `true` si el sufijo es «-F» en una especie sin formas por género.
   static (int, bool)? _resolveForm(int species, String suffix, GameVersion game) {
-    final s = norm(suffix);
+    final s = _formAliases[norm(suffix)] ?? norm(suffix);
     var names = SpeciesForms.formNames(species, game, DataLanguage.en);
     if (names.isEmpty) {
       final g = SpeciesForms.resolveGame(species, 1, game);
@@ -408,6 +426,7 @@ abstract final class Showdown {
       final tera = f.startsWith('*');
       f = f.replaceAll('*', '').replaceAll('♀', 'F').replaceAll('♂', 'M').replaceAll('’', "'");
       f = f.replaceAll(RegExp(r'\s+Form$'), '').trim().replaceAll(RegExp(r'\s+'), '-');
+      if (species == 710 || species == 711) f = f == 'Jumbo' ? 'Super' : f;
       if (f.isNotEmpty) name = '$name-$f${tera ? '-Tera' : ''}';
     }
     if (gigantamax) name = '$name-Gmax';
