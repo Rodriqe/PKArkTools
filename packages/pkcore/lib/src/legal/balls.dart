@@ -26,7 +26,12 @@ abstract final class BallTables {
   static List<int> forGame(GameVersion game) {
     final List<int> raw = switch (game) {
       GameVersion.redBlue || GameVersion.yellow || GameVersion.goldSilver || GameVersion.crystal => const [4],
-      GameVersion.rubySapphire || GameVersion.emerald || GameVersion.fireRedLeafGreen => _range(1, 12),
+      GameVersion.rubySapphire ||
+      GameVersion.emerald ||
+      GameVersion.fireRedLeafGreen ||
+      GameVersion.colosseum ||
+      GameVersion.xd =>
+        _range(1, 12),
       GameVersion.diamondPearl || GameVersion.platinum => _range(1, 16),
       // HGSS: Bonguri y Competi; los traspasos de Pal Park no traen otras.
       GameVersion.heartGoldSoulSilver => _range(1, 24),

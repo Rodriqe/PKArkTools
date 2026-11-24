@@ -18,6 +18,10 @@ abstract final class GameVersions {
     GameVersion.rubySapphire: [2, 1],
     GameVersion.emerald: [3],
     GameVersion.fireRedLeafGreen: [4, 5],
+    // Colosseum y XD comparten la versión de origen 15 en sus Pokémon; para
+    // el save se usan los ids de grupo de PKHeX (`GameVersion.COLO`/`XD`).
+    GameVersion.colosseum: [66],
+    GameVersion.xd: [67],
     GameVersion.diamondPearl: [10, 11],
     GameVersion.platinum: [12],
     GameVersion.heartGoldSoulSilver: [7, 8],
@@ -70,6 +74,8 @@ abstract final class GameVersions {
         11 => es ? 'Perla' : 'Pearl',
         12 => es ? 'Platino' : 'Platinum',
         15 => 'Colosseum/XD',
+        66 => 'Colosseum',
+        67 => 'XD',
         20 => es ? 'Blanco' : 'White',
         21 => es ? 'Negro' : 'Black',
         22 => es ? 'Blanco 2' : 'White 2',

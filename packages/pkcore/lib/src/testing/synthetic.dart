@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart' show md5;
 
+import '../crypto/gc_crypto.dart';
 import '../crypto/meme_crypto.dart';
 import '../crypto/pk_crypto.dart';
 import '../crypto/sc_block.dart';
@@ -9,6 +10,9 @@ import '../crypto/swish_crypto.dart';
 import '../edit/ctr_editors.dart';
 import '../edit/gb_editors.dart';
 import '../formats/gb_saves.dart';
+import '../formats/gc_container.dart';
+import '../data/generated/gc_data.dart';
+import '../pkm/gc_pkm.dart';
 import '../pkm/pk_format.dart';
 import '../pkm/pkm.dart';
 import '../data/game_data.dart';
@@ -43,6 +47,21 @@ class SynthMon {
   final bool shiny;
   final bool egg;
   final int item;
+}
+
+/// Pokémon de un save sintético de Colosseum/XD: [shadow] 0 = normal,
+/// 1 = oscuro (con su id y medidor de las tablas de PKHeX), 2 = purificado.
+class SynthGcMon {
+  const SynthGcMon(this.species, {this.level = 30, this.nickname, this.shadow = 0, this.item = 0, this.gauge});
+
+  final int species;
+  final int level;
+  final String? nickname;
+  final int shadow;
+  final int item;
+
+  /// Medidor de corazón restante (por defecto, la mitad del máximo).
+  final int? gauge;
 }
 
 /// Entrenador de un save sintético.
@@ -1037,6 +1056,361 @@ abstract final class SyntheticSaves {
   /// Envuelve un save de GB/GBA con un pie RTC de emulador.
   static Uint8List withRtcFooter(Uint8List data, [int size = 0x10]) =>
       Uint8List.fromList([...data, ...List.filled(size, 0x5A)]);
+
+
+  // ------------------------------------------------------------ GameCube
+
+  /// Encuentro de las tablas de Colosseum/XD (oscuro si [shadow]) para la especie.
+  static (String, int, int, int, int, int, int, int, int)? _gcEncounter(bool colo, int species, {required bool shadow}) {
+    final game = colo ? 'colo' : 'xd';
+    for (final e in kGcEncounters) {
+      if (e.$1 == game && e.$3 == species && (e.$2 == 0) == shadow) return e;
+    }
+    return null;
+  }
+
+  /// PK3 de origen Colosseum/XD coherente con las tablas (o capturado en
+  /// GBA y traído, si no hay encuentro) y su CK3/XK3.
+  static Uint8List _gcMon(SynthGcMon m, SynthTrainer t, int salt, {required bool colo, required GcRegion region}) {
+    final enc = _gcEncounter(colo, m.species, shadow: m.shadow != 0) ?? _gcEncounter(colo, m.species, shadow: false);
+    final pk = Pkm.fromDecrypted(PkFormat.pk3, Uint8List(PkCrypto.size3Party))
+      ..dataGame = GameVersion.emerald;
+    pk.species = m.species;
+    pk.tid = t.tid;
+    pk.sid = t.sid;
+    pk.pid = _pidFor(SynthMon(m.species), t.tid, t.sid, salt);
+    pk.language = 2;
+    pk.otName = t.name;
+    pk.exp = Species.expForLevel(m.species, m.level);
+    pk.heldItem = m.item;
+    pk.friendship = 70;
+    pk.ball = enc?.$9 == 4 || enc == null ? 4 : 2;
+    pk.version = enc == null ? 3 : 15;
+    pk.metLocation = enc?.$6 ?? 16;
+    pk.metLevel = enc?.$5 ?? m.level;
+    final table = GameDataTable.forGame(GameVersion.emerald);
+    final learned = [for (final x in table.levelUpMoves(m.species, 0)) if (x.level <= m.level && x.move != 0) x.move];
+    final moves = <int>[];
+    for (final mv in learned.reversed) {
+      if (!moves.contains(mv)) moves.add(mv);
+      if (moves.length == 4) break;
+    }
+    for (var i = 0; i < 4; i++) {
+      pk.setMove(i, i < moves.length ? moves.reversed.toList()[i] : 0, context: '3');
+    }
+    pk.setIvs([for (var i = 0; i < 6; i++) (salt * 7 + i * 5) % 32]);
+    if (m.shadow == 2) Ribbons.set(pk, 'RibbonNational', 1);
+    if (m.nickname != null) {
+      pk.setNickname(m.nickname);
+    } else {
+      pk.setDefaultNickname();
+    }
+    pk.refreshPartyStats();
+    pk.refreshChecksum();
+    final kind = colo ? GcKind.ck3 : GcKind.xk3;
+    final raw = GcPkm.write(pk, kind, region: region);
+    if (m.shadow != 0 && enc != null && enc.$2 == 0) {
+      final extra = GcExtra(kind, raw)..shadowId = enc.$7;
+      final gauge = m.gauge ?? enc.$8 ~/ 2;
+      if (colo) extra.purification = m.shadow == 2 ? kColoPurified : gauge;
+    }
+    return raw;
+  }
+
+  static void _gcString(Uint8List d, int ofs, int bytes, String s) {
+    d.fillRange(ofs, ofs + bytes, 0);
+    for (var i = 0; i < s.length && (i + 1) * 2 < bytes; i++) {
+      d.setU16be(ofs + i * 2, s.codeUnitAt(i));
+    }
+  }
+
+  static void _u32be(Uint8List d, int o, int v) {
+    d[o] = (v >> 24) & 0xFF;
+    d[o + 1] = (v >> 16) & 0xFF;
+    d[o + 2] = (v >> 8) & 0xFF;
+    d[o + 3] = v & 0xFF;
+  }
+
+  static void _memo(Uint8List d, int ofs, List<int> species, {required bool xd}) {
+    d.setU16be(ofs, species.length);
+    for (var i = 0; i < species.length; i++) {
+      final o = ofs + 4 + i * 12;
+      d.setU16be(o, SpeciesConvert.gen3FromNational(species[i]));
+      // Colosseum: los pares quedan «vistos» (bit 7); XD: todos vistos.
+      if (!xd && i.isOdd) d[o] |= 0x80;
+    }
+  }
+
+  static void _banner(Uint8List payload, String text) {
+    for (var i = 0; i < text.length; i++) {
+      payload[i] = text.codeUnitAt(i);
+    }
+  }
+
+  /// Save sintético de Pokémon Colosseum (datos de 0x60000, sin cabecera GCI;
+  /// ver [gci] y [memoryCard]).
+  static Uint8List colosseum({
+    SynthTrainer trainer = const SynthTrainer(name: 'WES', tid: 31337, sid: 4242, hours: 41, minutes: 7),
+    GcRegion region = GcRegion.ntscU,
+    List<SynthGcMon> party = const [],
+    Map<int, List<SynthGcMon?>> boxes = const {},
+    List<String> boxNames = const [],
+    int money = 12345,
+    List<(int, int)> items = const [(13, 5), (17, 3)],
+    List<int> memo = const [196, 197, 207, 153],
+  }) {
+    final payload = Uint8List(ColoCrypto.saveSize);
+    _banner(payload, 'PKARK SYNTHETIC COLOSSEUM');
+    Uint8List slot(int counter) {
+      final d = Uint8List(ColoCrypto.slotSize);
+      d.setU32le(0, 0x101);
+      _u32be(d, 4, counter);
+      d[0x08] = 11;
+      d[0x09] = region.index;
+      d[0x0A] = region.index;
+      d[0x0B] = 2;
+      ByteData.sublistView(d).setFloat32(0x28, (trainer.hours * 3600 + trainer.minutes * 60 + trainer.seconds).toDouble());
+      _gcString(d, 0x78, 20, trainer.name);
+      _gcString(d, 0x8C, 20, trainer.name);
+      d.setU16be(0xA4, trainer.sid);
+      d.setU16be(0xA6, trainer.tid);
+      d[0xAF8] = trainer.gender;
+      _u32be(d, 0xAFC, money);
+      for (var i = 0; i < party.length && i < 6; i++) {
+        d.setRange(0xA8 + i * 312, 0xA8 + (i + 1) * 312, _gcMon(party[i], trainer, i, colo: true, region: region));
+      }
+      for (var b = 0; b < 3; b++) {
+        final info = 0xB90 + b * 0x24A4;
+        _gcString(d, info, 16, b < boxNames.length ? boxNames[b] : 'BOX ${b + 1}');
+        final mons = boxes[b] ?? const [];
+        for (var i = 0; i < mons.length && i < 30; i++) {
+          final m = mons[i];
+          if (m == null) continue;
+          final o = info + 0x14 + i * 312;
+          d.setRange(o, o + 312, _gcMon(m, trainer, 100 + b * 30 + i, colo: true, region: region));
+        }
+      }
+      for (var i = 0; i < items.length; i++) {
+        d.setU16be(0x7F8 + i * 4, items[i].$1);
+        d.setU16be(0x7F8 + i * 4 + 2, items[i].$2);
+      }
+      d.setU16be(0x7F8 + 0x0FC, 4); // Poké Ball
+      d.setU16be(0x7F8 + 0x0FC + 2, 10);
+      _memo(d, 0x82B0, memo, xd: false);
+      ColoCrypto.setChecksums(d);
+      ColoCrypto.encrypt(d);
+      return d;
+    }
+
+    for (var i = 0; i < 3; i++) {
+      payload.setRange(ColoCrypto.slotOffset(i), ColoCrypto.slotOffset(i) + ColoCrypto.slotSize, slot(10 + (i == 1 ? 2 : i)));
+    }
+    return payload;
+  }
+
+  /// Bloques de XD (longitudes y offsets de PKHeX `SAV3XD()`).
+  static const List<int> _xdLen = [0x88, 0x978, 0xBC50, 0x4A, 0xCC, 0x1774, 0x364, 0x2400, 0x6B4, 0xB, 0x400, 0x800, 0x1000, 0x2000, 0x2298, 0xC800];
+  static const List<int> _xdOfs = [0x0, 0x90, 0xA10, 0xC660, 0xC6B0, 0xC780, 0xDF00, 0xE270, 0x10670, 0x10D30, 0x10D40, 0x11140, 0x11940, 0x12940, 0x14940, 0x16BE0];
+
+  /// Save sintético de Pokémon XD (datos de 0x56000, sin cabecera GCI).
+  static Uint8List xd({
+    SynthTrainer trainer = const SynthTrainer(name: 'MICHAEL', tid: 27182, sid: 8182, hours: 63, minutes: 15),
+    GcRegion region = GcRegion.ntscU,
+    List<SynthGcMon> party = const [],
+    Map<int, List<SynthGcMon?>> boxes = const {},
+    List<String> boxNames = const [],
+    int money = 54321,
+    List<(int, int)> items = const [(13, 10), (511, 4)],
+    List<int> memo = const [133, 216, 37, 363],
+  }) {
+    final payload = Uint8List(XdCrypto.saveSize);
+    _banner(payload, 'PKARK SYNTHETIC XD');
+    Uint8List slot(int counter) {
+      final d = Uint8List(XdCrypto.slotSize);
+      d.setU32le(0, 0x101);
+      _u32be(d, 4, counter);
+      for (var i = 0; i < 4; i++) {
+        d.setU16be(8 + i * 2, 0x1357 * (i + 1) + counter);
+      }
+      for (var i = 0; i < 16; i++) {
+        d.setU16be(0x20 + 2 * i, _xdLen[i]);
+        d.setU16be(0x40 + 4 * i, _xdOfs[i] & 0xFFFF);
+        d.setU16be(0x40 + 4 * i + 2, _xdOfs[i] >> 16);
+      }
+      final config = _xdOfs[0] + 0xA8, tr = _xdOfs[1] + 0xA8, box = _xdOfs[2] + 0xA8;
+      final shadow = _xdOfs[7] + 0xA8;
+      d[config] = 11;
+      d[config + 1] = region.index;
+      d[config + 2] = region.index;
+      d[config + 3] = 2;
+      ByteData.sublistView(d)
+          .setFloat64(config + 0x30, (trainer.hours * 3600 + trainer.minutes * 60 + trainer.seconds).toDouble());
+      _gcString(d, tr, 20, trainer.name);
+      d.setU16be(tr + 0x2C, trainer.sid);
+      d.setU16be(tr + 0x2E, trainer.tid);
+      d[tr + 0x8E0] = trainer.gender;
+      _u32be(d, tr + 0x8E4, money);
+      void shadowEntry(Uint8List raw, SynthGcMon m) {
+        final id = raw.u16be(0xBA);
+        if (id == 0) return;
+        final o = shadow + id * 72;
+        d[o] = m.shadow == 2 ? 0xC0 : 0x40; // capturado (+ purificado)
+        final iv = GcPkm.toPk3Bytes(GcKind.xk3, raw).u32le(0x48);
+        for (var i = 0; i < 6; i++) {
+          d[o + 0x0B + i] = (iv >> (5 * const [0, 1, 2, 4, 5, 3][i])) & 0x1F;
+        }
+        d.setU16be(o + 0x1A, raw.u16be(0));
+        _u32be(d, o + 0x1C, raw.u32be(0x28));
+        final enc = _gcEncounter(false, m.species, shadow: true);
+        _u32be(d, o + 0x24, m.shadow == 2 ? 0 : (m.gauge ?? (enc?.$8 ?? 2000) ~/ 2));
+        d[o + 0x3F] = id;
+      }
+
+      for (var i = 0; i < party.length && i < 6; i++) {
+        final raw = _gcMon(party[i], trainer, i, colo: false, region: region);
+        d.setRange(tr + 0x30 + i * 196, tr + 0x30 + (i + 1) * 196, raw);
+        shadowEntry(raw, party[i]);
+      }
+      for (var b = 0; b < 8; b++) {
+        final info = box + b * (0x14 + 30 * 196);
+        _gcString(d, info, 16, b < boxNames.length ? boxNames[b] : 'BOX ${b + 1}');
+        final mons = boxes[b] ?? const [];
+        for (var i = 0; i < mons.length && i < 30; i++) {
+          final m = mons[i];
+          if (m == null) continue;
+          final raw = _gcMon(m, trainer, 100 + b * 30 + i, colo: false, region: region);
+          final o = info + 0x14 + i * 196;
+          d.setRange(o, o + 196, raw);
+          shadowEntry(raw, m);
+        }
+      }
+      final pouch = tr + 0x4C8;
+      for (var i = 0; i < items.length; i++) {
+        final key = items[i].$1 >= 500 && items[i].$1 != 511;
+        final o = pouch + (key ? 0x078 : 0) + i * 4;
+        d.setU16be(o, items[i].$1);
+        d.setU16be(o + 2, items[i].$2);
+      }
+      d.setU16be(pouch + 0x124, 4);
+      d.setU16be(pouch + 0x124 + 2, 12);
+      _memo(d, _xdOfs[5] + 0xA8, memo, xd: true);
+      XdCrypto.setChecksums(d, _xdOfs[0]);
+      XdCrypto.encryptSlot(d);
+      return d;
+    }
+
+    for (var i = 0; i < 2; i++) {
+      payload.setRange(XdCrypto.slotOffset(i), XdCrypto.slotOffset(i) + XdCrypto.slotSize, slot(20 + i));
+    }
+    return payload;
+  }
+
+  /// Cabecera `DEntry` de un archivo de GameCube.
+  static Uint8List gcDirEntry(GcTitle title, GcRegion region, {int firstBlock = 5}) {
+    final e = Uint8List(GcDirEntry.size);
+    final letter = switch (region) { GcRegion.ntscJ => 'J', GcRegion.pal => 'P', _ => 'E' };
+    final code = '${title.prefix}$letter';
+    for (var i = 0; i < 4; i++) {
+      e[i] = code.codeUnitAt(i);
+    }
+    e[4] = 0x30; // '0'
+    e[5] = 0x31; // '1'
+    const name = 'pokemon_synthetic';
+    for (var i = 0; i < name.length; i++) {
+      e[8 + i] = name.codeUnitAt(i);
+    }
+    _u32be(e, 0x28, 0x2F000000);
+    e.setU16be(0x36, firstBlock);
+    e.setU16be(0x38, title.saveSize ~/ GcMemoryCard.blockSize);
+    return e;
+  }
+
+  /// `.gci` (cabecera + datos) de un save sintético de Colosseum/XD.
+  static Uint8List gci(Uint8List save, GcTitle title, {GcRegion region = GcRegion.ntscU}) =>
+      Uint8List.fromList([...gcDirEntry(title, region), ...save]);
+
+  /// Imagen de Memory Card de 59 bloques (512 KB) o mayor con los saves
+  /// dados. Con [scatter] los bloques del primer archivo no son contiguos.
+  static Uint8List memoryCard(List<(GcTitle, Uint8List)> files,
+      {GcRegion region = GcRegion.ntscU, int size = 0x200000, bool scatter = false}) {
+    final d = Uint8List(size)..fillRange(0, size, 0xFF);
+    const bs = GcMemoryCard.blockSize;
+    final blocks = size ~/ bs;
+    d.fillRange(0, 5 * bs, 0);
+    d.fillRange(0, 0x1FC, 0);
+    d.setU16be(0x22, size ~/ bs ~/ 0x10);
+    var (c, inv) = GcMemoryCard.checksum(d, 0, 0x1FC);
+    d.setU16be(0x1FC, c);
+    d.setU16be(0x1FE, inv);
+    final dir = Uint8List(bs)..fillRange(0, bs, 0xFF);
+    final bat = Uint8List(bs);
+    var next = 5;
+    for (var f = 0; f < files.length; f++) {
+      final (title, save) = files[f];
+      final n = save.length ~/ bs;
+      final chain = <int>[];
+      if (scatter && f == 0) {
+        // Pares primero y luego impares: una cadena no contigua.
+        for (var i = 0; i < n; i++) {
+          chain.add(next + (i < (n + 1) ~/ 2 ? i * 2 : (i - (n + 1) ~/ 2) * 2 + 1));
+        }
+      } else {
+        for (var i = 0; i < n; i++) {
+          chain.add(next + i);
+        }
+      }
+      next += n;
+      for (var i = 0; i < n; i++) {
+        d.setRange(chain[i] * bs, (chain[i] + 1) * bs, save, i * bs);
+        bat.setU16be(0x0A + (chain[i] - 5) * 2, i == n - 1 ? 0xFFFF : chain[i + 1]);
+      }
+      dir.setRange(f * GcDirEntry.size, (f + 1) * GcDirEntry.size, gcDirEntry(title, region, firstBlock: chain.first));
+    }
+    dir.setU16be(0x1FFA, 1);
+    (c, inv) = GcMemoryCard.checksum(dir, 0, 0x1FFC);
+    dir.setU16be(0x1FFC, c);
+    dir.setU16be(0x1FFE, inv);
+    bat.setU16be(4, 1);
+    bat.setU16be(6, blocks - next);
+    bat.setU16be(8, next - 1);
+    (c, inv) = GcMemoryCard.checksum(bat, 4, 0x1FFC);
+    bat.setU16be(0, c);
+    bat.setU16be(2, inv);
+    d.setRange(bs, 2 * bs, dir);
+    d.setRange(2 * bs, 3 * bs, dir);
+    d.setRange(3 * bs, 4 * bs, bat);
+    d.setRange(4 * bs, 5 * bs, bat);
+    return d;
+  }
+
+  /// Save de Colosseum de demostración (equipo con oscuros y purificados).
+  static Uint8List colosseumDemo() => colosseum(
+        party: const [
+          SynthGcMon(197, level: 32, nickname: 'NOX'),
+          SynthGcMon(196, level: 31),
+          SynthGcMon(153, level: 30, shadow: 1),
+          SynthGcMon(156, level: 30, shadow: 2),
+          SynthGcMon(244, level: 40, shadow: 1, gauge: 9000),
+        ],
+        boxes: const {
+          0: [SynthGcMon(311, level: 13), SynthGcMon(159, level: 30, shadow: 2), SynthGcMon(185, level: 35, shadow: 1)],
+        },
+        boxNames: const ['SNAGGED', 'PURIFIED'],
+      );
+
+  /// Save de XD de demostración.
+  static Uint8List xdDemo() => xd(
+        party: const [
+          SynthGcMon(133, level: 25, nickname: 'EON'),
+          SynthGcMon(216, level: 15, shadow: 2),
+          SynthGcMon(37, level: 20, shadow: 1),
+          SynthGcMon(363, level: 18, shadow: 1, gauge: 300),
+        ],
+        boxes: const {
+          0: [SynthGcMon(27, level: 23), SynthGcMon(155, level: 5), SynthGcMon(296, level: 18, shadow: 2)],
+        },
+        boxNames: const ['HQ LAB', 'SPOTS'],
+      );
 
   /// Conjunto de demostración variado (para la app y capturas).
   static Map<String, Uint8List> demoSet() => {

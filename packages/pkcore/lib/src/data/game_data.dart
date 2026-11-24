@@ -83,6 +83,9 @@ class GameDataTable {
       GameVersion.rubySapphire => ('rs', '3'),
       GameVersion.emerald => ('e', '3'),
       GameVersion.fireRedLeafGreen => ('fr', '3'),
+      // Colosseum/XD usan los datos personales de RZ (PKHeX `PersonalTable.RS`)
+      // y los movimientos por nivel de Esmeralda.
+      GameVersion.colosseum || GameVersion.xd => ('e', '3'),
       GameVersion.diamondPearl => ('dp', '4'),
       GameVersion.platinum => ('pt', '4'),
       GameVersion.heartGoldSoulSilver => ('hgss', '4'),
@@ -414,6 +417,7 @@ abstract final class ItemTables {
         GameVersion.rubySapphire => 'rs',
         GameVersion.emerald => 'e',
         GameVersion.fireRedLeafGreen => 'frlg',
+        GameVersion.colosseum || GameVersion.xd => 'rs',
         GameVersion.diamondPearl => 'dp',
         GameVersion.platinum => 'pt',
         GameVersion.heartGoldSoulSilver => 'hgss',

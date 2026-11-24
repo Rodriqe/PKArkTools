@@ -3,6 +3,7 @@ enum Platform {
   gameBoy('Game Boy', 'Game Boy'),
   gameBoyColor('Game Boy Color', 'Game Boy Color'),
   gameBoyAdvance('Game Boy Advance', 'Game Boy Advance'),
+  gameCube('GameCube', 'GameCube'),
   nintendoDs('Nintendo DS', 'Nintendo DS'),
   nintendo3ds('Nintendo 3DS', 'Nintendo 3DS'),
   nintendoSwitch('Nintendo Switch', 'Nintendo Switch');
@@ -21,6 +22,8 @@ enum GameVersion {
   rubySapphire(3, Platform.gameBoyAdvance, 'rs', 'Pokémon Rubí / Zafiro', 'Pokémon Ruby / Sapphire'),
   emerald(3, Platform.gameBoyAdvance, 'emerald', 'Pokémon Esmeralda', 'Pokémon Emerald'),
   fireRedLeafGreen(3, Platform.gameBoyAdvance, 'frlg', 'Pokémon Rojo Fuego / Verde Hoja', 'Pokémon FireRed / LeafGreen'),
+  colosseum(3, Platform.gameCube, 'colo', 'Pokémon Colosseum', 'Pokémon Colosseum'),
+  xd(3, Platform.gameCube, 'xd', 'Pokémon XD: Tempestad Oscura', 'Pokémon XD: Gale of Darkness'),
   diamondPearl(4, Platform.nintendoDs, 'dp', 'Pokémon Diamante / Perla', 'Pokémon Diamond / Pearl'),
   platinum(4, Platform.nintendoDs, 'pt', 'Pokémon Platino', 'Pokémon Platinum'),
   heartGoldSoulSilver(4, Platform.nintendoDs, 'hgss', 'Pokémon Oro HeartGold / Plata SoulSilver', 'Pokémon HeartGold / SoulSilver'),
@@ -57,6 +60,9 @@ enum GameVersion {
 
   /// Formato de ID de entrenador de 6 dígitos (Gen 7 en adelante).
   bool get usesSixDigitIds => generation >= 7;
+
+  /// Pokémon Colosseum o XD (GameCube): Gen 3 con formatos CK3/XK3.
+  bool get isGameCube => platform == Platform.gameCube;
 }
 
 /// Título concreto (cartucho) cuando el save lo identifica, p. ej. Espada vs Escudo.
@@ -64,6 +70,8 @@ enum GameVersion {
 /// Los ids coinciden con `GameVersion` de PKHeX.
 abstract final class GameTitles {
   static const Map<int, (String es, String en)> _titles = {
+    66: ('Pokémon Colosseum', 'Pokémon Colosseum'),
+    67: ('Pokémon XD: Tempestad Oscura', 'Pokémon XD: Gale of Darkness'),
     7: ('Pokémon Oro HeartGold', 'Pokémon HeartGold'),
     8: ('Pokémon Plata SoulSilver', 'Pokémon SoulSilver'),
     10: ('Pokémon Diamante', 'Pokémon Diamond'),

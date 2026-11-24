@@ -10,6 +10,7 @@ import '../model/save.dart';
 import '../strings/string_codec.dart';
 import '../util/bytes.dart';
 import '../util/checksums.dart';
+import 'gc_pkm.dart';
 import 'pk_format.dart';
 
 /// Entidad Pokémon editable (descifrada) de cualquier generación.
@@ -42,7 +43,13 @@ class Pkm {
   int get generation => format.generation;
 
   Pkm clone() => Pkm._(format, Uint8List.fromList(data),
-      japanese: japanese, korean: korean, gbNickname: _gbNick, gbOtName: _gbOt, gbEgg: _gbEgg);
+      japanese: japanese, korean: korean, gbNickname: _gbNick, gbOtName: _gbOt, gbEgg: _gbEgg)
+    ..gc = gc?.clone();
+
+  /// Datos propios de Pokémon Colosseum / XD (CK3/XK3) que el PK3 no guarda:
+  /// estado oscuro, región, apodo mostrado… null si el Pokémon no viene de
+  /// un save de GameCube. Ver [GcPkm].
+  GcExtra? gc;
 
   // ------------------------------------------------------------ creación
 

@@ -55,7 +55,12 @@ enum PkFormat {
   static PkFormat forGame(GameVersion game) => switch (game) {
         GameVersion.redBlue || GameVersion.yellow => pk1,
         GameVersion.goldSilver || GameVersion.crystal => pk2,
-        GameVersion.rubySapphire || GameVersion.emerald || GameVersion.fireRedLeafGreen => pk3,
+        GameVersion.rubySapphire ||
+        GameVersion.emerald ||
+        GameVersion.fireRedLeafGreen ||
+        GameVersion.colosseum ||
+        GameVersion.xd =>
+          pk3,
         GameVersion.diamondPearl || GameVersion.platinum || GameVersion.heartGoldSoulSilver => pk4,
         GameVersion.blackWhite || GameVersion.black2White2 => pk5,
         GameVersion.xy || GameVersion.omegaRubyAlphaSapphire => pk6,

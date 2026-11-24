@@ -4,6 +4,8 @@ import '../crypto/sc_block.dart';
 import '../crypto/swish_crypto.dart';
 import '../formats/ctr_saves.dart';
 import '../formats/gb_saves.dart';
+import '../formats/gc_container.dart';
+import '../formats/gc_saves.dart';
 import '../formats/gen3.dart';
 import '../formats/nds_saves.dart';
 import '../formats/switch_saves.dart';
@@ -13,7 +15,7 @@ import '../util/bytes.dart';
 
 /// Resultado de la detección de formato (sin parsear el contenido completo).
 class Detection {
-  const Detection._(this.game, this.container, this.payload, this._read);
+  const Detection._(this.game, this.container, this.payload, this._read, [this.rewrap, this.warnings = const []]);
 
   final GameVersion game;
 
@@ -23,6 +25,14 @@ class Detection {
   /// Bytes del save sin cabeceras/pies de emulador.
   final Uint8List payload;
   final SaveFile Function() _read;
+
+  /// Vuelve a meter un [payload] editado en el contenedor original cuando no
+  /// basta con añadir un pie (cabecera GCI, archivo dentro de una Memory
+  /// Card). null = el contenedor es el payload más un pie opcional.
+  final Uint8List Function(Uint8List payload)? rewrap;
+
+  /// Avisos de la detección (p. ej. varios saves en una Memory Card).
+  final List<String> warnings;
 
   SaveFile read() => _read();
 }
@@ -71,6 +81,10 @@ abstract final class SaveDetector {
 
     final d = data;
     Detection hit(GameVersion g, SaveFile Function() read) => Detection._(g, container, d, read);
+
+    // GameCube: .gci, imagen de Memory Card o datos sin cabecera de Colosseum/XD.
+    final gc = _detectGameCube(bytes);
+    if (gc != null) return gc;
 
     // 2) Game Boy / Game Boy Color.
     if (d.length == 0x8000) {
@@ -152,6 +166,59 @@ abstract final class SaveDetector {
     }
 
     throw UnsupportedSaveException(_explain(bytes.length), size: bytes.length);
+  }
+
+  static Detection? _detectGameCube(Uint8List bytes) {
+    const titles = {GcTitle.colosseum, GcTitle.xd};
+    GcContainer? container;
+    Uint8List? payload;
+    final warnings = <String>[];
+    final found = GcContainer.find(bytes, titles: titles);
+    if (found != null) {
+      (container, payload) = found;
+      final card = container.card;
+      if (card != null) {
+        final others = card.pokemonEntries.where((e) => e.index != container!.entry!.index).toList();
+        if (others.isNotEmpty) {
+          warnings.add('La Memory Card tiene ${others.length + 1} saves de Pokémon; se abre el de '
+              '${container.entry!.gameCode} (${others.map((e) => e.gameCode).join(', ')} '
+              'se pueden importar por separado).');
+        }
+      }
+    } else {
+      final title = GcSaveData.identifyRaw(bytes);
+      if (title == null) return null;
+      container = const GcContainer.raw();
+      payload = bytes;
+    }
+    final title = container.entry?.title ?? GcSaveData.identifyRaw(payload);
+    if (title == null || payload.length != title.saveSize) return null;
+    final c = container;
+    final p = payload;
+    final game = title == GcTitle.colosseum ? GameVersion.colosseum : GameVersion.xd;
+    return Detection._(
+      game,
+      c.kind == GcContainerKind.raw ? null : c.description,
+      p,
+      () {
+        final s = GcSaveReader.read(p, title, c);
+        if (warnings.isEmpty) return s;
+        return SaveFile(
+          game: s.game,
+          versionId: s.versionId,
+          trainer: s.trainer,
+          raw: s.raw,
+          format: s.format,
+          party: s.party,
+          boxes: s.boxes,
+          support: s.support,
+          checksum: s.checksum,
+          warnings: [...s.warnings, ...warnings],
+        );
+      },
+      c.kind == GcContainerKind.raw ? null : c.wrap,
+      warnings,
+    );
   }
 
   /// Detecta y lee el resumen completo.

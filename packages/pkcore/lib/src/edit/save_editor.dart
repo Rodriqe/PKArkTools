@@ -8,6 +8,8 @@ import '../pkm/pkm.dart';
 import 'ctr_editors.dart';
 import 'gb_editors.dart';
 import 'gba_editor.dart';
+import 'gc_editor.dart';
+import '../formats/gc_container.dart';
 import 'events.dart';
 import 'nds_editors.dart';
 import 'pokedex.dart';
@@ -149,6 +151,10 @@ abstract class SaveEditor {
   /// Bytes del contenedor que no forman parte del save (pie RTC, pie .dsv…).
   Uint8List suffix = Uint8List(0);
 
+  /// Reconstruye un contenedor que no es «payload + pie» (cabecera GCI,
+  /// archivo dentro de una Memory Card). Ver [Detection.rewrap].
+  Uint8List Function(Uint8List payload)? rewrap;
+
   PkFormat get format => PkFormat.forGame(game);
 
   /// Abre un archivo de save. Lanza [UnsupportedSaveException] si no se
@@ -167,6 +173,8 @@ abstract class SaveEditor {
         GameVersion.redBlue || GameVersion.yellow => Gen1Editor.open(payload, det.game),
         GameVersion.goldSilver || GameVersion.crystal => Gen2Editor.open(payload, det.game),
         GameVersion.rubySapphire || GameVersion.emerald || GameVersion.fireRedLeafGreen => Gen3Editor(payload, det.game),
+        GameVersion.colosseum => GcEditor(payload, GcTitle.colosseum),
+        GameVersion.xd => GcEditor(payload, GcTitle.xd),
         GameVersion.diamondPearl || GameVersion.platinum || GameVersion.heartGoldSoulSilver => Gen4Editor(payload, det.game),
         GameVersion.blackWhite || GameVersion.black2White2 => Gen5Editor(payload, det.game, versionId: save.versionId),
         GameVersion.xy ||
@@ -179,7 +187,8 @@ abstract class SaveEditor {
         GameVersion.swordShield || GameVersion.legendsArceus || GameVersion.scarletViolet || GameVersion.legendsZA =>
           SwishEditor(payload, det.game, versionId: save.versionId),
       };
-      editor.suffix = bytes.length > payload.length ? bytes.sublist(payload.length) : Uint8List(0);
+      editor.rewrap = det.rewrap;
+      editor.suffix = det.rewrap == null && bytes.length > payload.length ? bytes.sublist(payload.length) : Uint8List(0);
       final checksumProblems = <ChecksumProblem>[
         if (save.checksum != ChecksumStatus.valid) ...SaveVerifier.checksumProblems(bytes),
       ];
@@ -362,6 +371,7 @@ abstract class SaveEditor {
   /// Archivo completo (mismo contenedor que el original).
   Uint8List build() {
     final p = buildPayload();
+    if (rewrap != null) return rewrap!(p);
     if (suffix.isEmpty) return p;
     return Uint8List(p.length + suffix.length)
       ..setRange(0, p.length, p)

@@ -36,7 +36,12 @@ abstract final class SpeciesForms {
   static String _context(GameVersion game) => switch (game) {
         GameVersion.redBlue || GameVersion.yellow => 'Gen1',
         GameVersion.goldSilver || GameVersion.crystal => 'Gen2',
-        GameVersion.rubySapphire || GameVersion.emerald || GameVersion.fireRedLeafGreen => 'Gen3',
+        GameVersion.rubySapphire ||
+        GameVersion.emerald ||
+        GameVersion.fireRedLeafGreen ||
+        GameVersion.colosseum ||
+        GameVersion.xd =>
+          'Gen3',
         GameVersion.diamondPearl || GameVersion.platinum || GameVersion.heartGoldSoulSilver => 'Gen4',
         GameVersion.blackWhite || GameVersion.black2White2 => 'Gen5',
         GameVersion.xy || GameVersion.omegaRubyAlphaSapphire => 'Gen6',
