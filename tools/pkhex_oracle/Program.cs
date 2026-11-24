@@ -8,6 +8,7 @@
 //   dex <outdir>                  formas especiales y evoluciones para la Dex global (DexTable.cs)
 //   ribbons <outdir>              origen, juegos y cintas válidas por especie/forma (RibbonTable.cs)
 //   transfer <manifest> <out>     conversión entre formatos y legalidad (TransferOracle.cs)
+//   transfertables <out.dart>     tablas del conversor de pkcore (nombres, objetos, amistad base)
 //
 // Los volcados de saves reales contienen datos personales: guárdalos en .scratch/.
 using System.Text.Json;
@@ -24,6 +25,8 @@ static class Program
             return DexTable.Run(args[1]);
         if (args.Length == 2 && args[0] == "ribbons")
             return RibbonTable.Run(args[1]);
+        if (args.Length == 2 && args[0] == "transfertables")
+            return TransferTables.Run(args[1]);
         if (args.Length == 3 && args[0] == "transfer")
             return TransferOracle.Run(args[1], args[2]);
         if (args.Length < 2)

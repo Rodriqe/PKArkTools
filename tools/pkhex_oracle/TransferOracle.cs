@@ -87,3 +87,62 @@ static class TransferOracle
         _ => throw new ArgumentException($"formato destino desconocido: {ext}"),
     };
 }
+
+// Tablas para el conversor de pkcore (packages/pkcore/lib/src/data/generated/transfer_data.dart).
+//   transfertables <out.dart>
+static class TransferTables
+{
+    static readonly int[] Languages = [1, 2, 3, 4, 5, 7, 8, 9, 10];
+
+    public static int Run(string outPath)
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine("// GENERADO por tools/pkhex_oracle (transfertables) desde PKHeX.Core. No editar a mano.");
+        sb.AppendLine("// ignore_for_file: lines_longer_than_80_chars");
+        sb.AppendLine();
+        Names(sb, "kTransferNamesG4", 493, (s, l) => SpeciesName.GetSpeciesNameGeneration(s, l, 4));
+        Names(sb, "kTransferNamesG6", 721, (s, l) => SpeciesName.GetSpeciesNameGeneration(s, l, 6));
+        Names(sb, "kTransferNamesG7", 809, (s, l) => SpeciesName.GetSpeciesNameGeneration(s, l, 7));
+        Names(sb, "kTransferNamesHome", 1025, (s, l) => SpeciesName.GetSpeciesNameImportHOME(s, l, 8));
+        Ints(sb, "kBaseFriendshipSM", Enumerable.Range(0, 810).Select(s => (int)PersonalTable.USUM[(ushort)Math.Min(s, 807)].BaseFriendship));
+        Ints(sb, "kItem3to4", Enumerable.Range(0, 377).Select(i => (int)ItemConverter.GetItemFuture3((ushort)i)));
+        Ints(sb, "kItemFuture1", Enumerable.Range(0, 256).Select(i => (int)ItemConverter.GetItemFuture1((byte)i)));
+        Ints(sb, "kHeldItemsBW", ItemStorage5.GetAllHeld().Select(i => (int)i));
+        // Leyendas Arceus: altura y peso base por especie/forma (PA8.HeightAbsolute/WeightAbsolute).
+        var la = new List<string>();
+        for (ushort sp = 1; sp <= PersonalTable.LA.MaxSpeciesID; sp++)
+        {
+            var baseInfo = PersonalTable.LA[sp];
+            for (byte f = 0; f < Math.Max((byte)1, baseInfo.FormCount); f++)
+            {
+                if (!PersonalTable.LA.IsPresentInGame(sp, f)) continue;
+                var pi = PersonalTable.LA.GetFormEntry(sp, f);
+                la.Add($"{sp},{f},{pi.Height},{pi.Weight}");
+            }
+        }
+        sb.AppendLine("/// Leyendas Arceus: «especie,forma,altura,peso» de cada forma presente.");
+        sb.AppendLine($"const String kLaHeightWeight = '{string.Join(";", la)}';");
+        File.WriteAllText(outPath, sb.ToString());
+        return 0;
+    }
+
+    static void Names(System.Text.StringBuilder sb, string name, int max, Func<ushort, int, string> get)
+    {
+        sb.AppendLine($"/// Nombres de especie (0‥{max}) por idioma (id de PKHeX), separados por «|».");
+        sb.AppendLine($"const Map<int, String> {name} = <int, String>{{");
+        foreach (var l in Languages)
+        {
+            var names = Enumerable.Range(0, max + 1).Select(s => get((ushort)s, l));
+            var joined = string.Join("|", names).Replace("\\", "\\\\").Replace("'", "\\'").Replace("$", "\\$");
+            sb.AppendLine($"  {l}: '{joined}',");
+        }
+        sb.AppendLine("};");
+        sb.AppendLine();
+    }
+
+    static void Ints(System.Text.StringBuilder sb, string name, IEnumerable<int> values)
+    {
+        sb.AppendLine($"const List<int> {name} = <int>[{string.Join(",", values)}];");
+        sb.AppendLine();
+    }
+}
