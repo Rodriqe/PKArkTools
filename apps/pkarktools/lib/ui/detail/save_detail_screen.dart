@@ -329,15 +329,18 @@ class _SnapshotContentState extends ConsumerState<_SnapshotContent> {
             child: switch (section) {
           _Section.pokemon when !hasStorage => _Notice(text: l10n.notSupportedStorage, accent: accent),
           _Section.pokemon => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              _SectionTitle(l10n.team),
-              const SizedBox(height: 14),
-              PartyGrid(
-                party: editor.party,
-                actions: actions,
-                capacity: editor.partyCapacity,
-                focusSlot: widget.focus?.box == -1 ? widget.focus!.slot : null,
-              ),
-              const SizedBox(height: 36),
+              // Juegos de solo cajas (Stadium, Box, Rancho): sin equipo.
+              if (editor.partyCapacity > 0) ...[
+                _SectionTitle(l10n.team),
+                const SizedBox(height: 14),
+                PartyGrid(
+                  party: editor.party,
+                  actions: actions,
+                  capacity: editor.partyCapacity,
+                  focusSlot: widget.focus?.box == -1 ? widget.focus!.slot : null,
+                ),
+                const SizedBox(height: 36),
+              ],
               _SectionTitle(l10n.boxes),
               const SizedBox(height: 14),
               BoxBrowser(editor: editor, actions: actions, accent: accent, revision: draft.revision, focus: widget.focus),

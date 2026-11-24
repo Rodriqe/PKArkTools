@@ -22,6 +22,11 @@ abstract final class VersionPalette {
     15: Color(0xFF7C5BA6), // Colosseum/XD (origen de un Pokémon)
     66: Color(0xFFC2562C), // Colosseum (save): ocre rojizo del desierto de Orre
     67: Color(0xFF3B3F8F), // XD (save): índigo de Lugia oscuro
+    65: Color(0xFF2E8C8C), // Pokémon Box Rubí y Zafiro: verde azulado del Box
+    93: Color(0xFF5A7BC8), // Pokémon Stadium: azul del cartucho de N64
+    94: Color(0xFFD9A62E), // Pokémon Stadium 2: oro del cartucho
+    16: Color(0xFF8C2F39), // Battle Revolution: granate de Pokétopia
+    200: Color(0xFF7CB342), // My Pokémon Ranch: verde de pradera
     10: Color(0xFF6F97E3), // Diamante
     11: Color(0xFFE39CC0), // Perla
     12: Color(0xFF8E96A3), // Platino

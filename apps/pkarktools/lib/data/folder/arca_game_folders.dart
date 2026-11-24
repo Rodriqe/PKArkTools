@@ -57,6 +57,12 @@ abstract final class ArcaGameFolders {
       pk.Platform.nintendoDs => es
           ? 'DS: el .sav de Checkpoint, TWiLight Menu++, melonDS o un lector de cartuchos, o el .dsv de DeSmuME/DraStic.'
           : 'DS: the .sav from Checkpoint, TWiLight Menu++, melonDS or a cartridge reader, or the .dsv from DeSmuME/DraStic.',
+      pk.Platform.nintendo64 => es
+          ? 'Nintendo 64: el save del cartucho (.fla, .sra o .sav) de Mupen64Plus, Project64, simple64, RetroArch (.srm) o un volcado con un lector de cartuchos. Se aceptan también los volcados con el orden de bytes invertido.'
+          : 'Nintendo 64: the cartridge save (.fla, .sra or .sav) from Mupen64Plus, Project64, simple64, RetroArch (.srm) or a cartridge reader dump. Byte-swapped dumps are accepted too.',
+      pk.Platform.wii => es
+          ? 'Wii: el archivo de la NAND de Dolphin (Battle Revolution: PbrSaveData; Rancho: pokemonranch.bin) dentro de Wii/title/00010000/<id del juego>/data/, o exportado de una Wii con el gestor de datos y extraído con Dolphin.'
+          : 'Wii: the file from Dolphin\'s NAND (Battle Revolution: PbrSaveData; Ranch: pokemonranch.bin) inside Wii/title/00010000/<game id>/data/, or exported from a Wii with the data manager and extracted with Dolphin.',
       pk.Platform.gameCube => es
           ? 'GameCube: el .gci exportado desde Dolphin (Herramientas › Administrar tarjetas de memoria, o la carpeta GCI de Dolphin: User/GC/<USA|EUR|JAP>/Card A) o la imagen completa de la Memory Card (.raw de Dolphin, .gcp, .mci). Si la tarjeta tiene Colosseum y XD, se importan los dos.'
           : 'GameCube: the .gci exported from Dolphin (Tools › Manage Memory Cards, or Dolphin\'s GCI folder: User/GC/<USA|EUR|JAP>/Card A) or the whole Memory Card image (Dolphin .raw, .gcp, .mci). If the card has both Colosseum and XD, both are imported.',
@@ -71,9 +77,11 @@ abstract final class ArcaGameFolders {
 
   static String readme(GameVersion g, {required bool es}) {
     final name = es ? g.nameEs : g.nameEn;
-    final main = g.platform == pk.Platform.gameCube
-        ? (es ? '<el .gci o .raw con su nombre original>' : '<the .gci or .raw with its original name>')
-        : ArcaLayout.mainFileName(g.code, 'x.sav');
+    final main = switch (g.platform) {
+      pk.Platform.gameCube => es ? '<el .gci o .raw con su nombre original>' : '<the .gci or .raw with its original name>',
+      pk.Platform.nintendo64 => es ? '<Juego> con la extensión original' : '<Game> with the original extension',
+      _ => ArcaLayout.mainFileName(g.code, 'x.sav'),
+    };
     return es
         ? '''
 ${ArcaLayout.readmeMarker} · $name

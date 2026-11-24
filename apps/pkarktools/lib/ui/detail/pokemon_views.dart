@@ -51,8 +51,9 @@ class StorageActions {
     final l10n = context.l10n;
     // Colosseum/XD: el formato nativo (.ck3/.xk3) conserva el estado oscuro.
     final gc = _gcKind;
-    final ext = gc?.extension ?? pk.format.extension;
-    final bytes = gc != null ? GcPkm.toFile(pk, gc) : pk.toFile();
+    final native = StoragePkm.extensionFor(game);
+    final ext = gc?.extension ?? native ?? pk.format.extension;
+    final bytes = gc != null ? GcPkm.toFile(pk, gc) : (native != null ? StoragePkm.toFile(pk, game) : pk.toFile());
     final name = '${speciesName(context, pk.species)}_${pk.level}.$ext';
     final path = await ref.read(fileSourcesProvider).exportBytes(name, bytes);
     if (path != null) messenger.showSnackBar(SnackBar(content: Text(l10n.exportDone(path))));
@@ -64,6 +65,13 @@ class StorageActions {
         GameVersion.xd => GcKind.xk3,
         _ => null,
       };
+
+  /// Extensiones que acepta «Importar» en este juego.
+  String get _importExts {
+    final main = PkFormat.forGame(game).extension;
+    final own = _gcKind?.extension ?? StoragePkm.extensionFor(game);
+    return own == null ? main : '$own / .$main';
+  }
 
   Future<void> edit(SlotRef slot, Pkm pk) async {
     final res = await PokemonEditorScreen.open(
@@ -105,7 +113,7 @@ class StorageActions {
           ),
           ListTile(
             leading: const Icon(Icons.file_open_outlined),
-            title: Text(l10n.importPokemon(_gcKind != null ? '${_gcKind!.extension} / .pk3' : PkFormat.forGame(game).extension)),
+            title: Text(l10n.importPokemon(_importExts)),
             subtitle: Text(l10n.importPokemonDesc),
             onTap: () => Navigator.pop(ctx, 'import'),
           ),
@@ -135,12 +143,15 @@ class StorageActions {
     final ext = p.extension(f.name).replaceFirst('.', '').toLowerCase();
     final format = PkFormat.fromExtension(ext);
     final gcFile = GcKind.fromExtension(ext);
-    if (format != want && (gcFile == null || gcFile != _gcKind)) {
-      final wanted = _gcKind != null ? '${_gcKind!.extension} / .pk3' : want.extension;
-      messenger.showSnackBar(SnackBar(content: Text(l10n.importWrongFormat(ext.isEmpty ? '?' : ext, wanted))));
+    final native = StoragePkm.extensionFor(game);
+    final isNative = native != null && ext == native;
+    if (format != want && !isNative && (gcFile == null || gcFile != _gcKind)) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.importWrongFormat(ext.isEmpty ? '?' : ext, _importExts))));
       return;
     }
-    final pk = gcFile != null ? GcPkm.fromFile(gcFile, f.bytes) : Pkm.fromFile(want, f.bytes);
+    final pk = gcFile != null
+        ? GcPkm.fromFile(gcFile, f.bytes)
+        : (isNative ? StoragePkm.fromFile(ext, f.bytes) : Pkm.fromFile(want, f.bytes));
     if (pk == null || (!want.isGameBoy && !pk.checksumValid)) {
       messenger.showSnackBar(SnackBar(content: Text(l10n.importInvalidPokemon)));
       return;

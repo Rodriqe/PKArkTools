@@ -133,7 +133,9 @@ SaveFile storageSummary(SaveEditor ed, Uint8List raw, {required String format, r
   return SaveFile(
     game: ed.game,
     versionId: ed.versionId,
-    trainer: TrainerInfo(name: t.name, tid: t.tid, sid: t.sid, gender: t.gender, playTime: t.playTime),
+    // Sin entrenador propio (Stadium, Box, Rancho): sin SID que mostrar.
+    trainer: TrainerInfo(
+        name: t.name, tid: t.tid, sid: t.tid == 0 && t.sid == 0 ? null : t.sid, gender: t.gender, playTime: t.playTime),
     raw: raw,
     format: format,
     party: [for (var i = 0; i < ed.partyCount; i++) ed.readPartySlot(i).toSummary()],

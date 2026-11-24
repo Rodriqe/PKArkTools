@@ -104,7 +104,7 @@ abstract final class ArcaLayout {
 
   /// Extensiones de contenedor que conservan los emuladores y lectores
   /// (el resto se guarda como `.sav`).
-  static const containerExts = {'.sav', '.dsv', '.srm', '.sa1', '.fla', '.dat', '.bin'};
+  static const containerExts = {'.sav', '.dsv', '.srm', '.sa1', '.fla', '.dat', '.bin', '.sra', '.eep'};
 
   /// Contenedores de GameCube: `.gci` (un archivo de la Memory Card, carpeta
   /// GCI de Dolphin) e imágenes de Memory Card (`.raw` de Dolphin, `.gcp`, `.mci`).
@@ -119,7 +119,9 @@ abstract final class ArcaLayout {
   /// | Let's Go Pikachu / Eevee                   | `savedata.bin`   |
   /// | 3DS (X/Y, ROZA, Sol/Luna, USUL)            | `main`           |
   /// | GB, GBC, GBA, DS                           | `<Juego><ext>`   |
-  /// | Colosseum, XD (GameCube)                   | el `.gci` / `.raw` original, o `<Juego>.bin` |
+  /// | Colosseum, XD, Box (GameCube)              | el `.gci` / `.raw` original, o `<Juego>.bin` |
+  /// | Stadium, Stadium 2 (N64)                   | `<Juego><ext>` (`.fla`, `.sra`, `.sav`…) |
+  /// | Battle Revolution / Rancho (Wii)           | `PbrSaveData` / `pokemonranch.bin` |
   ///
   /// Son los nombres que usan Checkpoint/JKSM y los emuladores de Switch y
   /// 3DS. En GB…DS `<ext>` es la del contenedor original si es conocida
@@ -137,6 +139,9 @@ abstract final class ArcaLayout {
         break;
       default:
         if (game.platform == pk.Platform.nintendoSwitch || game.platform == pk.Platform.nintendo3ds) return 'main';
+        // Wii: el nombre del archivo de la NAND de Dolphin.
+        if (game == GameVersion.battleRevolution) return 'PbrSaveData';
+        if (game == GameVersion.ranch) return 'pokemonranch.bin';
         if (game.platform == pk.Platform.gameCube) {
           // Dolphin identifica los .gci por su cabecera, no por el nombre, pero
           // conservar el original (`01-GC6E-….gci`, `MemoryCardA.USA.raw`)
