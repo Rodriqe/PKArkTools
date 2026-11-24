@@ -137,6 +137,11 @@ purificarlo; uno purificado de XD llega con la marca de encuentro fatídico,
 como al intercambiarlo en el juego. Los Pokémon sueltos son `.ck3`
 (Colosseum) y `.xk3` (XD).
 
+<p>
+  <img src="../screenshots/gamecube/03_xd_shadow_pokemon.png" width="420" alt="Pokémon oscuro en XD">
+  <img src="../screenshots/gamecube/05_colosseum_purified.png" width="420" alt="Pokémon purificado en Colosseum">
+</p>
+
 ## Saves en solo lectura
 
 Si el save tiene datos ilegibles o checksums rotos se abre en **solo lectura**

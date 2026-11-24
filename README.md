@@ -94,7 +94,8 @@ background and cached, it opens instantly. [Dex guide](docs/usuario/dex.md).
 **Import from anywhere**
 * Single files or whole folders (bulk import with a summary first): GB/GBA/DS
   emulators (raw `.sav`/`.srm`, DeSmuME `.dsv`, RTC footers), Switch emulators
-  (Yuzu/Eden/Sudachi/Citron, Ryujinx) and their Android ports, cartridge dumps
+  (Yuzu/Eden/Sudachi/Citron, Ryujinx) and their Android ports, Dolphin
+  (`.gci` and Memory Card images for Colosseum/XD), cartridge dumps
   and **Checkpoint / JKSM** backups ([import guide](docs/usuario/importar.md)).
 * Detection by content (size, structure, checksums), never by extension;
   ROMs, keys and other files are ignored without being opened.
@@ -137,6 +138,7 @@ background and cached, it opens instantly. [Dex guide](docs/usuario/dex.md).
 | Red / Blue / Yellow (intl. & JP) | Game Boy | ✅ | ✅ | Pokédex, inventory + PC, raw events, `.pk1` |
 | Gold / Silver / Crystal (intl., JP, KR) | Game Boy Color | ✅ | ✅ | Pokédex, named events, `.pk2` |
 | Ruby / Sapphire, Emerald, FireRed / LeafGreen | GBA | ✅ | ✅ | Pokédex, events, ribbons, wild encounters, `.pk3` |
+| Colosseum, XD: Gale of Darkness | GameCube | ✅ | ✅ | Shadow Pokémon, Strategy Memo, bag, encounters, `.gci` / Memory Card, `.ck3`/`.xk3` |
 | Diamond / Pearl, Platinum, HeartGold / SoulSilver | DS | ✅ | ✅ | Pokédex + gender, events, ribbons, full encounter legality, `.pk4` |
 | Black / White, Black 2 / White 2 | DS | ✅ | ✅ | Pokédex + gender/shiny, events, ribbons, encounters, `.pk5` |
 | X / Y, Omega Ruby / Alpha Sapphire | 3DS | ✅ | ✅ | Pokédex with forms, events, ribbons, encounters, `.pk6` |

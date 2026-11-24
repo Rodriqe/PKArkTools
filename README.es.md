@@ -100,7 +100,8 @@ opcional. Se indexa en segundo plano y se cachea: abre al instante.
 * Archivos sueltos o carpetas enteras (importación en bloque con resumen
   previo): emuladores de GB/GBA/DS (`.sav`/`.srm` crudos, `.dsv` de DeSmuME,
   pies RTC), emuladores de Switch (Yuzu/Eden/Sudachi/Citron, Ryujinx) y sus
-  ports de Android, volcados de cartucho y copias de **Checkpoint / JKSM**
+  ports de Android, Dolphin (`.gci` e imágenes de Memory Card de
+  Colosseum/XD), volcados de cartucho y copias de **Checkpoint / JKSM**
   ([guía de importación](docs/usuario/importar.md)).
 * Detección por contenido (tamaño, estructura, checksums), nunca por la
   extensión; ROMs, claves y otros archivos se ignoran sin abrirse.
@@ -143,6 +144,7 @@ opcional. Se indexa en segundo plano y se cachea: abre al instante.
 | Rojo / Azul / Amarillo (int. y JP) | Game Boy | ✅ | ✅ | Pokédex, mochila + PC, eventos en crudo, `.pk1` |
 | Oro / Plata / Cristal (int., JP y coreano) | Game Boy Color | ✅ | ✅ | Pokédex, eventos con nombre, `.pk2` |
 | Rubí / Zafiro, Esmeralda, Rojo Fuego / Verde Hoja | GBA | ✅ | ✅ | Pokédex, eventos, cintas, encuentros salvajes, `.pk3` |
+| Colosseum, XD: Tempestad Oscura | GameCube | ✅ | ✅ | Pokémon oscuros, Strategy Memo, bolsa, encuentros, `.gci` / Memory Card, `.ck3`/`.xk3` |
 | Diamante / Perla, Platino, Oro HeartGold / Plata SoulSilver | DS | ✅ | ✅ | Pokédex + género, eventos, cintas, legalidad de encuentros completa, `.pk4` |
 | Negro / Blanco, Negro 2 / Blanco 2 | DS | ✅ | ✅ | Pokédex + género/variocolor, eventos, cintas, encuentros, `.pk5` |
 | X / Y, Rubí Omega / Zafiro Alfa | 3DS | ✅ | ✅ | Pokédex con formas, eventos, cintas, encuentros, `.pk6` |

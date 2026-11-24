@@ -71,6 +71,12 @@ también se puede importar un `.pk3` de GBA, que se convierte con la región
 del save. Un Pokémon oscuro sin purificar no se puede llevar a un juego de
 GBA (igual que en el juego).
 
+<p>
+  <img src="../screenshots/gamecube/01_arca.png" width="420" alt="Colosseum y XD en el Arca">
+  <img src="../screenshots/gamecube/02_xd_save.png" width="420" alt="Save de XD">
+  <img src="../screenshots/gamecube/04_colosseum_save.png" width="420" alt="Save de Colosseum en una Memory Card">
+</p>
+
 ### Emuladores de Switch en escritorio
 
 Elige la carpeta de saves del emulador, por ejemplo `nand/user/save/…` en
