@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pkcore/pkcore.dart';
 
+import '../../data/sprites/sprites.dart';
 import '../../theme/app_theme.dart';
 import '../common/format.dart';
+import '../common/sprite_image.dart';
 import 'dex_text.dart';
 import 'dex_tile.dart';
 
-/// Insignia «G» de Gigamax (no hay iconos propios de Gigamax: se dibuja la
-/// forma base con esta insignia).
+/// Insignia «G» de Gigamax: en «Tus ejemplares» marca el factor Gigamax y,
+/// en una forma Gigamax sin icono propio, que el icono es el de la especie.
 class GmaxBadge extends StatelessWidget {
   const GmaxBadge({super.key, this.size = 18});
   final double size;
@@ -28,9 +30,12 @@ class GmaxBadge extends StatelessWidget {
 }
 
 /// Insignia de la clase de forma especial (Mega, Primigenio, Ultra, Gigamax).
+/// [compact] es la versión pequeña que se pone sobre el icono de la especie
+/// cuando la forma no tiene icono propio.
 class SpecialKindBadge extends StatelessWidget {
-  const SpecialKindBadge(this.kind, {super.key});
+  const SpecialKindBadge(this.kind, {super.key, this.compact = false});
   final SpecialFormKind kind;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +46,10 @@ class SpecialKindBadge extends StatelessWidget {
       SpecialFormKind.gigantamax => ('G-MAX', const Color(0xFFD8335B)),
     };
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(6)),
-      child: Text(label,
-          style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 0.6)),
+      padding: EdgeInsets.symmetric(horizontal: compact ? 4 : 7, vertical: compact ? 1 : 2),
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(compact ? 4 : 6)),
+      child: Text(compact && kind == SpecialFormKind.primal ? 'P' : label,
+          style: TextStyle(color: Colors.white, fontSize: compact ? 8 : 10, fontWeight: FontWeight.w900, letterSpacing: 0.6)),
     );
   }
 }
@@ -64,6 +69,11 @@ class SpecialFormCard extends StatelessWidget {
     final any = unlock.normalUnlocked || unlock.shinyUnlocked;
     final iconForm = specialFormIconForm(f);
     final iconStatus = any ? DexStatus.caught : DexStatus.unknown;
+    // Icono propio de la forma (Gigamax, Mega…); variocolor si solo está
+    // desbloqueada la variocolor. Sin icono propio: el de la especie con insignia.
+    final ownIcon = Sprites.hasSpecialIcon(f);
+    final shinyIcon = Sprites.hasSpecialShinyIcon(f) ? Sprites.special(f, shiny: true) : null;
+    final icon = unlock.shinyUnlocked && !unlock.normalUnlocked && shinyIcon != null ? shinyIcon : Sprites.special(f);
     final (t1, t2) = f.form == null ? SpeciesForms.types(f.species, iconForm) : _types(f);
     final refs = [...unlock.normal, ...unlock.shiny];
     final itemSources = unlock.withItem;
@@ -84,9 +94,20 @@ class SpecialFormCard extends StatelessWidget {
             height: 72,
             decoration: BoxDecoration(color: tokens.sunken, borderRadius: BorderRadius.circular(16)),
             child: Stack(alignment: Alignment.center, clipBehavior: Clip.none, children: [
-              DexIcon(species: f.species, form: iconForm, status: iconStatus, size: 60),
+              DexIcon(
+                  key: ValueKey('dex-special-icon-${f.key}-${ownIcon ? 'own' : 'base'}'),
+                  species: f.species,
+                  form: iconForm,
+                  status: iconStatus,
+                  size: 60,
+                  sprite: ownIcon ? icon : null),
               if (!any) Icon(Icons.lock_rounded, size: 20, color: tokens.muted),
-              if (f.kind == SpecialFormKind.gigantamax) const Positioned(right: 2, bottom: 2, child: GmaxBadge()),
+              if (!ownIcon)
+                Positioned(
+                  right: 2,
+                  bottom: 2,
+                  child: f.kind == SpecialFormKind.gigantamax ? const GmaxBadge() : SpecialKindBadge(f.kind, compact: true),
+                ),
             ]),
           ),
           const SizedBox(width: 12),
@@ -115,7 +136,13 @@ class SpecialFormCard extends StatelessWidget {
         Row(children: [
           Expanded(child: _VariantPill(label: l10n.dexNormal, unlocked: unlock.normalUnlocked, shiny: false, keyName: '${f.key}-normal')),
           const SizedBox(width: 8),
-          Expanded(child: _VariantPill(label: l10n.dexShinyVariant, unlocked: unlock.shinyUnlocked, shiny: true, keyName: '${f.key}-shiny')),
+          Expanded(
+              child: _VariantPill(
+                  label: l10n.dexShinyVariant,
+                  unlocked: unlock.shinyUnlocked,
+                  shiny: true,
+                  keyName: '${f.key}-shiny',
+                  sprite: shinyIcon)),
         ]),
         if (!unlock.normalUnlocked || !unlock.shinyUnlocked) ...[
           const SizedBox(height: 10),
@@ -188,11 +215,15 @@ class SpecialFormCard extends StatelessWidget {
 }
 
 class _VariantPill extends StatelessWidget {
-  const _VariantPill({required this.label, required this.unlocked, required this.shiny, required this.keyName});
+  const _VariantPill({required this.label, required this.unlocked, required this.shiny, required this.keyName, this.sprite});
   final String label;
   final bool unlocked;
   final bool shiny;
   final String keyName;
+
+  /// Icono variocolor de la forma: se muestra en vez del destello cuando la
+  /// variante está desbloqueada.
+  final SpriteRef? sprite;
 
   @override
   Widget build(BuildContext context) {
@@ -209,8 +240,15 @@ class _VariantPill extends StatelessWidget {
           border: Border.all(color: unlocked ? color.withValues(alpha: 0.7) : tokens.hairline),
         ),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(unlocked ? (shiny ? Icons.auto_awesome : Icons.check_rounded) : Icons.lock_outline_rounded,
-              size: 15, color: unlocked ? color : tokens.muted),
+          if (unlocked && sprite != null)
+            SpriteImage(
+              sprite: sprite,
+              size: 22,
+              fallback: Icon(Icons.auto_awesome, size: 15, color: color),
+            )
+          else
+            Icon(unlocked ? (shiny ? Icons.auto_awesome : Icons.check_rounded) : Icons.lock_outline_rounded,
+                size: 15, color: unlocked ? color : tokens.muted),
           const SizedBox(width: 6),
           Flexible(
             child: Text(

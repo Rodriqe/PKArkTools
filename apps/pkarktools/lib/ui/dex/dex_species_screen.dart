@@ -633,7 +633,8 @@ class _Specimens extends StatelessWidget {
           return ListTile(
             key: ValueKey('dex-specimen-${src.id}-${p.box}-${p.slot}'),
             leading: Stack(clipBehavior: Clip.none, children: [
-              DexIcon(species: p.species, form: p.form, status: DexStatus.caught, size: 40),
+              DexIcon(
+                  species: p.species, form: p.form, status: DexStatus.caught, size: 40, gigantamax: p.gigantamax, shiny: p.shiny),
               if (p.shiny) Positioned(right: -4, top: -4, child: Icon(Icons.auto_awesome, size: 14, color: tokens.shiny)),
               if (p.gigantamax)
                 Positioned(left: -4, bottom: -4, child: GmaxBadge(size: 14)),

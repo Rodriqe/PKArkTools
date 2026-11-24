@@ -17,6 +17,7 @@ import 'package:pkarktools/data/db/arca_database.dart';
 import 'package:pkarktools/data/folder/arca_folder.dart';
 import 'package:pkarktools/data/folder/folder_fs.dart';
 import 'package:pkarktools/providers.dart';
+import 'package:pkarktools/ui/dex/dex_tile.dart';
 import 'package:pkarktools/ui/shell.dart';
 
 import 'arca_folder_test.dart' show memoryDb;
@@ -160,6 +161,13 @@ void main() {
     // Gigamax: solo la variocolor (el ejemplar con factor es variocolor).
     expect(find.byKey(const ValueKey('dex-variant-gmax:6:*-shiny-on')), findsOneWidget);
     expect(find.byKey(const ValueKey('dex-variant-gmax:6:*-normal-off')), findsOneWidget);
+    // Icono propio de Charizard Gigamax: el variocolor, que es el desbloqueado.
+    final gmaxIcon = t.widget<DexIcon>(find.byKey(const ValueKey('dex-special-icon-gmax:6:*-own')));
+    expect(gmaxIcon.sprite?.key, 'pokemon_small_shiny/0006-000-Charizard-Gmax');
+    final megaIcon = t.widget<DexIcon>(find.byKey(const ValueKey('dex-special-icon-mega:6:1-own')));
+    expect(megaIcon.sprite?.key, 'pokemon/scharizard-omega_x');
+    // «Tus ejemplares»: el Charizard con factor Gigamax se ve con su icono Gigamax.
+    expect(find.byWidgetPredicate((w) => w is DexIcon && w.gigantamax && w.shiny && w.species == 6), findsOneWidget);
     // Mega X e Y: el Charizard normal de X/Y las habilita; variocolor no.
     expect(find.byKey(const ValueKey('dex-variant-mega:6:1-normal-on')), findsOneWidget);
     expect(find.byKey(const ValueKey('dex-variant-mega:6:1-shiny-off')), findsOneWidget);
@@ -176,6 +184,10 @@ void main() {
     await pumpDex(t, '/dex/especie/3');
     expect(find.byKey(const ValueKey('dex-variant-mega:3:1-normal-off')), findsOneWidget);
     expect(find.byKey(const ValueKey('dex-variant-gmax:3:*-normal-off')), findsOneWidget);
+    // Bloqueadas: silueta del icono propio (Venusaur Gigamax de previews/gen9).
+    final locked = t.widget<DexIcon>(find.byKey(const ValueKey('dex-special-icon-gmax:3:*-own')));
+    expect(locked.sprite?.key, 'pokemon_preview/svenusaur-g');
+    expect(locked.status, DexStatus.unknown);
     expect(find.textContaining('Have a Venusaur with the Gigantamax Factor in Sword/Shield.'), findsOneWidget);
     expect(find.textContaining('Have a Venusaur in X / Y'), findsOneWidget);
     expect(find.textContaining('The shiny one needs a shiny specimen'), findsNWidgets(2), reason: 'ningún Venusaur');

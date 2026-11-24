@@ -19,7 +19,17 @@ const List<double> _greyscale = [
 /// color (capturado). Los iconos se descargan bajo demanda como en el resto
 /// de la app; sin icono se ve el número.
 class DexIcon extends StatelessWidget {
-  const DexIcon({super.key, required this.species, this.form = 0, required this.status, required this.size, this.label});
+  const DexIcon({
+    super.key,
+    required this.species,
+    this.form = 0,
+    required this.status,
+    required this.size,
+    this.label,
+    this.gigantamax = false,
+    this.shiny = false,
+    this.sprite,
+  });
 
   final int species;
   final int form;
@@ -27,10 +37,19 @@ class DexIcon extends StatelessWidget {
   final double size;
   final String? label;
 
+  /// Icono Gigamax de la especie (si lo hay).
+  final bool gigantamax;
+
+  /// Icono variocolor (solo las formas especiales lo tienen).
+  final bool shiny;
+
+  /// Icono concreto (formas especiales); si no, el de [species]/[form].
+  final SpriteRef? sprite;
+
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final sprite = Sprites.pokemon(species, form: form);
+    final sprite = this.sprite ?? Sprites.pokemon(species, form: form, gigantamax: gigantamax, shiny: shiny);
     final fallback = Text(
       status == DexStatus.unknown ? '?' : '$species',
       style: TextStyle(
