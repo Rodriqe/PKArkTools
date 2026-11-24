@@ -141,7 +141,9 @@ PKArkTools/_cuarentena/     ← lo que «Arreglar» no pudo reparar, con una not
   | Let's Go, Pikachu! / Eevee! | `savedata.bin` |
   | X/Y, Rubí Omega/Zafiro Alfa, Sol/Luna, Ultrasol/Ultraluna (3DS) | `main` |
   | Game Boy, GBA y DS | `<Juego>.<ext>`: `.sav`, o el contenedor original si es `.dsv` (DeSmuME/DraStic), `.srm` (RetroArch), `.sa1`, `.fla`, `.dat` o `.bin` |
-  | Colosseum y XD (GameCube) | El nombre original del `.gci` (p. ej. `01-GC6E-….gci`) o de la Memory Card (`MemoryCardA.USA.raw`); `<Juego>.bin` si eran datos sin cabecera |
+  | Stadium y Stadium 2 (N64) | `<Juego>.<ext>` con la extensión original (`.fla`, `.sra`, `.sav`…) |
+  | Battle Revolution / My Pokémon Ranch (Wii) | `PbrSaveData` / `pokemonranch.bin`, como en la NAND de Dolphin |
+  | Colosseum, XD y Box Rubí y Zafiro (GameCube) | El nombre original del `.gci` (p. ej. `01-GC6E-….gci`) o de la Memory Card (`MemoryCardA.USA.raw`); `<Juego>.bin` si eran datos sin cabecera |
 
   Si un mismo entrenador tiene copias de contenedores distintos (por ejemplo
   `.sav` de melonDS y `.dsv` de DeSmuME), cada uno tiene su archivo.

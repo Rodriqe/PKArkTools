@@ -12,6 +12,23 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 ## [Unreleased]
 
 ### Añadido
+- **Juegos de almacenamiento y estadio**: Pokémon Stadium y Stadium 2
+  (Nintendo 64; internacional, japonés y el Pocket Monsters Stadium original,
+  también volcados con el orden de bytes invertido), Pokémon Box: Rubí y
+  Zafiro (`.gci`, Memory Card o datos sin cabecera de GameCube), Pokémon
+  Battle Revolution y My Pokémon Ranch (Wii, archivos de la NAND de Dolphin).
+  Detección por contenido, lectura completa, escritura con sus sumas (sumas
+  por caja, sumas por bloque del Box, mitades cifradas con Genius Sonority y
+  contadores de bits de Battle Revolution, SHA-1, contador y marcador de fin
+  del Rancho), round-trip byte a byte y contenedor original conservado (orden
+  de bytes, los otros perfiles de Battle Revolution). Los equipos registrados
+  de Stadium se ven en solo lectura; los huecos del Rancho por encima de la
+  capacidad de su nivel están bloqueados.
+- Pokémon sueltos `.sk2`, `.bk4` y `.rk4`; los BK4 se editan como PK4 sin pérdidas.
+- Arca: plataformas Nintendo 64 y Wii, colores de los cinco juegos, nombres de
+  archivo principal (`PbrSaveData`, `pokemonranch.bin`, la extensión original
+  de N64) y LEEME de las carpetas de juego con cómo sacar cada save; los
+  juegos de solo cajas no muestran una sección de equipo vacía.
 - **Pokémon Colosseum y Pokémon XD: Tempestad Oscura (GameCube).** Se leen y
   escriben saves en `.gci` (exportados con Dolphin o de su carpeta GCI),
   imágenes completas de Memory Card (`.raw`, `.gcp`, `.mci`) y datos sin

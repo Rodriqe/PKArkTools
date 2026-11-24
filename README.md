@@ -139,6 +139,9 @@ background and cached, it opens instantly. [Dex guide](docs/usuario/dex.md).
 | Gold / Silver / Crystal (intl., JP, KR) | Game Boy Color | ✅ | ✅ | Pokédex, named events, `.pk2` |
 | Ruby / Sapphire, Emerald, FireRed / LeafGreen | GBA | ✅ | ✅ | Pokédex, events, ribbons, wild encounters, `.pk3` |
 | Colosseum, XD: Gale of Darkness | GameCube | ✅ | ✅ | Shadow Pokémon, Strategy Memo, bag, encounters, `.gci` / Memory Card, `.ck3`/`.xk3` |
+| Stadium, Stadium 2 | Nintendo 64 | ✅ | ✅ | boxes, registered teams (read-only), `.pk1`/`.sk2` |
+| Box: Ruby & Sapphire | GameCube | ✅ | ✅ | 1500 storage slots, `.gci` / Memory Card |
+| Battle Revolution, My Pokémon Ranch | Wii | ✅ | ✅ | party and boxes (BR), ranch boxes, `.bk4`/`.rk4` |
 | Diamond / Pearl, Platinum, HeartGold / SoulSilver | DS | ✅ | ✅ | Pokédex + gender, events, ribbons, full encounter legality, `.pk4` |
 | Black / White, Black 2 / White 2 | DS | ✅ | ✅ | Pokédex + gender/shiny, events, ribbons, encounters, `.pk5` |
 | X / Y, Omega Ruby / Alpha Sapphire | 3DS | ✅ | ✅ | Pokédex with forms, events, ribbons, encounters, `.pk6` |

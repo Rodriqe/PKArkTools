@@ -50,6 +50,7 @@ PKArkTools lee el save de tres formas; elige la que te resulte más cómoda:
    el save de «Pokémon Colosseum» o «Pokémon XD» y pulsa **Exportar GCI**.
    Importa ese `.gci`. Para devolverlo, en la misma ventana usa **Importar
    GCI** (borra antes la copia vieja, la tarjeta no admite dos iguales).
+   Pokémon Box: Rubí y Zafiro se exporta igual (código `GPXE`/`GPXP`/`GPXJ`).
 2. **Carpeta GCI de Dolphin**. Si en **Configuración › GameCube** la Ranura A
    es «Carpeta GCI», los saves están ya como `.gci` en
    `User/GC/<USA|EUR|JAP>/Card A/` (en Android,
@@ -72,10 +73,37 @@ del save. Un Pokémon oscuro sin purificar no se puede llevar a un juego de
 GBA (igual que en el juego).
 
 <p>
+  <img src="../screenshots/storage/01_arca.png" width="420" alt="Stadium, Box, Battle Revolution y Rancho en el Arca">
+  <img src="../screenshots/storage/02_stadium.png" width="420" alt="Cajas de Pokémon Stadium">
+  <img src="../screenshots/storage/06_battle_revolution.png" width="420" alt="Equipo de Battle Revolution">
+</p>
+
+<p>
   <img src="../screenshots/gamecube/01_arca.png" width="420" alt="Colosseum y XD en el Arca">
   <img src="../screenshots/gamecube/02_xd_save.png" width="420" alt="Save de XD">
   <img src="../screenshots/gamecube/04_colosseum_save.png" width="420" alt="Save de Colosseum en una Memory Card">
 </p>
+
+### Nintendo 64: Pokémon Stadium y Stadium 2
+
+El save va en el cartucho. Con un emulador, importa el archivo de save del
+juego: `.fla` (FlashRAM, Stadium) o `.sra` (SRAM, Stadium 2) en la carpeta
+`save` de **Mupen64Plus** / **simple64**, en `Save/` de **Project64** o el
+`.srm` de **RetroArch**. Con un cartucho real, vuelca el save con un lector
+(GB Operator, Retrode, Sanni Cart Reader…). Los volcados con el orden de bytes
+invertido se reconocen y se exportan igual. Los Pokémon que guarda Stadium en
+sus cajas se ven y se editan; los equipos registrados de cada copa, en solo
+lectura.
+
+### Wii: Battle Revolution y My Pokémon Ranch (Dolphin)
+
+Dolphin guarda los saves de Wii descifrados en su NAND:
+`User/Wii/title/00010000/<id>/data/`, con **PbrSaveData** (Battle Revolution,
+id `52504245`/`52504250`/`5250424a`) y **pokemonranch.bin** (My Pokémon Ranch).
+Importa ese archivo y, para devolverlo, cópialo encima con Dolphin cerrado. En
+una Wii real, copia el save a la SD desde **Ajustes de Wii › Gestor de datos**,
+impórtalo en Dolphin (**Herramientas › Importar save de Wii**) y toma el archivo
+de la NAND; el camino inverso es **Exportar save de Wii**.
 
 ### Emuladores de Switch en escritorio
 
@@ -116,7 +144,8 @@ archivo a Archivos e impórtalo desde ahí.
 
 Dentro del editor de cajas puedes **importar** y **exportar** Pokémon sueltos
 del formato del juego (`.pk1` … `.pk9`, `.pb7`, `.pb8`, `.pa8`, `.pa9`;
-`.ck3`/`.xk3` en Colosseum/XD). Ver
+`.ck3`/`.xk3` en Colosseum/XD, `.sk2` en Stadium 2, `.bk4` en Battle Revolution y
+`.rk4` en el Rancho). Ver
 [Editor](editor.md#cajas).
 
 Siguiente: [El Arca](arca.md).

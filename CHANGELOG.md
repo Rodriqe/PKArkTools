@@ -12,6 +12,21 @@ developer documentation in `docs/` is in Spanish.
 ## [Unreleased]
 
 ### Added
+- **Storage and stadium games**: Pokémon Stadium and Stadium 2 (Nintendo 64;
+  international, Japanese and the original Japanese Stadium, including
+  byte-swapped dumps), Pokémon Box: Ruby & Sapphire (GameCube `.gci`, Memory
+  Card or headerless data), Pokémon Battle Revolution and My Pokémon Ranch
+  (Wii, files from Dolphin's NAND). Content detection, full reading, writing
+  with their checksums (per-box sums, Box block sums, Battle Revolution's
+  Genius Sonority halves and bit-count sums, the Ranch SHA-1, counter and end
+  marker), byte-for-byte round-trip and the original container kept
+  (byte order, other Battle Revolution profiles). Stadium registered teams are
+  shown read-only; Ranch slots above the ranch level capacity are locked.
+- Loose `.sk2`, `.bk4` and `.rk4` Pokémon; BK4 is edited as PK4 without loss.
+- Arca: Nintendo 64 and Wii platforms, colours for the five games, main file
+  names (`PbrSaveData`, `pokemonranch.bin`, the original N64 extension) and
+  game folder READMEs explaining how to get each save; box-only games show no
+  empty Team section.
 - **Pokémon Colosseum and Pokémon XD: Gale of Darkness (GameCube).** Saves are
   read and written from `.gci` files (Dolphin export or GCI folder), whole
   Memory Card images (`.raw`, `.gcp`, `.mci`) and headerless save data, with

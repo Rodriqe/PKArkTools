@@ -145,6 +145,9 @@ opcional. Se indexa en segundo plano y se cachea: abre al instante.
 | Oro / Plata / Cristal (int., JP y coreano) | Game Boy Color | ✅ | ✅ | Pokédex, eventos con nombre, `.pk2` |
 | Rubí / Zafiro, Esmeralda, Rojo Fuego / Verde Hoja | GBA | ✅ | ✅ | Pokédex, eventos, cintas, encuentros salvajes, `.pk3` |
 | Colosseum, XD: Tempestad Oscura | GameCube | ✅ | ✅ | Pokémon oscuros, Strategy Memo, bolsa, encuentros, `.gci` / Memory Card, `.ck3`/`.xk3` |
+| Stadium, Stadium 2 | Nintendo 64 | ✅ | ✅ | cajas, equipos registrados (solo lectura), `.pk1`/`.sk2` |
+| Box: Rubí y Zafiro | GameCube | ✅ | ✅ | 1500 huecos, `.gci` / Memory Card |
+| Battle Revolution, My Pokémon Ranch | Wii | ✅ | ✅ | equipo y cajas (BR), cajas del rancho, `.bk4`/`.rk4` |
 | Diamante / Perla, Platino, Oro HeartGold / Plata SoulSilver | DS | ✅ | ✅ | Pokédex + género, eventos, cintas, legalidad de encuentros completa, `.pk4` |
 | Negro / Blanco, Negro 2 / Blanco 2 | DS | ✅ | ✅ | Pokédex + género/variocolor, eventos, cintas, encuentros, `.pk5` |
 | X / Y, Rubí Omega / Zafiro Alfa | 3DS | ✅ | ✅ | Pokédex con formas, eventos, cintas, encuentros, `.pk6` |
