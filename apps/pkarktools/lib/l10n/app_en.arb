@@ -788,5 +788,22 @@
   "dexShinyCount": "{count} shiny",
   "dexAllSpecies": "All",
   "dexMissingSpecies": "Missing",
-  "dexCaughtSpecies": "Caught"
+  "dexCaughtSpecies": "Caught",
+  "sectionShadow": "Shadow Pokémon",
+  "shadowStateShadow": "Shadow: heart closed",
+  "shadowStatePurified": "Purified",
+  "shadowIdLabel": "Shadow ID {id}",
+  "shadowGauge": "Heart gauge",
+  "shadowGaugeHint": "Remaining, from 0 to {max}. At 0 it can be purified in-game.",
+  "shadowGaugeUnknown": "Remaining (this ID's maximum is not in the tables).",
+  "shadowPurify": "Mark as purified…",
+  "shadowPurifyTitle": "Mark as purified?",
+  "shadowPurifyBody": "In-game, purification opens the heart at the Purify Chamber or the Relic Stone: it grants the National Ribbon, the stored experience and sometimes new moves. Here only the state changes and the National Ribbon is added; experience and moves stay as they are. A Shadow Pokémon cannot leave Colosseum/XD until purified.",
+  "shadowPurifyConfirm": "Purify",
+  "shadowRevert": "Make Shadow again…",
+  "shadowRevertTitle": "Make it Shadow again?",
+  "shadowRevertBody": "A purified Pokémon never becomes Shadow again in-game. Only use it to undo a change: the heart closes with a full gauge and the National Ribbon is removed.",
+  "shadowRevertConfirm": "Make Shadow",
+  "shadowCannotLeaveNote": "It cannot be moved to another game until purified.",
+  "shadowPurifiedNote": "It was Shadow; purification granted the National Ribbon."
 }

@@ -19,7 +19,9 @@ abstract final class VersionPalette {
     3: Color(0xFF169C5A), // Esmeralda
     4: Color(0xFFF0582A), // Rojo Fuego
     5: Color(0xFF6DB840), // Verde Hoja
-    15: Color(0xFF7C5BA6), // Colosseum/XD
+    15: Color(0xFF7C5BA6), // Colosseum/XD (origen de un Pokémon)
+    66: Color(0xFFC2562C), // Colosseum (save): ocre rojizo del desierto de Orre
+    67: Color(0xFF3B3F8F), // XD (save): índigo de Lugia oscuro
     10: Color(0xFF6F97E3), // Diamante
     11: Color(0xFFE39CC0), // Perla
     12: Color(0xFF8E96A3), // Platino

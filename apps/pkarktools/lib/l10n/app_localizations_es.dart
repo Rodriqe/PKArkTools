@@ -3005,4 +3005,64 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get dexCaughtSpecies => 'Capturados';
+
+  @override
+  String get sectionShadow => 'Pokémon oscuro';
+
+  @override
+  String get shadowStateShadow => 'Oscuro: corazón cerrado';
+
+  @override
+  String get shadowStatePurified => 'Purificado';
+
+  @override
+  String shadowIdLabel(String id) {
+    return 'Id oscuro $id';
+  }
+
+  @override
+  String get shadowGauge => 'Medidor de corazón';
+
+  @override
+  String shadowGaugeHint(String max) {
+    return 'Restante, de 0 a $max. A 0 se puede purificar en el juego.';
+  }
+
+  @override
+  String get shadowGaugeUnknown =>
+      'Restante (el máximo de este id no está en las tablas).';
+
+  @override
+  String get shadowPurify => 'Marcar como purificado…';
+
+  @override
+  String get shadowPurifyTitle => '¿Marcar como purificado?';
+
+  @override
+  String get shadowPurifyBody =>
+      'En el juego, purificar abre el corazón en la Cámara de Purificación o el Altar: da la Cinta Nacional, la experiencia acumulada y a veces movimientos nuevos. Aquí solo se cambia el estado y se añade la Cinta Nacional; la experiencia y los movimientos no cambian. Un Pokémon oscuro no puede salir de Colosseum/XD sin purificarse.';
+
+  @override
+  String get shadowPurifyConfirm => 'Purificar';
+
+  @override
+  String get shadowRevert => 'Volver a oscuro…';
+
+  @override
+  String get shadowRevertTitle => '¿Volver a hacerlo oscuro?';
+
+  @override
+  String get shadowRevertBody =>
+      'Un Pokémon purificado no vuelve a ser oscuro en el juego. Solo tiene sentido para deshacer un cambio: se cierra el corazón con el medidor al máximo y se quita la Cinta Nacional.';
+
+  @override
+  String get shadowRevertConfirm => 'Volver a oscuro';
+
+  @override
+  String get shadowCannotLeaveNote =>
+      'No se puede llevar a otro juego hasta purificarlo.';
+
+  @override
+  String get shadowPurifiedNote =>
+      'Fue oscuro; al purificarlo recibió la Cinta Nacional.';
 }

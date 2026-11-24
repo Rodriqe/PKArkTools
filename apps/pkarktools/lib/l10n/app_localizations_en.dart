@@ -2982,4 +2982,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dexCaughtSpecies => 'Caught';
+
+  @override
+  String get sectionShadow => 'Shadow Pokémon';
+
+  @override
+  String get shadowStateShadow => 'Shadow: heart closed';
+
+  @override
+  String get shadowStatePurified => 'Purified';
+
+  @override
+  String shadowIdLabel(String id) {
+    return 'Shadow ID $id';
+  }
+
+  @override
+  String get shadowGauge => 'Heart gauge';
+
+  @override
+  String shadowGaugeHint(String max) {
+    return 'Remaining, from 0 to $max. At 0 it can be purified in-game.';
+  }
+
+  @override
+  String get shadowGaugeUnknown =>
+      'Remaining (this ID\'s maximum is not in the tables).';
+
+  @override
+  String get shadowPurify => 'Mark as purified…';
+
+  @override
+  String get shadowPurifyTitle => 'Mark as purified?';
+
+  @override
+  String get shadowPurifyBody =>
+      'In-game, purification opens the heart at the Purify Chamber or the Relic Stone: it grants the National Ribbon, the stored experience and sometimes new moves. Here only the state changes and the National Ribbon is added; experience and moves stay as they are. A Shadow Pokémon cannot leave Colosseum/XD until purified.';
+
+  @override
+  String get shadowPurifyConfirm => 'Purify';
+
+  @override
+  String get shadowRevert => 'Make Shadow again…';
+
+  @override
+  String get shadowRevertTitle => 'Make it Shadow again?';
+
+  @override
+  String get shadowRevertBody =>
+      'A purified Pokémon never becomes Shadow again in-game. Only use it to undo a change: the heart closes with a full gauge and the National Ribbon is removed.';
+
+  @override
+  String get shadowRevertConfirm => 'Make Shadow';
+
+  @override
+  String get shadowCannotLeaveNote =>
+      'It cannot be moved to another game until purified.';
+
+  @override
+  String get shadowPurifiedNote =>
+      'It was Shadow; purification granted the National Ribbon.';
 }

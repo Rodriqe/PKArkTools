@@ -57,6 +57,9 @@ abstract final class ArcaGameFolders {
       pk.Platform.nintendoDs => es
           ? 'DS: el .sav de Checkpoint, TWiLight Menu++, melonDS o un lector de cartuchos, o el .dsv de DeSmuME/DraStic.'
           : 'DS: the .sav from Checkpoint, TWiLight Menu++, melonDS or a cartridge reader, or the .dsv from DeSmuME/DraStic.',
+      pk.Platform.gameCube => es
+          ? 'GameCube: el .gci exportado desde Dolphin (Herramientas › Administrar tarjetas de memoria, o la carpeta GCI de Dolphin: User/GC/<USA|EUR|JAP>/Card A) o la imagen completa de la Memory Card (.raw de Dolphin, .gcp, .mci). Si la tarjeta tiene Colosseum y XD, se importan los dos.'
+          : 'GameCube: the .gci exported from Dolphin (Tools › Manage Memory Cards, or Dolphin\'s GCI folder: User/GC/<USA|EUR|JAP>/Card A) or the whole Memory Card image (Dolphin .raw, .gcp, .mci). If the card has both Colosseum and XD, both are imported.',
       pk.Platform.gameBoyAdvance => es
           ? 'GBA: el .sav de mGBA, VisualBoyAdvance, Delta o un lector de cartuchos (o el .srm de RetroArch).'
           : 'GBA: the .sav from mGBA, VisualBoyAdvance, Delta or a cartridge reader (or the .srm from RetroArch).',
@@ -68,7 +71,9 @@ abstract final class ArcaGameFolders {
 
   static String readme(GameVersion g, {required bool es}) {
     final name = es ? g.nameEs : g.nameEn;
-    final main = ArcaLayout.mainFileName(g.code, 'x.sav');
+    final main = g.platform == pk.Platform.gameCube
+        ? (es ? '<el .gci o .raw con su nombre original>' : '<the .gci or .raw with its original name>')
+        : ArcaLayout.mainFileName(g.code, 'x.sav');
     return es
         ? '''
 ${ArcaLayout.readmeMarker} · $name

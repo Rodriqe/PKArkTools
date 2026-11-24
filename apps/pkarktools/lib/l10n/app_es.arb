@@ -2152,5 +2152,36 @@
   },
   "dexAllSpecies": "Todos",
   "dexMissingSpecies": "Faltantes",
-  "dexCaughtSpecies": "Capturados"
+  "dexCaughtSpecies": "Capturados",
+  "sectionShadow": "Pokémon oscuro",
+  "shadowStateShadow": "Oscuro: corazón cerrado",
+  "shadowStatePurified": "Purificado",
+  "shadowIdLabel": "Id oscuro {id}",
+  "@shadowIdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "shadowGauge": "Medidor de corazón",
+  "shadowGaugeHint": "Restante, de 0 a {max}. A 0 se puede purificar en el juego.",
+  "@shadowGaugeHint": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "shadowGaugeUnknown": "Restante (el máximo de este id no está en las tablas).",
+  "shadowPurify": "Marcar como purificado…",
+  "shadowPurifyTitle": "¿Marcar como purificado?",
+  "shadowPurifyBody": "En el juego, purificar abre el corazón en la Cámara de Purificación o el Altar: da la Cinta Nacional, la experiencia acumulada y a veces movimientos nuevos. Aquí solo se cambia el estado y se añade la Cinta Nacional; la experiencia y los movimientos no cambian. Un Pokémon oscuro no puede salir de Colosseum/XD sin purificarse.",
+  "shadowPurifyConfirm": "Purificar",
+  "shadowRevert": "Volver a oscuro…",
+  "shadowRevertTitle": "¿Volver a hacerlo oscuro?",
+  "shadowRevertBody": "Un Pokémon purificado no vuelve a ser oscuro en el juego. Solo tiene sentido para deshacer un cambio: se cierra el corazón con el medidor al máximo y se quita la Cinta Nacional.",
+  "shadowRevertConfirm": "Volver a oscuro",
+  "shadowCannotLeaveNote": "No se puede llevar a otro juego hasta purificarlo.",
+  "shadowPurifiedNote": "Fue oscuro; al purificarlo recibió la Cinta Nacional."
 }

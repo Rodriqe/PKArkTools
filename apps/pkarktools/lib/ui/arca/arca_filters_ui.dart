@@ -34,6 +34,7 @@ String platformShort(Platform p) => switch (p) {
       Platform.gameBoy => 'Game Boy',
       Platform.gameBoyColor => 'GB Color',
       Platform.gameBoyAdvance => 'GBA',
+      Platform.gameCube => 'GameCube',
       Platform.nintendoDs => 'DS',
       Platform.nintendo3ds => '3DS',
       Platform.nintendoSwitch => 'Switch',

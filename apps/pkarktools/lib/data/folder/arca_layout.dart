@@ -106,6 +106,10 @@ abstract final class ArcaLayout {
   /// (el resto se guarda como `.sav`).
   static const containerExts = {'.sav', '.dsv', '.srm', '.sa1', '.fla', '.dat', '.bin'};
 
+  /// Contenedores de GameCube: `.gci` (un archivo de la Memory Card, carpeta
+  /// GCI de Dolphin) e imágenes de Memory Card (`.raw` de Dolphin, `.gcp`, `.mci`).
+  static const gameCubeExts = {'.gci', '.raw', '.gcp', '.mci'};
+
   /// Nombre del archivo principal (la última versión) de una copia.
   ///
   /// | Juego / plataforma                         | Nombre           |
@@ -115,6 +119,7 @@ abstract final class ArcaLayout {
   /// | Let's Go Pikachu / Eevee                   | `savedata.bin`   |
   /// | 3DS (X/Y, ROZA, Sol/Luna, USUL)            | `main`           |
   /// | GB, GBC, GBA, DS                           | `<Juego><ext>`   |
+  /// | Colosseum, XD (GameCube)                   | el `.gci` / `.raw` original, o `<Juego>.bin` |
   ///
   /// Son los nombres que usan Checkpoint/JKSM y los emuladores de Switch y
   /// 3DS. En GB…DS `<ext>` es la del contenedor original si es conocida
@@ -132,6 +137,14 @@ abstract final class ArcaLayout {
         break;
       default:
         if (game.platform == pk.Platform.nintendoSwitch || game.platform == pk.Platform.nintendo3ds) return 'main';
+        if (game.platform == pk.Platform.gameCube) {
+          // Dolphin identifica los .gci por su cabecera, no por el nombre, pero
+          // conservar el original (`01-GC6E-….gci`, `MemoryCardA.USA.raw`)
+          // ayuda a reconocerlo; los datos sin cabecera, `<Juego>.bin`.
+          final ext = extensionFor(originalName);
+          if (gameCubeExts.contains(ext)) return safeSegment(originalName);
+          return '${gameDir(gameCode)}.bin';
+        }
     }
     var ext = extensionFor(originalName);
     if (!containerExts.contains(ext)) ext = '.sav';
@@ -261,7 +274,8 @@ Estructura
                                      espera cada juego: "main" (Switch y 3DS),
                                      "SaveData.bin" (Diamante Brillante / Perla
                                      Reluciente), "savedata.bin" (Let's Go) o
-                                     "<Juego>.sav" / ".dsv" / ".srm"... (GB, GBA, DS).
+                                     "<Juego>.sav" / ".dsv" / ".srm"... (GB, GBA, DS)
+                                     o el .gci / .raw original (GameCube).
       ultima.json                    qué copia del historial es la última.
       historial/
         AAAA-MM-DD_HHMMSS_<hash8>.<ext>        cada copia del save, tal cual

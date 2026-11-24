@@ -305,7 +305,7 @@ class _Items extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
           decoration: BoxDecoration(color: tokens.raised, borderRadius: BorderRadius.circular(14), border: Border.all(color: tokens.hairline)),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
-            Text(GameStrings.item(it.item, game.generation, context.dataLang), style: context.text.bodyMedium),
+            Text(GameStrings.itemFor(it.item, game, context.dataLang), style: context.text.bodyMedium),
             const SizedBox(width: 10),
             Text(
               '${it.before} → ${it.after}',

@@ -6,6 +6,7 @@ import '../util/bytes.dart';
 import 'generated/game_binaries.dart';
 import 'generated/form_names.dart';
 import 'generated/game_text.dart';
+import 'generated/gc_data.dart';
 import 'generated/learn_extra.dart';
 import 'species.dart';
 
@@ -392,6 +393,19 @@ abstract final class GameStrings {
 
   static String item(int id, int generation, [DataLanguage lang = DataLanguage.es]) =>
       _pick(itemList(generation, lang), id);
+
+  /// Nombre de un objeto en [game]: igual que [item], salvo en Colosseum y XD,
+  /// que tienen objetos propios desde el id 500 (llaves, colonias, discos).
+  static String itemFor(int id, GameVersion game, [DataLanguage lang = DataLanguage.es]) {
+    if (game.isGameCube && id >= 500) {
+      final es = lang == DataLanguage.es;
+      final list = game == GameVersion.colosseum
+          ? (es ? kGcItemsColoEs : kGcItemsColoEn)
+          : (es ? kGcItemsXdEs : kGcItemsXdEn);
+      if (id - 500 < list.length && list[id - 500].trim().isNotEmpty) return list[id - 500];
+    }
+    return item(id, game.generation, lang);
+  }
 
   static String species(int id, [DataLanguage lang = DataLanguage.es]) =>
       Species.name(id, lang == DataLanguage.es ? SpeciesLanguage.es : SpeciesLanguage.en);

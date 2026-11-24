@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pkcore/testing.dart';
 
-import 'package:pkcore/pkcore.dart' show GameVersion;
+import 'package:pkcore/pkcore.dart' show GameVersion, GcMemoryCard;
 
 import '../../data/arca_archive.dart';
 import '../../data/arca_repository.dart';
@@ -225,7 +225,15 @@ Future<List<ImportOutcome>> runImport(BuildContext context, WidgetRef ref, List<
   }
   try {
     for (final f in files) {
-      outcomes.add(await repo.importBytes(f.bytes, fileName: f.name, origin: f.origin, sourcePath: f.sourcePath));
+      // Una Memory Card con Colosseum y XD: cada juego se importa como su .gci.
+      final parts = GcMemoryCard.splitPokemonSaves(f.bytes);
+      if (parts != null) {
+        for (final (name, bytes) in parts) {
+          outcomes.add(await repo.importBytes(bytes, fileName: name, origin: f.origin, sourcePath: f.sourcePath));
+        }
+      } else {
+        outcomes.add(await repo.importBytes(f.bytes, fileName: f.name, origin: f.origin, sourcePath: f.sourcePath));
+      }
       progress.value = (outcomes.length, files.length);
     }
   } finally {

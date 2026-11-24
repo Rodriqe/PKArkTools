@@ -4836,6 +4836,108 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Capturados'**
   String get dexCaughtSpecies;
+
+  /// No description provided for @sectionShadow.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon oscuro'**
+  String get sectionShadow;
+
+  /// No description provided for @shadowStateShadow.
+  ///
+  /// In es, this message translates to:
+  /// **'Oscuro: corazón cerrado'**
+  String get shadowStateShadow;
+
+  /// No description provided for @shadowStatePurified.
+  ///
+  /// In es, this message translates to:
+  /// **'Purificado'**
+  String get shadowStatePurified;
+
+  /// No description provided for @shadowIdLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Id oscuro {id}'**
+  String shadowIdLabel(String id);
+
+  /// No description provided for @shadowGauge.
+  ///
+  /// In es, this message translates to:
+  /// **'Medidor de corazón'**
+  String get shadowGauge;
+
+  /// No description provided for @shadowGaugeHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Restante, de 0 a {max}. A 0 se puede purificar en el juego.'**
+  String shadowGaugeHint(String max);
+
+  /// No description provided for @shadowGaugeUnknown.
+  ///
+  /// In es, this message translates to:
+  /// **'Restante (el máximo de este id no está en las tablas).'**
+  String get shadowGaugeUnknown;
+
+  /// No description provided for @shadowPurify.
+  ///
+  /// In es, this message translates to:
+  /// **'Marcar como purificado…'**
+  String get shadowPurify;
+
+  /// No description provided for @shadowPurifyTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Marcar como purificado?'**
+  String get shadowPurifyTitle;
+
+  /// No description provided for @shadowPurifyBody.
+  ///
+  /// In es, this message translates to:
+  /// **'En el juego, purificar abre el corazón en la Cámara de Purificación o el Altar: da la Cinta Nacional, la experiencia acumulada y a veces movimientos nuevos. Aquí solo se cambia el estado y se añade la Cinta Nacional; la experiencia y los movimientos no cambian. Un Pokémon oscuro no puede salir de Colosseum/XD sin purificarse.'**
+  String get shadowPurifyBody;
+
+  /// No description provided for @shadowPurifyConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'Purificar'**
+  String get shadowPurifyConfirm;
+
+  /// No description provided for @shadowRevert.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver a oscuro…'**
+  String get shadowRevert;
+
+  /// No description provided for @shadowRevertTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Volver a hacerlo oscuro?'**
+  String get shadowRevertTitle;
+
+  /// No description provided for @shadowRevertBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Un Pokémon purificado no vuelve a ser oscuro en el juego. Solo tiene sentido para deshacer un cambio: se cierra el corazón con el medidor al máximo y se quita la Cinta Nacional.'**
+  String get shadowRevertBody;
+
+  /// No description provided for @shadowRevertConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver a oscuro'**
+  String get shadowRevertConfirm;
+
+  /// No description provided for @shadowCannotLeaveNote.
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede llevar a otro juego hasta purificarlo.'**
+  String get shadowCannotLeaveNote;
+
+  /// No description provided for @shadowPurifiedNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Fue oscuro; al purificarlo recibió la Cinta Nacional.'**
+  String get shadowPurifiedNote;
 }
 
 class _AppLocalizationsDelegate

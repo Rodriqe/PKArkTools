@@ -96,7 +96,7 @@ class _InventoryPanelState extends ConsumerState<InventoryPanel> {
     final present = {for (final it in pouch.items) it.item};
     final addable = [
       for (final id in pouch.legalItems)
-        if (!present.contains(id)) PickOption(id, GameStrings.item(id, gen, lang)),
+        if (!present.contains(id)) PickOption(id, GameStrings.itemFor(id, widget.editor.game, lang)),
     ];
     final full = pouch.items.length >= pouch.capacity;
 
@@ -153,7 +153,7 @@ class _InventoryPanelState extends ConsumerState<InventoryPanel> {
                 if (i > 0) const Divider(height: 1),
                 _ItemRow(
                   key: ValueKey('${pouch.type}-${pouch.items[i].item}'),
-                  name: GameStrings.item(pouch.items[i].item, gen, lang),
+                  name: GameStrings.itemFor(pouch.items[i].item, widget.editor.game, lang),
                   generation: gen,
                   item: pouch.items[i],
                   max: pouch.maxCount,
