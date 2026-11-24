@@ -158,4 +158,60 @@ void main() {
       });
     }
   });
+
+  group('Pokémon Battle Revolution', () {
+    final bytes = SyntheticSaves.battleRevolution(
+      party: const [SynthMon(448, level: 60, nickname: 'Lucky'), SynthMon(445, level: 62, shiny: true)],
+      boxes: const {0: [SynthMon(25, level: 10), null, SynthMon(493, level: 80)], 17: [SynthMon(1, level: 5)]},
+      secondProfile: 'Dawn',
+    );
+
+    test('lectura, perfiles y round-trip', () {
+      final s = SaveDetector.read(bytes);
+      expect(s.game, GameVersion.battleRevolution);
+      expect(s.versionId, 16);
+      expect(s.trainer.name, 'Lucas');
+      expect(s.trainer.tid, 2007);
+      expect(s.trainer.sid, 1121);
+      expect(s.party.map((p) => p.species), [448, 445]);
+      expect(s.party.first.nickname, 'Lucky');
+      expect(s.party[1].isShiny, isTrue);
+      expect(s.boxes.length, 18);
+      expect(s.boxes[0].slots.take(3).map((p) => p?.species), [25, null, 493]);
+      expect(s.boxes[17].slots.first!.species, 1);
+      expect(s.warnings.single, contains('Dawn'));
+      final ed = SaveEditor.open(bytes);
+      expect(ed.readOnly, isFalse, reason: ed.integrityIssues.join('; '));
+      expect(_same(ed.build(), bytes), isTrue);
+      expect(_same(ed.buildRepaired(), bytes), isTrue);
+    });
+
+    test('BK4 ↔ PK4 sin pérdidas', () {
+      final ed = SaveEditor.open(bytes);
+      final pk = ed.get(const SlotRef.party(0))!;
+      final back = Bk4.fromPk4(pk.data, base: pk.nativeRaw, size: 220);
+      expect(back, pk.nativeRaw);
+      final box = ed.get(const SlotRef.box(0, 2))!;
+      expect(Bk4.fromPk4(box.data, base: box.nativeRaw), box.nativeRaw);
+    });
+
+    test('edición verificada y Pokémon de Platino importado', () {
+      final ed = SaveEditor.open(bytes);
+      final pt = SaveEditor.open(SyntheticSaves.gen4(party: const [SynthMon(150, level: 70, nickname: 'MEWTWO')])).get(const SlotRef.party(0))!;
+      ed.set(const SlotRef.box(3, 4), pt);
+      final lucky = ed.get(const SlotRef.party(0))!..setNickname('Luck');
+      ed.set(const SlotRef.party(0), lucky);
+      ed.setBoxName(1, 'Torneo');
+      final out = ed.buildVerified();
+      final re = SaveEditor.open(out);
+      final got = re.get(const SlotRef.box(3, 4))!;
+      expect(got.species, 150);
+      expect(got.nickname, pt.nickname);
+      expect(got.ivs, pt.ivs);
+      expect(got.pid, pt.pid);
+      expect(re.get(const SlotRef.party(0))!.nickname, 'Luck');
+      expect(re.boxName(1), 'Torneo');
+      expect(SaveDetector.read(out).warnings.single, contains('Dawn'), reason: 'los otros perfiles se conservan');
+    });
+  });
 }

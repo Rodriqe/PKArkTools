@@ -53,6 +53,10 @@ void main(List<String> args) {
     files['pokemonranch${pt ? '_pt' : ''}.bin'] = SyntheticSaves.ranch(
         platinum: pt, mons: const [SynthMon(25, level: 20), SynthMon(393, level: 5, shiny: true), SynthMon(448, level: 40)]);
   }
+  files['PbrSaveData'] = SyntheticSaves.battleRevolution(
+    party: const [SynthMon(448, level: 60, nickname: 'Lucky'), SynthMon(445, level: 62, shiny: true)],
+    boxes: const {0: [SynthMon(25, level: 10), null, SynthMon(493, level: 80)], 17: [SynthMon(1, level: 5)]},
+  );
   files.forEach((name, bytes) => File('${dir.path}/$name').writeAsBytesSync(bytes));
   stdout.writeln('${files.length} archivos en ${dir.path}');
 }

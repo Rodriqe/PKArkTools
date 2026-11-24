@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import '../formats/rsbox.dart';
+import '../formats/batrev.dart';
 import '../formats/ranch.dart';
 import '../formats/stadium.dart';
 import '../model/game.dart';
@@ -477,5 +478,141 @@ class RanchEditor extends StorageEditor {
     be(RanchLayout.countOffset(out), occupied);
     RanchLayout.setSha(out);
     return out;
+  }
+}
+
+/// Editor de Pokémon Battle Revolution: equipo y 18 cajas del primer perfil
+/// con datos (el save guarda 4 perfiles). Los Pokémon son BK4, que se editan
+/// como PK4 conservando sus bytes propios ([Pkm.nativeRaw]).
+class BrEditor extends StorageEditor {
+  BrEditor(Uint8List payload, {int? profile})
+      : _br = BrData.open(payload) ?? (throw const FormatException('Battle Revolution: ninguna mitad del save es válida.')),
+        super(GameVersion.battleRevolution, versionId: 16) {
+    var p = profile;
+    if (p == null) {
+      for (var i = 0; i < BrData.profiles; i++) {
+        if (BrData.otName(_br.profile(i)).trim().isNotEmpty) {
+          p = i;
+          break;
+        }
+      }
+    }
+    profileIndex = p ?? 0;
+    _p = _br.profile(profileIndex);
+    _pristine = Uint8List.fromList(_p);
+  }
+
+  final BrData _br;
+  late final int profileIndex;
+  late final Uint8List _p;
+  late final Uint8List _pristine;
+
+  /// Perfiles con datos (nombre del entrenador de cada uno).
+  List<String> get profileNames => [for (var i = 0; i < BrData.profiles; i++) BrData.otName(_br.profile(i))];
+
+  @override
+  String get trainerLabel => BrData.otName(_p);
+  @override
+  TrainerData readTrainer() => TrainerData(
+      name: trainerLabel, tid: BrData.tid(_p), sid: BrData.sid(_p), money: BrData.money(_p), playTime: BrData.playTime(_p));
+  @override
+  int get boxCount => BrData.boxCount;
+  @override
+  int get boxSlotCount => 30;
+  @override
+  int get partyCapacity => 6;
+
+  Pkm? _read(int ofs, int size) {
+    final raw = _p.copyRange(ofs, size);
+    if (!Bk4.isPresent(raw)) return null;
+    final pk = Pkm.fromDecrypted(PkFormat.pk4, Bk4.toPk4(raw))..refreshChecksum();
+    pk.nativeRaw = raw;
+    return pk;
+  }
+
+  Uint8List _write(Pkm pk, int size) {
+    if (pk.format != PkFormat.pk4) throw SaveEditException('Formato no compatible con ${game.nameEs}.');
+    final base = pk.nativeRaw;
+    return Bk4.fromPk4(pk.data, base: base != null && base.length >= 136 ? base : null, size: size);
+  }
+
+  int _partyAt(int i) => BrData.partyOfs + i * BrData.partySlot;
+  int _boxAt(int b, int s) => BrData.boxOfs + (b * 30 + s) * 136;
+
+  @override
+  int get partyCount {
+    var n = 0;
+    for (var i = 0; i < 6; i++) {
+      if (Bk4.isPresent(_p.copyRange(_partyAt(i), BrData.partySlot))) n++;
+    }
+    return n;
+  }
+
+  @override
+  Pkm readPartySlot(int index) => _read(_partyAt(index), BrData.partySlot) ?? (throw RangeError.range(index, 0, partyCount - 1));
+
+  static bool _same(Pkm a, Pkm b) {
+    for (var i = 0; i < 136; i++) {
+      if (a.data[i] != b.data[i]) return false;
+    }
+    return true;
+  }
+
+  @override
+  void writeParty(List<Pkm> party) {
+    for (var i = 0; i < 6; i++) {
+      final o = _partyAt(i);
+      if (i < party.length) {
+        final cur = _read(o, BrData.partySlot);
+        if (cur != null && _same(cur, party[i])) continue;
+        _p.setRange(o, o + BrData.partySlot, _write(party[i], BrData.partySlot));
+      } else {
+        _p.fillRange(o, o + BrData.partySlot, 0);
+      }
+    }
+  }
+
+  @override
+  Pkm? readBoxSlot(int box, int slot) => _read(_boxAt(box, slot), 136);
+
+  @override
+  void writeBoxSlot(int box, int slot, Pkm? pk) {
+    final o = _boxAt(box, slot);
+    if (pk == null) {
+      _p.fillRange(o, o + 136, 0);
+      return;
+    }
+    final cur = readBoxSlot(box, slot);
+    if (cur != null && _same(cur, pk)) return;
+    _p.setRange(o, o + 136, _write(pk, 136));
+  }
+
+  @override
+  String boxName(int box) {
+    final n = BrData.utf16be(_p, BrData.boxNameOfs + box * 0x28, 0x14).trim();
+    return n.isEmpty ? super.boxName(box) : n;
+  }
+
+  @override
+  bool get canRenameBoxes => true;
+
+  @override
+  void setBoxName(int box, String name) {
+    final o = BrData.boxNameOfs + box * 0x28;
+    _p.fillRange(o, o + 0x28, 0);
+    final r = name.runes.take(0x13).toList();
+    for (var i = 0; i < r.length; i++) {
+      _p.setU16be(o + i * 2, r[i] & 0xFFFF);
+    }
+  }
+
+  @override
+  Uint8List buildPayload() {
+    var changed = forceChecksums;
+    for (var i = 0; i < _p.length && !changed; i++) {
+      if (_p[i] != _pristine[i]) changed = true;
+    }
+    if (!changed) return Uint8List.fromList(_br.encrypted);
+    return _br.build({profileIndex: _p});
   }
 }

@@ -10,6 +10,7 @@ import '../crypto/swish_crypto.dart';
 import '../edit/ctr_editors.dart';
 import '../edit/gb_editors.dart';
 import '../formats/gb_saves.dart';
+import '../formats/batrev.dart';
 import '../formats/ranch.dart';
 import '../formats/rsbox.dart';
 import '../formats/stadium.dart';
@@ -1469,6 +1470,79 @@ abstract final class SyntheticSaves {
     be(0x3C, end);
     be(end, 0x28);
     RanchLayout.setSha(d);
+    return d;
+  }
+
+
+  /// `PbrSaveData` sintético de Pokémon Battle Revolution: un perfil con
+  /// equipo y cajas (Pokémon de Platino convertidos a BK4).
+  static Uint8List battleRevolution({
+    String owner = 'Lucas',
+    List<SynthMon> party = const [],
+    Map<int, List<SynthMon?>> boxes = const {},
+    String? secondProfile,
+  }) {
+    final plain = Uint8List(BrData.size);
+    for (var h = 0; h < 2; h++) {
+      final o = h * BrData.half;
+      for (var i = 0; i < 4; i++) {
+        plain.setU16be(o + i * 2, 0x2468 + i * 0x1111 + h);
+      }
+    }
+    _u32be(plain, 0x4C, 7);
+    Uint8List mon(SynthMon m, int salt, int size) {
+      final pk4 = Pkm.fromEncrypted(PkFormat.pk4, _pk45(m, 2007, 1121, salt, gen: 4, party: true))!;
+      pk4.otName = owner;
+      pk4.refreshPartyStats();
+      pk4.refreshChecksum();
+      return Bk4.fromPk4(pk4.data, size: size);
+    }
+
+    void profile(int i, String name, List<SynthMon> team, Map<int, List<SynthMon?>> bx) {
+      final p = i * BrData.slotSize;
+      for (var c = 0; c < name.length; c++) {
+        plain.setU16be(p + 0x390 + c * 2, name.codeUnitAt(c));
+      }
+      plain[p + 0x12867] = 0x07;
+      plain[p + 0x12860] = 0xD7; // TID 2007
+      plain[p + 0x12865] = 0x04;
+      plain[p + 0x12866] = 0x61; // SID 1121
+      plain[p + 0x12863] = 0x10;
+      ByteData.sublistView(plain).setFloat64(p + 0x388, 3600.0 * 12 + 5);
+      for (var j = 0; j < team.length && j < 6; j++) {
+        final o = p + BrData.partyOfs + j * BrData.partySlot;
+        plain.setRange(o, o + BrData.partySlot, mon(team[j], j, BrData.partySlot));
+      }
+      bx.forEach((b, mons) {
+        for (var s = 0; s < mons.length && s < 30; s++) {
+          final m = mons[s];
+          if (m == null) continue;
+          final o = p + BrData.boxOfs + (b * 30 + s) * 136;
+          plain.setRange(o, o + 136, mon(m, 100 + b * 30 + s, 136));
+        }
+      });
+    }
+
+    profile(0, owner, party, boxes);
+    if (secondProfile != null) profile(2, secondProfile, const [SynthMon(25, level: 50)], const {});
+    // La otra mitad queda como copia antigua (contador menor).
+    plain.setRange(BrData.half + 8, 2 * BrData.half, plain, 8);
+    _u32be(plain, BrData.half + 0x4C, 6);
+    final br = BrData.open(_brEncryptOnly(plain));
+    return br!.build(const {});
+  }
+
+  static Uint8List _brEncryptOnly(Uint8List plain) {
+    // Sumas válidas en las dos mitades y cifrado, para que [BrData.open] las acepte.
+    final d = Uint8List.fromList(plain);
+    for (var h = 0; h < 2; h++) {
+      final base = h * BrData.half;
+      BrDataTesting.setSums(d, base);
+    }
+    for (var o = 0; o < BrData.size; o += BrData.half) {
+      final h = Uint8List.sublistView(d, o, o + BrData.half);
+      GeniusCrypto.encrypt(h, 8, BrData.half, GeniusCrypto.readKeys(h, 0));
+    }
     return d;
   }
 

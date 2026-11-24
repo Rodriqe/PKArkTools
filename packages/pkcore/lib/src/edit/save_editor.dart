@@ -183,8 +183,7 @@ abstract class SaveEditor {
             return StadiumEditor(payload, l, swapped: swapped);
           }(),
         GameVersion.ranch => RanchEditor(payload),
-        GameVersion.battleRevolution =>
-          throw UnsupportedSaveException('${det.game.nameEs}: editor pendiente.'),
+        GameVersion.battleRevolution => BrEditor(payload),
         GameVersion.xd => GcEditor(payload, GcTitle.xd),
         GameVersion.diamondPearl || GameVersion.platinum || GameVersion.heartGoldSoulSilver => Gen4Editor(payload, det.game),
         GameVersion.blackWhite || GameVersion.black2White2 => Gen5Editor(payload, det.game, versionId: save.versionId),

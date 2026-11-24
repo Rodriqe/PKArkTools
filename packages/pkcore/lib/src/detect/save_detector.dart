@@ -7,6 +7,7 @@ import '../formats/gb_saves.dart';
 import '../formats/gc_container.dart';
 import '../formats/gc_saves.dart';
 import '../formats/rsbox.dart';
+import '../formats/batrev.dart';
 import '../formats/ranch.dart';
 import '../formats/stadium.dart';
 import '../edit/storage_editors.dart';
@@ -141,6 +142,23 @@ abstract final class SaveDetector {
             format: 'N64 ${l.label}${swapped ? ', bytes invertidos' : ''}',
             checksumOk: ed.checksumsValid,
             warnings: [if (teams > 0) 'Equipos registrados: $teams (solo lectura).']);
+      });
+    }
+
+    // Pokémon Battle Revolution (Wii): 3,5 MB cifrados con sumas por mitad.
+    if (d.length == BrData.size && BrData.open(d) != null) {
+      return hit(GameVersion.battleRevolution, () {
+        final ed = BrEditor(d);
+        final others = [
+          for (final (i, n) in ed.profileNames.indexed)
+            if (i != ed.profileIndex && n.trim().isNotEmpty) n,
+        ];
+        return storageSummary(ed, d,
+            format: 'Wii Battle Revolution (perfil ${ed.profileIndex + 1})',
+            checksumOk: true,
+            warnings: [
+              if (others.isNotEmpty) 'El save tiene ${others.length + 1} perfiles; se muestra el de ${ed.trainerLabel} (otros: ${others.join(', ')}).',
+            ]);
       });
     }
 

@@ -96,6 +96,22 @@ abstract final class PkCrypto {
     return d;
   }
 
+  /// BK4 de Battle Revolution: solo barajado de bloques, sin XOR (PKHeX `Decrypt4BE`).
+  static Uint8List unshuffle4BE(Uint8List stored) {
+    final d = Uint8List.fromList(stored);
+    final pv = (d[0] << 24) | (d[1] << 16) | (d[2] << 8) | d[3];
+    _shuffle(d, 8, (pv >> 13) & 31, 32);
+    return d;
+  }
+
+  /// Inverso de [unshuffle4BE] (PKHeX `Encrypt4BE`).
+  static Uint8List shuffle4BE(Uint8List decrypted) {
+    final d = Uint8List.fromList(decrypted);
+    final pv = (d[0] << 24) | (d[1] << 16) | (d[2] << 8) | d[3];
+    _shuffle(d, 8, _blockPositionInvert[(pv >> 13) & 31], 32);
+    return d;
+  }
+
   static Uint8List encrypt45(Uint8List decrypted) {
     final d = Uint8List.fromList(decrypted);
     final pv = d.u32le(0);
