@@ -23,6 +23,7 @@ export 'src/legal/encounters.dart';
 export 'src/legal/legality.dart';
 export 'src/legal/origin.dart';
 export 'src/legal/plus_moves.dart';
+export 'src/legal/ribbon_master.dart';
 export 'src/legal/ribbons.dart';
 export 'src/edit/events.dart';
 export 'src/edit/pokedex.dart';
