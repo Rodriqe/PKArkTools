@@ -95,6 +95,11 @@ En Android (emulador):
   vuelven: Stadium 1/2 en los de Game Boy, Box: Rubí y Zafiro en
   Rubí/Zafiro/Esmeralda, y Battle Revolution y el Rancho en
   Diamante/Perla/Platino.
+
+<p>
+  <img src="../screenshots/gamecube/06_ribbon_hunter_purified.png" width="560" alt="Un Quilava purificado de Colosseum con la Cinta Nacional ya contada">
+  <img src="../screenshots/android/gc_05_ribbon_hunter_purified.png" width="180" alt="Android: el purificado en Tus ejemplares">
+</p>
 * **Compartir**: copia la guía como **texto para foros** o guárdala como
   **imagen** (cabecera y ruta).
 

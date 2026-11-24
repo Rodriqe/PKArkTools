@@ -84,6 +84,16 @@ GBA (igual que en el juego).
   <img src="../screenshots/gamecube/04_colosseum_save.png" width="420" alt="Save de Colosseum en una Memory Card">
 </p>
 
+En Android:
+
+<p>
+  <img src="../screenshots/android/gc_01_arca.png" width="180" alt="Android: juegos de GameCube y Wii en el Arca">
+  <img src="../screenshots/android/gc_02_xd_save.png" width="180" alt="Android: save de XD">
+  <img src="../screenshots/android/gc_03_xd_shadow_pokemon.png" width="180" alt="Android: Pokémon oscuro">
+  <img src="../screenshots/android/gc_06_stadium2.png" width="180" alt="Android: Stadium 2">
+  <img src="../screenshots/android/gc_08_battle_revolution.png" width="180" alt="Android: Battle Revolution">
+</p>
+
 ### Nintendo 64: Pokémon Stadium y Stadium 2
 
 El save va en el cartucho. Con un emulador, importa el archivo de save del
