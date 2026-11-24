@@ -464,7 +464,7 @@
   "spritesProgressBytes": "{done} of {total} icons · {size} of {totalSize}",
   "spritesOffline": "No Internet connection: GitHub couldn't be reached. What was already downloaded is kept; try again when online.",
   "spritesCleared": "Icon cache cleared.",
-  "spritesCredits": "Pokémon icons: Pokémon HOME box icons from the Smogon / Pokémon Showdown sprite repository (github.com/smogon/sprites, commit {pokemonCommit}). Items, Balls, types and ribbons: PKHeX resources (github.com/kwsch/PKHeX, commit {pkhexCommit}). Downloaded on demand, never bundled. Sprites are © Nintendo / Game Freak / The Pokémon Company.",
+  "spritesCredits": "Pokémon icons: Pokémon HOME box icons from the Smogon / Pokémon Showdown sprite repository (github.com/smogon/sprites, commit {pokemonCommit}); Gigantamax, new Megas and the shiny special forms come from the same commit (HOME icons and renders, Pokémon Champions icons). Items, Balls, types and ribbons: PKHeX resources (github.com/kwsch/PKHeX, commit {pkhexCommit}). Downloaded on demand, never bundled. Sprites are © Nintendo / Game Freak / The Pokémon Company.",
   "sectionOrigin": "Origin",
   "sectionRibbons": "Ribbons and marks",
   "originGame": "Origin game",

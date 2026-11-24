@@ -84,9 +84,13 @@ ejemplar que las habilite **en un juego donde existen**. Cada una tiene dos
 variantes, **normal** y **variocolor**, que se desbloquean por separado: un
 ejemplar normal desbloquea la normal y uno variocolor, la variocolor.
 
-Las bloqueadas se ven como silueta con un candado y la explicación de cómo se
-desbloquean. Las desbloqueadas muestran qué ejemplares lo hacen (tócalos para
-ir a su caja).
+Cada forma se dibuja con **su propio icono** (Charizard Gigamax, Mega
+Clefable…), y la variante variocolor desbloqueada muestra el suyo
+([Iconos](iconos.md#formas-especiales)). Las bloqueadas se ven como silueta de
+ese icono con un candado y la explicación de cómo se desbloquean. Las
+desbloqueadas muestran qué ejemplares lo hacen (tócalos para ir a su caja). En
+«Tus ejemplares», un Pokémon con el factor Gigamax se ve con su icono Gigamax y
+la insignia «G».
 
 <p>
   <img src="../screenshots/dex/03_locked_forms.png" width="49%" alt="Formas bloqueadas de Venusaur">

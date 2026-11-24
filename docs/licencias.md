@@ -56,9 +56,12 @@ los guarda en su caché:
 
 * **Pokémon**: iconos de caja de Pokémon HOME del repositorio de sprites de
   Smogon / Pokémon Showdown ([smogon/sprites](https://github.com/smogon/sprites),
-  carpeta `src/minisprites/pokemon/home`). El código de ese repositorio es MIT;
-  los sprites son de Nintendo / Game Freak / The Pokémon Company (solo se usa
-  esa carpeta de iconos oficiales, no los sprites hechos por la comunidad).
+  carpeta `src/minisprites/pokemon/home`; para las formas especiales que no
+  están ahí, archivos sueltos del mismo commit en
+  `src/_uncategorized/canonical/home`, `src/champions` y `src/previews/gen9`).
+  El código de ese repositorio es MIT; los sprites son de Nintendo / Game
+  Freak / The Pokémon Company (solo se usan iconos y renders de los juegos
+  —HOME y Pokémon Champions—, no los sprites hechos por la comunidad).
 * **Objetos, Balls, tipos y cintas**: recursos de
   [PKHeX](https://github.com/kwsch/PKHeX) (`PKHeX.Drawing.*`).
 

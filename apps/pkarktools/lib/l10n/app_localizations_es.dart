@@ -1737,7 +1737,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String spritesCredits(String pokemonCommit, String pkhexCommit) {
-    return 'Iconos de Pokémon: iconos de caja de Pokémon HOME del repositorio de sprites de Smogon / Pokémon Showdown (github.com/smogon/sprites, commit $pokemonCommit). Objetos, Balls, tipos y cintas: recursos de PKHeX (github.com/kwsch/PKHeX, commit $pkhexCommit). Se descargan bajo demanda, nunca se incluyen. Los sprites son © Nintendo / Game Freak / The Pokémon Company.';
+    return 'Iconos de Pokémon: iconos de caja de Pokémon HOME del repositorio de sprites de Smogon / Pokémon Showdown (github.com/smogon/sprites, commit $pokemonCommit); Gigamax, Megas nuevas y formas especiales variocolor salen del mismo commit (iconos y renders de HOME, iconos de Pokémon Champions). Objetos, Balls, tipos y cintas: recursos de PKHeX (github.com/kwsch/PKHeX, commit $pkhexCommit). Se descargan bajo demanda, nunca se incluyen. Los sprites son © Nintendo / Game Freak / The Pokémon Company.';
   }
 
   @override

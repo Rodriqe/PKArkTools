@@ -137,6 +137,9 @@ Fuentes (por grupo, en `kSpriteSources`/`kSpriteCommits`):
 | Grupo | Repositorio | Carpeta |
 | --- | --- | --- |
 | `pokemon` | `smogon/sprites` | `src/minisprites/pokemon/home` (iconos de HOME, 1025 especies + formas + huevo) |
+| `pokemon_small`, `pokemon_small_shiny` | `smogon/sprites` | `src/_uncategorized/canonical/home/small[-shiny]` (solo los archivos usados: Gigamax, Silvally, variocolor de Megas/Primigenias/Ultra) |
+| `pokemon_champions` | `smogon/sprites` | `src/champions` (solo las Megas de Leyendas Z-A y su variocolor «-s») |
+| `pokemon_preview` | `smogon/sprites` | `src/previews/gen9` (solo lo que no está en las anteriores: 9 Gigamax, 9 Megas de Z-A, Terapagos) |
 | `item`, `ball`, `ribbon`, `type` | `kwsch/PKHeX` | `PKHeX.Drawing.*/Resources/img/…` |
 
 Especie y forma → archivo: `kPokemonIconBase` (nombre «aplanado» de smogon por
@@ -145,9 +148,17 @@ especie, de los nombres en inglés de PKHeX) y `kPokemonIconForms`
 partir de los volcados de HOME del mismo repositorio
 (`src/_uncategorized/canonical/home/small*`, que llevan número de especie y de
 forma) más la tabla explícita `HAND_FORMS` del generador (Gen 9, Hisui y lo
-que el volcado no recoge). Una forma sin icono propio (megas nuevas de
-Leyendas Z-A, Teraforma de Terapagos, tipos de Silvally…) usa el de la
-especie. No hay iconos variocolor: el avatar pone la insignia.
+que el volcado no recoge). Las formas que esa carpeta no tiene salen de los
+grupos extra con tablas de (grupo, archivo): `kPokemonIconFormsExtra` (Megas
+de Z-A, Silvally, Terapagos por «especie-forma»), `kPokemonIconShinyForms`
+(variocolor de las formas especiales), `kPokemonIconGmax` y
+`kPokemonIconGmaxShiny` («especie» o «especie-forma» del ejemplar). Las tablas
+de entrada del generador son `ZA_MEGAS`, `OTHER_FORMS`, `GMAX_SPECIES` y
+`GMAX_FORMS`; `Sprites.special(SpecialForm)` resuelve cada forma de
+`SpecialForms` y `test/sprites_test.dart` exige icono propio normal y
+variocolor para todas. Una forma sin icono propio (modos de Koraidon/Miraidon…)
+usa el de la especie. Las formas normales no tienen variocolor: el avatar pone
+la insignia.
 
 Escala (`SpriteLayout` en `lib/ui/common/sprite_image.dart`): el generador mide
 el contenido no transparente de cada PNG y guarda por grupo el percentil 92
