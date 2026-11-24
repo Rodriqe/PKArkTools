@@ -69,11 +69,14 @@ class SpecialFormCard extends StatelessWidget {
     final any = unlock.normalUnlocked || unlock.shinyUnlocked;
     final iconForm = specialFormIconForm(f);
     final iconStatus = any ? DexStatus.caught : DexStatus.unknown;
-    // Icono propio de la forma (Gigamax, Mega…); variocolor si solo está
-    // desbloqueada la variocolor. Sin icono propio: el de la especie con insignia.
+    // Icono propio de la forma (Gigamax, Mega…): el variocolor en cuanto la
+    // variocolor está desbloqueada (también si la normal lo está; cada
+    // pastilla muestra además el de su variante). Sin icono propio: el de la
+    // especie con insignia. Sin variocolor en la fuente: el normal con ✦.
     final ownIcon = Sprites.hasSpecialIcon(f);
+    final normalIcon = Sprites.specialVariant(f, shiny: false).ref;
     final shinyIcon = Sprites.hasSpecialShinyIcon(f) ? Sprites.special(f, shiny: true) : null;
-    final icon = unlock.shinyUnlocked && !unlock.normalUnlocked && shinyIcon != null ? shinyIcon : Sprites.special(f);
+    final shown = Sprites.specialVariant(f, shiny: unlock.shinyUnlocked);
     final (t1, t2) = f.form == null ? SpeciesForms.types(f.species, iconForm) : _types(f);
     final refs = [...unlock.normal, ...unlock.shiny];
     final itemSources = unlock.withItem;
@@ -100,8 +103,17 @@ class SpecialFormCard extends StatelessWidget {
                   form: iconForm,
                   status: iconStatus,
                   size: 60,
-                  sprite: ownIcon ? icon : null),
+                  sprite: ownIcon ? shown.ref : null),
               if (!any) Icon(Icons.lock_rounded, size: 20, color: tokens.muted),
+              if (unlock.shinyUnlocked)
+                Positioned(
+                  right: 2,
+                  top: 2,
+                  child: Icon(Icons.auto_awesome,
+                      key: ValueKey('dex-special-shiny-badge-${f.key}${shown.shinyMissing ? '-fallback' : ''}'),
+                      size: 16,
+                      color: tokens.shiny),
+                ),
               if (!ownIcon)
                 Positioned(
                   right: 2,
@@ -134,7 +146,13 @@ class SpecialFormCard extends StatelessWidget {
         ]),
         const SizedBox(height: 12),
         Row(children: [
-          Expanded(child: _VariantPill(label: l10n.dexNormal, unlocked: unlock.normalUnlocked, shiny: false, keyName: '${f.key}-normal')),
+          Expanded(
+              child: _VariantPill(
+                  label: l10n.dexNormal,
+                  unlocked: unlock.normalUnlocked,
+                  shiny: false,
+                  keyName: '${f.key}-normal',
+                  sprite: ownIcon ? normalIcon : null)),
           const SizedBox(width: 8),
           Expanded(
               child: _VariantPill(
@@ -221,7 +239,8 @@ class _VariantPill extends StatelessWidget {
   final bool shiny;
   final String keyName;
 
-  /// Icono variocolor de la forma: se muestra en vez del destello cuando la
+  /// Icono propio de la forma en esta variante (el variocolor en la pastilla
+  /// variocolor): se muestra en vez de la marca o el destello cuando la
   /// variante está desbloqueada.
   final SpriteRef? sprite;
 
@@ -242,9 +261,10 @@ class _VariantPill extends StatelessWidget {
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           if (unlocked && sprite != null)
             SpriteImage(
+              key: ValueKey('dex-variant-icon-$keyName'),
               sprite: sprite,
               size: 22,
-              fallback: Icon(Icons.auto_awesome, size: 15, color: color),
+              fallback: Icon(shiny ? Icons.auto_awesome : Icons.check_rounded, size: 15, color: color),
             )
           else
             Icon(unlocked ? (shiny ? Icons.auto_awesome : Icons.check_rounded) : Icons.lock_outline_rounded,

@@ -14,9 +14,11 @@ import 'package:pkcore/testing.dart';
 import 'package:pkarktools/app.dart';
 import 'package:pkarktools/data/arca_repository.dart';
 import 'package:pkarktools/data/db/arca_database.dart';
+import 'package:pkarktools/data/sprites/sprites.dart';
 import 'package:pkarktools/data/folder/arca_folder.dart';
 import 'package:pkarktools/data/folder/folder_fs.dart';
 import 'package:pkarktools/providers.dart';
+import 'package:pkarktools/ui/common/sprite_image.dart';
 import 'package:pkarktools/ui/dex/dex_tile.dart';
 import 'package:pkarktools/ui/shell.dart';
 
@@ -178,6 +180,60 @@ void main() {
     // Registros y ejemplares.
     expect(find.text('Blaze · Charizard'), findsOneWidget);
     expect(find.text('Leon · Sword / Shield · Box 1, slot 4'), findsOneWidget);
+  });
+
+  testWidgets('variocolor y normal desbloqueadas: la tarjeta y la pastilla variocolor usan el icono variocolor', (t) async {
+    // El caso del Odin3 (1.0.3): Charizard Gigamax normal Y variocolor; la
+    // tarjeta mostraba el icono normal. Más Mega X variocolor por Z-A.
+    final dex = GlobalDex.build([
+      DexSource(
+        id: 21,
+        game: GameVersion.swordShield,
+        trainer: 'Leon',
+        scan: SaveDexScan(game: GameVersion.swordShield, hasPokedex: true, seen: const {6}, caught: const {6}, specimens: const [
+          DexSpecimen(species: 6, level: 60, gigantamax: true, box: 0, slot: 0, nickname: 'Plain'),
+          DexSpecimen(species: 6, level: 70, shiny: true, gigantamax: true, box: 0, slot: 1, nickname: 'Star'),
+        ]),
+      ),
+      DexSource(
+        id: 22,
+        game: GameVersion.legendsZA,
+        trainer: 'Urbain',
+        scan: SaveDexScan(game: GameVersion.legendsZA, hasPokedex: true, seen: const {6}, caught: const {6}, specimens: const [
+          DexSpecimen(species: 6, level: 50, box: 1, slot: 0),
+          DexSpecimen(species: 6, level: 55, shiny: true, box: 1, slot: 1),
+        ]),
+      ),
+    ]);
+    await pumpDex(t, '/dex/especie/6', dex: dex);
+    SpriteRef? imageIn(Finder f) => t.widget<SpriteImage>(find.descendant(of: f, matching: find.byType(SpriteImage)).first).sprite;
+
+    for (final (key, normal, shiny) in [
+      ('gmax:6:*', 'pokemon_small/0006-000-Charizard-Gmax', 'pokemon_small_shiny/0006-000-Charizard-Gmax'),
+      ('mega:6:1', 'pokemon/scharizard-omega_x', 'pokemon_small_shiny/0006-001-Charizard-Mega~X'),
+    ]) {
+      expect(find.byKey(ValueKey('dex-variant-$key-normal-on')), findsOneWidget);
+      expect(find.byKey(ValueKey('dex-variant-$key-shiny-on')), findsOneWidget);
+      final card = find.byKey(ValueKey('dex-special-$key'));
+      final icon = t.widget<DexIcon>(find.byKey(ValueKey('dex-special-icon-$key-own')));
+      expect(icon.sprite?.key, shiny, reason: '$key: tarjeta con la variocolor desbloqueada');
+      expect(imageIn(find.byKey(ValueKey('dex-special-icon-$key-own')))?.key, shiny);
+      expect(find.descendant(of: card, matching: find.byKey(ValueKey('dex-special-shiny-badge-$key'))), findsOneWidget);
+      expect(t.widget<SpriteImage>(find.byKey(ValueKey('dex-variant-icon-$key-normal'))).sprite?.key, normal);
+      expect(t.widget<SpriteImage>(find.byKey(ValueKey('dex-variant-icon-$key-shiny'))).sprite?.key, shiny);
+    }
+    // «Tus ejemplares»: el Gigamax variocolor con su icono variocolor y el normal con el normal.
+    expect(imageIn(find.byKey(const ValueKey('dex-specimen-21-0-1')))?.key, 'pokemon_small_shiny/0006-000-Charizard-Gmax');
+    expect(imageIn(find.byKey(const ValueKey('dex-specimen-21-0-0')))?.key, 'pokemon_small/0006-000-Charizard-Gmax');
+  });
+
+  testWidgets('solo la normal desbloqueada: tarjeta normal, sin insignia ✦; bloqueada: silueta normal', (t) async {
+    await pumpDex(t, '/dex/especie/6');
+    final mega = t.widget<DexIcon>(find.byKey(const ValueKey('dex-special-icon-mega:6:1-own')));
+    expect(mega.sprite?.key, 'pokemon/scharizard-omega_x');
+    expect(find.byKey(const ValueKey('dex-special-shiny-badge-mega:6:1')), findsNothing);
+    expect(find.byKey(const ValueKey('dex-variant-icon-mega:6:1-shiny')), findsNothing);
+    expect(find.byKey(const ValueKey('dex-special-shiny-badge-gmax:6:*')), findsOneWidget);
   });
 
   testWidgets('formas bloqueadas: silueta y cómo se desbloquean (Venusaur, Necrozma)', (t) async {

@@ -85,7 +85,9 @@ abstract final class Sprites {
     if (egg) return exists('pokemon', kPokemonIconEgg) ? const SpriteRef('pokemon', kPokemonIconEgg) : null;
     if (species <= 0 || species >= kPokemonIconBase.length) return null;
     if (gigantamax) {
-      final g = gmax(species, form: form, shiny: shiny);
+      // Sin Gigamax variocolor en la fuente: la Gigamax normal (la interfaz
+      // pone la insignia ✦), nunca el icono de la especie.
+      final g = gmax(species, form: form, shiny: shiny) ?? (shiny ? gmax(species, form: form) : null);
       if (g != null) return g;
     }
     if (shiny) {
@@ -128,6 +130,15 @@ abstract final class Sprites {
   static bool hasSpecialShinyIcon(SpecialForm f) {
     final r = special(f, shiny: true);
     return r != null && r != special(f);
+  }
+
+  /// Icono que se dibuja para la variante [shiny] (o normal) de una forma
+  /// especial. La variocolor usa su icono propio; si la fuente no lo tuviera,
+  /// el normal con `shinyMissing` para que la interfaz ponga la insignia ✦
+  /// (docs/usuario/iconos.md), nunca el normal sin avisar.
+  static ({SpriteRef? ref, bool shinyMissing}) specialVariant(SpecialForm f, {required bool shiny}) {
+    if (shiny && hasSpecialShinyIcon(f)) return (ref: special(f, shiny: true), shinyMissing: false);
+    return (ref: special(f), shinyMissing: shiny);
   }
 
   /// Icono de un objeto. [generation] indica en qué numeración está [item]

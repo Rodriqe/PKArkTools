@@ -247,7 +247,11 @@ class SpriteCache {
     return Uri.parse(root + [...dir.split('/'), '${ref.name}.png'].map(Uri.encodeComponent).join('/'));
   }
 
-  static String _fileName(SpriteRef ref) => '${ref.group}_${ref.name}.png';
+  /// Archivo de [ref] en la caché en disco: grupo + nombre, así la variocolor
+  /// de una forma especial (`pokemon_small_shiny_…`) nunca pisa la normal
+  /// (`pokemon_small_…`) aunque el archivo de origen se llame igual.
+  @visibleForTesting
+  static String fileNameOf(SpriteRef ref) => '${ref.group}_${ref.name}.png';
 
   /// Bytes ya disponibles sin esperar (memoria), para pintar sin parpadeo.
   Uint8List? peek(SpriteRef ref) => _memory[ref.key];
@@ -275,7 +279,7 @@ class SpriteCache {
 
   Future<Uint8List?> _load(SpriteRef ref) async {
     final dir = await _cacheDir();
-    final file = dir == null ? null : File(p.join(dir.path, _fileName(ref)));
+    final file = dir == null ? null : File(p.join(dir.path, fileNameOf(ref)));
     try {
       if (file != null && await file.exists()) {
         final b = await file.readAsBytes();
@@ -477,7 +481,7 @@ class SpriteCache {
     final valid = <SpriteRef>{};
     var invalid = 0;
     if (dir != null) {
-      final byName = {for (final r in _sizes.keys) _fileName(r): r};
+      final byName = {for (final r in _sizes.keys) fileNameOf(r): r};
       final writing = {for (final k in _inFlight.keys) k.replaceFirst('/', '_')};
       try {
         await for (final e in dir.list()) {
@@ -522,7 +526,7 @@ class SpriteCache {
     _failedAt.remove(ref.key);
     final dir = await _cacheDir();
     if (dir != null) {
-      final f = File(p.join(dir.path, _fileName(ref)));
+      final f = File(p.join(dir.path, fileNameOf(ref)));
       try {
         if (await f.exists()) await f.delete();
       } catch (_) {}
@@ -602,7 +606,7 @@ class SpriteCache {
       while (q.isNotEmpty && !stop()) {
         final ref = q.removeFirst();
         _failedAt.remove(ref.key);
-        final file = dir == null ? null : File(p.join(dir.path, _fileName(ref)));
+        final file = dir == null ? null : File(p.join(dir.path, fileNameOf(ref)));
         final pending = _inFlight[ref.key];
         Uint8List? b;
         var permanent = false;

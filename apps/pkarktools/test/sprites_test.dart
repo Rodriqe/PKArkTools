@@ -153,6 +153,43 @@ void main() {
       expect(names.length, SpecialForms.all.length);
     });
 
+    test('las 134 formas especiales × {normal, variocolor}: icono distinto, en el índice, en la caché y en «Reparar iconos»', () {
+      expect(SpecialForms.all.length, 134);
+      final all = SpriteCache.allRefs().toSet();
+      final keys = <String>{}, files = <String>{}, urls = <String>{};
+      for (final f in SpecialForms.all) {
+        final normal = Sprites.specialVariant(f, shiny: false), shiny = Sprites.specialVariant(f, shiny: true);
+        expect(normal.shinyMissing, isFalse, reason: f.key);
+        expect(shiny.shinyMissing, isFalse, reason: '${f.key}: sin variocolor en la fuente');
+        final n = normal.ref!, s = shiny.ref!;
+        expect(s, isNot(n), reason: '${f.key}: la variocolor resuelve al icono normal');
+        for (final r in [n, s]) {
+          expect(Sprites.exists(r.group, r.name), isTrue, reason: '${f.key} $r');
+          expect(Sprites.bytesOfRef(r), greaterThan(0), reason: '${f.key} $r');
+          expect(all, contains(r), reason: '${f.key} $r: «Descargar todos»/«Reparar iconos» no lo bajarían');
+          expect(keys.add(r.key), isTrue, reason: '${f.key} $r repetido');
+          expect(files.add(SpriteCache.fileNameOf(r)), isTrue, reason: '${f.key} $r: colisión en la caché en disco');
+          expect(urls.add(SpriteCache.urlOf(r).toString()), isTrue, reason: '${f.key} $r: misma URL');
+        }
+        // La misma ruta que usan «Tus ejemplares», cajas y editor (Sprites.pokemon).
+        if (f.kind == SpecialFormKind.gigantamax) {
+          final form = f.baseForms?.first ?? 0;
+          expect(Sprites.pokemon(f.species, form: form, gigantamax: true), n, reason: f.key);
+          expect(Sprites.pokemon(f.species, form: form, gigantamax: true, shiny: true), s, reason: f.key);
+        } else {
+          expect(Sprites.pokemon(f.species, form: f.form!), n, reason: f.key);
+          expect(Sprites.pokemon(f.species, form: f.form!, shiny: true), s, reason: f.key);
+        }
+      }
+      expect(keys.length, 2 * 134);
+      // El nombre de archivo en la caché es inyectivo en todo el índice
+      // (Charizard Gigamax: mismo nombre de origen en small y small-shiny).
+      expect({for (final r in all) SpriteCache.fileNameOf(r)}.length, all.length);
+      expect(SpriteCache.fileNameOf(Sprites.pokemon(6, gigantamax: true)!), 'pokemon_small_0006-000-Charizard-Gmax.png');
+      expect(SpriteCache.fileNameOf(Sprites.pokemon(6, gigantamax: true, shiny: true)!),
+          'pokemon_small_shiny_0006-000-Charizard-Gmax.png');
+    });
+
     test('todas las formas del índice apuntan a un archivo que existe', () {
       for (final e in kPokemonIconForms.entries) {
         expect(Sprites.exists('pokemon', e.value), isTrue, reason: e.key);
@@ -210,6 +247,26 @@ void main() {
       expect(await again.diskBytes(), _png.length);
       await again.clear();
       expect(await again.diskBytes(), 0);
+    });
+
+    test('Charizard Gigamax normal y variocolor (mismo nombre de origen) no se pisan en memoria ni en disco', () async {
+      // Bytes distintos según la carpeta de la URL: small o small-shiny.
+      final shinyPng = Uint8List.fromList([..._png.sublist(0, _png.length - 12), 0, 0, 0, 0, ..._png.sublist(_png.length - 12)]);
+      final asked = <String>[];
+      SpriteCache cacheAt() => SpriteCache(strictSizes: false, directory: () async => tmp, fetcher: (u) async {
+            asked.add(u.path);
+            return u.path.contains('/small-shiny/') ? shinyPng : _png;
+          });
+      final normal = Sprites.pokemon(6, gigantamax: true)!, shiny = Sprites.pokemon(6, gigantamax: true, shiny: true)!;
+      final cache = cacheAt();
+      expect(await cache.load(normal), _png);
+      expect(await cache.load(shiny), shinyPng);
+      expect(cache.peek(normal), _png);
+      expect(asked, hasLength(2));
+      // Reiniciada: cada una sale de su archivo, sin red.
+      final again = SpriteCache(strictSizes: false, directory: () async => tmp, fetcher: (u) async => throw const SocketException('sin red'));
+      expect(await again.load(shiny), shinyPng);
+      expect(await again.load(normal), _png);
     });
 
     test('sin conexión: reintenta, devuelve null y no insiste enseguida', () async {
