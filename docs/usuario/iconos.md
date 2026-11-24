@@ -57,6 +57,11 @@ Es la única conexión a internet que hace la app y no envía ningún dato tuyo.
 | Ultra Necrozma | 1 | Iconos de HOME | Volcado de HOME |
 | Gigamax | 34 | Volcado de HOME (25); renders de HOME (9: Venusaur, Blastoise, Rillaboom, Cinderace, Inteleon, Appletun, Toxtricity Grave, Urshifu Brusco y Fluido) | Igual, variocolor |
 
+<p>
+  <img src="../screenshots/dex/04_gigantamax_forms.png" width="49%" alt="Toxtricity Gigamax por forma">
+  <img src="../screenshots/dex/09_mega_za.png" width="49%" alt="Mega Clefable variocolor de Leyendas Z-A">
+</p>
+
 Las 134 formas especiales tienen icono propio normal y variocolor. Toxtricity
 y Urshifu tienen una Gigamax por forma; Alcremie, una sola para todas sus
 formas.

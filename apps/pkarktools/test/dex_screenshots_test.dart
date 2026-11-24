@@ -100,6 +100,9 @@ void main() {
     await write('03_locked_forms');
     await open('/dex/especie/849', const Size(1440, 1300));
     await write('04_gigantamax_forms');
+    // Mega de Leyendas Z-A con su icono propio, variocolor desbloqueada.
+    await open('/dex/especie/36', const Size(1440, 1100));
+    await write('09_mega_za');
     await open('/dex/progreso', const Size(1440, 1100));
     await write('05_progress');
     await open('/dex', desktop);
