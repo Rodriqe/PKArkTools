@@ -353,8 +353,7 @@ class StadiumEditor extends StorageEditor {
         for (final (name, ofs) in layout.teams())
           if (ofs + layout.teamSize <= _d.length)
             (name, [
-              for (var i = 0; i < 6; i++)
-                if (_readAt(ofs + layout.teamHeader + i * layout.slotSize) case final pk?) pk,
+              for (var i = 0; i < 6; i++) ?_readAt(ofs + layout.teamHeader + i * layout.slotSize),
             ]),
       ];
 

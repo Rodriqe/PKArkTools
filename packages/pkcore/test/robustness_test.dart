@@ -15,7 +15,7 @@ const _gcBox = {
   0: [SynthGcMon(1, level: 5), null, SynthGcMon(4, level: 7)],
 };
 
-/// Un save sintético por cada uno de los 24 formatos (GameVersion).
+/// Un save sintético por cada uno de los 29 formatos (GameVersion).
 final Map<GameVersion, Uint8List Function()> _fixtures = {
   GameVersion.redBlue: () => SyntheticSaves.gen1(party: _team),
   GameVersion.yellow: () => SyntheticSaves.gen1(party: _team, yellow: true),
@@ -26,6 +26,11 @@ final Map<GameVersion, Uint8List Function()> _fixtures = {
   GameVersion.fireRedLeafGreen: () => SyntheticSaves.gen3(game: GameVersion.fireRedLeafGreen, party: _team, boxes: _box),
   GameVersion.colosseum: () => SyntheticSaves.gci(SyntheticSaves.colosseum(party: _gcTeam, boxes: _gcBox), GcTitle.colosseum),
   GameVersion.xd: () => SyntheticSaves.memoryCard([(GcTitle.xd, SyntheticSaves.xd(party: _gcTeam, boxes: _gcBox))]),
+  GameVersion.boxRS: () => SyntheticSaves.gci(SyntheticSaves.rsBox(boxes: _box), GcTitle.rsBox),
+  GameVersion.stadium: () => SyntheticSaves.stadium(boxes: const {0: _team}),
+  GameVersion.stadium2: () => SyntheticSaves.stadium(layout: StadiumLayout.stadium2U, boxes: const {0: _team}, swapped: true),
+  GameVersion.ranch: () => SyntheticSaves.ranch(mons: _team),
+  GameVersion.battleRevolution: () => SyntheticSaves.battleRevolution(party: _team, boxes: _box),
   GameVersion.diamondPearl: () => SyntheticSaves.gen4(layout: Gen4Layout.dp, party: _team, boxes: _box),
   GameVersion.platinum: () => SyntheticSaves.gen4(party: _team, boxes: _box),
   GameVersion.heartGoldSoulSilver: () => SyntheticSaves.gen4(layout: Gen4Layout.hgss, party: _team, boxes: _box),
@@ -105,7 +110,7 @@ void main() {
     print('fuzzing: $byKind');
   });
 
-  test('hay un save sintético para cada uno de los 24 formatos', () {
+  test('hay un save sintético para cada uno de los 29 formatos', () {
     expect(_fixtures.keys.toSet(), GameVersion.values.toSet());
     for (final MapEntry(key: game, value: build) in _fixtures.entries) {
       expect(SaveDetector.detect(build()).game, game);
@@ -121,14 +126,17 @@ void main() {
         expect(SaveVerifier.checksums(original), isEmpty, reason: 'el sintético es válido');
         // Sin cambios también pasa la verificación.
         expect(e.buildVerified(), original);
-        if (e.canEditStorage) e.set(const SlotRef.box(0, 1), e.party.first);
+        final first = e.partyCount > 0 ? e.party.first : e.get(const SlotRef.box(0, 0))!;
+        if (e.canEditStorage) e.set(const SlotRef.box(0, 1), first);
         e.writeTrainer(e.readTrainer().copyWith(name: 'Ana', money: 4321));
         e.pokedex?.setCaught(e.pokedex!.species.first, true);
         if (e.events != null && e.events!.flagCount > 0) e.events!.setFlag(e.events!.flagCount - 1, true);
         final out = e.buildVerified();
         expect(SaveVerifier.checksums(out), isEmpty);
         expect(SaveVerifier.verifyExport(e, out), isEmpty);
-        expect(SaveEditor.open(out).readTrainer().money, e.maxMoney >= 4321 ? 4321 : e.maxMoney);
+        if (e.trainerFields.contains(TrainerField.money)) {
+          expect(SaveEditor.open(out).readTrainer().money, e.maxMoney >= 4321 ? 4321 : e.maxMoney);
+        }
       });
     }
 
@@ -182,13 +190,14 @@ void main() {
         // 4) Valores fuera de rango en una copia que sigue siendo detectable:
         //    se editan los datos de trabajo del editor (sin tocar la detección).
         final e = SaveEditor.open(original);
-        final pk = e.party.first;
+        final ref = e.partyCount > 0 ? const SlotRef.party(0) : const SlotRef.box(0, 0);
+        final pk = e.get(ref)!;
         pk.species = 0xFFF;
         pk.heldItem = 0xFFFF;
         pk.exp = 0x7FFFFFFF;
         pk.setMove(0, 0xFFFF, context: '9');
         try {
-          e.set(const SlotRef.party(0), pk);
+          e.set(ref, pk);
           final out = e.buildVerified();
           outcomes.add(_exercise(out));
         } on SaveEditException {
