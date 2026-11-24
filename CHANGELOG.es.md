@@ -11,6 +11,42 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+### Añadido
+- **Pokémon Colosseum y Pokémon XD: Tempestad Oscura (GameCube).** Se leen y
+  escriben saves en `.gci` (exportados con Dolphin o de su carpeta GCI),
+  imágenes completas de Memory Card (`.raw`, `.gcp`, `.mci`) y datos sin
+  cabecera, detectando por contenido el código de juego (`GC6x`/`GXXx`) y la
+  región (USA, Europa, Japón). Se leen entrenador, equipo, cajas, bolsa
+  (incluidos los discos y colonias de XD), Strategy Memo y **Pokémon
+  oscuros** (id oscuro, medidor de corazón, capturado y purificado); al
+  escribir se rehace el cifrado en cadena con SHA-1 (Colosseum) o el de
+  Genius Sonority (XD) y todas las sumas, se verifica la exportación y se
+  conserva el contenedor: la cabecera del `.gci`, o la tarjeta con solo los
+  bloques del save reescritos (siguiendo la tabla de bloques, sin tocar el
+  directorio). Un save sin cambios se escribe idéntico byte a byte.
+- Importar y exportar Pokémon sueltos `.ck3`/`.xk3`; un `.pk3` de un save de
+  GBA se puede colocar en Colosseum/XD y se convierte con la región del save.
+- Editor de Pokémon: sección **Pokémon oscuro** con el estado, el id oscuro y
+  el medidor de corazón, y *Marcar como purificado* con confirmación, que
+  añade también la Cinta Nacional.
+- Arca: carpetas de juego de Colosseum y XD con un LEEME que explica qué
+  exportar de Dolphin, colores de versión para los dos juegos y archivo
+  principal con el nombre original del `.gci`/`.raw`. Una Memory Card con los
+  dos juegos se importa como un `.gci` por juego.
+- Legalidad de origen Colosseum/XD: Pokémon oscuros, iniciales, regalos,
+  intercambios y Poké Spots de las tablas de PKHeX (con nombres de lugares),
+  id oscuro contra la especie, rango del medidor de corazón, la Cinta
+  Nacional justo en los oscuros purificados, la marca de encuentro fatídico
+  de XD y que un Pokémon oscuro no salga del juego sin purificar. Un Pokémon
+  purificado de XD que se mueve a un save de GBA recibe las mismas marcas
+  que en un intercambio en el juego.
+- Oráculo PKHeX: comando `write`, imágenes de Memory Card y campos oscuros en
+  el volcado; `tool/gen_gc_data.py` y `packages/pkcore/tool/write_synthetic.dart`.
+
+### Corregido
+- La marca de encuentro fatídico de los Pokémon de Gen 3 (PK3) ahora se lee y
+  se puede cambiar; antes siempre se leía desactivada.
+
 ## [1.0.4] — 2026-11-24
 
 ### Corregido

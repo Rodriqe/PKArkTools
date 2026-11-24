@@ -22,6 +22,11 @@ datos) y con una explicación. Son solo avisos: puedes guardar igualmente.
   singulares de evento sin «encuentro fatídico», nivel de encuentro.
 * **Encuentro**: especie (o preevolución), lugar y nivel contra las tablas de
   encuentros del juego de origen (Gen 3–9), con nombres de lugares.
+* **Colosseum y XD**: lugar y nivel contra los Pokémon oscuros, iniciales,
+  regalos, intercambios y Poké Spots de cada juego; id oscuro que corresponde
+  a la especie; medidor de corazón dentro de rango; **Cinta Nacional** solo y
+  siempre en los purificados; marca de encuentro fatídico en todo lo obtenido
+  en XD; y que un Pokémon oscuro no salga del juego sin purificar.
 * **Cintas y marcas** (al estilo de `RibbonVerifier` de PKHeX): cintas
   imposibles según los juegos por los que pudo pasar, marcas de encuentro fuera
   de su juego o repetidas, huevos con cintas y cintas de evento sin encuentro

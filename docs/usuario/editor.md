@@ -125,6 +125,18 @@ desajuste se marca con los lugares válidos.
   <img src="../screenshots/ios/v2_pro_06_origen.png" width="150" alt="Origen en iPhone">
 </p>
 
+## Pokémon oscuros (Colosseum y XD)
+
+En los Pokémon que fueron oscuros aparece la sección **Pokémon oscuro**: su
+estado (oscuro o purificado), el id oscuro y el **medidor de corazón**, que se
+puede ajustar dentro del rango del juego. **Marcar como purificado** pide
+confirmación: en el juego, purificar da la Cinta Nacional, la experiencia
+acumulada y a veces movimientos; aquí solo cambia el estado y se añade la
+Cinta Nacional. Un Pokémon oscuro no se puede mover a un save de GBA hasta
+purificarlo; uno purificado de XD llega con la marca de encuentro fatídico,
+como al intercambiarlo en el juego. Los Pokémon sueltos son `.ck3`
+(Colosseum) y `.xk3` (XD).
+
 ## Saves en solo lectura
 
 Si el save tiene datos ilegibles o checksums rotos se abre en **solo lectura**

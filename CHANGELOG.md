@@ -11,6 +11,40 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+### Added
+- **Pokémon Colosseum and Pokémon XD: Gale of Darkness (GameCube).** Saves are
+  read and written from `.gci` files (Dolphin export or GCI folder), whole
+  Memory Card images (`.raw`, `.gcp`, `.mci`) and headerless save data, with
+  content detection of the game code (`GC6x`/`GXXx`) and region (USA, Europe,
+  Japan). Trainer, party, boxes, bag (including XD discs and colognes),
+  Strategy Memo and **Shadow Pokémon** (shadow ID, heart gauge, snagged and
+  purified state) are read; writing redoes the SHA-1 chain cipher
+  (Colosseum) or the Genius Sonority cipher (XD) and every checksum, verifies
+  the export and keeps the container: the `.gci` header, or the card with
+  only the save's blocks rewritten (following the block table, untouched
+  directory). An unchanged save is written back byte for byte.
+- Loose `.ck3`/`.xk3` Pokémon import and export; a `.pk3` from a GBA save can
+  be placed in Colosseum/XD and is converted with the save's region.
+- Pokémon editor: a **Shadow Pokémon** section with the state, shadow ID and
+  heart gauge, and a confirmed *Mark as purified* action that also adds the
+  National Ribbon.
+- Arca: Colosseum and XD game folders with a README explaining what to
+  export from Dolphin, version colours for both games, and the main file
+  keeps the original `.gci`/`.raw` name. A Memory Card holding both games is
+  imported as one `.gci` per game.
+- Legality for Colosseum/XD origin: Shadow Pokémon, starters, gifts, trades
+  and Poké Spots from PKHeX's tables (with location names), shadow ID vs
+  species, heart gauge range, the National Ribbon exactly on purified Shadow
+  Pokémon, XD's fateful-encounter flag, and Shadow Pokémon cannot leave the
+  game until purified. Purified XD Pokémon moved to a GBA save get the same
+  flags as an in-game trade.
+- PKHeX oracle: `write` command, Memory Card images and shadow fields in the
+  dump; `tool/gen_gc_data.py` and `packages/pkcore/tool/write_synthetic.dart`.
+
+### Fixed
+- The fateful-encounter flag of Gen 3 Pokémon (PK3) is now read and can be
+  set; it always read as off before.
+
 ## [1.0.4] — 2026-11-24
 
 ### Fixed

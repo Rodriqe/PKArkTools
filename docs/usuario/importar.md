@@ -41,6 +41,36 @@ Los `.sav`/`.srm` crudos, los `.dsv` de DeSmuME y los saves con «pie RTC»
 (reloj) que añaden algunos emuladores de GB/GBA se reconocen; al exportar se
 conserva el mismo contenedor para que el emulador lo vuelva a cargar.
 
+### GameCube: Pokémon Colosseum y XD (Dolphin)
+
+PKArkTools lee el save de tres formas; elige la que te resulte más cómoda:
+
+1. **`.gci` exportado** (recomendado). En Dolphin: **Herramientas ›
+   Administrar tarjetas de memoria**, elige la tarjeta (Ranura A), selecciona
+   el save de «Pokémon Colosseum» o «Pokémon XD» y pulsa **Exportar GCI**.
+   Importa ese `.gci`. Para devolverlo, en la misma ventana usa **Importar
+   GCI** (borra antes la copia vieja, la tarjeta no admite dos iguales).
+2. **Carpeta GCI de Dolphin**. Si en **Configuración › GameCube** la Ranura A
+   es «Carpeta GCI», los saves están ya como `.gci` en
+   `User/GC/<USA|EUR|JAP>/Card A/` (en Android,
+   `Android/data/org.dolphinemu.dolphinemu/files/GC/…`, accesible por el
+   selector del sistema desde el gestor de archivos de Dolphin o copiándolo
+   por USB). Importa el archivo o la carpeta; para devolver el save editado,
+   reemplaza ese `.gci` con Dolphin cerrado.
+3. **Imagen completa de la Memory Card** (`MemoryCardA.USA.raw` en
+   `User/GC/`, o `.gcp`/`.mci` de otras herramientas). Si la tarjeta solo
+   tiene un save de Pokémon, el archivo exportado es la tarjeta entera con el
+   save editado en su sitio (el resto de juegos no cambia). Si tiene
+   Colosseum y XD, se importa cada uno como su `.gci`.
+
+En una GameCube o Wii real, copia el save a una tarjeta SD con
+GCMM (homebrew) como `.gci` o `.raw` e impórtalo igual.
+
+Los Pokémon sueltos de estos juegos son `.ck3` (Colosseum) y `.xk3` (XD);
+también se puede importar un `.pk3` de GBA, que se convierte con la región
+del save. Un Pokémon oscuro sin purificar no se puede llevar a un juego de
+GBA (igual que en el juego).
+
 ### Emuladores de Switch en escritorio
 
 Elige la carpeta de saves del emulador, por ejemplo `nand/user/save/…` en
@@ -79,7 +109,8 @@ archivo a Archivos e impórtalo desde ahí.
 ## Pokémon sueltos
 
 Dentro del editor de cajas puedes **importar** y **exportar** Pokémon sueltos
-del formato del juego (`.pk1` … `.pk9`, `.pb7`, `.pb8`, `.pa8`, `.pa9`). Ver
+del formato del juego (`.pk1` … `.pk9`, `.pb7`, `.pb8`, `.pa8`, `.pa9`;
+`.ck3`/`.xk3` en Colosseum/XD). Ver
 [Editor](editor.md#cajas).
 
 Siguiente: [El Arca](arca.md).

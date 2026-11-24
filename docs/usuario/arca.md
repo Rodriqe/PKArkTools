@@ -141,6 +141,7 @@ PKArkTools/_cuarentena/     ← lo que «Arreglar» no pudo reparar, con una not
   | Let's Go, Pikachu! / Eevee! | `savedata.bin` |
   | X/Y, Rubí Omega/Zafiro Alfa, Sol/Luna, Ultrasol/Ultraluna (3DS) | `main` |
   | Game Boy, GBA y DS | `<Juego>.<ext>`: `.sav`, o el contenedor original si es `.dsv` (DeSmuME/DraStic), `.srm` (RetroArch), `.sa1`, `.fla`, `.dat` o `.bin` |
+  | Colosseum y XD (GameCube) | El nombre original del `.gci` (p. ej. `01-GC6E-….gci`) o de la Memory Card (`MemoryCardA.USA.raw`); `<Juego>.bin` si eran datos sin cabecera |
 
   Si un mismo entrenador tiene copias de contenedores distintos (por ejemplo
   `.sav` de melonDS y `.dsv` de DeSmuME), cada uno tiene su archivo.
