@@ -11,7 +11,51 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
-### Añadido
+## [1.1.0] — 2026-11-24
+
+PKArkTools 1.1.0 trae dos grandes novedades: **Ribbon Hunter**, una guía de
+cintas por especie validada contra PKHeX (rutas, ranking por niveles, exportar
+la guía y tus propios ejemplares), y seis juegos nuevos de GameCube,
+Nintendo 64 y Wii: **Pokémon Colosseum**, **Pokémon XD: Tempestad Oscura**,
+**Pokémon Stadium** y **Stadium 2**, **Pokémon Box: Rubí y Zafiro**,
+**Pokémon Battle Revolution** y **My Pokémon Ranch**.
+
+### Añadido — Ribbon Hunter
+- Pestaña **Ribbon Hunter**: una guía de cintas por especie, no por ejemplar.
+  Eliges cualquier especie y forma y ves todas las cintas que puede ganar un
+  ejemplar, juego a juego de Gen 3 a Gen 9 (la ruta para convertirlo en Ribbon
+  Master), con cómo conseguir cada una, su requisito, el origen recomendado (el
+  más antiguo posible) y el máximo que se puede conseguir hoy.
+- Grafo de transferencias solo hacia adelante con ids de juego estables:
+  Colosseum y XD (por intercambio con Rubí/Zafiro/Esmeralda y Rojo Fuego/Verde
+  Hoja), Parque Compi, Pokétransfer, Poké Transporter/Banco, Consola Virtual →
+  Gen 7, HOME y Let's Go/GO de ida a HOME. Los avisos dicen cuándo transferir,
+  cuándo existe por primera vez una forma regional y cuándo un juego solo admite
+  la preevolución.
+- La Cinta Nacional (purificar un Pokémon oscuro) y la Cinta Tierra (Monte
+  Batalla) cuentan como cintas de juego de Colosseum/XD; los Pokémon oscuros son
+  orígenes válidos.
+- Sección «No disponibles hoy» (cintas de evento y la Torre Batalla Wi-Fi
+  cerrada), marcas aparte (las que se ganan ya capturado en Escarlata/Púrpura y
+  una marca de encuentro si se captura en Espada/Escudo o Escarlata/Púrpura) y
+  los Recuerdos de Concurso/Combate de Gen 3–4.
+- **Ranking por niveles**: las especies y formas se agrupan por el máximo de
+  cintas que pueden ganar («87 cintas · 33 especies y formas», «86 cintas · 107
+  especies y formas»…), con todos los niveles, iconos de muestra y el origen
+  común destacado («Pokémon oscuro en Colosseum / XD»). Al entrar en un nivel
+  se ve la lista completa, filtrable y en orden de Dex, y cada especie abre su
+  guía.
+- «Tus ejemplares de esta especie»: las cintas de cada uno y las que aún puede
+  ganar desde su juego actual. El índice de la Dex guarda ahora las cintas de
+  cada ejemplar (se reconstruye una vez).
+- Compartir una guía como texto para foros o guardarla como imagen.
+- Botón «Guía Ribbon Hunter» en la ficha de cada especie de la Dex.
+- Verificado contra PKHeX: el oráculo construye cada especie/forma desde su
+  mejor origen, la transfiere hacia adelante y le aplica todas las cintas
+  válidas; las rutas de la app coinciden con 0 contradicciones en 1333 especies
+  y formas (`tool/gen_ribbon_master_data.sh`, tabla de test versionada).
+
+### Añadido — Juegos de GameCube, Nintendo 64 y Wii
 - **Juegos de almacenamiento y estadio**: Pokémon Stadium y Stadium 2
   (Nintendo 64; internacional, japonés y el Pocket Monsters Stadium original,
   también volcados con el orden de bytes invertido), Pokémon Box: Rubí y
@@ -59,6 +103,23 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   que en un intercambio en el juego.
 - Oráculo PKHeX: comando `write`, imágenes de Memory Card y campos oscuros en
   el volcado; `tool/gen_gc_data.py` y `packages/pkcore/tool/write_synthetic.dart`.
+
+### Limitaciones conocidas
+- Colosseum/XD: no se comprueba la correlación PID/IV del generador de
+  números aleatorios (bloqueos de equipo de los Pokémon oscuros); una Memory
+  Card con los dos juegos se importa como dos `.gci` (el `.raw` editado solo
+  se reescribe si tiene un único save de Pokémon); no se edita el Purificador
+  de XD ni la guardería.
+- No se editan los equipos registrados de Stadium, el buzón de Stadium 2, los
+  perfiles 2–4 de Battle Revolution (se conservan intactos), sus pases de
+  combate y vestuario, ni los Mii y juguetes del Rancho. Las cajas de Stadium
+  son listas compactas: al vaciar un hueco los siguientes avanzan. Los huecos
+  del Rancho por encima de la capacidad de su nivel están bloqueados.
+- Stadium, Stadium 2, Box y el Rancho no tienen entrenador propio; en el Arca
+  aparecen como «STADIUM», «STADIUM 2», «BOX» o el dueño del rancho.
+- Ribbon Hunter es una guía por especie: las cintas de evento y la Torre
+  Batalla Wi-Fi cerrada se listan como no disponibles hoy, y las rutas son las
+  que PKHeX acepta, no todos los caminos posibles.
 
 ### Corregido
 - La marca de encuentro fatídico de los Pokémon de Gen 3 (PK3) ahora se lee y

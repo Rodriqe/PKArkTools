@@ -15,6 +15,7 @@ import 'ui/dex/dex_progress_screen.dart';
 import 'ui/dex/dex_screen.dart';
 import 'ui/dex/dex_species_screen.dart';
 import 'ui/onboarding/onboarding_screen.dart';
+import 'ui/ribbons/ribbon_hunter_screen.dart';
 import 'ui/settings/settings_screen.dart';
 import 'ui/shell.dart';
 
@@ -65,6 +66,36 @@ GoRouter buildRouter({String initialLocation = '/arca', ValueNotifier<ArcaSetup>
                     path: 'especie/:species',
                     builder: (_, state) => DexSpeciesScreen(
                       species: (int.tryParse(state.pathParameters['species']!) ?? 1).clamp(1, GlobalDex.maxSpecies),
+                    ),
+                  ),
+                ],
+              ),
+            ]),
+            StatefulShellBranch(routes: [
+              GoRoute(
+                path: '/cintas',
+                builder: (_, _) => const RibbonHunterScreen(),
+                routes: [
+                  GoRoute(path: 'top', redirect: (_, _) => '/cintas/ranking'),
+                  GoRoute(
+                    path: 'ranking',
+                    builder: (_, _) => const RibbonRankingScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':total',
+                        builder: (_, state) => RibbonTierScreen(
+                          key: ValueKey(state.uri.toString()),
+                          total: int.tryParse(state.pathParameters['total']!) ?? -1,
+                        ),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'guia/:species',
+                    builder: (_, state) => RibbonGuideScreen(
+                      key: ValueKey(state.uri.toString()),
+                      species: int.tryParse(state.pathParameters['species']!) ?? 1,
+                      form: int.tryParse(state.uri.queryParameters['forma'] ?? '') ?? 0,
                     ),
                   ),
                 ],

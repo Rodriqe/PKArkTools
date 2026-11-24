@@ -11,7 +11,49 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
-### Added
+## [1.1.0] — 2026-11-24
+
+PKArkTools 1.1.0 brings two big additions: **Ribbon Hunter**, a per-species
+ribbon guide validated against PKHeX (routes, ranking by tiers, guide export
+and your own specimens), and six new games from the GameCube, Nintendo 64 and
+Wii: **Pokémon Colosseum**, **Pokémon XD: Gale of Darkness**, **Pokémon
+Stadium** and **Stadium 2**, **Pokémon Box: Ruby & Sapphire**, **Pokémon
+Battle Revolution** and **My Pokémon Ranch**.
+
+### Added — Ribbon Hunter
+- **Ribbon Hunter** tab: a ribbon guide per species, not per specimen. Pick
+  any species and form and see every ribbon one specimen can earn, game by
+  game from Gen 3 to Gen 9 (the route to make it a Ribbon Master), with how
+  to get each one, its requirement, the recommended (oldest possible) origin
+  and the max obtainable today.
+- Forward-only transfer graph with stable game ids: Colosseum and XD (traded
+  to/from Ruby/Sapphire/Emerald and FireRed/LeafGreen), Pal Park, Poké
+  Transfer, Poké Transporter/Bank, Virtual Console → Gen 7, HOME, and
+  Let's Go/GO one-way into HOME. Notes tell you when to transfer, when a
+  regional form first exists and when a game only takes the pre-evolution.
+- National Ribbon (purifying a Shadow Pokémon) and Earth Ribbon (Mt. Battle)
+  count as in-game ribbons from Colosseum/XD; Shadow Pokémon are valid
+  origins.
+- "Not available today" section (event ribbons and the closed Wi-Fi Battle
+  Tower), marks shown apart (post-capture marks in Scarlet/Violet and one
+  encounter mark if caught in Sword/Shield or Scarlet/Violet), and the Gen 3–4
+  Contest/Battle Memory counts.
+- **Ranking by tiers**: species and forms are grouped by the most ribbons they
+  can earn ("87 ribbons · 33 species & forms", "86 ribbons · 107 species &
+  forms"…), with every tier, sample icons and the common origin highlighted
+  ("Shadow Pokémon in Colosseum / XD"). Opening a tier shows its full list,
+  filterable and in Dex order, and each species opens its guide.
+- "Your specimens of this species": ribbons each one has and the ones it can
+  still earn from its current game. The Dex index now stores each specimen's
+  ribbons (the index rebuilds once).
+- Share a guide as text for forums or save it as an image.
+- "Ribbon Hunter guide" button on every Dex species page.
+- Verified against PKHeX: the PKHeX oracle builds every species/form from its
+  best origin, transfers it forward and applies all valid ribbons; the app's
+  routes match it with 0 contradictions across 1333 species and forms
+  (`tool/gen_ribbon_master_data.sh`, versioned test table).
+
+### Added — GameCube, Nintendo 64 and Wii games
 - **Storage and stadium games**: Pokémon Stadium and Stadium 2 (Nintendo 64;
   international, Japanese and the original Japanese Stadium, including
   byte-swapped dumps), Pokémon Box: Ruby & Sapphire (GameCube `.gci`, Memory
@@ -55,6 +97,22 @@ developer documentation in `docs/` is in Spanish.
   flags as an in-game trade.
 - PKHeX oracle: `write` command, Memory Card images and shadow fields in the
   dump; `tool/gen_gc_data.py` and `packages/pkcore/tool/write_synthetic.dart`.
+
+### Known limitations
+- Colosseum/XD: the PID/IV correlation of the random number generator
+  (Shadow Pokémon team locks) is not checked; a Memory Card holding both
+  games is imported as two `.gci` files (an edited `.raw` is only rewritten
+  when it holds a single Pokémon save); XD's Purifier and the Day Care are
+  not edited.
+- Stadium registered teams, the Stadium 2 mailbox, Battle Revolution
+  profiles 2–4 (kept intact), battle passes and wardrobe, and Ranch Miis and
+  toys are not edited. Stadium boxes are compact lists: emptying a slot moves
+  the next ones up. Ranch slots above the ranch level capacity are locked.
+- Stadium, Stadium 2, Box and the Ranch have no trainer of their own; they
+  appear in the Ark as "STADIUM", "STADIUM 2", "BOX" or the ranch owner.
+- Ribbon Hunter is a guide per species: event ribbons and the closed Wi-Fi
+  Battle Tower are listed as not available today, and the routes are those
+  PKHeX accepts, not every possible path.
 
 ### Fixed
 - The fateful-encounter flag of Gen 3 Pokémon (PK3) is now read and can be

@@ -12,7 +12,7 @@ GlobalDex demoDex() {
     specimens: const [
       DexSpecimen(species: 6, level: 50, shiny: true, gigantamax: true, box: 0, slot: 3, nickname: 'Blaze'),
       DexSpecimen(species: 6, level: 47, gigantamax: true, box: 0, slot: 4),
-      DexSpecimen(species: 25, level: 22, gigantamax: true, box: -1, slot: 0),
+      DexSpecimen(species: 25, level: 22, gigantamax: true, box: -1, slot: 0, ribbons: ['RibbonChampionGalar', 'RibbonEffort']),
       DexSpecimen(species: 133, level: 30, shiny: true, box: 1, slot: 0),
       DexSpecimen(species: 849, form: 1, level: 40, gigantamax: true, box: 1, slot: 1),
       DexSpecimen(species: 892, form: 1, level: 70, box: -1, slot: 1),
@@ -24,7 +24,13 @@ GlobalDex demoDex() {
     seen: range(1, 251),
     caught: {...range(1, 160), ...range(650, 721)},
     specimens: const [
-      DexSpecimen(species: 6, level: 36, box: -1, slot: 0, heldItem: 660),
+      DexSpecimen(
+          species: 6,
+          level: 36,
+          box: -1,
+          slot: 0,
+          heldItem: 660,
+          ribbons: ['RibbonChampionKalos', 'RibbonTraining', 'RibbonBestFriends', 'RibbonEffort']),
       DexSpecimen(species: 448, level: 40, box: 0, slot: 2),
       DexSpecimen(species: 3, level: 32, shiny: true, box: 0, slot: 5),
     ],

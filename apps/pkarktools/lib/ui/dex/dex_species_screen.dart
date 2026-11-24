@@ -7,6 +7,7 @@ import '../../providers.dart';
 import '../../theme/app_theme.dart';
 import '../../theme/game_palette.dart';
 import '../common/format.dart';
+import '../ribbons/ribbon_hunter_screen.dart';
 import 'dex_screen.dart';
 import 'dex_special_forms.dart';
 import 'dex_text.dart';
@@ -119,6 +120,19 @@ class _DexSpeciesScreenState extends ConsumerState<DexSpeciesScreen> {
               padding: EdgeInsets.fromLTRB(pad, 4, pad, 96),
               children: [
                 header,
+                if (RibbonMaster.has(s, form))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FilledButton.tonalIcon(
+                        key: const ValueKey('dex-ribbon-guide'),
+                        onPressed: () => context.go(ribbonGuidePath(s, form)),
+                        icon: const Icon(Icons.military_tech_rounded),
+                        label: Text(l10n.rmOpenGuide),
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 8),
                 if (wide)
                   Row(crossAxisAlignment: CrossAxisAlignment.start, children: [

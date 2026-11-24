@@ -3065,4 +3065,252 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get shadowPurifiedNote =>
       'Fue oscuro; al purificarlo recibió la Cinta Nacional.';
+
+  @override
+  String get navRibbonHunter => 'Ribbon Hunter';
+
+  @override
+  String get navRibbonsShort => 'Cintas';
+
+  @override
+  String get rmSubtitle =>
+      'Elige cualquier Pokémon y mira todas las cintas que puede ganar un mismo ejemplar, de la generación más antigua a la más nueva.';
+
+  @override
+  String get rmSearchHint => 'Busca una especie o forma (nombre o número)';
+
+  @override
+  String get rmRanking => 'Ranking por niveles';
+
+  @override
+  String get rmRankingShort => 'Ranking';
+
+  @override
+  String get rmRankingSubtitle =>
+      'Especies y formas agrupadas por el máximo de cintas que pueden ganar jugando hoy. Entra en un nivel para ver todas las de ese nivel.';
+
+  @override
+  String get rmSeeRanking => 'Ver el ranking';
+
+  @override
+  String rmTierCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n especies y formas',
+      one: '1 especie o forma',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rmTierPos(int n) {
+    return 'Nivel $n';
+  }
+
+  @override
+  String rmTierOriginAll(String kind, String games) {
+    return 'Origen común: $kind en $games';
+  }
+
+  @override
+  String rmTierOriginMost(String kind, String games, int n, int total) {
+    return 'Origen más común: $kind en $games ($n de $total)';
+  }
+
+  @override
+  String get rmTierFilterHint => 'Filtrar este nivel (nombre o número)';
+
+  @override
+  String rmTierOfRanking(int n, int count, String species) {
+    return 'Nivel $n de $count del ranking · $species';
+  }
+
+  @override
+  String get rmTierNotFound => 'Ese nivel no existe.';
+
+  @override
+  String rmRibbons(int n) {
+    return '$n cintas';
+  }
+
+  @override
+  String get rmMaxToday => 'Máximo hoy';
+
+  @override
+  String get rmOrigin => 'Origen recomendado';
+
+  @override
+  String rmGen(String gen) {
+    return 'Gen $gen';
+  }
+
+  @override
+  String get rmTimeline =>
+      'Ruta para convertirlo en Ribbon Master, juego a juego';
+
+  @override
+  String get rmTransferOnly =>
+      'Aquí no se gana ninguna cinta nueva: es un paso de la transferencia.';
+
+  @override
+  String rmAlsoHere(String list) {
+    return 'También aquí: $list';
+  }
+
+  @override
+  String get rmUnavailable => 'No disponibles hoy';
+
+  @override
+  String get rmUnavailableBody =>
+      'Cintas de eventos y de servicios en línea cerrados. No suman al máximo.';
+
+  @override
+  String get rmClosedOnline => 'Servicio cerrado';
+
+  @override
+  String get rmEventOnly => 'Solo eventos';
+
+  @override
+  String get rmOnline => 'En línea';
+
+  @override
+  String get rmMarks => 'Marcas';
+
+  @override
+  String rmMarksPost(String list) {
+    return 'Ya capturado, puede ganar en Escarlata/Púrpura: $list.';
+  }
+
+  @override
+  String rmMarksCapture(String games, int n) {
+    return 'Si lo capturas en $games puede llevar además una marca de encuentro ($n posibles, como mucho una por ejemplar).';
+  }
+
+  @override
+  String get rmMarksNote =>
+      'Las marcas no suman al total: solo se ponen al capturarlo.';
+
+  @override
+  String rmMemory(String battle, String contest, int n) {
+    return 'Al pasar a Gen 6 sus cintas de concurso ($contest) y de combate ($battle) de Gen 3 y 4 se convierten en los Recuerdos de Concurso y de Combate: en el juego final verás $n cintas.';
+  }
+
+  @override
+  String get rmYourSpecimens => 'Tus ejemplares de esta especie';
+
+  @override
+  String rmSpecimenLine(String have, String missing) {
+    return '$have cintas · le faltan $missing que aún puede ganar';
+  }
+
+  @override
+  String rmSpecimenComplete(String have) {
+    return '$have cintas · nada pendiente desde su juego';
+  }
+
+  @override
+  String get rmSpecimensEmpty => 'No hay ejemplares de esta forma en tu Arca.';
+
+  @override
+  String rmMissingTitle(int n) {
+    return 'Le faltan ($n)';
+  }
+
+  @override
+  String get rmShare => 'Compartir guía';
+
+  @override
+  String get rmCopyText => 'Copiar texto para foros';
+
+  @override
+  String get rmCopied => 'Guía copiada al portapapeles';
+
+  @override
+  String get rmSaveImage => 'Guardar como imagen';
+
+  @override
+  String rmImageSaved(String path) {
+    return 'Imagen guardada: $path';
+  }
+
+  @override
+  String get rmOpenGuide => 'Guía Ribbon Hunter';
+
+  @override
+  String get rmKindEgg => 'huevo';
+
+  @override
+  String get rmKindWild => 'salvaje';
+
+  @override
+  String get rmKindStatic => 'encuentro fijo';
+
+  @override
+  String get rmKindGift => 'regalo';
+
+  @override
+  String get rmKindTrade => 'intercambio';
+
+  @override
+  String get rmKindShadow => 'Pokémon oscuro';
+
+  @override
+  String get rmKindRaid => 'incursión';
+
+  @override
+  String get rmKindGo => 'Pokémon GO';
+
+  @override
+  String get rmKindEvent => 'evento';
+
+  @override
+  String get rmNoGuide => 'No hay guía para esta forma.';
+
+  @override
+  String rmResults(int n) {
+    return '$n resultados';
+  }
+
+  @override
+  String get rmHowTitle => 'Cómo se calcula';
+
+  @override
+  String get rmHowBody =>
+      'Se elige el origen que permite más cintas (el más antiguo posible), se recorre el grafo de transferencias solo hacia adelante y se suman las cintas que se pueden ganar hoy jugando, sin conexión o en línea. Cada cinta cuenta una vez, en el primer juego donde se puede ganar. Las reglas y la disponibilidad de cada especie y forma están comprobadas contra PKHeX.';
+
+  @override
+  String get rmOriginEvent =>
+      'Esta especie solo tiene origen en eventos o repartos.';
+
+  @override
+  String rmStepCount(int n) {
+    return '+$n';
+  }
+
+  @override
+  String rmFormsLabel(String list) {
+    return 'Puede estar como: $list';
+  }
+
+  @override
+  String get rmMemoryTitle => 'Recuerdos de Gen 3 y 4';
+
+  @override
+  String rmContestG3(int n) {
+    return 'Concursos de Hoenn ($n)';
+  }
+
+  @override
+  String rmContestG4(int n) {
+    return 'Superconcursos de Sinnoh ($n)';
+  }
+
+  @override
+  String get rmContestOrderG3 =>
+      'Cada categoría se gana en orden: Normal → Alto → Avanzado → Experto. Cualquier especie puede participar.';
+
+  @override
+  String get rmContestOrderG4 =>
+      'Cada categoría se gana en orden: Normal → Difícil → Superior → Experto (Ciudad Corazón). Todas las especies menos Ditto y Unown.';
 }

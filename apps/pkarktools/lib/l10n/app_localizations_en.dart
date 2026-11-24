@@ -3042,4 +3042,251 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get shadowPurifiedNote =>
       'It was Shadow; purification granted the National Ribbon.';
+
+  @override
+  String get navRibbonHunter => 'Ribbon Hunter';
+
+  @override
+  String get navRibbonsShort => 'Ribbons';
+
+  @override
+  String get rmSubtitle =>
+      'Pick any Pokémon and see every ribbon a single specimen can earn, from the oldest generation to the newest.';
+
+  @override
+  String get rmSearchHint => 'Search a species or form (name or number)';
+
+  @override
+  String get rmRanking => 'Ranking by tiers';
+
+  @override
+  String get rmRankingShort => 'Ranking';
+
+  @override
+  String get rmRankingSubtitle =>
+      'Species and forms grouped by the most ribbons they can earn by playing today. Open a tier to see every one in it.';
+
+  @override
+  String get rmSeeRanking => 'See the ranking';
+
+  @override
+  String rmTierCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n species & forms',
+      one: '1 species or form',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rmTierPos(int n) {
+    return 'Tier $n';
+  }
+
+  @override
+  String rmTierOriginAll(String kind, String games) {
+    return 'Common origin: $kind in $games';
+  }
+
+  @override
+  String rmTierOriginMost(String kind, String games, int n, int total) {
+    return 'Most common origin: $kind in $games ($n of $total)';
+  }
+
+  @override
+  String get rmTierFilterHint => 'Filter this tier (name or number)';
+
+  @override
+  String rmTierOfRanking(int n, int count, String species) {
+    return 'Tier $n of $count in the ranking · $species';
+  }
+
+  @override
+  String get rmTierNotFound => 'That tier doesn\'t exist.';
+
+  @override
+  String rmRibbons(int n) {
+    return '$n ribbons';
+  }
+
+  @override
+  String get rmMaxToday => 'Max today';
+
+  @override
+  String get rmOrigin => 'Recommended origin';
+
+  @override
+  String rmGen(String gen) {
+    return 'Gen $gen';
+  }
+
+  @override
+  String get rmTimeline => 'Route to Ribbon Master, game by game';
+
+  @override
+  String get rmTransferOnly => 'No new ribbons here: it\'s a transfer step.';
+
+  @override
+  String rmAlsoHere(String list) {
+    return 'Also here: $list';
+  }
+
+  @override
+  String get rmUnavailable => 'Not available today';
+
+  @override
+  String get rmUnavailableBody =>
+      'Event ribbons and ribbons from closed online services. They don\'t count towards the max.';
+
+  @override
+  String get rmClosedOnline => 'Closed service';
+
+  @override
+  String get rmEventOnly => 'Events only';
+
+  @override
+  String get rmOnline => 'Online';
+
+  @override
+  String get rmMarks => 'Marks';
+
+  @override
+  String rmMarksPost(String list) {
+    return 'Once caught, it can earn in Scarlet/Violet: $list.';
+  }
+
+  @override
+  String rmMarksCapture(String games, int n) {
+    return 'If you catch it in $games it can also carry one encounter mark ($n possible, at most one per specimen).';
+  }
+
+  @override
+  String get rmMarksNote =>
+      'Marks don\'t add to the total: they\'re only given on capture.';
+
+  @override
+  String rmMemory(String battle, String contest, int n) {
+    return 'When it moves to Gen 6 its Gen 3–4 contest ($contest) and battle ($battle) ribbons become the Contest and Battle Memory ribbons: in the final game you\'ll see $n ribbons.';
+  }
+
+  @override
+  String get rmYourSpecimens => 'Your specimens of this species';
+
+  @override
+  String rmSpecimenLine(String have, String missing) {
+    return '$have ribbons · $missing left that it can still earn';
+  }
+
+  @override
+  String rmSpecimenComplete(String have) {
+    return '$have ribbons · nothing left from its game';
+  }
+
+  @override
+  String get rmSpecimensEmpty =>
+      'There are no specimens of this form in your Arca.';
+
+  @override
+  String rmMissingTitle(int n) {
+    return 'Missing ($n)';
+  }
+
+  @override
+  String get rmShare => 'Share guide';
+
+  @override
+  String get rmCopyText => 'Copy text for forums';
+
+  @override
+  String get rmCopied => 'Guide copied to the clipboard';
+
+  @override
+  String get rmSaveImage => 'Save as image';
+
+  @override
+  String rmImageSaved(String path) {
+    return 'Image saved: $path';
+  }
+
+  @override
+  String get rmOpenGuide => 'Ribbon Hunter guide';
+
+  @override
+  String get rmKindEgg => 'egg';
+
+  @override
+  String get rmKindWild => 'wild';
+
+  @override
+  String get rmKindStatic => 'static encounter';
+
+  @override
+  String get rmKindGift => 'gift';
+
+  @override
+  String get rmKindTrade => 'in-game trade';
+
+  @override
+  String get rmKindShadow => 'Shadow Pokémon';
+
+  @override
+  String get rmKindRaid => 'raid';
+
+  @override
+  String get rmKindGo => 'Pokémon GO';
+
+  @override
+  String get rmKindEvent => 'event';
+
+  @override
+  String get rmNoGuide => 'There\'s no guide for this form.';
+
+  @override
+  String rmResults(int n) {
+    return '$n results';
+  }
+
+  @override
+  String get rmHowTitle => 'How it\'s calculated';
+
+  @override
+  String get rmHowBody =>
+      'We pick the origin that allows the most ribbons (the oldest possible), walk the transfer graph forward only and add up the ribbons you can earn today by playing, offline or online. Each ribbon counts once, in the first game where it can be earned. The rules and each species/form\'s availability are checked against PKHeX.';
+
+  @override
+  String get rmOriginEvent =>
+      'This species only comes from events or distributions.';
+
+  @override
+  String rmStepCount(int n) {
+    return '+$n';
+  }
+
+  @override
+  String rmFormsLabel(String list) {
+    return 'Can be: $list';
+  }
+
+  @override
+  String get rmMemoryTitle => 'Gen 3–4 memories';
+
+  @override
+  String rmContestG3(int n) {
+    return 'Hoenn contests ($n)';
+  }
+
+  @override
+  String rmContestG4(int n) {
+    return 'Sinnoh Super Contests ($n)';
+  }
+
+  @override
+  String get rmContestOrderG3 =>
+      'Each condition is won in order: Normal → Super → Hyper → Master. Any species can enter.';
+
+  @override
+  String get rmContestOrderG4 =>
+      'Each condition is won in order: Normal → Great → Ultra → Master (Hearthome City). Any species except Ditto and Unown.';
 }
