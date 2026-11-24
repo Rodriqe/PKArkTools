@@ -7,6 +7,7 @@ import '../formats/gb_saves.dart';
 import '../formats/gc_container.dart';
 import '../formats/gc_saves.dart';
 import '../formats/rsbox.dart';
+import '../formats/stadium.dart';
 import '../edit/storage_editors.dart';
 import '../formats/gen3.dart';
 import '../formats/nds_saves.dart';
@@ -127,6 +128,19 @@ abstract final class SaveDetector {
           return hit(Gen3.versionFromSmall(small), () => Gen3.read(d));
         }
       }
+    }
+
+    // Pokémon Stadium / Stadium 2 (N64): firmas «POKE»/«P3v0» al final de cada lista.
+    if (StadiumLayout.detect(d) case (final l, final swapped)) {
+      final g = l.generation == 1 ? GameVersion.stadium : GameVersion.stadium2;
+      return hit(g, () {
+        final ed = StadiumEditor(d, l, swapped: swapped);
+        final teams = ed.teams.where((t) => t.$2.isNotEmpty).length;
+        return storageSummary(ed, d,
+            format: 'N64 ${l.label}${swapped ? ', bytes invertidos' : ''}',
+            checksumOk: ed.checksumsValid,
+            warnings: [if (teams > 0) 'Equipos registrados: $teams (solo lectura).']);
+      });
     }
 
     // 4) Nintendo DS.

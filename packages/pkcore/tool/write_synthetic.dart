@@ -34,6 +34,21 @@ void main(List<String> args) {
         }, boxNames: const ['FAVS']),
         GcTitle.rsBox),
   };
+  for (final l in StadiumLayout.all) {
+    final g1 = l.generation == 1;
+    final name = l.label.replaceAll(RegExp(r'[^A-Za-z0-9]+'), '_');
+    for (final swapped in [false, true]) {
+      files['$name${swapped ? '_swap' : ''}.sav'] = SyntheticSaves.stadium(
+        layout: l,
+        swapped: swapped,
+        boxes: {
+          0: [SynthMon(g1 ? 25 : 152, level: 30), const SynthMon(1, level: 5), SynthMon(g1 ? 150 : 249, level: 70, shiny: true)],
+          1: const [SynthMon(4, level: 9)],
+        },
+        team: const [SynthMon(6, level: 50), SynthMon(9, level: 50)],
+      );
+    }
+  }
   files.forEach((name, bytes) => File('${dir.path}/$name').writeAsBytesSync(bytes));
   stdout.writeln('${files.length} archivos en ${dir.path}');
 }

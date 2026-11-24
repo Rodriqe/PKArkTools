@@ -11,6 +11,7 @@ import '../edit/ctr_editors.dart';
 import '../edit/gb_editors.dart';
 import '../formats/gb_saves.dart';
 import '../formats/rsbox.dart';
+import '../formats/stadium.dart';
 import '../formats/gc_container.dart';
 import '../data/generated/gc_data.dart';
 import '../pkm/gc_pkm.dart';
@@ -1348,6 +1349,81 @@ abstract final class SyntheticSaves {
       block(2 * RsBoxData.blockCount + i, i, 6, true);
     }
     return d;
+  }
+
+
+  /// Un hueco de Stadium: estructura de GB + apodo + entrenador (Stadium 1) o SK2 (Stadium 2).
+  static Uint8List _stadiumSlot(StadiumLayout l, SynthMon m, SynthTrainer t) {
+    final out = Uint8List(l.slotSize);
+    final nick = m.nickname ?? Species.name(m.species, SpeciesLanguage.en).toUpperCase();
+    if (l.generation == 1) {
+      out.setRange(0, 33, _pk1(m, t.tid, party: false));
+      out.setRange(33, 33 + l.strLen, StringCodec.encodeGb(nick, l.strLen, japanese: l.japanese));
+      out.setRange(33 + l.strLen, 33 + 2 * l.strLen, StringCodec.encodeGb(t.name, l.strLen, japanese: l.japanese));
+      return out;
+    }
+    final p = _pk2(m, t.tid, party: false);
+    out.setRange(0, 8, p);
+    final exp = Species.expForLevel(m.species, m.level);
+    out[9] = (exp >> 16) & 0xFF;
+    out[10] = (exp >> 8) & 0xFF;
+    out[11] = exp & 0xFF;
+    out.setRange(0x0C, 0x18, p, 11);
+    out[0x18] = 35;
+    out[0x1C] = 70;
+    out[0x1D] = m.level;
+    out.setRange(0x24, 0x30, StringCodec.encodeGb(nick, 12, japanese: l.japanese));
+    out.setRange(0x30, 0x3C, StringCodec.encodeGb(t.name, 12, japanese: l.japanese));
+    return out;
+  }
+
+  /// Save sintético de Pokémon Stadium / Stadium 2 con la distribución [layout]
+  /// (cajas y un equipo registrado). Con [swapped], palabras de 32 bits invertidas.
+  static Uint8List stadium({
+    StadiumLayout layout = StadiumLayout.stadiumU,
+    SynthTrainer trainer = const SynthTrainer(name: 'RED', tid: 1996),
+    Map<int, List<SynthMon>> boxes = const {},
+    List<SynthMon> team = const [],
+    List<String> boxNames = const [],
+    bool swapped = false,
+  }) {
+    final l = layout;
+    final d = Uint8List(l.fileSizes.reduce((a, b) => a > b ? a : b));
+    // Equipos: todas las listas del primer tipo con su firma (como el juego).
+    final teams = l.teams();
+    for (var t = 0; t < teams.length && t < 10; t++) {
+      final o = teams[t].$2;
+      d.setU32le(o + l.teamSize - 6, l.magic);
+      if (t == 0) {
+        for (var i = 0; i < team.length && i < 6; i++) {
+          final so = o + l.teamHeader + i * l.slotSize;
+          d.setRange(so, so + l.slotSize, _stadiumSlot(l, team[i], trainer));
+        }
+      }
+    }
+    final copies = l == StadiumLayout.stadiumJOld ? 2 : 1;
+    for (var copy = 0; copy < copies; copy++) {
+      for (var b = 0; b < l.boxCount; b++) {
+        final o = l.boxOffset(b) + copy * l.boxCount * l.boxSize;
+        final h = l.headerMagic;
+        if (h != null) d.setRange(o, o + 4, [h >> 24, (h >> 16) & 0xFF, (h >> 8) & 0xFF, h & 0xFF]);
+        if (l.generation == 2) {
+          d[o] = 1;
+          d[o + 4] = 0x50;
+          final name = b < boxNames.length ? boxNames[b] : 'BOX${b + 1}';
+          d.setRange(o + 0x10, o + 0x1C, StringCodec.encodeGb(name, 12, japanese: l.japanese));
+        }
+        final mons = boxes[b] ?? const [];
+        for (var i = 0; i < mons.length && i < l.slotsPerBox; i++) {
+          final so = o + l.boxHeader + i * l.slotSize;
+          d.setRange(so, so + l.slotSize, _stadiumSlot(l, mons[i], trainer));
+        }
+        if (l.countAt != null) d[o + l.countAt!] = mons.length;
+        d.setU32le(o + l.boxSize - 6, l.magic);
+        d.setU16be(o + l.boxSize - 2, StadiumLayout.sum16(d, o, l.boxSize - 2));
+      }
+    }
+    return swapped ? StadiumLayout.swap32(d) : d;
   }
 
   /// Cabecera `DEntry` de un archivo de GameCube.

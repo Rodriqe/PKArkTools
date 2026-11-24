@@ -44,7 +44,14 @@ class Pkm {
 
   Pkm clone() => Pkm._(format, Uint8List.fromList(data),
       japanese: japanese, korean: korean, gbNickname: _gbNick, gbOtName: _gbOt, gbEgg: _gbEgg)
-    ..gc = gc?.clone();
+    ..gc = gc?.clone()
+    ..nativeRaw = nativeRaw == null ? null : Uint8List.fromList(nativeRaw!);
+
+  /// Bytes originales de un formato de juego de almacenamiento (SK2 de
+  /// Stadium 2, RK4 del Rancho, BK4 de Battle Revolution). Al volver a
+  /// escribir el Pokémon en su juego se parte de ellos para conservar lo que
+  /// el formato principal no guarda.
+  Uint8List? nativeRaw;
 
   /// Datos propios de Pokémon Colosseum / XD (CK3/XK3) que el PK3 no guarda:
   /// estado oscuro, región, apodo mostrado… null si el Pokémon no viene de

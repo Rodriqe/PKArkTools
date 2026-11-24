@@ -11,6 +11,7 @@ import 'gb_editors.dart';
 import 'gba_editor.dart';
 import 'gc_editor.dart';
 import 'storage_editors.dart';
+import '../formats/stadium.dart';
 import '../formats/gc_container.dart';
 import 'events.dart';
 import 'nds_editors.dart';
@@ -177,8 +178,10 @@ abstract class SaveEditor {
         GameVersion.rubySapphire || GameVersion.emerald || GameVersion.fireRedLeafGreen => Gen3Editor(payload, det.game),
         GameVersion.colosseum => GcEditor(payload, GcTitle.colosseum),
         GameVersion.boxRS => RsBoxEditor(payload),
-        GameVersion.stadium ||
-        GameVersion.stadium2 ||
+        GameVersion.stadium || GameVersion.stadium2 => () {
+            final (l, swapped) = StadiumLayout.detect(payload)!;
+            return StadiumEditor(payload, l, swapped: swapped);
+          }(),
         GameVersion.battleRevolution ||
         GameVersion.ranch =>
           throw UnsupportedSaveException('${det.game.nameEs}: editor pendiente.'),

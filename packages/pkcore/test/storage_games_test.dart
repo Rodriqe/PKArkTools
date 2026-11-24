@@ -72,4 +72,55 @@ void main() {
       expect(SaveEditor.open(bad).readOnly, isTrue);
     });
   });
+
+  group('Pokémon Stadium y Stadium 2', () {
+    for (final l in StadiumLayout.all) {
+      for (final swapped in [false, true]) {
+        test('${l.label}${swapped ? ' (bytes invertidos)' : ''}: lectura, round-trip y edición', () {
+          final gen1 = l.generation == 1;
+          final nick = l.japanese ? 'ピカ' : 'SPARK';
+          final boxName = l.japanese ? 'ボックス' : 'FAVS';
+          final bytes = SyntheticSaves.stadium(
+            layout: l,
+            swapped: swapped,
+            boxes: {
+              0: [SynthMon(gen1 ? 25 : 152, level: 30, nickname: nick), const SynthMon(1, level: 5), SynthMon(gen1 ? 150 : 249, level: 70, shiny: true)],
+              1: const [SynthMon(4, level: 9)],
+            },
+            team: const [SynthMon(6, level: 50), SynthMon(9, level: 50)],
+            boxNames: [boxName],
+          );
+          final s = SaveDetector.read(bytes);
+          expect(s.game, gen1 ? GameVersion.stadium : GameVersion.stadium2);
+          expect(s.checksum, ChecksumStatus.valid);
+          expect(s.boxes.length, l.boxCount);
+          expect(s.boxes[0].slots.take(4).map((p) => p?.species), [gen1 ? 25 : 152, 1, gen1 ? 150 : 249, null]);
+          expect(s.boxes[0].slots.first!.nickname, nick);
+          expect(s.boxes[0].slots[2]!.isShiny, isTrue);
+          expect(s.warnings.single, contains('1'));
+          if (!gen1) expect(s.boxes[0].name, boxName);
+
+          final ed = SaveEditor.open(bytes) as StadiumEditor;
+          expect(ed.readOnly, isFalse, reason: ed.integrityIssues.join('; '));
+          expect(ed.swapped, swapped);
+          expect(_same(ed.build(), bytes), isTrue);
+          expect(ed.teams.first.$2.map((p) => p.species), [6, 9]);
+          // Mover, borrar (compacta la lista) y añadir.
+          final mew = ed.get(const SlotRef.box(0, 2))!;
+          final list = l.countAt != null; // el Stadium japonés original no guarda contador
+          ed.set(const SlotRef.box(0, 0), null);
+          expect(ed.get(const SlotRef.box(0, 0))?.species, list ? 1 : null);
+          ed.set(const SlotRef.box(2, 7), mew);
+          final out = ed.buildVerified();
+          final re = SaveEditor.open(out);
+          expect(re.get(SlotRef.box(0, list ? 1 : 2))!.species, gen1 ? 150 : 249);
+          final moved = re.get(SlotRef.box(2, list ? 0 : 7))!;
+          expect(moved.species, gen1 ? 150 : 249, reason: 'en las listas con contador se compacta');
+          expect(moved.isShiny, isTrue);
+          expect(SaveDetector.read(out).checksum, ChecksumStatus.valid);
+          if (swapped) expect(StadiumLayout.detect(out)!.$2, isTrue, reason: 'se conserva el orden de bytes');
+        });
+      }
+    }
+  });
 }
