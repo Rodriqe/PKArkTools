@@ -2982,4 +2982,201 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dexCaughtSpecies => 'Caught';
+
+  @override
+  String get navRibbonMaster => 'Ribbon Master';
+
+  @override
+  String get navRibbonsShort => 'Ribbons';
+
+  @override
+  String get rmSubtitle =>
+      'Pick any Pokémon and see every ribbon a single specimen can earn, from the oldest generation to the newest.';
+
+  @override
+  String get rmSearchHint => 'Search a species or form (name or number)';
+
+  @override
+  String get rmTop50 => 'Top 50';
+
+  @override
+  String get rmTop50Subtitle =>
+      'The species and forms that can earn the most ribbons by playing today.';
+
+  @override
+  String get rmSeeTop => 'See the Top 50';
+
+  @override
+  String rmRibbons(int n) {
+    return '$n ribbons';
+  }
+
+  @override
+  String get rmMaxToday => 'Max today';
+
+  @override
+  String get rmOrigin => 'Recommended origin';
+
+  @override
+  String rmGen(String gen) {
+    return 'Gen $gen';
+  }
+
+  @override
+  String get rmTimeline => 'Route, game by game';
+
+  @override
+  String get rmTransferOnly => 'No new ribbons here: it\'s a transfer step.';
+
+  @override
+  String rmAlsoHere(String list) {
+    return 'Also here: $list';
+  }
+
+  @override
+  String get rmUnavailable => 'Not available today';
+
+  @override
+  String get rmUnavailableBody =>
+      'Event ribbons and ribbons from closed online services. They don\'t count towards the max.';
+
+  @override
+  String get rmClosedOnline => 'Closed service';
+
+  @override
+  String get rmEventOnly => 'Events only';
+
+  @override
+  String get rmOnline => 'Online';
+
+  @override
+  String get rmMarks => 'Marks';
+
+  @override
+  String rmMarksPost(String list) {
+    return 'Once caught, it can earn in Scarlet/Violet: $list.';
+  }
+
+  @override
+  String rmMarksCapture(String games, int n) {
+    return 'If you catch it in $games it can also carry one encounter mark ($n possible, at most one per specimen).';
+  }
+
+  @override
+  String get rmMarksNote =>
+      'Marks don\'t add to the total: they\'re only given on capture.';
+
+  @override
+  String rmMemory(String battle, String contest, int n) {
+    return 'When it moves to Gen 6 its Gen 3–4 contest ($contest) and battle ($battle) ribbons become the Contest and Battle Memory ribbons: in the final game you\'ll see $n ribbons.';
+  }
+
+  @override
+  String get rmYourSpecimens => 'Your specimens of this species';
+
+  @override
+  String rmSpecimenLine(String have, String missing) {
+    return '$have ribbons · $missing left that it can still earn';
+  }
+
+  @override
+  String rmSpecimenComplete(String have) {
+    return '$have ribbons · nothing left from its game';
+  }
+
+  @override
+  String get rmSpecimensEmpty =>
+      'There are no specimens of this form in your Arca.';
+
+  @override
+  String rmMissingTitle(int n) {
+    return 'Missing ($n)';
+  }
+
+  @override
+  String get rmShare => 'Share guide';
+
+  @override
+  String get rmCopyText => 'Copy text for forums';
+
+  @override
+  String get rmCopied => 'Guide copied to the clipboard';
+
+  @override
+  String get rmSaveImage => 'Save as image';
+
+  @override
+  String rmImageSaved(String path) {
+    return 'Image saved: $path';
+  }
+
+  @override
+  String get rmOpenGuide => 'Ribbon Master guide';
+
+  @override
+  String get rmKindEgg => 'egg';
+
+  @override
+  String get rmKindWild => 'wild';
+
+  @override
+  String get rmKindStatic => 'static encounter';
+
+  @override
+  String get rmKindGift => 'gift';
+
+  @override
+  String get rmKindTrade => 'in-game trade';
+
+  @override
+  String get rmKindShadow => 'Shadow Pokémon';
+
+  @override
+  String get rmKindRaid => 'raid';
+
+  @override
+  String get rmKindGo => 'Pokémon GO';
+
+  @override
+  String get rmKindEvent => 'event';
+
+  @override
+  String rmTiedBeyond(int n, String total) {
+    return 'And $n more tied at $total ribbons.';
+  }
+
+  @override
+  String get rmTie => 'tie';
+
+  @override
+  String get rmNoGuide => 'There\'s no guide for this form.';
+
+  @override
+  String rmResults(int n) {
+    return '$n results';
+  }
+
+  @override
+  String get rmHowTitle => 'How it\'s calculated';
+
+  @override
+  String get rmHowBody =>
+      'We pick the origin that allows the most ribbons (the oldest possible), walk the transfer graph forward only and add up the ribbons you can earn today by playing, offline or online. Each ribbon counts once, in the first game where it can be earned. The rules and each species/form\'s availability are checked against PKHeX.';
+
+  @override
+  String get rmOriginEvent =>
+      'This species only comes from events or distributions.';
+
+  @override
+  String rmStepCount(int n) {
+    return '+$n';
+  }
+
+  @override
+  String rmFormsLabel(String list) {
+    return 'Can be: $list';
+  }
+
+  @override
+  String get rmMemoryTitle => 'Gen 3–4 memories';
 }

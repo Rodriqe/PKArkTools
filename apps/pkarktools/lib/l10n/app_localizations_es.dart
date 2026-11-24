@@ -3005,4 +3005,201 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get dexCaughtSpecies => 'Capturados';
+
+  @override
+  String get navRibbonMaster => 'Ribbon Master';
+
+  @override
+  String get navRibbonsShort => 'Cintas';
+
+  @override
+  String get rmSubtitle =>
+      'Elige cualquier Pokémon y mira todas las cintas que puede ganar un mismo ejemplar, de la generación más antigua a la más nueva.';
+
+  @override
+  String get rmSearchHint => 'Busca una especie o forma (nombre o número)';
+
+  @override
+  String get rmTop50 => 'Top 50';
+
+  @override
+  String get rmTop50Subtitle =>
+      'Las especies y formas que pueden ganar más cintas jugando hoy.';
+
+  @override
+  String get rmSeeTop => 'Ver el Top 50';
+
+  @override
+  String rmRibbons(int n) {
+    return '$n cintas';
+  }
+
+  @override
+  String get rmMaxToday => 'Máximo hoy';
+
+  @override
+  String get rmOrigin => 'Origen recomendado';
+
+  @override
+  String rmGen(String gen) {
+    return 'Gen $gen';
+  }
+
+  @override
+  String get rmTimeline => 'Ruta, juego a juego';
+
+  @override
+  String get rmTransferOnly =>
+      'Aquí no se gana ninguna cinta nueva: es un paso de la transferencia.';
+
+  @override
+  String rmAlsoHere(String list) {
+    return 'También aquí: $list';
+  }
+
+  @override
+  String get rmUnavailable => 'No disponibles hoy';
+
+  @override
+  String get rmUnavailableBody =>
+      'Cintas de eventos y de servicios en línea cerrados. No suman al máximo.';
+
+  @override
+  String get rmClosedOnline => 'Servicio cerrado';
+
+  @override
+  String get rmEventOnly => 'Solo eventos';
+
+  @override
+  String get rmOnline => 'En línea';
+
+  @override
+  String get rmMarks => 'Marcas';
+
+  @override
+  String rmMarksPost(String list) {
+    return 'Ya capturado, puede ganar en Escarlata/Púrpura: $list.';
+  }
+
+  @override
+  String rmMarksCapture(String games, int n) {
+    return 'Si lo capturas en $games puede llevar además una marca de encuentro ($n posibles, como mucho una por ejemplar).';
+  }
+
+  @override
+  String get rmMarksNote =>
+      'Las marcas no suman al total: solo se ponen al capturarlo.';
+
+  @override
+  String rmMemory(String battle, String contest, int n) {
+    return 'Al pasar a Gen 6 sus cintas de concurso ($contest) y de combate ($battle) de Gen 3 y 4 se convierten en los Recuerdos de Concurso y de Combate: en el juego final verás $n cintas.';
+  }
+
+  @override
+  String get rmYourSpecimens => 'Tus ejemplares de esta especie';
+
+  @override
+  String rmSpecimenLine(String have, String missing) {
+    return '$have cintas · le faltan $missing que aún puede ganar';
+  }
+
+  @override
+  String rmSpecimenComplete(String have) {
+    return '$have cintas · nada pendiente desde su juego';
+  }
+
+  @override
+  String get rmSpecimensEmpty => 'No hay ejemplares de esta forma en tu Arca.';
+
+  @override
+  String rmMissingTitle(int n) {
+    return 'Le faltan ($n)';
+  }
+
+  @override
+  String get rmShare => 'Compartir guía';
+
+  @override
+  String get rmCopyText => 'Copiar texto para foros';
+
+  @override
+  String get rmCopied => 'Guía copiada al portapapeles';
+
+  @override
+  String get rmSaveImage => 'Guardar como imagen';
+
+  @override
+  String rmImageSaved(String path) {
+    return 'Imagen guardada: $path';
+  }
+
+  @override
+  String get rmOpenGuide => 'Guía Ribbon Master';
+
+  @override
+  String get rmKindEgg => 'huevo';
+
+  @override
+  String get rmKindWild => 'salvaje';
+
+  @override
+  String get rmKindStatic => 'encuentro fijo';
+
+  @override
+  String get rmKindGift => 'regalo';
+
+  @override
+  String get rmKindTrade => 'intercambio';
+
+  @override
+  String get rmKindShadow => 'Pokémon oscuro';
+
+  @override
+  String get rmKindRaid => 'incursión';
+
+  @override
+  String get rmKindGo => 'Pokémon GO';
+
+  @override
+  String get rmKindEvent => 'evento';
+
+  @override
+  String rmTiedBeyond(int n, String total) {
+    return 'Y $n más empatadas con $total cintas.';
+  }
+
+  @override
+  String get rmTie => 'empate';
+
+  @override
+  String get rmNoGuide => 'No hay guía para esta forma.';
+
+  @override
+  String rmResults(int n) {
+    return '$n resultados';
+  }
+
+  @override
+  String get rmHowTitle => 'Cómo se calcula';
+
+  @override
+  String get rmHowBody =>
+      'Se elige el origen que permite más cintas (el más antiguo posible), se recorre el grafo de transferencias solo hacia adelante y se suman las cintas que se pueden ganar hoy jugando, sin conexión o en línea. Cada cinta cuenta una vez, en el primer juego donde se puede ganar. Las reglas y la disponibilidad de cada especie y forma están comprobadas contra PKHeX.';
+
+  @override
+  String get rmOriginEvent =>
+      'Esta especie solo tiene origen en eventos o repartos.';
+
+  @override
+  String rmStepCount(int n) {
+    return '+$n';
+  }
+
+  @override
+  String rmFormsLabel(String list) {
+    return 'Puede estar como: $list';
+  }
+
+  @override
+  String get rmMemoryTitle => 'Recuerdos de Gen 3 y 4';
 }

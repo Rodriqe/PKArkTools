@@ -4836,6 +4836,330 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Capturados'**
   String get dexCaughtSpecies;
+
+  /// No description provided for @navRibbonMaster.
+  ///
+  /// In es, this message translates to:
+  /// **'Ribbon Master'**
+  String get navRibbonMaster;
+
+  /// No description provided for @navRibbonsShort.
+  ///
+  /// In es, this message translates to:
+  /// **'Cintas'**
+  String get navRibbonsShort;
+
+  /// No description provided for @rmSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige cualquier Pokémon y mira todas las cintas que puede ganar un mismo ejemplar, de la generación más antigua a la más nueva.'**
+  String get rmSubtitle;
+
+  /// No description provided for @rmSearchHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Busca una especie o forma (nombre o número)'**
+  String get rmSearchHint;
+
+  /// No description provided for @rmTop50.
+  ///
+  /// In es, this message translates to:
+  /// **'Top 50'**
+  String get rmTop50;
+
+  /// No description provided for @rmTop50Subtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Las especies y formas que pueden ganar más cintas jugando hoy.'**
+  String get rmTop50Subtitle;
+
+  /// No description provided for @rmSeeTop.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver el Top 50'**
+  String get rmSeeTop;
+
+  /// No description provided for @rmRibbons.
+  ///
+  /// In es, this message translates to:
+  /// **'{n} cintas'**
+  String rmRibbons(int n);
+
+  /// No description provided for @rmMaxToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Máximo hoy'**
+  String get rmMaxToday;
+
+  /// No description provided for @rmOrigin.
+  ///
+  /// In es, this message translates to:
+  /// **'Origen recomendado'**
+  String get rmOrigin;
+
+  /// No description provided for @rmGen.
+  ///
+  /// In es, this message translates to:
+  /// **'Gen {gen}'**
+  String rmGen(String gen);
+
+  /// No description provided for @rmTimeline.
+  ///
+  /// In es, this message translates to:
+  /// **'Ruta, juego a juego'**
+  String get rmTimeline;
+
+  /// No description provided for @rmTransferOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Aquí no se gana ninguna cinta nueva: es un paso de la transferencia.'**
+  String get rmTransferOnly;
+
+  /// No description provided for @rmAlsoHere.
+  ///
+  /// In es, this message translates to:
+  /// **'También aquí: {list}'**
+  String rmAlsoHere(String list);
+
+  /// No description provided for @rmUnavailable.
+  ///
+  /// In es, this message translates to:
+  /// **'No disponibles hoy'**
+  String get rmUnavailable;
+
+  /// No description provided for @rmUnavailableBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Cintas de eventos y de servicios en línea cerrados. No suman al máximo.'**
+  String get rmUnavailableBody;
+
+  /// No description provided for @rmClosedOnline.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicio cerrado'**
+  String get rmClosedOnline;
+
+  /// No description provided for @rmEventOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo eventos'**
+  String get rmEventOnly;
+
+  /// No description provided for @rmOnline.
+  ///
+  /// In es, this message translates to:
+  /// **'En línea'**
+  String get rmOnline;
+
+  /// No description provided for @rmMarks.
+  ///
+  /// In es, this message translates to:
+  /// **'Marcas'**
+  String get rmMarks;
+
+  /// No description provided for @rmMarksPost.
+  ///
+  /// In es, this message translates to:
+  /// **'Ya capturado, puede ganar en Escarlata/Púrpura: {list}.'**
+  String rmMarksPost(String list);
+
+  /// No description provided for @rmMarksCapture.
+  ///
+  /// In es, this message translates to:
+  /// **'Si lo capturas en {games} puede llevar además una marca de encuentro ({n} posibles, como mucho una por ejemplar).'**
+  String rmMarksCapture(String games, int n);
+
+  /// No description provided for @rmMarksNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Las marcas no suman al total: solo se ponen al capturarlo.'**
+  String get rmMarksNote;
+
+  /// No description provided for @rmMemory.
+  ///
+  /// In es, this message translates to:
+  /// **'Al pasar a Gen 6 sus cintas de concurso ({contest}) y de combate ({battle}) de Gen 3 y 4 se convierten en los Recuerdos de Concurso y de Combate: en el juego final verás {n} cintas.'**
+  String rmMemory(String battle, String contest, int n);
+
+  /// No description provided for @rmYourSpecimens.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus ejemplares de esta especie'**
+  String get rmYourSpecimens;
+
+  /// No description provided for @rmSpecimenLine.
+  ///
+  /// In es, this message translates to:
+  /// **'{have} cintas · le faltan {missing} que aún puede ganar'**
+  String rmSpecimenLine(String have, String missing);
+
+  /// No description provided for @rmSpecimenComplete.
+  ///
+  /// In es, this message translates to:
+  /// **'{have} cintas · nada pendiente desde su juego'**
+  String rmSpecimenComplete(String have);
+
+  /// No description provided for @rmSpecimensEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay ejemplares de esta forma en tu Arca.'**
+  String get rmSpecimensEmpty;
+
+  /// No description provided for @rmMissingTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Le faltan ({n})'**
+  String rmMissingTitle(int n);
+
+  /// No description provided for @rmShare.
+  ///
+  /// In es, this message translates to:
+  /// **'Compartir guía'**
+  String get rmShare;
+
+  /// No description provided for @rmCopyText.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiar texto para foros'**
+  String get rmCopyText;
+
+  /// No description provided for @rmCopied.
+  ///
+  /// In es, this message translates to:
+  /// **'Guía copiada al portapapeles'**
+  String get rmCopied;
+
+  /// No description provided for @rmSaveImage.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar como imagen'**
+  String get rmSaveImage;
+
+  /// No description provided for @rmImageSaved.
+  ///
+  /// In es, this message translates to:
+  /// **'Imagen guardada: {path}'**
+  String rmImageSaved(String path);
+
+  /// No description provided for @rmOpenGuide.
+  ///
+  /// In es, this message translates to:
+  /// **'Guía Ribbon Master'**
+  String get rmOpenGuide;
+
+  /// No description provided for @rmKindEgg.
+  ///
+  /// In es, this message translates to:
+  /// **'huevo'**
+  String get rmKindEgg;
+
+  /// No description provided for @rmKindWild.
+  ///
+  /// In es, this message translates to:
+  /// **'salvaje'**
+  String get rmKindWild;
+
+  /// No description provided for @rmKindStatic.
+  ///
+  /// In es, this message translates to:
+  /// **'encuentro fijo'**
+  String get rmKindStatic;
+
+  /// No description provided for @rmKindGift.
+  ///
+  /// In es, this message translates to:
+  /// **'regalo'**
+  String get rmKindGift;
+
+  /// No description provided for @rmKindTrade.
+  ///
+  /// In es, this message translates to:
+  /// **'intercambio'**
+  String get rmKindTrade;
+
+  /// No description provided for @rmKindShadow.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon oscuro'**
+  String get rmKindShadow;
+
+  /// No description provided for @rmKindRaid.
+  ///
+  /// In es, this message translates to:
+  /// **'incursión'**
+  String get rmKindRaid;
+
+  /// No description provided for @rmKindGo.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon GO'**
+  String get rmKindGo;
+
+  /// No description provided for @rmKindEvent.
+  ///
+  /// In es, this message translates to:
+  /// **'evento'**
+  String get rmKindEvent;
+
+  /// No description provided for @rmTiedBeyond.
+  ///
+  /// In es, this message translates to:
+  /// **'Y {n} más empatadas con {total} cintas.'**
+  String rmTiedBeyond(int n, String total);
+
+  /// No description provided for @rmTie.
+  ///
+  /// In es, this message translates to:
+  /// **'empate'**
+  String get rmTie;
+
+  /// No description provided for @rmNoGuide.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay guía para esta forma.'**
+  String get rmNoGuide;
+
+  /// No description provided for @rmResults.
+  ///
+  /// In es, this message translates to:
+  /// **'{n} resultados'**
+  String rmResults(int n);
+
+  /// No description provided for @rmHowTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Cómo se calcula'**
+  String get rmHowTitle;
+
+  /// No description provided for @rmHowBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se elige el origen que permite más cintas (el más antiguo posible), se recorre el grafo de transferencias solo hacia adelante y se suman las cintas que se pueden ganar hoy jugando, sin conexión o en línea. Cada cinta cuenta una vez, en el primer juego donde se puede ganar. Las reglas y la disponibilidad de cada especie y forma están comprobadas contra PKHeX.'**
+  String get rmHowBody;
+
+  /// No description provided for @rmOriginEvent.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta especie solo tiene origen en eventos o repartos.'**
+  String get rmOriginEvent;
+
+  /// No description provided for @rmStepCount.
+  ///
+  /// In es, this message translates to:
+  /// **'+{n}'**
+  String rmStepCount(int n);
+
+  /// No description provided for @rmFormsLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Puede estar como: {list}'**
+  String rmFormsLabel(String list);
+
+  /// No description provided for @rmMemoryTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Recuerdos de Gen 3 y 4'**
+  String get rmMemoryTitle;
 }
 
 class _AppLocalizationsDelegate
