@@ -11,6 +11,17 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [2.1.0] — 2026-11-25
+
+PKArkTools 2.1.0 adds a **Competitive** tab for Pokémon Champions: the
+Official format, a **Champions stat calculator** (Stat Points, level 50,
+Megas), a **damage calculator** validated roll for roll against Pokémon
+Showdown and **My teams**, saved in your Ark under `Competitive/Teams/`. It
+also marks **Shadow Pokémon** in Colosseum and XD, ships an **`.ipa` for
+AltStore** with every release and reads the Champions data from the game's
+**official sources**. The classic stat calculator leaves the editor, and on
+phones **Activity** moves to the Ark header.
+
 ### Added
 
 - **Competitive tab (Pokémon Champions)**: a new navigation entry

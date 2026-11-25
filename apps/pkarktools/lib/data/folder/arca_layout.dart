@@ -282,6 +282,10 @@ Estructura
 ----------
   PKArkTools/
     README.txt                       (este archivo)
+    Competitive/Teams/<equipo>.json  tus equipos de la pestaña Competitivo
+                                     (Pokémon Champions): un JSON legible por
+                                     equipo. No son partidas: el Arca no los
+                                     indexa ni los toca.
     <Juego>/<Entrenador (TID)>/
       main                           LA ÚLTIMA VERSIÓN, lista para copiar al
                                      juego o al emulador. Se llama como la
@@ -315,6 +319,8 @@ Reglas
 * Las copias de conflicto de la nube ("conflicted copy", "(1)", .icloud,
   .tmp...) se ignoran. Las del archivo principal se retiran solas si su
   contenido ya está en el historial; si no, se ofrecen para adoptar.
+* Los equipos de Competitive/Teams/ se pueden copiar a otro Arca o
+  compartir tal cual; PKArkTools los lee al abrir Competitivo → Mis equipos.
 * La base de datos de la app es solo un índice local de cada dispositivo y
   nunca se guarda aquí: se puede reconstruir en cualquier momento desde
   Ajustes → Reindexar.

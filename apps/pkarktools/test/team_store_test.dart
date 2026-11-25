@@ -134,6 +134,8 @@ void main() {
     expect(arcaProblemsOf(report), isEmpty);
     expect(await repo.allSlots(), hasLength(1));
     expect(ArcaLayout.ignoreReason('Competitive/Teams/Equipo.json'), IgnoreReason.appData);
+    // El README del Arca (plantilla) explica la carpeta.
+    expect(ArcaLayout.readme(), contains('Competitive/Teams/'));
   });
 
   test('al cambiar de carpeta los equipos van con el Arca', () async {

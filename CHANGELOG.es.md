@@ -11,6 +11,18 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [2.1.0] — 2026-11-25
+
+PKArkTools 2.1.0 añade la pestaña **Competitivo** de Pokémon Champions: el
+formato oficial, una **calculadora de estadísticas de Champions** (puntos de
+estadística, nivel 50, Megas), una **calculadora de daño** validada tirada a
+tirada frente a Pokémon Showdown y **Mis equipos**, guardados en tu Arca en
+`Competitive/Teams/`. Además marca los **Pokémon oscuros** en Colosseum y XD,
+incluye un **`.ipa` para AltStore** en cada release y lee los datos de
+Champions de las **fuentes oficiales** del juego. La calculadora de stats
+clásica sale del editor y, en el teléfono, **Actividad** pasa a la cabecera
+del Arca.
+
 ### Añadido
 
 - **Pestaña Competitivo (Pokémon Champions)**: nueva entrada de la navegación
