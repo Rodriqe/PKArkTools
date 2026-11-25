@@ -74,6 +74,39 @@ void main() {
     expect(e.where((x) => x.species == 201 && x.creatable).length, 28, reason: 'Unown en Rojo Fuego');
   });
 
+  test('formas cosméticas: Furfrou, Vivillon, Meowstic hembra, Unown y evoluciones por intercambio', () {
+    LivingDexEntry? e(int v, int s, int f) =>
+        LivingDexDb.forVersion(v).where((x) => x.species == s && x.form == f).firstOrNull;
+    // X/Y: los cortes de Furfrou vuelven a la forma base en la caja; en USUL se guardan.
+    expect(e(24, 676, 0)!.creatable, isTrue);
+    expect(e(24, 676, 3)!.exclusion, LivingDexExclusion.boxReverts);
+    expect(e(32, 676, 3)!.creatable, isTrue);
+    // Vivillon: 18 dibujos con su región; Elegante y Poké Ball solo por evento.
+    expect(LivingDexDb.forVersion(24).where((x) => x.species == 666 && x.creatable).length, 18);
+    expect(e(24, 666, 19)!.exclusion, LivingDexExclusion.eventOnlyForm);
+    // Meowstic hembra en Gen 6–7.
+    expect(e(24, 678, 1)!.creatable, isTrue);
+    expect(e(32, 678, 1)!.creatable, isTrue);
+    // DBPR: las 28 letras de Unown y Alakazam (evolución por intercambio con su entrenador).
+    expect(LivingDexDb.forVersion(48).where((x) => x.species == 201 && x.creatable).length, 28);
+    expect(e(48, 65, 0)!.creatable, isTrue);
+  });
+
+  test('resumen: lo que no se generó agrupado por motivo', () {
+    final ed = SaveEditor.open(SyntheticSaves.gen1(trainer: const SynthTrainer(name: 'RED')));
+    final plan = LivingDex.plan(ed);
+    final res = LivingDex.apply(ed, plan, shiny: true, random: Random(3));
+    final m = livingDexMissing(plan, res);
+    expect(m[LivingDexMissingReason.doesNotFit] ?? const [], isEmpty);
+    final xy = SaveEditor.open(SyntheticSaves.ctr(layout: CtrLayout.xy, trainer: const SynthTrainer(name: 'Serena', versionId: 24)));
+    final p2 = LivingDex.plan(xy);
+    final m2 = livingDexMissing(p2, LivingDex.apply(xy, p2, shiny: true, random: Random(4)));
+    expect(m2[LivingDexMissingReason.boxReverts], contains((676, 1)));
+    expect(m2[LivingDexMissingReason.eventOnly], contains((666, 19)));
+    expect(m2[LivingDexMissingReason.battleOnly], isNotEmpty);
+    expect(m2[LivingDexMissingReason.shinyImpossible], isNotEmpty);
+  });
+
   test('solo por evento (distribución terminada): míticos sin encuentro propio', () {
     expect(LivingDexDb.eventOnly(151), isTrue, reason: 'Mew (Isla Lejana exige el Mapa Viejo)');
     expect(LivingDexDb.eventOnly(385), isTrue, reason: 'Jirachi');

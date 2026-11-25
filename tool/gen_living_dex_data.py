@@ -11,7 +11,7 @@ con carga perezosa por `LivingDexDb` (lib/src/livingdex/living_dex.dart):
 * kLivingDexMeta: 'versiones|especie|forma|estado' donde estado es
     'k,m,sm,fl,es,nv'  (tipo e/s/w, modo f/1/k, modo variocolor f/1/-, flags L=bloqueado, S=variocolor fijo, F=objeto de evento,
                         especie del encuentro, nivel)  si hay plantilla, o
-    '!motivo'          (battle, fused, totem, lord, noenc, err) si no.
+    '!motivo'          (battle, fused, totem, lord, boxrevert, eventform, region, noenc, err) si no.
 * kLivingDexTpl: Pokémon almacenado (descifrado) que generó PKHeX, con los ceros
   comprimidos (0x00 n = n ceros) y en base64.
 * kLivingDexAlt: plantilla alternativa (modo keep), mismo formato; vacío si no hay.
@@ -47,7 +47,8 @@ for r in rows:
         tpl.append(rle(base64.b64decode(r['tpl'])))
         alt.append(rle(base64.b64decode(r['alt'])) if r.get('alt') else '')
     else:
-        why = r.get('skip') or ('noenc' if r.get('err') == 'noenc' else 'err')
+        why = r.get('skip') or ('noenc' if r.get('err') == 'noenc' else
+                                ('region' if 'Vivillon' in r.get('err', '') else 'err'))
         st = '!' + why
         tpl.append(''); alt.append('')
     meta.append(f"{vs}|{r['s']}|{r['f']}|{st}")

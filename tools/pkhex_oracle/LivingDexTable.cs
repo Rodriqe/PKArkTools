@@ -136,6 +136,11 @@ static class LivingDexTable
         if (FormInfo.IsFusedForm(s, f, fmt)) return "fused";
         if (FormInfo.IsTotemForm(s, f, v.Context)) return "totem";
         if (FormInfo.IsLordForm(s, f, v.Context)) return "lord";
+        // Gen 6: los cortes de Furfrou y Hoopa desatado vuelven a la forma base al dejarlos en
+        // la caja (PKHeX `CheckFurfrou6`: la forma solo existe en el equipo).
+        if (v.Generation == 6 && f != 0 && s is (ushort)Species.Furfrou or (ushort)Species.Hoopa) return "boxrevert";
+        // Vivillon Elegante y Poké Ball: solo por evento.
+        if (s is (ushort)Species.Scatterbug or (ushort)Species.Spewpa or (ushort)Species.Vivillon && (f == 19 || (f == 18 && v.Generation <= 7))) return "eventform";
         // Pikachu con gorra / cosplay, Floette eterna, Pichu picoreja, Eevee/Pikachu compañero:
         // los decide el encuentro (si no hay, no saldrán).
         return null;
@@ -147,6 +152,7 @@ static class LivingDexTable
         pk.Species = s;
         pk.Form = s == (int)Species.Unown && v.Generation <= 2 ? (byte)0 : f;
         pk.Version = v;
+        if (GenderFor(s, f) == Gender.Female) pk.Gender = 1;
         return pk;
     }
 
@@ -175,14 +181,15 @@ static class LivingDexTable
                 // Entree Forest (Dream World, en línea): fuera. Max Lair: el último recurso.
                 && !e.GetType().Name.Contains("Entree"))
             .OrderBy(Kind)
-            .Take(s == (int)Species.Unown ? 400 : 24).ToList();
+            .Take(s == (int)Species.Unown ? 4000 : 24).ToList();
         if (encs.Count == 0) { row["err"] = "noenc"; return row; }
+        row["nenc"] = encs.Count;
         string? firstErr = null;
         foreach (var enc in encs)
         {
             PKM? pk = null;
             string err = "";
-            var tries = s == (int)Species.Unown && v.Generation <= 3 ? (v.Generation == 2 ? 2000 : 60) : 6;
+            var tries = s == (int)Species.Unown ? (v.Generation == 2 || v.Context == EntityContext.Gen8b ? 600 : 60) : 6;
             for (var k = 0; k < tries && pk == null; k++) pk = Make(enc, tr, s, f, out err);
             if (pk == null) { firstErr ??= err; continue; }
             // Solo encuentros de esta versión (PKHeX puede dar un huevo de otra del mismo formato).
@@ -239,17 +246,19 @@ static class LivingDexTable
     {
         err = "";
         PKM pk;
-        var crit = new EncounterCriteria { Shiny = PKHeX.Core.Shiny.Never, Gender = GenderFor(s, f), Form = s == (int)Species.Unown && tr.Version.Generation == 3 ? (sbyte)f : (sbyte)-1 };
+        var crit = new EncounterCriteria { Shiny = PKHeX.Core.Shiny.Never, Gender = GenderFor(s, f), Form = s == (int)Species.Unown && tr.Version.Generation >= 3 ? (sbyte)f : (sbyte)-1 };
         try { pk = ((IEncounterConvertible)enc).ConvertToPKM(tr, crit); }
         catch (Exception e) { err = "convert: " + e.Message; return null; }
         if (pk.IsShiny) { err = "shiny"; return null; }
-        if (s == (int)Species.Unown && pk.Format <= 3 && pk.Form != f) { err = "letter"; return null; }
+        if (s == (int)Species.Unown && pk.Format >= 3 && pk.Form != f) { err = "letter"; return null; }
         if (pk.Species != s || pk.Form != f)
         {
             // Evolución; las de intercambio necesitan haber pasado por otro entrenador (Gen 6+:
             // entrenador anterior y su recuerdo, como al cambiarlo y recibirlo de vuelta).
             var evolved = Evolve(pk, enc, s, f, null);
-            if (evolved == null && pk is IHandlerUpdate && pk.Format >= 6) evolved = Evolve(pk, enc, s, f, tr);
+            var plainErr = EvolveErr;
+            if (evolved == null && pk.Format >= 6) evolved = Evolve(pk, enc, s, f, tr);
+            if (evolved == null) EvolveErr = plainErr + " || traded: " + EvolveErr;
             if (evolved == null) { err = EvolveErr ?? "evolve"; return null; }
             pk = evolved;
         }
@@ -271,6 +280,16 @@ static class LivingDexTable
             hu.UpdateHandler(partner);
             hu.UpdateHandler(traded);
         }
+        else if (traded != null)
+        {
+            // DBPR (PB8) no implementa IHandlerUpdate: el entrenador del intercambio se escribe
+            // como lo hace PKHeX (`PKH.UpdateHandler`) y el Pokémon vuelve a su OT.
+            pk.HandlingTrainerName = "Ark";
+            pk.HandlingTrainerGender = 0;
+            if (pk is IHandlerLanguage hl) hl.HandlingTrainerLanguage = (byte)traded.Language;
+            pk.HandlingTrainerFriendship = pk.PersonalInfo.BaseFriendship;
+            pk.CurrentHandler = 0;
+        }
         pk.Species = s;
         pk.Form = f;
         if (!pk.IsNicknamed) pk.ClearNickname();
@@ -290,7 +309,7 @@ static class LivingDexTable
     static string Report(PKM pk)
     {
         var r = new LegalityAnalysis(pk).Report();
-        return r.Length > 300 ? r[..300] : r;
+        return r.Length > 1500 ? r[..1500] : r;
     }
 
     static bool FixUp(PKM pk, byte level)
@@ -311,7 +330,7 @@ static class LivingDexTable
         else if (pi.OnlyFemale) pk.Gender = 1;
         pk.RefreshAbility(pk.AbilityNumber >> 1);
         // Milotic: Feebas evoluciona con Belleza alta (concursos de Gen 3–5).
-        if (pk.Species == (int)Species.Milotic && pk.Format <= 5 && pk is IContestStats cs && cs.ContestBeauty < 170) { cs.ContestBeauty = 170; cs.ContestSheen = 255; }
+        if (pk.Species == (int)Species.Milotic && (pk.Format <= 5 || pk is PB8) && pk is IContestStats cs && cs.ContestBeauty < 170) { cs.ContestBeauty = 170; cs.ContestSheen = 255; }
         // Furfrou/Hoopa: días restantes; evoluciones por contador (Annihilape, Gholdengo…).
         if (pk is IFormArgument fa)
         {

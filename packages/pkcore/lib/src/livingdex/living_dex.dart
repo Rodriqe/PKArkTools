@@ -29,6 +29,15 @@ enum LivingDexExclusion {
   /// Pokémon dominante (Sol/Luna) o noble (Leyendas Arceus): no se pueden tener.
   totemOrLord,
 
+  /// Vuelve a la forma base al dejarlo en la caja (cortes de Furfrou y Hoopa desatado en Gen 6).
+  boxReverts,
+
+  /// Forma que solo se repartió por evento (Vivillon Elegante y Poké Ball en Gen 6–7).
+  eventOnlyForm,
+
+  /// Necesita los datos de región de otra consola (dibujos de Vivillon).
+  needsRegion,
+
   /// Sin encuentro propio en esta versión (solo por intercambio, HOME u otra versión).
   notObtainable,
 }
@@ -111,6 +120,9 @@ abstract final class LivingDexDb {
         'battle' => LivingDexExclusion.battleOnly,
         'fused' => LivingDexExclusion.fused,
         'totem' || 'lord' => LivingDexExclusion.totemOrLord,
+        'boxrevert' => LivingDexExclusion.boxReverts,
+        'eventform' => LivingDexExclusion.eventOnlyForm,
+        'region' => LivingDexExclusion.needsRegion,
         _ => LivingDexExclusion.notObtainable,
       };
       return LivingDexEntry._(i, vs, s, f, exclusion: why);
@@ -235,6 +247,58 @@ bool isLegendaryOrMythical(int s) =>
       716, 717, 718, 719, 720, 721, 772, 773, 789, 790, 791, 792, 800, 801, 802, 807, 808, 809, 888, 889, 890, 891, 892, 893,
       894, 895, 896, 897, 898, 905, 1001, 1002, 1003, 1004, 1007, 1008, 1014, 1015, 1016, 1017, 1024, 1025}.contains(s) ||
     (s >= 377 && s <= 386) || (s >= 480 && s <= 494) || (s >= 785 && s <= 788) || (s >= 793 && s <= 799) || (s >= 803 && s <= 806);
+
+/// Motivo por el que algo no quedó (o no quedó como se pidió) en la Living Dex.
+enum LivingDexMissingReason {
+  /// Formas que solo existen en combate.
+  battleOnly,
+
+  /// Fusiones, dominantes y nobles.
+  fusedOrTotem,
+
+  /// Formas que vuelven a la base en la caja.
+  boxReverts,
+
+  /// Solo por evento (míticos sin evento creable aquí, formas de evento).
+  eventOnly,
+
+  /// Necesita la región de otra consola.
+  needsRegion,
+
+  /// Sin encuentro propio en esta versión (otra versión, intercambio o HOME).
+  notObtainable,
+
+  /// Pedido variocolor que quedó normal.
+  shinyImpossible,
+
+  /// No cupo en las cajas.
+  doesNotFit,
+}
+
+/// Todo lo que no se generó (o se generó normal en vez de variocolor), agrupado por motivo.
+Map<LivingDexMissingReason, List<(int species, int form)>> livingDexMissing(LivingDexPlan plan, LivingDexResult result) {
+  final out = <LivingDexMissingReason, List<(int, int)>>{};
+  void add(LivingDexMissingReason r, int s, int f) => (out[r] ??= []).add((s, f));
+  for (final e in plan.excluded) {
+    final r = switch (e.exclusion!) {
+      LivingDexExclusion.battleOnly => LivingDexMissingReason.battleOnly,
+      LivingDexExclusion.fused || LivingDexExclusion.totemOrLord => LivingDexMissingReason.fusedOrTotem,
+      LivingDexExclusion.boxReverts => LivingDexMissingReason.boxReverts,
+      LivingDexExclusion.eventOnlyForm => LivingDexMissingReason.eventOnly,
+      LivingDexExclusion.needsRegion => LivingDexMissingReason.needsRegion,
+      LivingDexExclusion.notObtainable =>
+        LivingDexDb.eventOnly(e.species) ? LivingDexMissingReason.eventOnly : LivingDexMissingReason.notObtainable,
+    };
+    add(r, e.species, e.form);
+  }
+  for (final s in result.normalInsteadOfShiny) {
+    add(LivingDexMissingReason.shinyImpossible, s.species, s.form);
+  }
+  for (final s in result.left) {
+    add(LivingDexMissingReason.doesNotFit, s.species, s.form);
+  }
+  return out;
+}
 
 /// Pokémon generados y el edit que los coloca en las cajas.
 class LivingDexBatch {
