@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -1540,8 +1541,7 @@ class AppLocalizationsEs extends AppLocalizations {
       locale: localeName,
       other:
           '$count archivos omitidos (temporales, parciales o copias de conflicto de la nube).',
-      one:
-          '1 archivo omitido (temporal, parcial o copia de conflicto de la nube).',
+      one: '1 archivo omitido (temporal, parcial o copia de conflicto de la nube).',
     );
     return '$_temp0';
   }
@@ -4482,5 +4482,26 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String eventsNewCount(int count) {
     return '$count nuevos desde la última vez';
+  }
+
+  @override
+  String get shadowMarkChip => 'Pokémon oscuro';
+
+  @override
+  String get shadowMarkTooltip =>
+      'Pokémon oscuro: tiene el corazón cerrado. Hay que purificarlo en Colosseum o XD antes de llevarlo a otro juego.';
+
+  @override
+  String get shadowPurifiedTooltip =>
+      'Fue un Pokémon oscuro y ya está purificado: puede ir a otros juegos.';
+
+  @override
+  String shadowHeartProgress(String max, String percent, String value) {
+    return 'Corazón abierto: $percent % (medidor $value / $max)';
+  }
+
+  @override
+  String shadowHeartUnknown(String value) {
+    return 'Medidor de corazón: $value';
   }
 }

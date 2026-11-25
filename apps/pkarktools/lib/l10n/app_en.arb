@@ -1175,5 +1175,10 @@
   "eventsCheckFailed": "Could not check (offline?): using the saved database.",
   "eventsFutureSchema": "There is a newer event database that this version cannot read: update PKArkTools.",
   "eventsNew": "New",
-  "eventsNewCount": "{count} new since last time"
+  "eventsNewCount": "{count} new since last time",
+  "shadowMarkChip": "Shadow Pokémon",
+  "shadowMarkTooltip": "Shadow Pokémon: its heart is closed. It must be purified in Colosseum or XD before it can go to another game.",
+  "shadowPurifiedTooltip": "It was a Shadow Pokémon and is now purified: it can go to other games.",
+  "shadowHeartProgress": "Heart opened: {percent}% (gauge {value} / {max})",
+  "shadowHeartUnknown": "Heart gauge: {value}"
 }

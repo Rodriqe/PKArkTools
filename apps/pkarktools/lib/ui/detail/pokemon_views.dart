@@ -12,6 +12,7 @@ import '../common/format.dart';
 import '../common/species_avatar.dart';
 import '../editor/legality_view.dart';
 import '../editor/pokemon_editor.dart';
+import '../common/shadow_mark.dart';
 import '../editor/shadow_panel.dart';
 import '../events/event_explorer.dart';
 import '../transfer/transfer_screen.dart';
@@ -406,6 +407,7 @@ class _PartyGridState extends State<PartyGrid> {
                     locked: false,
                     builder: (context, hover) => _PartyTile(
                       p: party[i],
+                      shadow: ShadowMark.applies(party[i], actions.game),
                       hover: hover || widget.focusSlot == i,
                       warnings: _warnings(party[i], actions.game),
                       onTap: () => actions.edit(SlotRef.party(i), party[i]),
@@ -430,8 +432,11 @@ class _PartyGridState extends State<PartyGrid> {
 }
 
 class _PartyTile extends StatelessWidget {
-  const _PartyTile({required this.p, required this.hover, required this.warnings, required this.onTap});
+  const _PartyTile({required this.p, required this.hover, required this.warnings, required this.onTap, this.shadow = false});
   final Pkm p;
+
+  /// Pokémon oscuro en Colosseum/XD: halo, borde morado e insignia.
+  final bool shadow;
   final bool hover;
   final int warnings;
   final VoidCallback onTap;
@@ -447,7 +452,11 @@ class _PartyTile extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
         side: BorderSide(
-          color: hover ? context.colors.primary : (p.isShiny ? tokens.shiny.withValues(alpha: 0.6) : tokens.hairline),
+          color: hover
+              ? context.colors.primary
+              : (shadow
+                  ? ShadowMark.color(context).withValues(alpha: 0.6)
+                  : (p.isShiny ? tokens.shiny.withValues(alpha: 0.6) : tokens.hairline)),
           width: hover ? 2 : 1,
         ),
       ),
@@ -457,9 +466,11 @@ class _PartyTile extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(14),
           child: Row(children: [
-            Stack(clipBehavior: Clip.none, children: [
+            Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
+              if (shadow) const Positioned(left: -8, top: -8, right: -8, bottom: -8, child: ShadowAura(size: 68)),
               SpeciesAvatar(species: p.species, form: p.form, game: p.dataGame, female: p.gender == 1, shiny: p.isShiny, egg: p.isEgg, size: 52),
               if (warnings > 0) Positioned(left: -5, bottom: -5, child: LegalityDot(count: warnings)),
+              if (shadow) const Positioned(right: -5, bottom: -5, child: ShadowBadge()),
             ]),
             const SizedBox(width: 14),
             Expanded(
@@ -654,6 +665,7 @@ class _BoxBrowserState extends State<BoxBrowser> {
                 locked: locked,
                 builder: (context, hover) => _BoxSlot(
                   p: pk,
+                  shadow: pk != null && ShadowMark.applies(pk, widget.actions.game),
                   hover: hover || (widget.focus?.box == box && widget.focus?.slot == i && pk != null),
                   locked: locked,
                   warnings: pk == null ? 0 : _warnings(pk, widget.actions.game),
@@ -676,8 +688,11 @@ class _BoxBrowserState extends State<BoxBrowser> {
 }
 
 class _BoxSlot extends StatelessWidget {
-  const _BoxSlot({required this.p, required this.hover, required this.locked, required this.warnings, required this.onTap});
+  const _BoxSlot({required this.p, required this.hover, required this.locked, required this.warnings, required this.onTap, this.shadow = false});
   final Pkm? p;
+
+  /// Pokémon oscuro en Colosseum/XD: halo e insignia.
+  final bool shadow;
   final bool hover;
   final bool locked;
   final int warnings;
@@ -702,7 +717,8 @@ class _BoxSlot extends StatelessWidget {
     final name = p.isEgg ? context.l10n.egg : pokemonName(context, p.species, p.form, p.dataGame);
     final nick = p.isNicknamed && !p.isEgg ? p.nickname : null;
     return Tooltip(
-      message: '${nick ?? name}\n${p.isEgg ? '' : context.l10n.level(p.level)}${p.isShiny ? '  ${context.l10n.shiny}' : ''}',
+      message: '${nick ?? name}\n${p.isEgg ? '' : context.l10n.level(p.level)}${p.isShiny ? '  ${context.l10n.shiny}' : ''}'
+          '${shadow ? '\n${context.l10n.shadowMarkTooltip}' : ''}',
       child: Material(
         color: hover ? context.colors.primary.withValues(alpha: 0.14) : Colors.transparent,
         shape: RoundedRectangleBorder(
@@ -712,6 +728,7 @@ class _BoxSlot extends StatelessWidget {
           onTap: onTap,
           child: LayoutBuilder(
             builder: (context, c) => Stack(alignment: Alignment.center, clipBehavior: Clip.none, children: [
+              if (shadow) ShadowAura(size: c.maxWidth * 0.96),
               SpeciesAvatar(species: p.species, form: p.form, game: p.dataGame, female: p.gender == 1, shiny: p.isShiny, egg: p.isEgg, size: c.maxWidth * 0.86),
               if (!p.isEgg && c.maxWidth > 56)
                 Positioned(
@@ -724,6 +741,7 @@ class _BoxSlot extends StatelessWidget {
                 ),
               if (warnings > 0) Positioned(left: 0, top: 0, child: LegalityDot(count: warnings, size: 14)),
               if (locked) Positioned(right: 2, bottom: 2, child: Icon(Icons.lock_rounded, size: 14, color: tokens.muted)),
+              if (shadow) const Positioned(left: 0, bottom: 0, child: ShadowBadge(size: 14)),
             ]),
           ),
         ),

@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -1416,8 +1417,7 @@ class AppLocalizationsEn extends AppLocalizations {
       locale: localeName,
       other:
           'Your $count current backups will be copied to the chosen folder and verified one by one.',
-      one:
-          'Your current backup will be copied to the chosen folder and verified.',
+      one: 'Your current backup will be copied to the chosen folder and verified.',
     );
     return '$_temp0';
   }
@@ -4449,5 +4449,26 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String eventsNewCount(int count) {
     return '$count new since last time';
+  }
+
+  @override
+  String get shadowMarkChip => 'Shadow Pokémon';
+
+  @override
+  String get shadowMarkTooltip =>
+      'Shadow Pokémon: its heart is closed. It must be purified in Colosseum or XD before it can go to another game.';
+
+  @override
+  String get shadowPurifiedTooltip =>
+      'It was a Shadow Pokémon and is now purified: it can go to other games.';
+
+  @override
+  String shadowHeartProgress(String max, String percent, String value) {
+    return 'Heart opened: $percent% (gauge $value / $max)';
+  }
+
+  @override
+  String shadowHeartUnknown(String value) {
+    return 'Heart gauge: $value';
   }
 }

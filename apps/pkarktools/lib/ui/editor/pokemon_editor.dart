@@ -11,6 +11,7 @@ import '../common/species_avatar.dart';
 import '../common/game_icons.dart';
 import 'legality_view.dart';
 import 'origin_panel.dart';
+import '../common/shadow_mark.dart';
 import 'shadow_panel.dart';
 import 'pickers.dart';
 import 'ribbons_panel.dart';
@@ -317,7 +318,15 @@ class _Specimen extends StatelessWidget {
                     label: pk.isSquareShiny ? l10n.shinySquare : l10n.shiny,
                     color: tokens.shiny,
                     icon: Icons.auto_awesome),
+              if (ShadowMark.applies(pk, game))
+                const ShadowStateChip(purified: false)
+              else if (ShadowMark.purified(pk, game))
+                const ShadowStateChip(purified: true),
             ]),
+            if (ShadowMark.applies(pk, game)) ...[
+              const SizedBox(height: 8),
+              ShadowHeartProgress(gc: pk.gc!),
+            ],
           ]),
         ),
       ]),

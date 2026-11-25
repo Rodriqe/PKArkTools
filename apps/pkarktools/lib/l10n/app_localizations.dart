@@ -7166,6 +7166,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'{count} nuevos desde la última vez'**
   String eventsNewCount(int count);
+
+  /// No description provided for @shadowMarkChip.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon oscuro'**
+  String get shadowMarkChip;
+
+  /// No description provided for @shadowMarkTooltip.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon oscuro: tiene el corazón cerrado. Hay que purificarlo en Colosseum o XD antes de llevarlo a otro juego.'**
+  String get shadowMarkTooltip;
+
+  /// No description provided for @shadowPurifiedTooltip.
+  ///
+  /// In es, this message translates to:
+  /// **'Fue un Pokémon oscuro y ya está purificado: puede ir a otros juegos.'**
+  String get shadowPurifiedTooltip;
+
+  /// No description provided for @shadowHeartProgress.
+  ///
+  /// In es, this message translates to:
+  /// **'Corazón abierto: {percent} % (medidor {value} / {max})'**
+  String shadowHeartProgress(String max, String percent, String value);
+
+  /// No description provided for @shadowHeartUnknown.
+  ///
+  /// In es, this message translates to:
+  /// **'Medidor de corazón: {value}'**
+  String shadowHeartUnknown(String value);
 }
 
 class _AppLocalizationsDelegate

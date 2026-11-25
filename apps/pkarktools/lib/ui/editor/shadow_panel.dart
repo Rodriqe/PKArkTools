@@ -3,6 +3,7 @@ import 'package:pkcore/pkcore.dart';
 
 import '../../theme/app_theme.dart';
 import '../common/format.dart';
+import '../common/shadow_mark.dart';
 import '../common/species_avatar.dart';
 
 /// Sección «Pokémon oscuro» del editor (Colosseum / XD): estado, id oscuro y
@@ -21,10 +22,7 @@ class ShadowPanel extends StatelessWidget {
   static bool applies(Pkm pk, GameVersion game) =>
       (pk.gc?.shadowId ?? 0) != 0 || (game.isColosseumOrXd && !pk.isEgg);
 
-  int? _maxGauge(GcExtra gc) {
-    final enc = GcEncounter.byShadowId(gc.shadowId, xd: gc.kind == GcKind.xk3);
-    return enc.isEmpty ? null : enc.first.gauge;
-  }
+  int? _maxGauge(GcExtra gc) => ShadowMark.maxGauge(gc);
 
   Future<bool> _confirm(BuildContext context, String title, String body, String action) async =>
       await showDialog<bool>(

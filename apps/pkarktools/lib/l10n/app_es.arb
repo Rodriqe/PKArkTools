@@ -3281,5 +3281,30 @@
         "type": "int"
       }
     }
+  },
+  "shadowMarkChip": "Pokémon oscuro",
+  "shadowMarkTooltip": "Pokémon oscuro: tiene el corazón cerrado. Hay que purificarlo en Colosseum o XD antes de llevarlo a otro juego.",
+  "shadowPurifiedTooltip": "Fue un Pokémon oscuro y ya está purificado: puede ir a otros juegos.",
+  "shadowHeartProgress": "Corazón abierto: {percent} % (medidor {value} / {max})",
+  "@shadowHeartProgress": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "shadowHeartUnknown": "Medidor de corazón: {value}",
+  "@shadowHeartUnknown": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   }
 }
