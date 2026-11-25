@@ -27,9 +27,7 @@ etc. se descartan sin leerlas.
 La app recuerda la ruta de origen de cada copia para poder **restaurarla en el
 mismo sitio** (ver [El Arca](arca.md#restaurar)).
 
-Para la carpeta de un emulador que respaldas a menudo, vincúlala una vez en
-**Ajustes → Emuladores** y respáldala con un toque (ver
-[Emuladores](emuladores.md)). Los equipos en texto de Pokémon Showdown se
+Los equipos en texto de Pokémon Showdown se
 importan desde la partida (ver [Herramientas](herramientas.md#pokémon-showdown)).
 
 ## Fuentes habituales

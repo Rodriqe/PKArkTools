@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pkcore/pkcore.dart';
 
-import '../../data/emulators/emulator_service.dart';
-import '../../data/emulators/emulators.dart';
 import '../../editing/draft.dart';
 import '../common/format.dart';
 import 'box_sort_ui.dart';
@@ -12,7 +10,7 @@ import 'showdown_ui.dart';
 import 'tools_common.dart';
 
 /// Herramientas de la sección Pokémon de una partida: Showdown (importar y
-/// exportar), ordenar cajas, formato oficial y abrir el juego en el emulador.
+/// exportar), ordenar cajas y formato oficial.
 class SaveToolsBar extends ConsumerWidget {
   const SaveToolsBar({super.key, required this.snapshotId, required this.editor, this.onTransfer});
   final int snapshotId;
@@ -105,37 +103,7 @@ class SaveToolsBar extends ConsumerWidget {
           icon: const Icon(Icons.emoji_events_outlined),
           label: Text(tr(context, 'Formato oficial', 'Official format')),
         ),
-        _OpenGameButton(game: editor.game),
       ],
-    );
-  }
-}
-
-/// «Abrir el juego»: solo aparece si hay un emulador de esa consola que se
-/// pueda abrir desde la app (Android: intent; iOS: esquema de URL).
-class _OpenGameButton extends ConsumerWidget {
-  const _OpenGameButton({required this.game});
-  final GameVersion game;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final launcher = ref.watch(emulatorLauncherProvider);
-    return FutureBuilder<List<Emulator>>(
-      future: launcher.installedFor(game),
-      builder: (context, snap) {
-        final list = snap.data ?? const <Emulator>[];
-        if (list.isEmpty) return const SizedBox.shrink();
-        return OutlinedButton.icon(
-          key: const ValueKey('tool-open-game'),
-          onPressed: () async {
-            final messenger = ScaffoldMessenger.of(context);
-            final fail = tr(context, 'No se pudo abrir ${list.first.name}.', 'Could not open ${list.first.name}.');
-            if (!await launcher.launch(list.first)) messenger.showSnackBar(SnackBar(content: Text(fail)));
-          },
-          icon: const Icon(Icons.play_arrow_rounded),
-          label: Text(tr(context, 'Abrir en ${list.first.name}', 'Open in ${list.first.name}')),
-        );
-      },
     );
   }
 }

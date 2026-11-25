@@ -45,18 +45,6 @@
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
-        <!-- Emuladores que «Abrir el juego» puede lanzar (visibilidad de paquetes, Android 11+). -->
-        <package android:name="com.retroarch"/>
-        <package android:name="com.retroarch.aarch64"/>
-        <package android:name="com.retroarch.ra32"/>
-        <package android:name="me.magnum.melonds"/>
-        <package android:name="org.azahar_emu.azahar"/>
-        <package android:name="io.github.lime3ds.android"/>
-        <package android:name="org.dolphinemu.dolphinemu"/>
-        <package android:name="dev.eden.eden_emulator"/>
-        <package android:name="org.citron.citron_emu"/>
-        <package android:name="org.sudachi.sudachi_emu"/>
-        <package android:name="org.yuzu.yuzu_emu"/>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>

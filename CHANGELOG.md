@@ -142,14 +142,7 @@ developer documentation in `docs/` is in Spanish.
 - **Share card**: an image of a Pokémon (app logo, icon, name and form, level,
   types, shiny, nature, ability, item, Tera Type, origin, ribbons, IVs/EVs and
   moves), saved as PNG or sent through the system share sheet.
-- **Emulators** (Settings): link the save folder of RetroArch, mGBA, melonDS,
-  Azahar/Lime3DS, Dolphin, Delta's sync folder or the Android Switch ports
-  (with the user's permission) and back it up to the Ark in one tap; known
-  default folders are found on Windows and Linux. **Open in …** launches the
-  installed emulator on Android (intent) and Delta on iOS (URL scheme); the
-  button is hidden elsewhere. Compatibility table in
-  `docs/usuario/emuladores.md`.
-- User guides: `herramientas.md`, `formato-oficial.md`, `emuladores.md` and
+- User guides: `herramientas.md`, `formato-oficial.md` and
   `instalar.md` (including iPhone/iPad with AltStore and the 7-day refresh).
 
 ## [1.1.0] — 2026-11-24

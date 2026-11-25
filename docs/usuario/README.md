@@ -19,9 +19,8 @@ editarla y exportarla lista para el juego o el emulador.
 12. [Living Dex](living-dex.md): llenar las cajas de una partida con un Pokémon legal de cada especie y forma.
 13. [Herramientas](herramientas.md): importar y exportar texto de Showdown, calculadora de stats e IVs, ordenar cajas y tarjeta para compartir.
 14. [Formato oficial](formato-oficial.md): la regulación vigente de Pokémon Champions y qué Pokémon de tus partidas valen.
-15. [Emuladores](emuladores.md): vincular y respaldar carpetas de saves, abrir el emulador y compatibilidad.
-16. [Instalar](instalar.md): todas las plataformas, y iPhone/iPad con AltStore.
-17. [Preguntas frecuentes y solución de problemas](faq.md).
+15. [Instalar](instalar.md): todas las plataformas, y iPhone/iPad con AltStore.
+16. [Preguntas frecuentes y solución de problemas](faq.md).
 
 Consulta también [Formatos soportados](../formatos.md) y
 [Seguridad de datos y privacidad](../seguridad-datos.md).

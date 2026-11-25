@@ -8,8 +8,6 @@ import '../../data/sprites/sprite_manifest.g.dart';
 import '../common/brand_mark.dart';
 import '../common/format.dart';
 import '../import/import_flow.dart';
-import '../tools/emulators_section.dart';
-import '../tools/tools_common.dart';
 import 'folder_section.dart';
 import 'sprites_section.dart';
 import 'update_section.dart';
@@ -26,17 +24,20 @@ class SettingsScreen extends ConsumerWidget {
     final pad = compact ? 16.0 : 32.0;
 
     Widget section(String title, Widget child, {String? body}) => Padding(
-          padding: const EdgeInsets.only(bottom: 28),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(title, style: context.text.titleLarge),
-            if (body != null) ...[
-              const SizedBox(height: 6),
-              Text(body, style: context.text.bodyMedium!.copyWith(color: context.tokens.muted)),
-            ],
-            const SizedBox(height: 12),
-            child,
-          ]),
-        );
+      padding: const EdgeInsets.only(bottom: 28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: context.text.titleLarge),
+          if (body != null) ...[
+            const SizedBox(height: 6),
+            Text(body, style: context.text.bodyMedium!.copyWith(color: context.tokens.muted)),
+          ],
+          const SizedBox(height: 12),
+          child,
+        ],
+      ),
+    );
 
     return Scaffold(
       body: SafeArea(
@@ -55,9 +56,21 @@ class SettingsScreen extends ConsumerWidget {
                   l10n.theme,
                   SegmentedButton<ThemeMode>(
                     segments: [
-                      ButtonSegment(value: ThemeMode.dark, label: Text(l10n.themeDark), icon: const Icon(Icons.dark_mode_rounded)),
-                      ButtonSegment(value: ThemeMode.light, label: Text(l10n.themeLight), icon: const Icon(Icons.light_mode_rounded)),
-                      ButtonSegment(value: ThemeMode.system, label: Text(l10n.themeSystem), icon: const Icon(Icons.contrast_rounded)),
+                      ButtonSegment(
+                        value: ThemeMode.dark,
+                        label: Text(l10n.themeDark),
+                        icon: const Icon(Icons.dark_mode_rounded),
+                      ),
+                      ButtonSegment(
+                        value: ThemeMode.light,
+                        label: Text(l10n.themeLight),
+                        icon: const Icon(Icons.light_mode_rounded),
+                      ),
+                      ButtonSegment(
+                        value: ThemeMode.system,
+                        label: Text(l10n.themeSystem),
+                        icon: const Icon(Icons.contrast_rounded),
+                      ),
                     ],
                     selected: {settings.themeMode},
                     onSelectionChanged: (s) => notifier.setThemeMode(s.first),
@@ -77,24 +90,24 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 section(
                   l10n.archiveExport,
-                  Wrap(spacing: 12, runSpacing: 12, children: [
-                    FilledButton.tonalIcon(
-                      onPressed: () => exportArcaZip(context, ref),
-                      icon: const Icon(Icons.archive_outlined),
-                      label: Text(l10n.archiveExport),
-                    ),
-                    OutlinedButton.icon(
-                      onPressed: () => restoreArcaZip(context, ref),
-                      icon: const Icon(Icons.unarchive_outlined),
-                      label: Text(l10n.archiveRestore),
-                    ),
-                  ]),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      FilledButton.tonalIcon(
+                        onPressed: () => exportArcaZip(context, ref),
+                        icon: const Icon(Icons.archive_outlined),
+                        label: Text(l10n.archiveExport),
+                      ),
+                      OutlinedButton.icon(
+                        onPressed: () => restoreArcaZip(context, ref),
+                        icon: const Icon(Icons.unarchive_outlined),
+                        label: Text(l10n.archiveRestore),
+                      ),
+                    ],
+                  ),
                   body: '${l10n.archiveExportDesc} ${l10n.archiveRestoreDesc}',
                 ),
-                section(tr(context, 'Emuladores', 'Emulators'), const EmulatorsSection(),
-                    body: tr(context,
-                        'Vincula la carpeta de saves de tu emulador (RetroArch, mGBA, melonDS, Azahar, Dolphin…) para respaldarla en el Arca con un toque.',
-                        'Link your emulator save folder (RetroArch, mGBA, melonDS, Azahar, Dolphin…) to back it up to the Ark in one tap.')),
                 section(l10n.spritesSection, const SpritesSection(), body: l10n.spritesSectionDesc),
                 section(
                   l10n.sampleData,
@@ -107,36 +120,52 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 section(
                   l10n.about,
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Row(children: [
-                      const BrandMark(size: 88),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('PKArkTools', style: context.text.titleLarge!.copyWith(fontFamily: AppTheme.display)),
-                          Text(l10n.updateCurrent(kAppVersion),
-                              style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
-                        ]),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const BrandMark(size: 88),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'PKArkTools',
+                                  style: context.text.titleLarge!.copyWith(fontFamily: AppTheme.display),
+                                ),
+                                Text(
+                                  l10n.updateCurrent(kAppVersion),
+                                  style: context.text.bodySmall!.copyWith(color: context.tokens.muted),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ]),
-                    const SizedBox(height: 12),
-                    const UpdateAboutControls(),
-                    const SizedBox(height: 12),
-                    Text(
-                        l10n.spritesCredits(kSpriteCommits['smogon/sprites']!.substring(0, 7),
-                            kSpriteCommits['kwsch/PKHeX']!.substring(0, 7)),
-                        style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
-                    const SizedBox(height: 4),
-                    TextButton(
-                      onPressed: () => showLicensePage(
-                        context: context,
-                        applicationName: l10n.appTitle,
-                        applicationVersion: kAppVersion,
-                        applicationIcon: const Padding(padding: EdgeInsets.all(8), child: BrandMark(size: 96)),
+                      const SizedBox(height: 12),
+                      const UpdateAboutControls(),
+                      const SizedBox(height: 12),
+                      Text(
+                        l10n.spritesCredits(
+                          kSpriteCommits['smogon/sprites']!.substring(0, 7),
+                          kSpriteCommits['kwsch/PKHeX']!.substring(0, 7),
+                        ),
+                        style: context.text.bodySmall!.copyWith(color: context.tokens.muted),
                       ),
-                      child: Text(l10n.licenses),
-                    ),
-                  ]),
+                      const SizedBox(height: 4),
+                      TextButton(
+                        onPressed: () => showLicensePage(
+                          context: context,
+                          applicationName: l10n.appTitle,
+                          applicationVersion: kAppVersion,
+                          applicationIcon: const Padding(padding: EdgeInsets.all(8), child: BrandMark(size: 96)),
+                        ),
+                        child: Text(l10n.licenses),
+                      ),
+                    ],
+                  ),
                   body: l10n.aboutBody,
                 ),
               ],

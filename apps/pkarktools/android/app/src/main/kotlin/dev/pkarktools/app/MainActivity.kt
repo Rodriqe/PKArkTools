@@ -37,25 +37,6 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         updater = AppUpdateInstaller(this, flutterEngine.dartExecutor.binaryMessenger)
-        // «Abrir el juego»: abre el emulador instalado (ver docs/usuario/emuladores.md).
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "dev.pkarktools/emulators").setMethodCallHandler { call, result ->
-            when (call.method) {
-                "installed" -> {
-                    val packages = call.argument<List<String>>("packages") ?: emptyList()
-                    result.success(packages.firstOrNull { packageManager.getLaunchIntentForPackage(it) != null })
-                }
-                "launch" -> {
-                    val intent = call.argument<String>("package")?.let { packageManager.getLaunchIntentForPackage(it) }
-                    if (intent == null) {
-                        result.success(false)
-                    } else {
-                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                        result.success(true)
-                    }
-                }
-                else -> result.notImplemented()
-            }
-        }
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).setMethodCallHandler { call, result ->
             when (call.method) {
                 "pickTree" -> pickTree(result)

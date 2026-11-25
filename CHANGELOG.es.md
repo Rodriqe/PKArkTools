@@ -149,14 +149,7 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   nombre y forma, nivel, tipos, variocolor, naturaleza, habilidad, objeto,
   teratipo, origen, cintas, IVs/EVs y movimientos), en PNG o por el menú de
   compartir del sistema.
-- **Emuladores** (Ajustes): vincula la carpeta de saves de RetroArch, mGBA,
-  melonDS, Azahar/Lime3DS, Dolphin, la carpeta de sincronización de Delta o
-  los ports de Switch en Android (con permiso del usuario) y respáldala en el
-  Arca con un toque; en Windows y Linux se encuentran las carpetas por
-  defecto. **Abrir en …** abre el emulador instalado en Android (intent) y
-  Delta en iOS (esquema de URL); en el resto el botón no aparece. Tabla de
-  compatibilidad en `docs/usuario/emuladores.md`.
-- Guías: `herramientas.md`, `formato-oficial.md`, `emuladores.md` e
+- Guías: `herramientas.md`, `formato-oficial.md` e
   `instalar.md` (con iPhone/iPad mediante AltStore y el refresco cada 7 días).
 
 ## [1.1.0] — 2026-11-24

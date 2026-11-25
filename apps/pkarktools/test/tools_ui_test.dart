@@ -13,18 +13,13 @@ import 'package:pkcore/testing.dart';
 import 'package:pkarktools/app.dart';
 import 'package:pkarktools/data/arca_repository.dart';
 import 'package:pkarktools/data/db/arca_database.dart';
-import 'package:pkarktools/data/emulators/emulator_service.dart';
-import 'package:pkarktools/data/emulators/emulators.dart';
 import 'package:pkarktools/data/folder/arca_folder.dart';
-import 'package:pkarktools/data/folder/folder_access.dart';
 import 'package:pkarktools/data/folder/folder_fs.dart';
-import 'package:pkarktools/data/folder/memory_folder_fs.dart';
 import 'package:pkarktools/editing/draft.dart';
 import 'package:pkarktools/l10n/app_localizations.dart';
 import 'package:pkarktools/providers.dart';
 import 'package:pkarktools/theme/app_theme.dart';
 import 'package:pkarktools/ui/tools/champions_screen.dart';
-import 'package:pkarktools/ui/tools/emulators_section.dart';
 import 'package:pkarktools/ui/tools/share_card.dart';
 import 'package:pkarktools/ui/tools/showdown_ui.dart';
 import 'package:pkarktools/ui/tools/stat_calculator.dart';
@@ -250,82 +245,6 @@ void main() {
     await tester.pump();
     expect(find.textContaining('restringidos'), findsWidgets);
     expect(find.textContaining('no está en la lista'), findsOneWidget);
-  });
-
-  testWidgets('emuladores: buscar carpetas conocidas y vincular con permiso', (tester) async {
-    bigView(tester);
-    debugDefaultTargetPlatformOverride = TargetPlatform.linux;
-    final emu = Emulators.byId('retroarch')!;
-    await tester.pumpWidget(
-      wrap(
-        SingleChildScrollView(child: EmulatorsSection(detect: () async => [(emu, '/home/u/.config/retroarch/saves')])),
-      ),
-    );
-    await settle(tester);
-    await tester.tap(find.byKey(const ValueKey('emu-detect')));
-    await settle(tester);
-    expect(find.text('/home/u/.config/retroarch/saves'), findsOneWidget);
-    await tester.tap(find.text('Vincular'));
-    await settle(tester);
-    expect(find.textContaining('¿Dar acceso'), findsOneWidget);
-    await tester.tap(find.text('Dar acceso'));
-    await settle(tester);
-    expect(find.byKey(const ValueKey('emu-link-retroarch-/home/u/.config/retroarch/saves')), findsOneWidget);
-    final saved = await tester.runAsync(() => repo.getSetting(EmulatorLinksNotifier.settingKey));
-    expect(EmulatorLink.decodeList(saved).single.location.value, '/home/u/.config/retroarch/saves');
-    debugDefaultTargetPlatformOverride = null;
-  });
-
-  test('respaldo de la carpeta de un emulador en el Arca', () async {
-    final fs = MemoryFolderFs();
-    await fs.writeNew('saves/Pokemon Esmeralda.srm', SyntheticSaves.gen3(trainer: const SynthTrainer(name: 'MAY')));
-    await fs.writeNew('saves/otra.sav', SyntheticSaves.gen3(trainer: const SynthTrainer(name: 'BRENDAN', tid: 777)));
-    await fs.writeNew('roms/Pokemon.gba', Uint8List(1024));
-    await fs.writeNew('notas.sav', Uint8List.fromList(List.filled(64, 1)));
-    final r = await backupEmulatorFolder(fs, repo);
-    expect(r.added, 2);
-    expect(r.skipped, 2);
-    final again = await backupEmulatorFolder(fs, repo);
-    expect(again.added, 0);
-    expect(again.duplicates, 2);
-  });
-
-  group('rutas de emuladores', () {
-    test('plantillas por sistema', () {
-      final ra = Emulators.byId('retroarch')!;
-      expect(
-        Emulators.expand(r'%APPDATA%\RetroArch\saves', env: {'APPDATA': r'C:\Users\a\AppData\Roaming'}, windows: true),
-        r'C:\Users\a\AppData\Roaming\RetroArch\saves',
-      );
-      expect(
-        Emulators.candidates(ra, TargetPlatform.linux, env: const {}, home: '/home/a'),
-        contains('/home/a/.config/retroarch/saves'),
-      );
-      expect(Emulators.candidates(ra, TargetPlatform.android, env: const {}, home: null), [
-        '/storage/emulated/0/RetroArch/saves',
-      ]);
-      expect(Emulators.expand(r'%APPDATA%\x', env: const {}), isNull);
-    });
-
-    test('abrir el juego solo donde se puede', () {
-      expect(Emulators.byId('delta')!.canLaunchOn(TargetPlatform.iOS), isTrue);
-      expect(Emulators.byId('delta')!.canLaunchOn(TargetPlatform.android), isFalse);
-      expect(Emulators.byId('dolphin')!.canLaunchOn(TargetPlatform.android), isTrue);
-      for (final e in Emulators.all) {
-        expect(e.canLaunchOn(TargetPlatform.macOS), isFalse);
-        expect(e.canLaunchOn(TargetPlatform.windows), isFalse);
-      }
-    });
-
-    test('vínculos se guardan y se leen', () {
-      final links = [
-        const EmulatorLink('dolphin', ArcaLocation(LocationKind.saf, value: 'content://tree/x', label: 'x')),
-      ];
-      final back = EmulatorLink.decodeList(EmulatorLink.encodeList(links));
-      expect(back.single.emulatorId, 'dolphin');
-      expect(back.single.location.kind, LocationKind.saf);
-      expect(EmulatorLink.decodeList('basura'), isEmpty);
-    });
   });
 
   test('placementFor: equipo primero y después huecos libres de las cajas', () {

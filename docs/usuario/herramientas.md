@@ -4,9 +4,8 @@ Todas trabajan sobre el **borrador** de la partida: nada se escribe en el Arca
 hasta que pulsas **Guardar en el Arca**, y cualquier cambio se puede deshacer.
 
 En el detalle de una partida, sección **Pokémon**, hay una fila de botones:
-**Importar de Showdown**, **Equipo a Showdown**, **Ordenar cajas**,
-**Formato oficial** y, si hay un emulador que se pueda abrir, **Abrir en…**
-(ver [Emuladores](emuladores.md)).
+**Transferir Pokémon…**, **Importar de Showdown**, **Equipo a Showdown**,
+**Ordenar cajas** y **Formato oficial**.
 
 ## Pokémon Showdown
 
