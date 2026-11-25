@@ -11,6 +11,17 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+### Añadido
+
+- **Marca de Pokémon oscuro (Colosseum y XD)**: en los saves de Colosseum y
+  XD, los Pokémon oscuros muestran un halo morado suave y una pequeña insignia
+  con un corazón roto en las cajas y el equipo; al mantenerla pulsada o pasar
+  el ratón se ve una explicación breve. La cabecera del editor muestra el chip
+  **Pokémon oscuro** y el progreso de la purificación (cuánto se ha abierto el
+  corazón y lo que queda del medidor); un purificado no lleva marca (el editor
+  dice **Purificado**). En los demás juegos no hay marca. Solo se muestra: el
+  save no cambia.
+
 ### Cambiado
 
 - **Formato oficial desde las fuentes oficiales**: la Action diaria

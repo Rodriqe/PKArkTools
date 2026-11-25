@@ -11,6 +11,16 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+### Added
+
+- **Shadow Pokémon mark (Colosseum and XD)**: in Colosseum and XD saves,
+  Shadow Pokémon now show a soft purple aura and a small broken-heart badge in
+  the boxes and the party; long-press or hover the badge for a short
+  explanation. The editor header shows a **Shadow Pokémon** chip and the
+  purification progress (how much of the heart is open and the gauge left);
+  a purified Pokémon shows no mark (the editor says **Purified**). No mark in
+  any other game. Display only: the save is not changed.
+
 ### Changed
 
 - **Official format from the official sources**: the daily

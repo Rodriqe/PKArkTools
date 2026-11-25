@@ -137,6 +137,22 @@ purificarlo; uno purificado de XD llega con la marca de encuentro fatídico,
 como al intercambiarlo en el juego. Los Pokémon sueltos son `.ck3`
 (Colosseum) y `.xk3` (XD).
 
+### Marca de Pokémon oscuro
+
+En los saves de Colosseum y XD, los Pokémon que **siguen siendo oscuros** se
+reconocen de un vistazo:
+
+* **Cajas y equipo**: un halo morado detrás del Pokémon y una pequeña
+  insignia con un corazón roto. Mantén pulsada la insignia (o pasa el ratón
+  por encima) para ver qué significa.
+* **Cabecera del editor**: el chip **Pokémon oscuro** y el progreso de la
+  purificación (cuánto se ha abierto el corazón y lo que queda del medidor).
+* Un Pokémon **purificado** no lleva marca en las cajas ni en el equipo; en el
+  editor la cabecera dice **Purificado**.
+
+La marca solo se muestra en Colosseum y XD: si llevas un Pokémon purificado a
+otro juego, allí no aparece. Es solo informativa; no cambia nada del save.
+
 <p>
   <img src="../screenshots/gamecube/03_xd_shadow_pokemon.png" width="420" alt="Pokémon oscuro en XD">
   <img src="../screenshots/gamecube/05_colosseum_purified.png" width="420" alt="Pokémon purificado en Colosseum">
