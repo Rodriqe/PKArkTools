@@ -13,6 +13,26 @@ developer documentation in `docs/` is in Spanish.
 
 ### Added
 
+- **Mystery Gift events.** PKHeX's whole event database (2922 Pokémon gifts,
+  Gen 3 to Gen 9: WC3/PCNY/PCJP, PCD/PGT, PGF, WC6, WC7, WB7, WC8, WB8, WA8,
+  WC9, WA9), regenerated with `tool/gen_event_data.sh` and loaded lazily.
+  - **Event explorer** (Dex → Events, and from each species page): search by
+    species, card title, OT or card number and filter by game, generation,
+    year, region, language, shiny and distribution type; each event card shows
+    all its fixed data (OT/ID, moves, relearn moves, Ball, item, fixed IVs,
+    nature, ribbons, dates) and can export the card file.
+  - **Create from an event** (empty slot → “From an event”) in any compatible
+    save: fixed data are kept and the receiving trainer's OT, ID, gender and
+    language are applied as the game does, with PKHeX-valid PID/IV variants
+    (Gen 3/4 RNG methods, Gen 5 shiny and ID-correlated PIDs, Z-A seeds).
+    `tool/check_events_pkhex.sh` checks every creatable gift for two trainers
+    with PKHeX: 0 invalid out of 5830.
+  - **Import event cards** (.pgt, .pcd/.wc4, .pgf, .wc6/.wc6full,
+    .wc7/.wc7full, .wb7, .wc8, .wb8, .wa8, .wc9, .wa9) and receive them in a
+    slot.
+  - **Legality** now recognizes Pokémon that come from an event (fixed OT/ID,
+    Ball, place and level): their special moves, item and Ball no longer raise
+    notices and the encounter tables are not applied.
 - **Create Shadow Pokémon in Colosseum and XD.** An empty slot offers
   “Shadow Pokémon”: pick one of the game's Shadow encounters (PKHeX
   `Encounters3ColoShadow` / `Encounters3XD`, without the Japanese e-Reader
@@ -33,6 +53,10 @@ developer documentation in `docs/` is in Spanish.
 
 - The sidebar logo is much larger (96 px on the extended rail, 72 px on the
   compact one) with the name below it.
+
+### Fixed
+
+- Let's Go (PB7) Pokémon checksum now covers the 0xE8 bytes PKHeX uses.
 
 ## [1.1.0] — 2026-11-24
 

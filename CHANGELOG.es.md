@@ -13,6 +13,28 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ### Añadido
 
+- **Eventos (Regalo Misterioso).** Toda la base de eventos de PKHeX (2922
+  regalos de Pokémon, de Gen 3 a Gen 9: WC3/PCNY/PCJP, PCD/PGT, PGF, WC6, WC7,
+  WB7, WC8, WB8, WA8, WC9, WA9), regenerada con `tool/gen_event_data.sh` y con
+  carga perezosa.
+  - **Explorador de eventos** (Dex → Eventos y desde la ficha de cada
+    especie): búsqueda por especie, título de tarjeta, OT o nº de tarjeta y
+    filtros por juego, generación, año, región, idioma, variocolor y tipo de
+    distribución; la ficha muestra todos los datos fijos (OT/ID, movimientos,
+    recordables, Ball, objeto, IV fijos, naturaleza, cintas, fechas) y permite
+    exportar la tarjeta.
+  - **Crear desde un evento** (hueco vacío → «Desde un evento») en cualquier
+    partida compatible: se respetan los datos fijos y se aplican OT, ID, género
+    e idioma de quien lo recibe como hace el juego, con variantes PID/IV que
+    PKHeX da por válidas (métodos RNG de Gen 3/4, PID variocolor y con
+    correlación de ID de Gen 5, semillas de Z-A). `tool/check_events_pkhex.sh`
+    comprueba con PKHeX todos los eventos creables con dos entrenadores: 0
+    inválidos de 5830.
+  - **Importar tarjetas de evento** (.pgt, .pcd/.wc4, .pgf, .wc6/.wc6full,
+    .wc7/.wc7full, .wb7, .wc8, .wb8, .wa8, .wc9, .wa9) y recibirlas en un hueco.
+  - **Legalidad**: reconoce los Pokémon que vienen de un evento (OT/ID, Ball,
+    lugar y nivel fijos): sus movimientos especiales, objeto y Ball ya no dan
+    avisos y no se aplican las tablas de encuentros.
 - **Crear Pokémon oscuros en Colosseum y XD.** Un hueco vacío ofrece
   «Pokémon oscuro»: eliges uno de los encuentros oscuros del juego (PKHeX
   `Encounters3ColoShadow` / `Encounters3XD`, sin los de e-Reader japoneses) y
@@ -33,6 +55,10 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 - El logo de la barra lateral es mucho más grande (96 px en el rail
   extendido, 72 px en el compacto) con el nombre debajo.
+
+### Corregido
+
+- El checksum de los Pokémon de Let's Go (PB7) cubre los 0xE8 bytes que usa PKHeX.
 
 ## [1.1.0] — 2026-11-24
 

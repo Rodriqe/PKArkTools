@@ -10,6 +10,7 @@ editarla y exportarla lista para el juego o el emulador.
 3. [El Arca](arca.md): historial, notas, versión del cartucho, comparar, exportar, restaurar y zip.
 4. [Editor](editor.md): Pokémon, cajas, entrenador, inventario, Pokédex, eventos, cintas y origen.
 5. [Dex](dex.md): la Pokédex global de todas tus partidas, formas especiales desbloqueables y living dex.
+5b. [Eventos](eventos.md): explorador del Regalo Misterioso, crear Pokémon de evento e importar/exportar tarjetas.
 6. [Ribbon Hunter](ribbon-hunter.md): todas las cintas que puede ganar un ejemplar de cada especie, juego a juego, y el ranking por niveles.
 7. [Legalidad y avisos](legalidad.md): qué se comprueba y qué hace «Intentar corregir».
 8. [Saves dañados y reparar checksums](reparar-checksums.md).
