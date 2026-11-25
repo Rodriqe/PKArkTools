@@ -18,38 +18,71 @@ se juega en **Pokémon Champions**.
   rechazarlos. Para usarlos hay que llevarlos a Champions por HOME.
 
 Lo que la fuente no dice no se inventa: las **fechas** se marcan como «sin
-confirmar» si no hay una fuente oficial, y la lista de **objetos permitidos**
-no está incluida (consúltala en el juego).
+confirmar» si no hay una fuente oficial, la **siguiente regulación** sale
+como «aún sin anunciar» hasta que Showdown la incluya, y la lista de
+**objetos permitidos** no está incluida (consúltala en el juego).
+
+## Se actualiza solo
+
+No hace falta esperar a una versión nueva de PKArkTools para ver la
+regulación vigente:
+
+1. Cada día, la GitHub Action
+   [`champions-data.yml`](../../.github/workflows/champions-data.yml) descarga
+   de Pokémon Showdown los tres archivos de la tabla de abajo, regenera
+   [`data/champions/champions.json`](../../data/champions/champions.json) y
+   lo valida. **Solo si cambiaron los datos** lo sube a `main` (autor
+   `github-actions[bot]`). Si Showdown cambia algo que el generador no
+   entiende, el job falla sin subir nada y la app sigue con la última
+   versión buena.
+2. Al abrir **Formato oficial** (como mucho una vez cada 12 horas), la app
+   descarga ese JSON de
+   `https://raw.githubusercontent.com/Rodriqe/PKArkTools/main/data/champions/champions.json`,
+   comprueba que es válido y lo guarda en el índice local. **Buscar
+   actualizaciones** consulta en el momento.
+3. Sin conexión, o si la descarga falla o no es válida, usa la última copia
+   guardada o la que lleva la app (la más reciente de las dos).
+
+La pantalla indica **«Actualizado el … · fuente: Showdown …»** (fecha de los
+datos y commit de Showdown), cuándo termina la regulación y cuál es la
+siguiente.
+
+**Privacidad**: es un GET anónimo a GitHub, sin cabeceras propias ni
+identificadores (ni siquiera la versión de la app); no se envía nada de tus
+partidas.
+
+Si el JSON publicado tiene un `schemaVersion` más nuevo del que entiende tu
+versión de la app, se ignora y la pantalla sugiere actualizar PKArkTools.
 
 ## De dónde salen los datos
 
 | Dato | Fuente | Dónde vive |
 |---|---|---|
-| Especies y formas permitidas, Megaevoluciones | Pokémon Showdown, [`data/mods/champions/formats-data.ts`](https://github.com/smogon/pokemon-showdown/blob/master/data/mods/champions/formats-data.ts) (especies sin `isNonstandard`) | `packages/pkcore/lib/src/data/generated/champions_data.dart` (generado) |
-| Nombre del formato y reglas | Showdown, `config/formats.ts` (formato `[Gen 9 Champions] VGC …` con `mod: 'champions'`) y `data/rulesets.ts` (*Flat Rules*) | mismo archivo generado |
-| Fechas de la regulación | A mano, con su fuente (ahora Bulbapedia, sin confirmar) | `ChampionsFormat.regulation` en `packages/pkcore/lib/src/tools/champions.dart` |
+| Especies y formas permitidas, Megaevoluciones | Pokémon Showdown, [`data/mods/champions/formats-data.ts`](https://github.com/smogon/pokemon-showdown/blob/master/data/mods/champions/formats-data.ts) (especies sin `isNonstandard`; los campos de National Dex, como `natDexTier`, no cuentan) | `data/champions/champions.json` y su copia integrada `packages/pkcore/lib/src/data/generated/champions_data.dart` (generados) |
+| Nombre del formato y reglas | Showdown, `config/formats.ts` (formato `[Gen 9 Champions] VGC … Reg …` con `mod: 'champions'`; *National Dex*, BSS, etc. no cuentan) y `data/rulesets.ts` (*Flat Rules*) | mismos archivos generados |
+| Siguiente regulación | Showdown, `config/formats.ts` (un formato VGC con un código posterior, p. ej. Reg M-D) | mismos archivos generados |
+| Fechas de cada regulación | A mano, con su fuente (Serebii/Bulbapedia, sin confirmar) | [`tool/champions_regulations.json`](../../tool/champions_regulations.json) |
 
-El archivo generado guarda el **commit** de Showdown y su fecha; la pantalla
-los muestra junto a un enlace a la fuente.
+Los datos guardan el **commit** de Showdown y su fecha; la pantalla los
+muestra junto a un enlace a la fuente. Un commit nuevo de Showdown que no
+cambia los datos no genera cambios.
 
-## Cómo actualizarla cuando cambie la regulación
+## Cómo actualizarla a mano
+
+Normalmente no hace falta (lo hace la Action). Para probar el generador en
+local:
 
 ```bash
-mkdir -p .scratch/champions
-base=https://raw.githubusercontent.com/smogon/pokemon-showdown/master
-curl -o .scratch/champions/formats-data.ts $base/data/mods/champions/formats-data.ts
-curl -o .scratch/champions/formats.ts $base/config/formats.ts
-curl -o .scratch/champions/rulesets.ts $base/data/rulesets.ts
-curl -s 'https://api.github.com/repos/smogon/pokemon-showdown/commits?path=data/mods/champions/formats-data.ts&per_page=1' \
-  | python3 -c "import sys,json;d=json.load(sys.stdin)[0];print(d['sha'],d['commit']['committer']['date'][:10])"
-python3 tool/gen_champions_data.py .scratch/champions <sha> <AAAA-MM-DD> \
-  packages/pkcore/lib/src/data/generated/champions_data.dart
+python3 tool/fetch_champions_sources.py .scratch/champions   # imprime commit= y date=
+python3 tool/gen_champions_data.py .scratch/champions <commit> <AAAA-MM-DD>
+python3 tool/test_gen_champions_data.py
 ```
 
-Después, en `champions.dart`, actualiza `ChampionsFormat.regulation` (código,
-fechas, `datesSource` y `datesConfirmed: true` solo si las fechas vienen de
-Play! Pokémon o del juego) y pasa `dart test test/tools_test.dart` en
-`packages/pkcore` (comprueba que todos los ids de Showdown se traducen a
-especie y forma). Si Showdown cambia el `mod` del formato vigente (por
-ejemplo `championsregmb` para la anterior), el generador toma el primero con
-`mod: 'champions'`.
+Escribe `data/champions/champions.json` y `champions_data.dart`. Cuando se
+conozcan las fechas de una regulación, añádelas a
+`tool/champions_regulations.json` con su fuente (`confirmed: true` solo si
+vienen de Play! Pokémon o del juego) y vuelve a generar. Después pasa
+`dart test test/tools_test.dart` en `packages/pkcore` (comprueba, entre
+otras cosas, que todos los ids de Showdown se traducen a especie y forma). Si
+Showdown cambia el `mod` del formato vigente (por ejemplo `championsregmb`
+para la anterior), el generador toma el que tiene `mod: 'champions'`.

@@ -141,6 +141,18 @@ Colosseum y XD. La app de macOS llega firmada y notarizada.
   Pokémon Showdown (`tool/gen_champions_data.py`, versionada con commit y
   fecha); la app indica las fechas sin confirmar y que falta la lista de
   objetos.
+- **El formato oficial se actualiza solo**: una GitHub Action diaria
+  (`champions-data.yml`) regenera `data/champions/champions.json` desde
+  Showdown, lo valida y solo hace commit si cambian los datos. Al abrir la
+  pantalla (como mucho cada 12 h, o con **Buscar actualizaciones**), la app lo
+  descarga con un GET anónimo y lo guarda. Sin conexión, usa la copia guardada
+  o la que lleva la app. La pantalla muestra la fecha de actualización y el
+  commit de Showdown, cuándo termina la regulación y cuál es la siguiente (o
+  «aún sin anunciar»). Si los datos tienen un esquema más nuevo, se ignoran y
+  se sugiere actualizar la app. Las fechas de cada regulación (M-A, M-B, M-C,
+  sin confirmar) están en `tool/champions_regulations.json` con su fuente.
+  Comprobado frente a «Implement Champions National Dex» (#12488) de
+  Showdown: la lista sigue siendo la de VGC Reg M-C.
 - **Tarjeta para compartir**: una imagen de un Pokémon (logo de la app, icono,
   nombre y forma, nivel, tipos, variocolor, naturaleza, habilidad, objeto,
   teratipo, origen, cintas, IVs/EVs y movimientos), en PNG o por el menú de

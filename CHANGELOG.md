@@ -136,6 +136,18 @@ macOS app is signed and notarized.
   others are not. Species list generated from Pokémon Showdown's `champions`
   mod (`tool/gen_champions_data.py`, versioned with commit and date);
   unconfirmed dates and the missing item list are flagged in the app.
+- **Official format updates itself**: a daily GitHub Action
+  (`champions-data.yml`) regenerates `data/champions/champions.json` from
+  Showdown, validates it and commits it only when the data changes. When the
+  screen opens (at most every 12 h, or with **Check for updates**), the app
+  downloads it with a plain anonymous GET and caches it. Offline, it uses the
+  cached copy or the one built into the app. The screen shows the update date
+  and the Showdown commit, when the regulation ends and the next one (or "not
+  announced yet"). Data with a newer schema is ignored with a hint to update
+  the app. Regulation dates (M-A, M-B, M-C, unconfirmed) live in
+  `tool/champions_regulations.json` with their source. Checked against
+  Showdown's "Implement Champions National Dex" (#12488): the list is still
+  the VGC Reg M-C one.
 - **Share card**: an image of a Pokémon (app logo, icon, name and form, level,
   types, shiny, nature, ability, item, Tera Type, origin, ribbons, IVs/EVs and
   moves), saved as PNG or sent through the system share sheet.
