@@ -13,6 +13,7 @@ import '../common/species_avatar.dart';
 import '../editor/legality_view.dart';
 import '../editor/pokemon_editor.dart';
 import '../editor/shadow_panel.dart';
+import '../events/event_explorer.dart';
 
 /// Lo que viaja al arrastrar un Pokémon.
 class SlotDrag {
@@ -120,6 +121,22 @@ class StorageActions {
               subtitle: Text(l10n.shadowCreateDesc),
               onTap: () => Navigator.pop(ctx, 'shadow'),
             ),
+          if (EventDb.creatableIn(game).isNotEmpty) ...[
+            ListTile(
+              key: const ValueKey('create-event'),
+              leading: const Icon(Icons.card_giftcard_rounded),
+              title: Text(l10n.createFromEvent),
+              subtitle: Text(l10n.createFromEventDesc),
+              onTap: () => Navigator.pop(ctx, 'event'),
+            ),
+            ListTile(
+              key: const ValueKey('import-event-card'),
+              leading: const Icon(Icons.redeem_rounded),
+              title: Text(l10n.importEventCard),
+              subtitle: Text(l10n.importEventCardDesc),
+              onTap: () => Navigator.pop(ctx, 'card'),
+            ),
+          ],
           ListTile(
             leading: const Icon(Icons.file_open_outlined),
             title: Text(l10n.importPokemon(_importExts)),
@@ -147,9 +164,51 @@ class StorageActions {
         ..dataGame = game;
       final res = await PokemonEditorScreen.open(context, game: game, pk: pk, slotLabel: slotLabel(slot), isNew: true);
       if (res is EditorApply && context.mounted) _apply(SetSlotEdit(slot, res.pk, label: 'Creado'));
+    } else if (choice == 'event') {
+      final lang = guessSaveLanguage(_editor, fallback: context.isSpanish ? 7 : 2);
+      final pick = await EventPicker.show(context, game, saveLanguage: lang);
+      if (pick == null || !context.mounted) return;
+      await _createEvent(slot, pick.gift, language: pick.language, shiny: pick.shiny);
+    } else if (choice == 'card') {
+      await importEventCard(slot);
     } else {
       await importInto(slot);
     }
+  }
+
+  /// Crea [gift] para el entrenador de la partida y abre el editor antes de ponerlo en [slot].
+  Future<void> _createEvent(SlotRef slot, EventGift gift, {required int language, bool? shiny}) async {
+    final ed = _editor;
+    final pk = EventFactory.create(gift, game, ed.readTrainer(), language: language, versionId: ed.versionId, shiny: shiny);
+    final res = await PokemonEditorScreen.open(context, game: game, pk: pk, slotLabel: slotLabel(slot), isNew: true);
+    if (res is EditorApply && context.mounted) {
+      _apply(SetSlotEdit(slot, res.pk, label: 'Evento'));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.eventCreated(pokemonName(context, gift.species, gift.form, game)))));
+    }
+  }
+
+  /// Importa una tarjeta de Regalo Misterioso y la «recibe» en [slot].
+  Future<void> importEventCard(SlotRef slot) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
+    final files = await ref.read(fileSourcesProvider).pickFiles();
+    if (files.isEmpty || !context.mounted) return;
+    final f = files.first;
+    final ext = p.extension(f.name).replaceFirst('.', '').toLowerCase();
+    final gift = EventCards.identify(ext, f.bytes);
+    if (gift == null) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.eventCardUnknown)));
+      return;
+    }
+    if (!EventFactory.canCreateIn(gift, game)) {
+      final es = context.isSpanish;
+      final games = gift.games.map((g) => es ? g.nameEs : g.nameEn).join(', ');
+      messenger.showSnackBar(SnackBar(content: Text(l10n.eventCardWrongGame(games.isEmpty ? 'Gen ${gift.generation}' : games))));
+      return;
+    }
+    final lang = guessSaveLanguage(_editor, fallback: context.isSpanish ? 7 : 2);
+    await _createEvent(slot, gift, language: EventFactory.languageFor(gift, lang));
   }
 
   Future<void> importInto(SlotRef slot) async {

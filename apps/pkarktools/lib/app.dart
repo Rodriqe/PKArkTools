@@ -8,6 +8,7 @@ import 'data/arca_session.dart';
 import 'l10n/app_localizations.dart';
 import 'providers.dart';
 import 'theme/app_theme.dart';
+import 'ui/events/event_explorer.dart';
 import 'ui/activity/activity_screen.dart';
 import 'ui/arca/arca_screen.dart';
 import 'ui/detail/save_detail_screen.dart';
@@ -62,6 +63,10 @@ GoRouter buildRouter({String initialLocation = '/arca', ValueNotifier<ArcaSetup>
                 builder: (_, _) => const DexScreen(),
                 routes: [
                   GoRoute(path: 'progreso', builder: (_, _) => const DexProgressScreen()),
+                  GoRoute(
+                    path: 'eventos',
+                    builder: (_, state) => EventExplorerScreen(species: int.tryParse(state.uri.queryParameters['especie'] ?? '')),
+                  ),
                   GoRoute(
                     path: 'especie/:species',
                     builder: (_, state) => DexSpeciesScreen(

@@ -126,6 +126,12 @@ class _DexBody extends ConsumerWidget {
                 icon: const Icon(Icons.insights_rounded),
               ),
               IconButton(
+                key: const ValueKey('dex-events'),
+                tooltip: l10n.dexEventsButton,
+                onPressed: () => context.go('/dex/eventos'),
+                icon: const Icon(Icons.card_giftcard_rounded),
+              ),
+              IconButton(
                 key: const ValueKey('dex-settings'),
                 tooltip: l10n.dexSettings,
                 onPressed: () => showDexSettings(context, ref),

@@ -133,6 +133,19 @@ class _DexSpeciesScreenState extends ConsumerState<DexSpeciesScreen> {
                       ),
                     ),
                   ),
+                if (EventDb.forSpecies(s).isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: OutlinedButton.icon(
+                        key: const ValueKey('dex-species-events'),
+                        onPressed: () => context.go('/dex/eventos?especie=$s'),
+                        icon: const Icon(Icons.card_giftcard_rounded),
+                        label: Text(l10n.dexSpeciesEvents(EventDb.forSpecies(s).length)),
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 8),
                 if (wide)
                   Row(crossAxisAlignment: CrossAxisAlignment.start, children: [

@@ -1775,7 +1775,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventsSearch.
   ///
   /// In es, this message translates to:
-  /// **'Buscar por nombre o número'**
+  /// **'Buscar especie, tarjeta, OT o nº de tarjeta'**
   String get eventsSearch;
 
   /// No description provided for @eventsUnsupported.
@@ -5430,6 +5430,438 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Sustituir'**
   String get shadowApplyConfirm;
+
+  /// No description provided for @yesLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Sí'**
+  String get yesLabel;
+
+  /// No description provided for @eventsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Eventos (Regalo Misterioso)'**
+  String get eventsTitle;
+
+  /// No description provided for @eventsPickTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear desde un evento'**
+  String get eventsPickTitle;
+
+  /// No description provided for @eventsSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} distribuciones oficiales de la base de PKHeX, de Gen 3 a Gen 9. Todas han terminado: puedes consultar sus datos, exportar la tarjeta y recrearlas en una partida compatible.'**
+  String eventsSubtitle(int count);
+
+  /// No description provided for @eventsFilterGen.
+  ///
+  /// In es, this message translates to:
+  /// **'Generación'**
+  String get eventsFilterGen;
+
+  /// No description provided for @eventsFilterGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Juego'**
+  String get eventsFilterGame;
+
+  /// No description provided for @eventsFilterYear.
+  ///
+  /// In es, this message translates to:
+  /// **'Año'**
+  String get eventsFilterYear;
+
+  /// No description provided for @eventsFilterRegion.
+  ///
+  /// In es, this message translates to:
+  /// **'Región'**
+  String get eventsFilterRegion;
+
+  /// No description provided for @eventsFilterLanguage.
+  ///
+  /// In es, this message translates to:
+  /// **'Idioma'**
+  String get eventsFilterLanguage;
+
+  /// No description provided for @eventsFilterShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor'**
+  String get eventsFilterShiny;
+
+  /// No description provided for @eventsFilterType.
+  ///
+  /// In es, this message translates to:
+  /// **'Distribución'**
+  String get eventsFilterType;
+
+  /// No description provided for @eventsAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos'**
+  String get eventsAll;
+
+  /// No description provided for @eventsShinyYes.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor o puede serlo'**
+  String get eventsShinyYes;
+
+  /// No description provided for @eventsShinyNo.
+  ///
+  /// In es, this message translates to:
+  /// **'No variocolor'**
+  String get eventsShinyNo;
+
+  /// No description provided for @eventsRegionJapan.
+  ///
+  /// In es, this message translates to:
+  /// **'Japón'**
+  String get eventsRegionJapan;
+
+  /// No description provided for @eventsRegionInternational.
+  ///
+  /// In es, this message translates to:
+  /// **'Occidente (inglés, francés, italiano, alemán, español)'**
+  String get eventsRegionInternational;
+
+  /// No description provided for @eventsRegionKorea.
+  ///
+  /// In es, this message translates to:
+  /// **'Corea'**
+  String get eventsRegionKorea;
+
+  /// No description provided for @eventsRegionChina.
+  ///
+  /// In es, this message translates to:
+  /// **'China y Taiwán'**
+  String get eventsRegionChina;
+
+  /// No description provided for @eventsTypeCard.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta de Regalo Misterioso'**
+  String get eventsTypeCard;
+
+  /// No description provided for @eventsTypeHome.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon HOME'**
+  String get eventsTypeHome;
+
+  /// No description provided for @eventsTypeGen3.
+  ///
+  /// In es, this message translates to:
+  /// **'Evento de Gen 3 (cartucho, e-Reader, tiendas)'**
+  String get eventsTypeGen3;
+
+  /// No description provided for @eventsTypePokemonCenter.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon Center (Gen 3)'**
+  String get eventsTypePokemonCenter;
+
+  /// No description provided for @eventsEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Ningún evento con estos filtros.'**
+  String get eventsEmpty;
+
+  /// No description provided for @eventsCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} eventos'**
+  String eventsCount(int count);
+
+  /// No description provided for @eventsEntry.
+  ///
+  /// In es, this message translates to:
+  /// **'Gen {nGen} · Nv. {nLevel} · {games}'**
+  String eventsEntry(String games, int nGen, int nLevel);
+
+  /// No description provided for @eventsManyLanguages.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} idiomas'**
+  String eventsManyLanguages(int count);
+
+  /// No description provided for @eventsCardNo.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta nº {nId}'**
+  String eventsCardNo(int nId);
+
+  /// No description provided for @eventsEnded.
+  ///
+  /// In es, this message translates to:
+  /// **'Distribución terminada'**
+  String get eventsEnded;
+
+  /// No description provided for @eventsDetailCard.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta'**
+  String get eventsDetailCard;
+
+  /// No description provided for @eventsDetailMethod.
+  ///
+  /// In es, this message translates to:
+  /// **'Método PID/IV'**
+  String get eventsDetailMethod;
+
+  /// No description provided for @eventsDetailGames.
+  ///
+  /// In es, this message translates to:
+  /// **'Juegos'**
+  String get eventsDetailGames;
+
+  /// No description provided for @eventsDetailDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha'**
+  String get eventsDetailDate;
+
+  /// No description provided for @eventsDetailWindow.
+  ///
+  /// In es, this message translates to:
+  /// **'Del {start} al {end}'**
+  String eventsDetailWindow(String end, String start);
+
+  /// No description provided for @eventsDetailWindowOpen.
+  ///
+  /// In es, this message translates to:
+  /// **'Desde el {start}'**
+  String eventsDetailWindowOpen(String start);
+
+  /// No description provided for @eventsDetailShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor'**
+  String get eventsDetailShiny;
+
+  /// No description provided for @eventsDetailEgg.
+  ///
+  /// In es, this message translates to:
+  /// **'Huevo'**
+  String get eventsDetailEgg;
+
+  /// No description provided for @eventsDetailLevel.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel'**
+  String get eventsDetailLevel;
+
+  /// No description provided for @eventsDetailOt.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrenador original'**
+  String get eventsDetailOt;
+
+  /// No description provided for @eventsDetailOtRecipient.
+  ///
+  /// In es, this message translates to:
+  /// **'El de quien lo recibe'**
+  String get eventsDetailOtRecipient;
+
+  /// No description provided for @eventsDetailId.
+  ///
+  /// In es, this message translates to:
+  /// **'ID'**
+  String get eventsDetailId;
+
+  /// No description provided for @eventsDetailBall.
+  ///
+  /// In es, this message translates to:
+  /// **'Poké Ball'**
+  String get eventsDetailBall;
+
+  /// No description provided for @eventsDetailLocation.
+  ///
+  /// In es, this message translates to:
+  /// **'Lugar de encuentro'**
+  String get eventsDetailLocation;
+
+  /// No description provided for @eventsDetailMoves.
+  ///
+  /// In es, this message translates to:
+  /// **'Movimientos'**
+  String get eventsDetailMoves;
+
+  /// No description provided for @eventsDetailRelearn.
+  ///
+  /// In es, this message translates to:
+  /// **'Recordables'**
+  String get eventsDetailRelearn;
+
+  /// No description provided for @eventsDetailItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Objeto'**
+  String get eventsDetailItem;
+
+  /// No description provided for @eventsDetailNature.
+  ///
+  /// In es, this message translates to:
+  /// **'Naturaleza'**
+  String get eventsDetailNature;
+
+  /// No description provided for @eventsDetailIvs.
+  ///
+  /// In es, this message translates to:
+  /// **'IV'**
+  String get eventsDetailIvs;
+
+  /// No description provided for @eventsDetailRandom.
+  ///
+  /// In es, this message translates to:
+  /// **'Al azar'**
+  String get eventsDetailRandom;
+
+  /// No description provided for @eventsDetailRibbons.
+  ///
+  /// In es, this message translates to:
+  /// **'Cintas y marcas'**
+  String get eventsDetailRibbons;
+
+  /// No description provided for @eventsDetailFateful.
+  ///
+  /// In es, this message translates to:
+  /// **'Encuentro fatídico'**
+  String get eventsDetailFateful;
+
+  /// No description provided for @eventsShinyNever.
+  ///
+  /// In es, this message translates to:
+  /// **'Nunca'**
+  String get eventsShinyNever;
+
+  /// No description provided for @eventsShinyRandom.
+  ///
+  /// In es, this message translates to:
+  /// **'Puede serlo (PID al azar)'**
+  String get eventsShinyRandom;
+
+  /// No description provided for @eventsShinyAlways.
+  ///
+  /// In es, this message translates to:
+  /// **'Siempre'**
+  String get eventsShinyAlways;
+
+  /// No description provided for @eventsShinyStar.
+  ///
+  /// In es, this message translates to:
+  /// **'Siempre (estrella)'**
+  String get eventsShinyStar;
+
+  /// No description provided for @eventsShinySquare.
+  ///
+  /// In es, this message translates to:
+  /// **'Siempre (cuadrado)'**
+  String get eventsShinySquare;
+
+  /// No description provided for @eventsShinyFixed.
+  ///
+  /// In es, this message translates to:
+  /// **'PID fijo de la tarjeta'**
+  String get eventsShinyFixed;
+
+  /// No description provided for @eventsNotCreatable.
+  ///
+  /// In es, this message translates to:
+  /// **'PKHeX no puede generar este evento de forma legal ({reason}): solo se puede consultar.'**
+  String eventsNotCreatable(String reason);
+
+  /// No description provided for @eventsGen3Rng.
+  ///
+  /// In es, this message translates to:
+  /// **'Su PID variocolor sale del RNG de Gen 3 con el ID de quien lo recibe: no se puede recrear.'**
+  String get eventsGen3Rng;
+
+  /// No description provided for @eventsLanguagePick.
+  ///
+  /// In es, this message translates to:
+  /// **'Idioma del Pokémon'**
+  String get eventsLanguagePick;
+
+  /// No description provided for @eventsCreateShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear variocolor'**
+  String get eventsCreateShiny;
+
+  /// No description provided for @eventsOtherGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Se repartió para {games}: se creará con ese juego de origen (como si llegara por intercambio).'**
+  String eventsOtherGame(String games);
+
+  /// No description provided for @eventsCreateHere.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear en esta partida'**
+  String get eventsCreateHere;
+
+  /// No description provided for @eventsExportCard.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar tarjeta (.{ext})'**
+  String eventsExportCard(String ext);
+
+  /// No description provided for @createFromEvent.
+  ///
+  /// In es, this message translates to:
+  /// **'Desde un evento'**
+  String get createFromEvent;
+
+  /// No description provided for @createFromEventDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Un regalo oficial (Regalo Misterioso) con sus datos fijos: OT, ID, movimientos, cintas'**
+  String get createFromEventDesc;
+
+  /// No description provided for @importEventCard.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar tarjeta de evento'**
+  String get importEventCard;
+
+  /// No description provided for @importEventCardDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Archivo .pgt, .pcd, .wc4, .pgf, .wc6, .wc7, .wb7, .wc8, .wb8, .wa8, .wc9 o .wa9'**
+  String get importEventCardDesc;
+
+  /// No description provided for @eventCardUnknown.
+  ///
+  /// In es, this message translates to:
+  /// **'No reconozco esta tarjeta: no está en la base de eventos de PKHeX.'**
+  String get eventCardUnknown;
+
+  /// No description provided for @eventCardWrongGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta tarjeta es de {games}: no se puede recibir en esta partida.'**
+  String eventCardWrongGame(String games);
+
+  /// No description provided for @eventCreated.
+  ///
+  /// In es, this message translates to:
+  /// **'Evento creado: {name}'**
+  String eventCreated(String name);
+
+  /// No description provided for @dexEventsButton.
+  ///
+  /// In es, this message translates to:
+  /// **'Eventos'**
+  String get dexEventsButton;
+
+  /// No description provided for @dexSpeciesEvents.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} eventos oficiales (distribución terminada)'**
+  String dexSpeciesEvents(int count);
 }
 
 class _AppLocalizationsDelegate

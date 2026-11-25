@@ -1044,7 +1044,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eventsRaw => 'Full list';
 
   @override
-  String get eventsSearch => 'Search by name or number';
+  String get eventsSearch => 'Search species, card, OT or card number';
 
   @override
   String get eventsUnsupported => 'This game has no event editor yet.';
@@ -3363,4 +3363,251 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shadowApplyConfirm => 'Replace';
+
+  @override
+  String get yesLabel => 'Yes';
+
+  @override
+  String get eventsTitle => 'Events (Mystery Gift)';
+
+  @override
+  String get eventsPickTitle => 'Create from an event';
+
+  @override
+  String eventsSubtitle(int count) {
+    return '$count official distributions from PKHeX\'s database, Gen 3 to Gen 9. All have ended: you can look up their data, export the card and recreate them in a compatible save.';
+  }
+
+  @override
+  String get eventsFilterGen => 'Generation';
+
+  @override
+  String get eventsFilterGame => 'Game';
+
+  @override
+  String get eventsFilterYear => 'Year';
+
+  @override
+  String get eventsFilterRegion => 'Region';
+
+  @override
+  String get eventsFilterLanguage => 'Language';
+
+  @override
+  String get eventsFilterShiny => 'Shiny';
+
+  @override
+  String get eventsFilterType => 'Distribution';
+
+  @override
+  String get eventsAll => 'All';
+
+  @override
+  String get eventsShinyYes => 'Shiny or can be';
+
+  @override
+  String get eventsShinyNo => 'Not shiny';
+
+  @override
+  String get eventsRegionJapan => 'Japan';
+
+  @override
+  String get eventsRegionInternational =>
+      'West (English, French, Italian, German, Spanish)';
+
+  @override
+  String get eventsRegionKorea => 'Korea';
+
+  @override
+  String get eventsRegionChina => 'China and Taiwan';
+
+  @override
+  String get eventsTypeCard => 'Mystery Gift card';
+
+  @override
+  String get eventsTypeHome => 'Pokémon HOME';
+
+  @override
+  String get eventsTypeGen3 => 'Gen 3 event (cartridge, e-Reader, stores)';
+
+  @override
+  String get eventsTypePokemonCenter => 'Pokémon Center (Gen 3)';
+
+  @override
+  String get eventsEmpty => 'No event matches these filters.';
+
+  @override
+  String eventsCount(int count) {
+    return '$count events';
+  }
+
+  @override
+  String eventsEntry(String games, int nGen, int nLevel) {
+    return 'Gen $nGen · Lv. $nLevel · $games';
+  }
+
+  @override
+  String eventsManyLanguages(int count) {
+    return '$count languages';
+  }
+
+  @override
+  String eventsCardNo(int nId) {
+    return 'Card #$nId';
+  }
+
+  @override
+  String get eventsEnded => 'Distribution ended';
+
+  @override
+  String get eventsDetailCard => 'Card';
+
+  @override
+  String get eventsDetailMethod => 'PID/IV method';
+
+  @override
+  String get eventsDetailGames => 'Games';
+
+  @override
+  String get eventsDetailDate => 'Date';
+
+  @override
+  String eventsDetailWindow(String end, String start) {
+    return 'From $start to $end';
+  }
+
+  @override
+  String eventsDetailWindowOpen(String start) {
+    return 'Since $start';
+  }
+
+  @override
+  String get eventsDetailShiny => 'Shiny';
+
+  @override
+  String get eventsDetailEgg => 'Egg';
+
+  @override
+  String get eventsDetailLevel => 'Level';
+
+  @override
+  String get eventsDetailOt => 'Original trainer';
+
+  @override
+  String get eventsDetailOtRecipient => 'The receiving trainer\'s';
+
+  @override
+  String get eventsDetailId => 'ID';
+
+  @override
+  String get eventsDetailBall => 'Poké Ball';
+
+  @override
+  String get eventsDetailLocation => 'Met location';
+
+  @override
+  String get eventsDetailMoves => 'Moves';
+
+  @override
+  String get eventsDetailRelearn => 'Relearn moves';
+
+  @override
+  String get eventsDetailItem => 'Held item';
+
+  @override
+  String get eventsDetailNature => 'Nature';
+
+  @override
+  String get eventsDetailIvs => 'IVs';
+
+  @override
+  String get eventsDetailRandom => 'Random';
+
+  @override
+  String get eventsDetailRibbons => 'Ribbons and marks';
+
+  @override
+  String get eventsDetailFateful => 'Fateful encounter';
+
+  @override
+  String get eventsShinyNever => 'Never';
+
+  @override
+  String get eventsShinyRandom => 'Can be (random PID)';
+
+  @override
+  String get eventsShinyAlways => 'Always';
+
+  @override
+  String get eventsShinyStar => 'Always (star)';
+
+  @override
+  String get eventsShinySquare => 'Always (square)';
+
+  @override
+  String get eventsShinyFixed => 'Card\'s fixed PID';
+
+  @override
+  String eventsNotCreatable(String reason) {
+    return 'PKHeX cannot generate this event legally ($reason): it can only be looked up.';
+  }
+
+  @override
+  String get eventsGen3Rng =>
+      'Its shiny PID comes from the Gen 3 RNG with the receiving trainer\'s ID: it cannot be recreated.';
+
+  @override
+  String get eventsLanguagePick => 'Pokémon language';
+
+  @override
+  String get eventsCreateShiny => 'Create shiny';
+
+  @override
+  String eventsOtherGame(String games) {
+    return 'It was distributed for $games: it will be created with that origin game (as if traded in).';
+  }
+
+  @override
+  String get eventsCreateHere => 'Create in this save';
+
+  @override
+  String eventsExportCard(String ext) {
+    return 'Export card (.$ext)';
+  }
+
+  @override
+  String get createFromEvent => 'From an event';
+
+  @override
+  String get createFromEventDesc =>
+      'An official gift (Mystery Gift) with its fixed data: OT, ID, moves, ribbons';
+
+  @override
+  String get importEventCard => 'Import event card';
+
+  @override
+  String get importEventCardDesc =>
+      'A .pgt, .pcd, .wc4, .pgf, .wc6, .wc7, .wb7, .wc8, .wb8, .wa8, .wc9 or .wa9 file';
+
+  @override
+  String get eventCardUnknown =>
+      'Unknown card: it is not in PKHeX\'s event database.';
+
+  @override
+  String eventCardWrongGame(String games) {
+    return 'This card is for $games: it cannot be received in this save.';
+  }
+
+  @override
+  String eventCreated(String name) {
+    return 'Event created: $name';
+  }
+
+  @override
+  String get dexEventsButton => 'Events';
+
+  @override
+  String dexSpeciesEvents(int count) {
+    return '$count official events (distribution ended)';
+  }
 }

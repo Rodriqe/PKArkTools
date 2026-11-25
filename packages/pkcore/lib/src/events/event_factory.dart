@@ -288,3 +288,26 @@ abstract final class EventFactory {
 extension on String {
   String characters(int max) => runes.length <= max ? this : String.fromCharCodes(runes.take(max));
 }
+
+/// Idioma probable de una partida (ids de PKHeX): el más común entre sus
+/// Pokémon del propio entrenador; [fallback] si no hay ninguno.
+int guessSaveLanguage(SaveEditor editor, {int fallback = 2}) {
+  final t = editor.readTrainer();
+  final count = <int, int>{};
+  void add(Pkm? pk) {
+    if (pk == null || pk.format.isGameBoy || pk.otName != t.name || pk.tid != t.tid) return;
+    final l = pk.language;
+    if (l > 0) count[l] = (count[l] ?? 0) + 1;
+  }
+
+  for (final pk in editor.party) {
+    add(pk);
+  }
+  for (var b = 0; b < editor.boxCount; b++) {
+    for (var s = 0; s < editor.boxSlotCount; s++) {
+      add(editor.get(SlotRef.box(b, s)));
+    }
+  }
+  if (count.isEmpty) return fallback;
+  return (count.entries.toList()..sort((a, b) => b.value.compareTo(a.value))).first.key;
+}

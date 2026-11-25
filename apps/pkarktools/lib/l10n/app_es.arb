@@ -646,7 +646,7 @@
   },
   "eventsNamed": "Con nombre",
   "eventsRaw": "Lista completa",
-  "eventsSearch": "Buscar por nombre o número",
+  "eventsSearch": "Buscar especie, tarjeta, OT o nº de tarjeta",
   "eventsUnsupported": "Este juego todavía no tiene editor de eventos.",
   "eventsNoMatch": "Nada coincide con la búsqueda.",
   "eventsUnnamed": "Sin nombre conocido",
@@ -2448,5 +2448,177 @@
   "shadowChangeEncounter": "Cambiar de Pokémon oscuro…",
   "shadowApplyTitle": "¿Sustituir por este Pokémon oscuro?",
   "shadowApplyBody": "Se cambian especie, nivel, movimientos, PID, IV, lugar, Ball y estado oscuro por los del encuentro, como lo capturaría el juego. El apodo y los demás cambios de este Pokémon se pierden.",
-  "shadowApplyConfirm": "Sustituir"
+  "shadowApplyConfirm": "Sustituir",
+  "yesLabel": "Sí",
+  "eventsTitle": "Eventos (Regalo Misterioso)",
+  "eventsPickTitle": "Crear desde un evento",
+  "eventsSubtitle": "{count} distribuciones oficiales de la base de PKHeX, de Gen 3 a Gen 9. Todas han terminado: puedes consultar sus datos, exportar la tarjeta y recrearlas en una partida compatible.",
+  "@eventsSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventsFilterGen": "Generación",
+  "eventsFilterGame": "Juego",
+  "eventsFilterYear": "Año",
+  "eventsFilterRegion": "Región",
+  "eventsFilterLanguage": "Idioma",
+  "eventsFilterShiny": "Variocolor",
+  "eventsFilterType": "Distribución",
+  "eventsAll": "Todos",
+  "eventsShinyYes": "Variocolor o puede serlo",
+  "eventsShinyNo": "No variocolor",
+  "eventsRegionJapan": "Japón",
+  "eventsRegionInternational": "Occidente (inglés, francés, italiano, alemán, español)",
+  "eventsRegionKorea": "Corea",
+  "eventsRegionChina": "China y Taiwán",
+  "eventsTypeCard": "Tarjeta de Regalo Misterioso",
+  "eventsTypeHome": "Pokémon HOME",
+  "eventsTypeGen3": "Evento de Gen 3 (cartucho, e-Reader, tiendas)",
+  "eventsTypePokemonCenter": "Pokémon Center (Gen 3)",
+  "eventsEmpty": "Ningún evento con estos filtros.",
+  "eventsCount": "{count} eventos",
+  "@eventsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventsEntry": "Gen {nGen} · Nv. {nLevel} · {games}",
+  "@eventsEntry": {
+    "placeholders": {
+      "games": {
+        "type": "String"
+      },
+      "nGen": {
+        "type": "int"
+      },
+      "nLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "eventsManyLanguages": "{count} idiomas",
+  "@eventsManyLanguages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventsCardNo": "Tarjeta nº {nId}",
+  "@eventsCardNo": {
+    "placeholders": {
+      "nId": {
+        "type": "int"
+      }
+    }
+  },
+  "eventsEnded": "Distribución terminada",
+  "eventsDetailCard": "Tarjeta",
+  "eventsDetailMethod": "Método PID/IV",
+  "eventsDetailGames": "Juegos",
+  "eventsDetailDate": "Fecha",
+  "eventsDetailWindow": "Del {start} al {end}",
+  "@eventsDetailWindow": {
+    "placeholders": {
+      "end": {
+        "type": "String"
+      },
+      "start": {
+        "type": "String"
+      }
+    }
+  },
+  "eventsDetailWindowOpen": "Desde el {start}",
+  "@eventsDetailWindowOpen": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      }
+    }
+  },
+  "eventsDetailShiny": "Variocolor",
+  "eventsDetailEgg": "Huevo",
+  "eventsDetailLevel": "Nivel",
+  "eventsDetailOt": "Entrenador original",
+  "eventsDetailOtRecipient": "El de quien lo recibe",
+  "eventsDetailId": "ID",
+  "eventsDetailBall": "Poké Ball",
+  "eventsDetailLocation": "Lugar de encuentro",
+  "eventsDetailMoves": "Movimientos",
+  "eventsDetailRelearn": "Recordables",
+  "eventsDetailItem": "Objeto",
+  "eventsDetailNature": "Naturaleza",
+  "eventsDetailIvs": "IV",
+  "eventsDetailRandom": "Al azar",
+  "eventsDetailRibbons": "Cintas y marcas",
+  "eventsDetailFateful": "Encuentro fatídico",
+  "eventsShinyNever": "Nunca",
+  "eventsShinyRandom": "Puede serlo (PID al azar)",
+  "eventsShinyAlways": "Siempre",
+  "eventsShinyStar": "Siempre (estrella)",
+  "eventsShinySquare": "Siempre (cuadrado)",
+  "eventsShinyFixed": "PID fijo de la tarjeta",
+  "eventsNotCreatable": "PKHeX no puede generar este evento de forma legal ({reason}): solo se puede consultar.",
+  "@eventsNotCreatable": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "eventsGen3Rng": "Su PID variocolor sale del RNG de Gen 3 con el ID de quien lo recibe: no se puede recrear.",
+  "eventsLanguagePick": "Idioma del Pokémon",
+  "eventsCreateShiny": "Crear variocolor",
+  "eventsOtherGame": "Se repartió para {games}: se creará con ese juego de origen (como si llegara por intercambio).",
+  "@eventsOtherGame": {
+    "placeholders": {
+      "games": {
+        "type": "String"
+      }
+    }
+  },
+  "eventsCreateHere": "Crear en esta partida",
+  "eventsExportCard": "Exportar tarjeta (.{ext})",
+  "@eventsExportCard": {
+    "placeholders": {
+      "ext": {
+        "type": "String"
+      }
+    }
+  },
+  "createFromEvent": "Desde un evento",
+  "createFromEventDesc": "Un regalo oficial (Regalo Misterioso) con sus datos fijos: OT, ID, movimientos, cintas",
+  "importEventCard": "Importar tarjeta de evento",
+  "importEventCardDesc": "Archivo .pgt, .pcd, .wc4, .pgf, .wc6, .wc7, .wb7, .wc8, .wb8, .wa8, .wc9 o .wa9",
+  "eventCardUnknown": "No reconozco esta tarjeta: no está en la base de eventos de PKHeX.",
+  "eventCardWrongGame": "Esta tarjeta es de {games}: no se puede recibir en esta partida.",
+  "@eventCardWrongGame": {
+    "placeholders": {
+      "games": {
+        "type": "String"
+      }
+    }
+  },
+  "eventCreated": "Evento creado: {name}",
+  "@eventCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dexEventsButton": "Eventos",
+  "dexSpeciesEvents": "{count} eventos oficiales (distribución terminada)",
+  "@dexSpeciesEvents": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
