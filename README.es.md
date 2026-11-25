@@ -66,8 +66,8 @@ qué cambia y de la legalidad en el destino (cada salto se valida contra
 PKHeX). La app solo puede garantizar la continuidad **hasta Alola** (Gen 7): a
 partir de ahí, el rastreador de HOME lo genera la app, no los servidores de
 HOME, así que recomendamos no subir esos Pokémon a HOME. La ruta recomendada a
-Switch: transferir con la app hasta Sol/Luna o Ultrasol/Ultraluna (**Llevarlo
-a Alola y seguir con Bank/HOME**) y seguir con Pokémon Bank → Pokémon HOME
+Switch: transferir con la app hasta Sol/Luna o Ultrasol/Ultraluna (**Llevar hasta
+Alola y continuar con Banco/HOME**) y seguir con Pokémon Bank → Pokémon HOME
 oficiales. Un **detector de clones de HOME** (Ajustes) encuentra Pokémon que
 comparten rastreador. [Guía de transferencias](docs/usuario/transferir.md).
 

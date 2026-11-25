@@ -186,6 +186,10 @@ no se pudo comprobar) y la opción **Buscar actualizaciones automáticamente**
 (activada por defecto; desactívala si no quieres ninguna consulta al abrir).
 Sin red, la búsqueda automática no muestra nada.
 
+Ahí mismo se recuerda que **PKArkTools no está afiliado a Nintendo, The
+Pokémon Company ni Game Freak**. La app no incluye ni enlaza ROMs, claves ni
+firmware: usa solo tus propios saves.
+
 <p>
   <img src="../screenshots/android/v2_47_update_notice.png" width="200" alt="Aviso de versión nueva en Ajustes (Android)">
   <img src="../screenshots/android/v2_48_update_sheet.png" width="200" alt="Novedades y botón Actualizar (Android)">

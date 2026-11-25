@@ -4,7 +4,7 @@
 |---|---|
 | Android | APK de la página de *Releases* (o desde la propia app: Ajustes → Actualizaciones). |
 | Windows | Instalador `…-windows-x64-setup.exe` o zip portátil. Sin firma: SmartScreen puede avisar (**Más información → Ejecutar de todas formas**). |
-| macOS | Zip de `PKArkTools.app`; la primera vez, clic derecho → **Abrir**. |
+| macOS | `…-macos.dmg`: arrastra PKArkTools a Aplicaciones. Va firmada y notarizada por Apple, así que se abre con doble clic (si una build saliera sin notarizar, las notas del release lo dicen: la primera vez, clic derecho → **Abrir**). El actualizador de la app usa el `…-macos.zip`. |
 | Linux | `tar.gz` con la carpeta `PKArkTools/`. |
 | iPhone / iPad | Con **AltStore** y tu propio Apple ID (abajo). |
 

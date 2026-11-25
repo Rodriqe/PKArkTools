@@ -24,6 +24,18 @@ Transporter, Pokémon Bank y Pokémon HOME).
 Las dos partidas se guardan como **copias nuevas** en el Arca; las anteriores
 siguen en el historial, así que siempre puedes volver atrás.
 
+Los Pokémon de **evento** y los de la **Living Dex** se transfieren igual que
+los demás y siguen siendo legales en el destino (comprobado con PKHeX). En
+Espada/Escudo, quien recibe el Pokémon pasa a ser su último entrenador con el
+recuerdo de intercambio, como en el juego.
+
+## Detector de clones de HOME
+
+**Ajustes → Clones de HOME → Buscar clones en el Arca** revisa la última copia
+de cada partida y lista los Pokémon que comparten rastreador de HOME (son
+copias del mismo Pokémon), con la partida y la caja de cada uno. HOME puede
+rechazarlos o marcarlos: conserva solo uno.
+
 ## Reglas que se respetan
 
 | Paso | Qué hace |
