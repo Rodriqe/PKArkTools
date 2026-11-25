@@ -1,0 +1,122 @@
+import 'dart:io' as io;
+import 'dart:math';
+import 'dart:typed_data';
+
+import 'package:pkcore/pkcore.dart';
+import 'package:pkcore/testing.dart';
+import 'package:test/test.dart';
+
+/// Base de eventos (Mystery Gift) de PKHeX y creación de Pokémon de evento.
+///
+/// Con `EVENTS_OUT=<carpeta>` escribe además saves sintéticos con todos los
+/// eventos creados (dos entrenadores distintos por formato) para comprobarlos
+/// con el oráculo PKHeX (`tool/check_events_pkhex.sh`).
+const _trainers = [
+  (SynthTrainer(name: 'Prueba', tid: 4242, sid: 31337, gender: 1), 7, false),
+  (SynthTrainer(name: 'Tester', tid: 60123, sid: 999, gender: 0), 2, true),
+];
+
+/// Save sintético vacío de cada formato con el entrenador [t].
+(GameVersion, Uint8List) syntheticFor(PkFormat f, SynthTrainer t) => switch (f) {
+      PkFormat.pk3 => (GameVersion.emerald, SyntheticSaves.gen3(trainer: t)),
+      PkFormat.pk4 => (GameVersion.heartGoldSoulSilver, SyntheticSaves.gen4(layout: Gen4Layout.hgss, trainer: t)),
+      PkFormat.pk5 => (GameVersion.black2White2, SyntheticSaves.gen5(layout: Gen5Layout.b2w2, trainer: _v(t, 22))),
+      PkFormat.pk6 => (GameVersion.omegaRubyAlphaSapphire, SyntheticSaves.ctr(layout: CtrLayout.oras, trainer: _v(t, 26))),
+      PkFormat.pk7 => (GameVersion.ultraSunUltraMoon, SyntheticSaves.ctr(layout: CtrLayout.usum, trainer: _v(t, 32))),
+      PkFormat.pb7 => (GameVersion.letsGo, SyntheticSaves.letsGo(trainer: _v(t, 42))),
+      PkFormat.pk8 => (GameVersion.swordShield, SyntheticSaves.swordShield(trainer: _v(t, 44))),
+      PkFormat.pb8 => (GameVersion.brilliantDiamondShiningPearl, SyntheticSaves.bdsp(trainer: t)),
+      PkFormat.pa8 => (GameVersion.legendsArceus, SyntheticSaves.legendsArceus(trainer: t)),
+      PkFormat.pk9 => (GameVersion.scarletViolet, SyntheticSaves.scarletViolet(trainer: _v(t, 50))),
+      PkFormat.pa9 => (GameVersion.legendsZA, SyntheticSaves.legendsZA(trainer: t)),
+      _ => throw ArgumentError(f),
+    };
+
+SynthTrainer _v(SynthTrainer t, int v) =>
+    SynthTrainer(name: t.name, tid: t.tid, sid: t.sid, gender: t.gender, versionId: v);
+
+void main() {
+  group('base de eventos', () {
+    final all = EventDb.all;
+    test('todos los eventos de PKHeX (Gen 3–9) con plantilla legal', () {
+      expect(all.length, greaterThan(2900));
+      final dbs = {for (final g in all) g.db};
+      expect(dbs, containsAll(['wc3', 'pcny', 'pcjp', 'pcd', 'pgf', 'wc6', 'wc7', 'wb7', 'wc8', 'wb8', 'wa8', 'wc9', 'wa9']));
+      final creatable = all.where((g) => g.canCreate).length;
+      expect(creatable, greaterThan(all.length - 10));
+      for (final g in all) {
+        expect(Species.isValid(g.species), isTrue, reason: '$g');
+        if (!g.canCreate) continue;
+        final pk = g.template()!;
+        expect(pk.species, g.species, reason: '$g');
+        expect(pk.checksumValid, isTrue, reason: '$g');
+      }
+    });
+
+    test('datos fijos: Mew de Gen 3 (MYSTRY) y tarjetas con fecha', () {
+      final mew = all.firstWhere((g) => g.db == 'wc3' && g.species == 151 && g.fixedOtName == 'MYSTRY');
+      expect(mew.shiny, EventShiny.never);
+      expect(mew.distribution, EventDistribution.gen3);
+      expect(mew.template()!.otName, 'MYSTRY');
+      expect(mew.cardExtension, isNull);
+      final withYear = all.where((g) => g.year != null).length;
+      expect(withYear, greaterThan(1500));
+      final home = all.where((g) => g.distribution == EventDistribution.home);
+      expect(home, isNotEmpty);
+    });
+
+    test('regiones e idiomas', () {
+      final jp = all.where((g) => g.regions.contains(EventRegion.japan)).length;
+      final intl = all.where((g) => g.regions.contains(EventRegion.international)).length;
+      final kor = all.where((g) => g.regions.contains(EventRegion.korea)).length;
+      expect(jp, greaterThan(300));
+      expect(intl, greaterThan(300));
+      expect(kor, greaterThan(50));
+    });
+
+    test('tarjeta en bruto: se reconoce al importarla', () {
+      final g = all.firstWhere((g) => g.db == 'wc7' && g.canCreate);
+      final raw = g.rawCard!;
+      expect(EventDb.byRawCard(raw), same(g));
+    });
+  });
+
+  group('crear desde un evento', () {
+    final rnd = Random(7);
+    for (final f in [PkFormat.pk3, PkFormat.pk4, PkFormat.pk5, PkFormat.pk6, PkFormat.pk7, PkFormat.pb7, PkFormat.pk8, PkFormat.pb8, PkFormat.pa8, PkFormat.pk9, PkFormat.pa9]) {
+      test('${f.extension}: datos del receptor y regla de variocolor', () {
+        final (game, raw) = syntheticFor(f, _trainers.first.$1);
+        final ed = SaveEditor.open(raw);
+        final t = ed.readTrainer();
+        final gifts = EventDb.creatableIn(game);
+        expect(gifts, isNotEmpty);
+        for (final g in gifts) {
+          final pk = EventFactory.create(g, game, t, language: 7, versionId: ed.versionId, random: rnd);
+          expect(pk.species, g.species, reason: '$g');
+          if (g.recipientOt && !(f == PkFormat.pk3 && pk.language == 1)) expect(pk.otName, t.name.length > f.maxTrainerNameLength ? anything : t.name, reason: '$g');
+          if (g.recipientId) expect((pk.tid, pk.sid), (t.tid, t.sid), reason: '$g');
+          if (g.shiny == EventShiny.never) expect(pk.isShiny, isFalse, reason: '$g');
+          if (g.shiny.isShiny && f.generation >= 5) expect(pk.isShiny, isTrue, reason: '$g');
+          expect(pk.checksumValid, isTrue);
+        }
+      });
+    }
+  });
+
+  final out = io.Platform.environment['EVENTS_OUT'];
+  test('archivos para el oráculo PKHeX', skip: out == null ? 'sin EVENTS_OUT' : null, () {
+    io.Directory(out!).createSync(recursive: true);
+    for (final f in [PkFormat.pk3, PkFormat.pk4, PkFormat.pk5, PkFormat.pk6, PkFormat.pk7, PkFormat.pb7, PkFormat.pk8, PkFormat.pb8, PkFormat.pa8, PkFormat.pk9, PkFormat.pa9]) {
+      for (var ti = 0; ti < _trainers.length; ti++) {
+        final (st, lang, shiny) = _trainers[ti];
+        final (game, raw) = syntheticFor(f, st);
+        final ed = SaveEditor.open(raw);
+        for (final g in EventDb.creatableIn(game)) {
+          final pk = EventFactory.create(g, game, ed.readTrainer(),
+              language: lang, versionId: ed.versionId, shiny: shiny && EventFactory.canBeShiny(g) ? true : null, random: Random(g.id));
+          io.File('$out/ev_${g.db}_${g.dbIndex}_$ti.${f.extension}').writeAsBytesSync(pk.toFile());
+        }
+      }
+    }
+  });
+}

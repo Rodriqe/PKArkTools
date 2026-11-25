@@ -215,20 +215,24 @@ static class EventTable
         row["tplVersion"] = (int)tv;
         row["tplLang"] = tl;
         row["format"] = tpl.GetType().Name.ToLowerInvariant();
-        var stored = new byte[tpl.SIZE_STORED];
-        tpl.WriteDecryptedDataStored(stored);
+        tpl.ResetPartyStats();
+        var stored = new byte[tpl.SIZE_PARTY];
+        tpl.WriteDecryptedDataParty(stored);
         row["tpl"] = Convert.ToBase64String(stored);
 
         // 2) Versiones e idiomas aceptados.
+        // Versión de origen que pone PKHeX con un entrenador de cada versión: si la
+        // tarjeta no la fija, es la del entrenador (y debe seguir siendo legal).
         var okVersions = new JsonArray();
+        var seenVer = new HashSet<int>();
         var locByVer = new JsonObject();
         foreach (var v in versions)
         {
             var pv = Make(g, Trainer(v, tl));
-            if (!Legal(pv, out _)) continue;
-            okVersions.Add((int)v);
-            if (pv!.MetLocation != tpl.MetLocation || pv.EggLocation != tpl.EggLocation)
-                locByVer[((int)v).ToString()] = $"{pv.MetLocation}|{pv.EggLocation}";
+            if (!Legal(pv, out _) || !seenVer.Add((int)pv!.Version)) continue;
+            okVersions.Add((int)pv.Version);
+            if (pv.MetLocation != tpl.MetLocation || pv.EggLocation != tpl.EggLocation)
+                locByVer[((int)pv.Version).ToString()] = $"{pv.MetLocation}|{pv.EggLocation}";
         }
         row["versions"] = okVersions;
         if (locByVer.Count > 0) row["locByVer"] = locByVer;
@@ -255,9 +259,13 @@ static class EventTable
         var other = Make(g, Trainer(tv, tl, alt: true));
         if (other != null)
         {
-            row["recvOt"] = other.OriginalTrainerName != tpl.OriginalTrainerName;
-            row["recvId"] = other.ID32 != tpl.ID32;
-            row["recvGender"] = other.OriginalTrainerGender != tpl.OriginalTrainerGender;
+            // Del receptor solo si coincide con el entrenador en ambos casos (los
+            // regalos del Pokémon Center de Gen 3 sacan el ID del RNG, no del receptor).
+            var b = Trainer(tv, tl, alt: true);
+            var a = Trainer(tv, tl);
+            row["recvOt"] = other.OriginalTrainerName == b.OT && tpl.OriginalTrainerName == a.OT;
+            row["recvId"] = other.TID16 == b.TID16 && tpl.TID16 == a.TID16;
+            row["recvGender"] = other.OriginalTrainerGender == b.Gender && tpl.OriginalTrainerGender == a.Gender;
             row["recvLang"] = other.Language != tpl.Language;
             row["altLegal"] = Legal(other, out _);
         }
@@ -280,7 +288,7 @@ static class EventTable
 
     static int IV32_HashOrZero(this PKM pk) => pk.IV_HP | (pk.IV_ATK << 5) | (pk.IV_DEF << 10) | (pk.IV_SPE << 15) | (pk.IV_SPA << 20) | (pk.IV_SPD << 25);
 
-    /// PID(4) EC(4) IV×6 naturaleza naturaleza-stat nº habilidad género altura peso = 20 bytes.
+    /// PID(4) EC(4) IV×6 naturaleza naturaleza-stat nº habilidad género habilidad(2) = 20 bytes.
     static string Variant(PKM pk)
     {
         var b = new byte[20];
@@ -289,8 +297,10 @@ static class EventTable
         b[8] = (byte)pk.IV_HP; b[9] = (byte)pk.IV_ATK; b[10] = (byte)pk.IV_DEF;
         b[11] = (byte)pk.IV_SPE; b[12] = (byte)pk.IV_SPA; b[13] = (byte)pk.IV_SPD;
         b[14] = (byte)pk.Nature; b[15] = (byte)pk.StatAlignment;
-        b[16] = (byte)pk.AbilityNumber; b[17] = pk.Gender;
-        if (pk is IScaledSize s) { b[18] = s.HeightScalar; b[19] = s.WeightScalar; }
+        // Gen 3: el bit de habilidad guardado (en especies de una habilidad no se deduce del nº).
+        b[16] = pk is PK3 p3 ? (byte)(p3.AbilityBit ? 2 : 1) : (byte)pk.AbilityNumber;
+        b[17] = pk.Gender;
+        BitConverter.TryWriteBytes(b.AsSpan(18), (ushort)pk.Ability);
         return Convert.ToBase64String(b);
     }
 }

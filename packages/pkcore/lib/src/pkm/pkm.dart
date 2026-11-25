@@ -174,6 +174,8 @@ class Pkm {
   int computeChecksum() => switch (format) {
         PkFormat.pk1 || PkFormat.pk2 => 0,
         PkFormat.pk3 => PkCrypto.checksum3(data),
+        // PB7: como PKHeX (`G6PKM`), solo los 0xE8 bytes de PK6/PK7 aunque guarde 0x104.
+        PkFormat.pb7 => Checksums.add16(data, 8, 0xE8),
         _ => Checksums.add16(data, 8, format.storedSize),
       };
 
