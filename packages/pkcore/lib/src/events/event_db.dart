@@ -309,3 +309,88 @@ abstract final class EventDb {
     return null;
   }
 }
+
+/// Filtro del explorador de eventos (todos los campos opcionales).
+class EventFilter {
+  const EventFilter({
+    this.text = '',
+    this.generation,
+    this.game,
+    this.year,
+    this.region,
+    this.language,
+    this.shiny,
+    this.distribution,
+    this.creatableIn,
+    this.species,
+  });
+
+  /// Texto: especie (es/en), título de la tarjeta, OT o nº de tarjeta.
+  final String text;
+  final int? generation;
+  final GameVersion? game;
+  final int? year;
+  final EventRegion? region;
+  final int? language;
+
+  /// true = solo variocolor (o que pueden serlo); false = solo no variocolor.
+  final bool? shiny;
+  final EventDistribution? distribution;
+
+  /// Solo los que se pueden crear en una partida de este juego.
+  final GameVersion? creatableIn;
+  final int? species;
+
+  bool get isEmpty =>
+      text.trim().isEmpty &&
+      generation == null &&
+      game == null &&
+      year == null &&
+      region == null &&
+      language == null &&
+      shiny == null &&
+      distribution == null &&
+      species == null;
+
+  List<EventGift> apply(Iterable<EventGift> gifts, {required String Function(int species) nameEs, required String Function(int species) nameEn}) {
+    final q = text.trim().toLowerCase();
+    final f = creatableIn == null || creatableIn!.isStorage || creatableIn!.isColosseumOrXd ? null : PkFormat.forGame(creatableIn!);
+    return [
+      for (final g in gifts)
+        if ((species == null || g.species == species) &&
+            (generation == null || g.generation == generation) &&
+            (game == null || g.games.contains(game)) &&
+            (year == null || g.year == year) &&
+            (region == null || g.regions.contains(region)) &&
+            (language == null || g.languages.contains(language)) &&
+            (shiny == null || (shiny! ? (g.shiny.isShiny || g.shiny == EventShiny.random) : !g.shiny.isShiny)) &&
+            (distribution == null || g.distribution == distribution) &&
+            (creatableIn == null || (f != null && g.canCreate && g.format == f)) &&
+            (q.isEmpty || _text(g, q, nameEs, nameEn)))
+          g,
+    ];
+  }
+
+  static bool _text(EventGift g, String q, String Function(int) es, String Function(int) en) {
+    if (es(g.species).toLowerCase().contains(q) || en(g.species).toLowerCase().contains(q)) return true;
+    if (g.title.toLowerCase().contains(q)) return true;
+    if (g.cardId > 0 && g.cardId.toString() == q) return true;
+    final ot = g.fixedOtName ?? (g.recipientOt ? null : g.template()?.otName);
+    if (ot != null && ot.toLowerCase().contains(q)) return true;
+    return g.otByLanguage.values.any((o) => o.toLowerCase().contains(q));
+  }
+}
+
+/// Nombre de idioma (ids de PKHeX `LanguageID`).
+String eventLanguageName(int id, {bool es = true}) => switch (id) {
+      1 => es ? 'Japonés' : 'Japanese',
+      2 => es ? 'Inglés' : 'English',
+      3 => es ? 'Francés' : 'French',
+      4 => es ? 'Italiano' : 'Italian',
+      5 => es ? 'Alemán' : 'German',
+      7 => es ? 'Español' : 'Spanish',
+      8 => es ? 'Coreano' : 'Korean',
+      9 => es ? 'Chino simplificado' : 'Simplified Chinese',
+      10 => es ? 'Chino tradicional' : 'Traditional Chinese',
+      _ => '#$id',
+    };

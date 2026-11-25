@@ -97,6 +97,48 @@ void main() {
     });
   });
 
+  group('explorador: filtros y datos fijos', () {
+    String es(int s) => Species.name(s, SpeciesLanguage.es);
+    String en(int s) => Species.name(s, SpeciesLanguage.en);
+    final all = EventDb.all;
+    test('filtros', () {
+      final mew = const EventFilter(text: 'mew').apply(all, nameEs: es, nameEn: en);
+      expect(mew, isNotEmpty);
+      expect(mew.every((g) => g.species == 151 || g.species == 150 || es(g.species).toLowerCase().contains('mew') || g.title.toLowerCase().contains('mew')), isTrue);
+      final jp4 = const EventFilter(generation: 4, region: EventRegion.japan).apply(all, nameEs: es, nameEn: en);
+      expect(jp4, isNotEmpty);
+      expect(jp4.every((g) => g.generation == 4 && g.languages.contains(1)), isTrue);
+      final shiny = const EventFilter(shiny: true, generation: 8).apply(all, nameEs: es, nameEn: en);
+      expect(shiny.every((g) => g.shiny != EventShiny.never), isTrue);
+      final swsh = const EventFilter(creatableIn: GameVersion.swordShield).apply(all, nameEs: es, nameEn: en);
+      expect(swsh, isNotEmpty);
+      expect(swsh.every((g) => g.format == PkFormat.pk8), isTrue);
+      final y2020 = const EventFilter(year: 2020).apply(all, nameEs: es, nameEn: en);
+      expect(y2020, isNotEmpty);
+      final home = const EventFilter(distribution: EventDistribution.home).apply(all, nameEs: es, nameEn: en);
+      expect(home.every((g) => g.isHome), isTrue);
+      expect(const EventFilter().isEmpty, isTrue);
+      expect(eventLanguageName(7), 'Español');
+    });
+
+    test('datos fijos de la ficha', () {
+      final mew = all.firstWhere((g) => g.db == 'wc3' && g.fixedOtName == 'MYSTRY');
+      final d = EventDetails.of(mew)!;
+      expect(d.otName, 'MYSTRY');
+      expect(d.level, 10);
+      expect(d.moves, contains(1)); // Destructor
+      expect(d.displayId, '06930');
+      // Algún evento con los 6 IV fijos y alguno con naturaleza fija.
+      expect(all.where((g) => g.canCreate).map(EventDetails.of).any((x) => x != null && x.fixedIvs.every((v) => v != null)), isTrue);
+      expect(all.where((g) => g.canCreate && g.generation >= 6).map(EventDetails.of).any((x) => x?.fixedNature != null), isTrue);
+      // Cintas de evento (Clásica, Evento…) en las plantillas de Gen 6+.
+      expect(all.where((g) => g.generation >= 6 && g.canCreate).map(EventDetails.of).any((x) => x!.ribbons.isNotEmpty), isTrue);
+      final recv = all.firstWhere((g) => g.recipientOt && g.recipientId && g.canCreate);
+      expect(EventDetails.of(recv)!.otName, isNull);
+      expect(EventDetails.of(recv)!.displayId, isNull);
+    });
+  });
+
   group('crear desde un evento', () {
     final rnd = Random(7);
     for (final f in [PkFormat.pk3, PkFormat.pk4, PkFormat.pk5, PkFormat.pk6, PkFormat.pk7, PkFormat.pb7, PkFormat.pk8, PkFormat.pb8, PkFormat.pa8, PkFormat.pk9, PkFormat.pa9]) {
