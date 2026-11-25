@@ -194,16 +194,30 @@ jobs:
       - name: flutter build macos --release
         working-directory: apps/pkarktools
         run: flutter build macos --release
-      - name: Zip PKArkTools.app
+      - name: Sign, notarize and package (DMG + zip for the in-app updater)
+        # Opcionales: sin MACOS_CERT_P12_BASE64 sale el zip con la firma ad hoc
+        # de siempre y un aviso; sin la clave de la API se firma sin notarizar.
+        # El script usa un llavero temporal que borra al terminar
+        # (ver docs/publicacion.md#firma-y-notarización-de-macos).
+        env:
+          MACOS_CERT_P12_BASE64: ${{ secrets.MACOS_CERT_P12_BASE64 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+          APPLE_API_KEY_P8_BASE64: ${{ secrets.APPLE_API_KEY_P8_BASE64 }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           label="${GITHUB_REF_NAME//\//-}"
-          ditto -c -k --sequesterRsrc --keepParent \
+          tool/macos_sign_notarize.sh \
             apps/pkarktools/build/macos/Build/Products/Release/PKArkTools.app \
-            "PKArkTools-${label}-macos.zip"
+            "$label" .
       - uses: actions/upload-artifact@v4
         with:
           name: macos-app
-          path: PKArkTools-*-macos.zip
+          path: |
+            PKArkTools-*-macos.zip
+            PKArkTools-*-macos.dmg
+          if-no-files-found: error
 
   release:
     name: GitHub Release (draft)

@@ -86,6 +86,11 @@ developer documentation in `docs/` is in Spanish.
 
 - The sidebar logo is much larger (96 px on the extended rail, 72 px on the
   compact one) with the name below it.
+- **The macOS app is now signed and notarized.** The release is signed with
+  Developer ID with the hardened runtime and notarized by Apple, so it opens
+  with a double-click (no more right-click → Open). It also comes as a
+  `PKArkTools-vX.Y.Z-macos.dmg`; the `-macos.zip` used by the in-app updater
+  stays.
 
 ### Fixed
 

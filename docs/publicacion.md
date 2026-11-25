@@ -101,7 +101,7 @@ R8 activo con `proguard.map` y símbolos nativos dentro del bundle ✅.
 | MAC-3 | 🔴 | El target macOS **no tiene equipo** (`DEVELOPMENT_TEAM`) y la firma de la build local es *ad hoc* con `get-task-allow`. | `macos/Runner.xcodeproj/project.pbxproj` | Owner: asignar el equipo en Xcode (Signing & Capabilities) y archivar con firma de distribución (*Apple Distribution* + perfil Mac App Store), que quita `get-task-allow`. |
 | MAC-4 | 🟠 | Falta `LSApplicationCategoryType` (categoría), que App Store Connect pide para apps de Mac. | `macos/Runner/Info.plist` | Decisión del owner (p. ej. `public.app-category.utilities`). |
 | MAC-5 | 🟢 | Sin `PrivacyInfo.xcprivacy` en el target macOS (Apple lo exige en iOS; en macOS se recomienda). | `macos/Runner/` | Copiar el de iOS y añadirlo al target. |
-| MAC-6 | 🟢 | Sin *hardened runtime* explícito. No hace falta para la Mac App Store (basta el sandbox), sí para distribuir fuera con notarización. | `project.pbxproj` | Si se distribuye fuera de la tienda: `ENABLE_HARDENED_RUNTIME = YES` y notarizar. |
+| MAC-6 | 🟢 ✅ en CI | Sin *hardened runtime* explícito. No hace falta para la Mac App Store (basta el sandbox), sí para distribuir fuera con notarización. | `project.pbxproj` | El job `macos` del tag vuelve a firmar la app con Developer ID y *hardened runtime* y la notariza ([Firma y notarización de macOS](#firma-y-notarización-de-macos)). Falta que el owner cargue los secretos. |
 | MAC-7 | ✅ | Capturas de 2880×1800 (`docs/screenshots/v2/mac_*`) válidas para la Mac App Store (16:10). Iconos con alfa: correcto en macOS. *Deployment target* 12.0; binario universal (arm64 + x86_64). | — | Ninguna. |
 
 ## Accesibilidad y localización
@@ -165,6 +165,75 @@ Hechos técnicos (sin opinión legal):
 | `CFBundleLocalizations` (es, en) en iOS y macOS | `ios/Runner/Info.plist`, `macos/Runner/Info.plist` |
 | `NSPhotoLibraryUsageDescription` (Photos enlazado por file_picker) | `ios/Runner/Info.plist` |
 | Parche de `apkanalyzer` para rutas con espacios (sin él, `flutter build appbundle` acababa en error) | `tool/android_setup.sh` |
+
+## Firma y notarización de macOS
+
+Fuera de la Mac App Store, Gatekeeper solo abre con doble clic una app
+firmada con **Developer ID Application**, con *hardened runtime* y
+**notarizada** por Apple. El job `macos` del workflow (solo en tags `v*` y
+lanzamientos manuales) lo hace con `tool/macos_sign_notarize.sh`:
+
+1. Importa el `.p12` en un llavero temporal del runner (se borra al terminar).
+2. Firma de dentro hacia fuera: cada `.dylib` y `.framework` de
+   `Contents/Frameworks` y después `PKArkTools.app` con
+   `apps/pkarktools/macos/Runner/Release.entitlements` (sandbox,
+   `network.client`, `files.user-selected.read-write`,
+   `files.bookmarks.app-scope`), `--options runtime` y sello de tiempo.
+3. `xcrun notarytool submit --wait` con la clave de la API y
+   `xcrun stapler staple` de la app.
+4. Sube `PKArkTools-vX.Y.Z-macos.zip` (el que descarga el actualizador de la
+   app) y `PKArkTools-vX.Y.Z-macos.dmg`, firmado, notarizado y grapado.
+5. Comprueba con `spctl --assess` la app y el DMG.
+
+Sin `MACOS_CERT_P12_BASE64` el job hace lo de antes (zip con firma *ad hoc*)
+y lo avisa; sin la clave de la API firma pero no notariza. Ningún secreto
+que falte hace fallar el CI.
+
+### Qué tiene que hacer el owner (una vez)
+
+Hace falta estar en el **Apple Developer Program** (de pago).
+
+1. **Solicitud de certificado (CSR).** En el Mac: *Acceso a Llaveros →
+   Asistente para certificados → Solicitar un certificado de una autoridad
+   de certificación…*, con tu correo y nombre, «Guardado en el disco».
+2. **Certificado Developer ID Application.** En
+   [developer.apple.com](https://developer.apple.com/account/resources/certificates/list)
+   → *Certificates* → **+** → *Developer ID Application* (perfil G2 Sub-CA),
+   sube el CSR, descarga el `.cer` y ábrelo con doble clic (queda en el
+   llavero *Inicio de sesión*, junto a su clave privada).
+3. **Exportar como `.p12`.** En *Acceso a Llaveros → Mis certificados*, clic
+   derecho en «Developer ID Application: … (EQUIPO)» → *Exportar…* →
+   formato `.p12`, con una contraseña fuerte.
+4. **Clave de la API de App Store Connect.** En
+   [App Store Connect](https://appstoreconnect.apple.com/access/integrations/api)
+   → *Usuarios y acceso → Integraciones → App Store Connect API* → **+**, con
+   el rol **Developer**. Descarga el `.p8` (solo se puede descargar una vez) y
+   apunta el **Key ID** y el **Issuer ID** que aparecen en esa página.
+5. **Team ID**: en [developer.apple.com → Membership](https://developer.apple.com/account#MembershipDetailsCard)
+   (10 caracteres; también sale entre paréntesis en el nombre del certificado).
+6. **Cargar los 6 secretos** (desde la carpeta donde estén los archivos):
+
+   ```bash
+   base64 -i DeveloperID.p12 | gh secret set MACOS_CERT_P12_BASE64 -R Rodriqe/PKArkTools
+   gh secret set MACOS_CERT_PASSWORD -R Rodriqe/PKArkTools        # pide la contraseña del .p12
+   base64 -i AuthKey_XXXXXXXXXX.p8 | gh secret set APPLE_API_KEY_P8_BASE64 -R Rodriqe/PKArkTools
+   gh secret set APPLE_API_KEY_ID -R Rodriqe/PKArkTools           # Key ID
+   gh secret set APPLE_API_ISSUER_ID -R Rodriqe/PKArkTools        # Issuer ID
+   gh secret set APPLE_TEAM_ID -R Rodriqe/PKArkTools              # Team ID
+   ```
+
+   Si guardas un valor en un archivo de texto, también vale
+   `gh secret set NOMBRE -R Rodriqe/PKArkTools < archivo`.
+7. **Prueba**: *Actions → CI → Run workflow* sobre `main`. El log del paso
+   *Sign, notarize and package* debe mostrar `Notarization of …: Accepted` dos
+   veces y terminar con `spctl (app): accepted` y `spctl (DMG): accepted`. El
+   log es público: el script no imprime el nombre del certificado, el Team
+   ID, el Key ID ni el Issuer ID.
+
+**El `.p12`, el `.p8` y sus contraseñas nunca van al repo.** Guárdalos en
+`RESPALDO-PKArkTools` (excluida de git) y en tu gestor de contraseñas. Si se
+pierde el `.p8` se crea otra clave y se revoca la vieja; si se filtra el
+`.p12`, revoca el certificado en developer.apple.com.
 
 ## Qué requiere decisión o cuentas del owner
 

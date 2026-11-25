@@ -146,8 +146,10 @@ requests de forks) el APK sale con la clave debug y el job lo avisa.
    `git push origin main vX.Y.Z`.
 6. El workflow compila Android, Windows, Linux y macOS y crea un **borrador**
    de Release `PKArkTools vX.Y.Z` con las notas en inglés y los binarios:
-   `PKArkTools-vX.Y.Z.apk`, `…-macos.zip`, `…-windows-x64-setup.exe`,
-   `…-windows-x64.zip` y `…-linux-x64.tar.gz`.
+   `PKArkTools-vX.Y.Z.apk`, `…-macos.dmg`, `…-macos.zip`,
+   `…-windows-x64-setup.exe`, `…-windows-x64.zip` y `…-linux-x64.tar.gz`.
+   La app de macOS sale firmada con Developer ID y notarizada si están los
+   secretos ([Firma y notarización de macOS](publicacion.md#firma-y-notarización-de-macos)).
 7. Revisa el borrador en GitHub (*Releases*), descarga al menos el APK y la app
    de macOS para probarlos y pulsa **Publish release**.
 
@@ -163,8 +165,9 @@ Checklist antes de publicar:
 - [ ] `tool/ci.sh` en verde; todos los jobs del tag en verde.
 - [ ] APK firmado con el keystore de release (el log de `android` no avisa de
       la clave debug) si el release es para usuarios.
-- [ ] APK instalado en un teléfono y app de macOS abierta con clic derecho →
-      Abrir; capturas y enlaces de la documentación sin errores
+- [ ] APK instalado en un teléfono y app de macOS del DMG abierta con doble
+      clic (el log de `macos` no avisa de que falta la firma o la
+      notarización); capturas y enlaces de la documentación sin errores
       (`tool/check_links.py`).
 - [ ] Windows/Linux: si nadie los ha probado en un PC, el texto del Release lo
       dice (ya viene en las notas).

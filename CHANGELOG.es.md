@@ -89,6 +89,11 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 - El logo de la barra lateral es mucho más grande (96 px en el rail
   extendido, 72 px en el compacto) con el nombre debajo.
+- **La app de macOS ahora está firmada y notarizada.** El release se firma con
+  Developer ID y *hardened runtime* y Apple lo notariza, así que se abre con
+  doble clic (sin clic derecho → Abrir). También viene como
+  `PKArkTools-vX.Y.Z-macos.dmg`; el `-macos.zip` que usa el actualizador de la
+  app se mantiene.
 
 ### Corregido
 

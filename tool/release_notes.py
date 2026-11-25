@@ -24,9 +24,9 @@ FOOTER = """
 
 * **Android**: `PKArkTools-{tag}.apk`. Install it from the file (allow
   installing from that source when Android asks).
-* **macOS**: `PKArkTools-{tag}-macos.zip`. Unzip it and move the app to
-  Applications. It is not notarized: the first time, right-click the app →
-  **Open** → **Open**.
+* **macOS**: `PKArkTools-{tag}-macos.dmg`. Open it and drag PKArkTools to
+  Applications (`PKArkTools-{tag}-macos.zip` has the same app). Signed with
+  Developer ID and notarized by Apple, so it opens with a double-click.
 * **Windows**: `PKArkTools-{tag}-windows-x64-setup.exe` (installer) or
   `PKArkTools-{tag}-windows-x64.zip` (portable: unzip and run
   `PKArkTools.exe`). It is not signed: if SmartScreen warns, choose **More
