@@ -26,6 +26,9 @@ String describeEdits(BuildContext context, List<SaveEditOp> edits, SaveEditor ed
       SetBoxNameEdit(:final box, :final name) => l10n.editBoxName(box + 1, name),
       PokedexEdit() => l10n.editPokedex,
       EventEdit() => l10n.editEvents,
+      RearrangeSlotsEdit(:final layout) => context.isSpanish
+          ? 'Cajas ordenadas (${layout.length} huecos)'
+          : 'Boxes sorted (${layout.length} slots)',
     });
   }
   final unique = <String>[];

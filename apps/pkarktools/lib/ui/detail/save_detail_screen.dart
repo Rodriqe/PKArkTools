@@ -18,6 +18,7 @@ import '../editor/events_panel.dart';
 import '../editor/inventory_panel.dart';
 import '../editor/pokedex_panel.dart';
 import '../editor/trainer_panel.dart';
+import '../tools/save_tools_bar.dart';
 import 'pokemon_views.dart';
 import 'compare_screen.dart';
 import 'damage_notice.dart';
@@ -329,6 +330,8 @@ class _SnapshotContentState extends ConsumerState<_SnapshotContent> {
             child: switch (section) {
           _Section.pokemon when !hasStorage => _Notice(text: l10n.notSupportedStorage, accent: accent),
           _Section.pokemon => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              SaveToolsBar(snapshotId: snapshot.id, editor: editor),
+              const SizedBox(height: 24),
               // Juegos de solo cajas (Stadium, Box, Rancho): sin equipo.
               if (editor.partyCapacity > 0) ...[
                 _SectionTitle(l10n.team),

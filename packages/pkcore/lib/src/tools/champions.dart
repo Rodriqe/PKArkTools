@@ -157,6 +157,10 @@ abstract final class ChampionsFormat {
   /// Especies con Megaevolución en la regulación.
   static Set<int> get megaSpecies => _megaSpecies;
 
+  /// Singulares y legendarios restringidos (prohibidos por «Flat Rules»).
+  static Set<int> get mythicalSpecies => _mythicals;
+  static Set<int> get restrictedSpecies => _restricted;
+
   static bool isMythical(int species) => _mythicals.contains(species);
   static bool isRestricted(int species) => _restricted.contains(species);
 

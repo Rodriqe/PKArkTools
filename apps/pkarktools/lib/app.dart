@@ -18,6 +18,7 @@ import 'ui/onboarding/onboarding_screen.dart';
 import 'ui/ribbons/ribbon_hunter_screen.dart';
 import 'ui/settings/settings_screen.dart';
 import 'ui/shell.dart';
+import 'ui/tools/champions_screen.dart';
 
 /// Ruta a la que hay que ir según el estado de la carpeta (null = ninguna).
 String? setupRedirect(ArcaSetup setup, String location) => switch (setup) {
@@ -62,6 +63,7 @@ GoRouter buildRouter({String initialLocation = '/arca', ValueNotifier<ArcaSetup>
                 builder: (_, _) => const DexScreen(),
                 routes: [
                   GoRoute(path: 'progreso', builder: (_, _) => const DexProgressScreen()),
+                  GoRoute(path: 'formato-oficial', builder: (_, _) => const ChampionsScreen()),
                   GoRoute(
                     path: 'especie/:species',
                     builder: (_, state) => DexSpeciesScreen(

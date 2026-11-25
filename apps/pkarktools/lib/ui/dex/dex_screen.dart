@@ -8,6 +8,7 @@ import '../../theme/app_theme.dart';
 import '../../theme/game_palette.dart';
 import '../common/adaptive.dart';
 import '../common/format.dart';
+import '../tools/tools_common.dart';
 import 'dex_text.dart';
 import 'dex_tile.dart';
 
@@ -124,6 +125,12 @@ class _DexBody extends ConsumerWidget {
                 tooltip: l10n.dexProgress,
                 onPressed: () => context.go('/dex/progreso'),
                 icon: const Icon(Icons.insights_rounded),
+              ),
+              IconButton(
+                key: const ValueKey('dex-official-format'),
+                tooltip: tr(context, 'Formato oficial', 'Official format'),
+                onPressed: () => context.go('/dex/formato-oficial'),
+                icon: const Icon(Icons.emoji_events_outlined),
               ),
               IconButton(
                 key: const ValueKey('dex-settings'),
