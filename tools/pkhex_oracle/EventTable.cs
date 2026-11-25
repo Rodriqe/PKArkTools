@@ -265,7 +265,14 @@ static class EventTable
             var a = Trainer(tv, tl);
             row["recvOt"] = other.OriginalTrainerName == b.OT && tpl.OriginalTrainerName == a.OT;
             row["recvId"] = other.TID16 == b.TID16 && tpl.TID16 == a.TID16;
-            row["recvGender"] = other.OriginalTrainerGender == b.Gender && tpl.OriginalTrainerGender == a.Gender;
+            // El género puede salir del RNG (Gen 3 RandS7…): solo si sigue al entrenador en varias tiradas.
+            var gender = true;
+            for (var k = 0; k < 6 && gender; k++)
+            {
+                var pa = Make(g, a); var pb = Make(g, b);
+                gender = pa?.OriginalTrainerGender == a.Gender && pb?.OriginalTrainerGender == b.Gender;
+            }
+            row["recvGender"] = gender;
             row["recvLang"] = other.Language != tpl.Language;
             row["altLegal"] = Legal(other, out _);
         }
@@ -288,9 +295,17 @@ static class EventTable
 
     static int IV32_HashOrZero(this PKM pk) => pk.IV_HP | (pk.IV_ATK << 5) | (pk.IV_DEF << 10) | (pk.IV_SPE << 15) | (pk.IV_SPA << 20) | (pk.IV_SPD << 25);
 
-    /// PID(4) EC(4) IV×6 naturaleza naturaleza-stat nº habilidad género habilidad(2) = 20 bytes.
+    /// Gen 3: el Pokémon almacenado entero (80 bytes). Resto: PID(4) EC(4) IV×6 naturaleza naturaleza-stat nº habilidad género habilidad(2) = 20 bytes.
     static string Variant(PKM pk)
     {
+        // Gen 3: el RNG también decide el género del OT o el ID (PCNY, BACD_M…): variante completa.
+        // Z-A: PID/EC/IV/tamaño salen de una semilla de 64 bits (`ISeedCorrelation64`).
+        if (pk is PK3 or PA9)
+        {
+            var full = new byte[pk.SIZE_STORED];
+            pk.WriteDecryptedDataStored(full);
+            return Convert.ToBase64String(full);
+        }
         var b = new byte[20];
         BitConverter.TryWriteBytes(b.AsSpan(0), pk.PID);
         BitConverter.TryWriteBytes(b.AsSpan(4), pk.EncryptionConstant);

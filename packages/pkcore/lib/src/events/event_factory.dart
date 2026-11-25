@@ -24,7 +24,11 @@ abstract final class EventFactory {
 
   /// `true` si [gift] se puede crear en una partida de [game].
   static bool canCreateIn(EventGift gift, GameVersion game) =>
-      gift.canCreate && !game.isStorage && !game.isColosseumOrXd && gift.format == PkFormat.forGame(game);
+      gift.canCreate &&
+      !game.isStorage &&
+      !game.isColosseumOrXd &&
+      gift.format == PkFormat.forGame(game);
+
 
   /// Idioma con el que se crearía en una partida en [saveLanguage]: el mismo si
   /// el evento se distribuyó en ese idioma, si no el de la plantilla.
@@ -35,6 +39,7 @@ abstract final class EventFactory {
   static bool canBeShiny(EventGift gift) {
     if (gift.shiny.isShiny) return true;
     if (gift.isEgg) return false; // el PID se decide al recibirlo y al eclosionar
+    if (gift.isHome) return false; // HOME solo da variocolor si la tarjeta lo fija
     if (gift.shiny != EventShiny.random) return false;
     // Gen 3–4: PID ligado a los IV por el RNG; solo si alguna variante legal lo es.
     return (gift.format?.generation ?? 0) >= 5;
@@ -55,12 +60,16 @@ abstract final class EventFactory {
     final f = pk.format;
     final lang = languageFor(gift, language);
 
+    // 0) Gen 3 y Z-A: variante completa (PID/IV y lo que el RNG decide del OT o del tamaño).
+    if (gift.hasFullVariants) _applyFullVariant(pk, gift, trainer, shiny, rnd);
+
     // 1) Entrenador que lo recibe.
     if (gift.recipientId) {
       pk.tid = trainer.tid;
       pk.sid = trainer.sid;
     }
-    if (gift.recipientGender) pk.otGender = trainer.gender ?? 0;
+    // En Gen 3 el género del OT puede venir del RNG (ya está en la variante).
+    if (gift.recipientGender && !gift.hasFullVariants) pk.otGender = trainer.gender ?? 0;
     final nick = gift.nicknameByLanguage[lang];
     if (nick != null) pk.language = nick.$1;
     if (gift.recipientOt) {
@@ -80,7 +89,7 @@ abstract final class EventFactory {
     _setHandler(pk, trainer, lang);
 
     // 2) PID/IV: una variante legal que cumpla la regla de variocolor con el ID final.
-    _applyVariant(pk, gift, shiny, rnd);
+    if (!gift.hasFullVariants) _applyVariant(pk, gift, shiny, rnd);
 
     // 3) Versión de origen y fecha de recepción.
     final v = versionId;
@@ -191,11 +200,59 @@ abstract final class EventFactory {
         case EventShiny.fixed:
           break;
       }
-    } else if (gen == 5 && !ok(pk.pid)) {
+    } else if (gen == 5) {
+      // Huevos y regalos con correlación PID–ID de Gen 5 (PKHeX `MonochromeRNG.GetBitXor`):
+      // si la plantilla la cumplía con el ID de prueba, se mantiene con el ID final.
+      final tpl = gift.template()!;
+      // Tarjetas PGF variocolor (también huevos): PID = MonochromeRNG.GetShinyPID con el ID final.
+      if (gift.recipientId && _isG5ShinyPid(tpl.pid, tpl.tid, tpl.sid)) {
+        final g = pk.pid & 0xFFFF;
+        var p = ((g ^ pk.tid ^ pk.sid) << 16) | g;
+        if ((p & 0x10000) != (pk.pid & 0x10000)) p ^= 0x10000;
+        pk.pid = p;
+      } else if (gift.recipientId && _g5Xor(tpl.pid, tpl.tid, tpl.sid) == 0 && _g5Xor(pk.pid, pk.tid, pk.sid) != 0) {
+        pk.pid = pk.pid ^ 0x80000000;
+      }
       // PGF: PID al azar con el bit de habilidad y el género conservados.
-      pk.setShiny(rule.isShiny || (wantShiny ?? false), random: rnd);
+      if (!ok(pk.pid)) pk.setShiny(rule.isShiny || (wantShiny ?? false), random: rnd);
     }
   }
+
+  static void _applyFullVariant(Pkm pk, EventGift gift, TrainerData trainer, bool? wantShiny, Random rnd) {
+    final all = gift.fullVariants;
+    if (all.isEmpty) return;
+    bool ok(Pkm v) {
+      final tid = gift.recipientId ? trainer.tid : v.tid;
+      final sid = gift.recipientId ? trainer.sid : v.sid;
+      final xor = (tid ^ sid ^ (v.pid >> 16) ^ (v.pid & 0xFFFF)) & 0xFFFF;
+      final s = xor < (v.format.generation <= 5 ? 8 : 16);
+      return switch (gift.shiny) {
+        EventShiny.never => !s,
+        EventShiny.random => wantShiny == null || wantShiny == s,
+        EventShiny.fixed => true,
+        _ => s,
+      };
+    }
+
+    final cands = [for (final d in all) Pkm.fromDecrypted(pk.format, d)];
+    var good = [for (final c in cands) if (ok(c)) c];
+    if (gift.recipientGender) {
+      final g = trainer.gender ?? 0;
+      final same = [for (final c in good) if (c.otGender == g) c];
+      if (same.isNotEmpty) good = same;
+    }
+    if (good.isEmpty && ok(pk)) return;
+    final pick = (good.isNotEmpty ? good : cands)[rnd.nextInt(good.isNotEmpty ? good.length : cands.length)];
+    final n = pk.format.storedSize;
+    pk.data.setRange(0, n, pick.data.sublist(0, n));
+  }
+
+  static bool _isG5ShinyPid(int pid, int tid, int sid) {
+    final lo = pid & 0xFFFF;
+    return lo < 0x100 && ((pid >> 16) & 0xFFFE) == ((lo ^ tid ^ sid) & 0xFFFE);
+  }
+
+  static int _g5Xor(int pid, int tid, int sid) => ((tid ^ sid) & 1) ^ (pid & 1) ^ ((pid >> 31) & 1);
 
   static void _setVariant(Pkm pk, EventVariant v) {
     final f = pk.format;

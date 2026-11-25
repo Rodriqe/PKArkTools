@@ -157,7 +157,11 @@ class EventGift {
   /// La fecha de encuentro es la de recepción (hoy); si no, es fija.
   bool get metToday => _flags.contains('T');
 
-  bool get canCreate => format != null && kEventTpl[id].isNotEmpty;
+  bool get canCreate => format != null && kEventTpl[id].isNotEmpty && !needsRecipientRng;
+
+  /// Gen 3 variocolor con el ID de quien lo recibe (Pichu huevo japonés,
+  /// BACD_TS): el PID sale del RNG en función del ID, sin variante reutilizable.
+  bool get needsRecipientRng => format == PkFormat.pk3 && recipientId && shiny.isShiny;
 
   EventDistribution get distribution => switch (db) {
         'wc3' => EventDistribution.gen3,
@@ -191,18 +195,32 @@ class EventGift {
   /// Pokémon de plantilla (copia nueva en cada llamada).
   Pkm? template([GameVersion? game]) {
     final f = format;
-    if (f == null || !canCreate) return null;
+    if (f == null || kEventTpl[id].isEmpty) return null;
     return Pkm.fromDecrypted(f, base64Decode(kEventTpl[id]))..dataGame = game ?? _defaultGame;
   }
 
   GameVersion? get _defaultGame => OriginPlace.gameOf(templateVersion);
 
-  /// Variantes legales de PID/EC/IV/naturaleza/habilidad/género.
+  /// Variantes legales de PID/EC/IV/naturaleza/habilidad/género (Gen 4+).
   List<EventVariant> get variants {
     final s = kEventVar[id];
-    if (s.isEmpty) return const [];
+    if (s.isEmpty || hasFullVariants) return const [];
     final d = base64Decode(s);
     return [for (var o = 0; o + 20 <= d.length; o += 20) EventVariant._(Uint8List.sublistView(d, o, o + 20))];
+  }
+
+  /// Gen 3 y Z-A guardan variantes completas (el Pokémon almacenado): en Gen 3 el
+  /// RNG del evento decide también el género del OT o el ID, y en Z-A PID, EC,
+  /// IV y tamaño salen de la misma semilla.
+  bool get hasFullVariants => format == PkFormat.pk3 || format == PkFormat.pa9;
+
+  List<Uint8List> get fullVariants {
+    final s = kEventVar[id];
+    final f = format;
+    if (s.isEmpty || f == null || !hasFullVariants) return const [];
+    final d = base64Decode(s);
+    final n = f.storedSize;
+    return [for (var o = 0; o + n <= d.length; o += n) Uint8List.sublistView(d, o, o + n)];
   }
 
   /// Nombre del entrenador original que trae (null si es el de quien lo recibe).
