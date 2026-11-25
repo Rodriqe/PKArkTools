@@ -28,7 +28,7 @@ FILES = {
 def get(url: str) -> bytes:
     for attempt in range(3):
         try:
-            req = urllib.request.Request(url, headers={'User-Agent': 'gen-champions-data'})
+            req = urllib.request.Request(url, headers={'User-Agent': 'PKArkTools-data/1.0 (+https://github.com/Rodriqe/PKArkTools)'})
             with urllib.request.urlopen(req, timeout=30) as r:
                 return r.read()
         except OSError as e:

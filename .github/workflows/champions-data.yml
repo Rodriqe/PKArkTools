@@ -1,13 +1,18 @@
 name: Champions data
 
-# Cada día: vuelve a generar data/champions/champions.json (y su copia
-# integrada champions_data.dart) desde Pokémon Showdown y, solo si cambió, lo
-# sube a main. La app lo descarga al abrir «Formato oficial»
-# (docs/usuario/formato-oficial.md). Si Showdown cambia algo que el generador
-# no entiende, el job falla sin commit y la app sigue con la última versión buena.
+# Cada día a las 02:30 UTC (las regulaciones cambian a las 02:00 UTC; la M-D
+# empieza el 2026-12-02 02:00 UTC): vuelve a generar data/champions/champions.json
+# (y su copia integrada champions_data.dart) y, solo si cambió, lo sube a main.
+# La app lo descarga al abrir «Formato oficial» (docs/usuario/formato-oficial.md).
+#
+# Fuentes: primero las OFICIALES del juego (noticias + «Eligible Pokémon»);
+# Pokémon Showdown solo para Flat Rules/Megas, para comprobar la lista (las
+# diferencias salen como avisos) y como lista de reserva mientras la oficial
+# no esté publicada. Si la fuente oficial falla o algo no se entiende, el job
+# falla sin commit y la app sigue con el último JSON bueno.
 on:
   schedule:
-    - cron: '17 6 * * *'
+    - cron: '30 2 * * *'
   workflow_dispatch:
 
 permissions: {}
@@ -27,14 +32,25 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - name: Download Showdown sources
+      - name: Download official sources
+        run: python3 tool/fetch_champions_official.py "$RUNNER_TEMP/official"
+      - name: Download Showdown sources (cross-check)
         id: src
+        continue-on-error: true
         run: python3 tool/fetch_champions_sources.py "$RUNNER_TEMP/champions" | tee -a "$GITHUB_OUTPUT"
       - name: Regenerate
         env:
+          SHOWDOWN_OK: ${{ steps.src.outcome == 'success' }}
           COMMIT: ${{ steps.src.outputs.commit }}
           DATE: ${{ steps.src.outputs.date }}
-        run: python3 tool/gen_champions_data.py "$RUNNER_TEMP/champions" "$COMMIT" "$DATE"
+        run: |
+          args=(--official "$RUNNER_TEMP/official")
+          if [ "$SHOWDOWN_OK" = true ]; then
+            args+=(--showdown "$RUNNER_TEMP/champions" --commit "$COMMIT" --date "$DATE")
+          else
+            echo "::warning::Showdown no disponible: Flat Rules y Megas del último JSON"
+          fi
+          python3 tool/gen_champions_data.py "${args[@]}"
       - name: Validate
         env:
           CHAMPIONS_SRC: ${{ runner.temp }}/champions
@@ -42,17 +58,15 @@ jobs:
           python3 tool/gen_champions_data.py --validate data/champions/champions.json
           python3 tool/test_gen_champions_data.py
       - name: Commit if changed
-        env:
-          COMMIT: ${{ steps.src.outputs.commit }}
         run: |
           files="data/champions/champions.json packages/pkcore/lib/src/data/generated/champions_data.dart"
           if git diff --quiet -- $files; then
             echo "No changes."
             exit 0
           fi
-          name=$(python3 -c "import json;print(json.load(open('data/champions/champions.json'))['regulation']['name'])")
+          msg=$(python3 -c "import json;d=json.load(open('data/champions/champions.json'));r=d['regulation'];n=d['nextRegulation'];print(r['name']+' ('+r['allowedSource']+' list)'+(', next '+n['code']+' from '+n['from'] if n else ''))")
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add $files
-          git commit -m "Champions data: $name from Showdown ${COMMIT:0:7}"
+          git commit -m "Champions data: $msg"
           git push origin HEAD:main
