@@ -342,8 +342,29 @@ reading, writing, legality) and `apps/pkarktools` (Flutter app). See
 
 Saves never leave your device or your folder; the original file is never
 modified; every copy and export is verified by SHA-256 / re-reading; nothing
-is ever overwritten. The only network request is the optional icon download.
+is ever overwritten. The app only makes plain downloads, never uploads: icons,
+the update check against GitHub Releases, and the Official format and event
+data published in this repository. No accounts, no telemetry.
 Read [Data safety and privacy](docs/seguridad-datos.md).
+
+## Code signing policy
+
+Free code signing on Windows provided by [SignPath.io](https://about.signpath.io),
+certificate by [SignPath Foundation](https://signpath.org) (once the project is
+approved; until then Windows builds are unsigned).
+
+- Committers and reviewers: [Rodriqe](https://github.com/Rodriqe)
+- Approvers: [Rodriqe](https://github.com/Rodriqe)
+
+Only binaries built by GitHub Actions from a tagged commit of this repository
+are signed. The macOS app is signed with an Apple Developer ID and notarized
+by Apple; the Android APK is signed with the project's release key.
+
+Privacy: this program does not transfer any information to other networked
+systems unless specifically requested by the user or the person installing or
+operating it. It only downloads data (icons, update checks, Official format and
+event data from raw.githubusercontent.com and GitHub Releases); see
+[Data safety and privacy](docs/seguridad-datos.md#privacidad).
 
 ## Documentation
 
