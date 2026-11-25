@@ -67,7 +67,7 @@ class _ShareCardScreenState extends ConsumerState<ShareCardScreen> {
   Widget build(BuildContext context) {
     final messenger = ScaffoldMessenger.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(tr(context, 'Tarjeta para compartir', 'Share card'))),
+      appBar: AppBar(title: Text(context.l10n.toolsShareCard)),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -92,12 +92,12 @@ class _ShareCardScreenState extends ConsumerState<ShareCardScreen> {
                 onPressed: _busy
                     ? null
                     : () => _run((png) async {
-                        final done = tr(context, 'Guardada en', 'Saved to');
+                        final done = context.l10n.toolsSavedTo;
                         final path = await ref.read(fileSourcesProvider).exportBytes(_fileName, png);
                         if (path != null) messenger.showSnackBar(SnackBar(content: Text('$done $path')));
                       }),
                 icon: const Icon(Icons.download_rounded),
-                label: Text(tr(context, 'Guardar PNG', 'Save PNG')),
+                label: Text(context.l10n.toolsSavePNG),
               ),
               Builder(
                 builder: (b) => FilledButton.icon(
@@ -105,17 +105,13 @@ class _ShareCardScreenState extends ConsumerState<ShareCardScreen> {
                   onPressed: _busy
                       ? null
                       : () => _run((png) async {
-                          final unavailable = tr(
-                            context,
-                            'No hay menú de compartir en este sistema: usa «Guardar PNG».',
-                            'No share menu on this system: use “Save PNG”.',
-                          );
+                          final unavailable = context.l10n.toolsNoShareMenuOnThis;
                           if (!await shareFile(b, png, _fileName, 'image/png')) {
                             messenger.showSnackBar(SnackBar(content: Text(unavailable)));
                           }
                         }),
                   icon: const Icon(Icons.ios_share_rounded),
-                  label: Text(tr(context, 'Compartir', 'Share')),
+                  label: Text(context.l10n.toolsShare),
                 ),
               ),
             ],
@@ -282,7 +278,7 @@ class PokemonShareCard extends StatelessWidget {
                             ),
                           if (pk.isShiny)
                             chip(
-                              tr(context, 'Variocolor', 'Shiny'),
+                              context.l10n.toolsShiny,
                               const Color(0xFFFFC94A),
                               leading: const Icon(Icons.auto_awesome, size: 14, color: Color(0xFFFFC94A)),
                             ),
@@ -294,17 +290,16 @@ class PokemonShareCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            if (gen >= 3) info(tr(context, 'Naturaleza', 'Nature'), GameStrings.nature(pk.statNature, lang)),
-            if (gen >= 3 && pk.ability > 0)
-              info(tr(context, 'Habilidad', 'Ability'), GameStrings.ability(pk.ability, lang)),
-            if (pk.heldItem > 0) info(tr(context, 'Objeto', 'Item'), GameStrings.itemFor(pk.heldItem, game, lang)),
+            if (gen >= 3) info(context.l10n.toolsNature, GameStrings.nature(pk.statNature, lang)),
+            if (gen >= 3 && pk.ability > 0) info(context.l10n.toolsAbility, GameStrings.ability(pk.ability, lang)),
+            if (pk.heldItem > 0) info(context.l10n.toolsItem, GameStrings.itemFor(pk.heldItem, game, lang)),
             if (pk.format.hasTeraType)
               info(
-                tr(context, 'Teratipo', 'Tera Type'),
-                pk.teraType == 99 ? tr(context, 'Astral', 'Stellar') : GameStrings.type(pk.teraType, lang),
+                context.l10n.toolsTeraType,
+                pk.teraType == 99 ? context.l10n.toolsStellar : GameStrings.type(pk.teraType, lang),
               ),
-            info(tr(context, 'Origen', 'Origin'), origin),
-            if (ribbons > 0) info(tr(context, 'Cintas', 'Ribbons'), '$ribbons'),
+            info(context.l10n.toolsOrigin, origin),
+            if (ribbons > 0) info(context.l10n.toolsRibbons, '$ribbons'),
             const SizedBox(height: 8),
             Expanded(
               child: Row(
@@ -354,7 +349,7 @@ class PokemonShareCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(tr(context, 'Movimientos', 'Moves'), style: st(13, w: FontWeight.w700)),
+                        Text(context.l10n.toolsMoves, style: st(13, w: FontWeight.w700)),
                         const SizedBox(height: 6),
                         for (final m in pk.moves)
                           if (m != 0)
@@ -382,7 +377,7 @@ class PokemonShareCard extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                tr(context, 'Hecho con PKArkTools', 'Made with PKArkTools'),
+                context.l10n.toolsMadeWithPKArkTools,
                 style: st(10, w: FontWeight.w500, color: muted),
               ),
             ),

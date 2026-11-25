@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -1417,7 +1416,8 @@ class AppLocalizationsEn extends AppLocalizations {
       locale: localeName,
       other:
           'Your $count current backups will be copied to the chosen folder and verified one by one.',
-      one: 'Your current backup will be copied to the chosen folder and verified.',
+      one:
+          'Your current backup will be copied to the chosen folder and verified.',
     );
     return '$_temp0';
   }
@@ -4048,5 +4048,309 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String transferFailed(String error) {
     return 'Couldn\'t transfer: $error';
+  }
+
+  @override
+  String get toolsDexNumber => 'Dex number';
+
+  @override
+  String get toolsType => 'Type';
+
+  @override
+  String get toolsGeneration => 'Generation';
+
+  @override
+  String get toolsLivingDexEachSpeciesIn =>
+      'Living dex (each species in its slot)';
+
+  @override
+  String get toolsLevel => 'Level';
+
+  @override
+  String get toolsShinyFirst => 'Shiny first';
+
+  @override
+  String get toolsSortBoxes => 'Sort boxes';
+
+  @override
+  String get toolsOrderBy => 'Order by';
+
+  @override
+  String get toolsScope => 'Scope';
+
+  @override
+  String get toolsAllBoxes => 'All boxes';
+
+  @override
+  String get toolsFrom => 'From';
+
+  @override
+  String get toolsTo => 'to';
+
+  @override
+  String get toolsAlreadySortedNothingToMove =>
+      'Already sorted: nothing to move.';
+
+  @override
+  String toolsSlotsChangeYouCanUndo(Object moved) {
+    return '$moved slots change. You can undo it.';
+  }
+
+  @override
+  String toolsDuplicatesGoAfterTheLast(Object overflow) {
+    return '$overflow duplicates go after the last number.';
+  }
+
+  @override
+  String get toolsApplyOrder => 'Apply order';
+
+  @override
+  String get toolsOfficialFormat => 'Official format';
+
+  @override
+  String get toolsRegulation => 'Regulation';
+
+  @override
+  String get toolsYourPokemon => 'Your Pokémon';
+
+  @override
+  String get toolsSearchPokemon => 'Search Pokémon';
+
+  @override
+  String toolsDatesNotConfirmedByAn(Object datesSource) {
+    return 'Dates not confirmed by an official source ($datesSource).';
+  }
+
+  @override
+  String get toolsRules => 'Rules';
+
+  @override
+  String toolsDataPokemonShowdownChampions(Object sourceDate, Object commit) {
+    return 'Data: Pokémon Showdown (“champions” mod), version of $sourceDate, commit $commit.';
+  }
+
+  @override
+  String get toolsViewSource => 'View source';
+
+  @override
+  String toolsAllowed(Object allowedCount) {
+    return 'Allowed ($allowedCount)';
+  }
+
+  @override
+  String toolsBannedRestrictedLegendariesAndMythicals(Object bannedCount) {
+    return 'Banned: restricted legendaries and mythicals ($bannedCount)';
+  }
+
+  @override
+  String toolsDoubleBattlesVGCTeamOf(
+    Object teamSize,
+    Object bringDoubles,
+    Object bringSingles,
+  ) {
+    return 'Double battles (VGC): team of $teamSize, bring $bringDoubles. Singles: bring $bringSingles.';
+  }
+
+  @override
+  String toolsLevelHigherLevelPokemon(Object level) {
+    return 'Level $level: higher-level Pokémon are scaled down to $level.';
+  }
+
+  @override
+  String get toolsSpeciesClauseNoRepeatedSpecies =>
+      'Species clause: no repeated species.';
+
+  @override
+  String toolsItemClauseEachItemAt(Object itemClause) {
+    return 'Item clause: each item at most $itemClause time.';
+  }
+
+  @override
+  String get toolsRestrictedLegendariesAndMythicalsAre =>
+      'Restricted legendaries and mythicals are banned.';
+
+  @override
+  String toolsMegaEvolutionAvailableForSpecies(Object megaSpeciesCount) {
+    return 'Mega Evolution available for $megaSpeciesCount species.';
+  }
+
+  @override
+  String get toolsOpenTeamSheets => 'Open Team Sheets.';
+
+  @override
+  String get toolsAllowedItemsTheSourceHas =>
+      'Allowed items: the source has no complete list; check it in the game.';
+
+  @override
+  String toolsOfPokemonInYour(
+    Object eligible,
+    Object allCount,
+    Object formatName,
+  ) {
+    return '$eligible of $allCount Pokémon in your saves are eligible for $formatName.';
+  }
+
+  @override
+  String get toolsToUseThemTheyMust =>
+      'To use them they must reach Pokémon Champions through Pokémon HOME.';
+
+  @override
+  String get toolsEligibleOnly => 'Eligible only';
+
+  @override
+  String get toolsThereAreNoPokemon => 'There are no Pokémon in the Ark.';
+
+  @override
+  String get toolsHasAMegaEvolution => 'Has a Mega Evolution';
+
+  @override
+  String toolsPokemonAddedToThe(Object added) {
+    return '$added Pokémon added to the draft.';
+  }
+
+  @override
+  String get toolsBoxesSorted => 'Boxes sorted.';
+
+  @override
+  String get toolsUndo => 'Undo';
+
+  @override
+  String get toolsImportFromShowdown => 'Import from Showdown';
+
+  @override
+  String get toolsTeamToShowdown => 'Team to Showdown';
+
+  @override
+  String get toolsPasteOneOrMorePok =>
+      'Paste one or more Pokémon in Pokémon Showdown format.';
+
+  @override
+  String get toolsAnalyze => 'Analyze';
+
+  @override
+  String get toolsParty => 'Party';
+
+  @override
+  String get toolsBoxes => 'Boxes';
+
+  @override
+  String get toolsNoPokemonFoundIn => 'No Pokémon found in the text.';
+
+  @override
+  String toolsOnlyRoomForOf(Object room, Object okCount) {
+    return 'Only room for $room of $okCount.';
+  }
+
+  @override
+  String toolsAddToTheSave(Object count) {
+    return 'Add $count to the save';
+  }
+
+  @override
+  String get toolsNoWarnings => 'No warnings.';
+
+  @override
+  String get toolsShowdownText => 'Showdown text';
+
+  @override
+  String get toolsNoPokemon => '(no Pokémon)';
+
+  @override
+  String get toolsCopy => 'Copy';
+
+  @override
+  String get toolsShare => 'Share';
+
+  @override
+  String get toolsShareCard => 'Share card';
+
+  @override
+  String get toolsSavedTo => 'Saved to';
+
+  @override
+  String get toolsSavePNG => 'Save PNG';
+
+  @override
+  String get toolsNoShareMenuOnThis =>
+      'No share menu on this system: use “Save PNG”.';
+
+  @override
+  String get toolsShiny => 'Shiny';
+
+  @override
+  String get toolsNature => 'Nature';
+
+  @override
+  String get toolsAbility => 'Ability';
+
+  @override
+  String get toolsItem => 'Item';
+
+  @override
+  String get toolsTeraType => 'Tera Type';
+
+  @override
+  String get toolsStellar => 'Stellar';
+
+  @override
+  String get toolsOrigin => 'Origin';
+
+  @override
+  String get toolsRibbons => 'Ribbons';
+
+  @override
+  String get toolsMoves => 'Moves';
+
+  @override
+  String get toolsMadeWithPKArkTools => 'Made with PKArkTools';
+
+  @override
+  String get toolsEnterAllSixStats => 'Enter all six stats.';
+
+  @override
+  String get toolsCalculator => 'Calculator';
+
+  @override
+  String get toolsLv50 => 'Lv. 50';
+
+  @override
+  String get toolsLv100 => 'Lv. 100';
+
+  @override
+  String get toolsObserved => 'Observed';
+
+  @override
+  String get toolsInGen12Special =>
+      'In Gen 1/2 Special covers both special attack and defense.';
+
+  @override
+  String toolsIVsFromStatsEnterThe(Object level) {
+    return 'IVs from stats: enter the stats you see in the game (with the current EVs, level $level and nature).';
+  }
+
+  @override
+  String get toolsUseCurrent => 'Use current';
+
+  @override
+  String get toolsCalculateIVs => 'Calculate IVs';
+
+  @override
+  String get toolsApplyIVs => 'Apply IVs';
+
+  @override
+  String get toolsSomeStatFitsNoIV =>
+      'Some stat fits no IV: check EVs, level or nature.';
+
+  @override
+  String toolsPower(Object power) {
+    return 'power $power';
+  }
+
+  @override
+  String get toolsCopiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String toolsBoxesSortedNote(int count) {
+    return 'Boxes sorted ($count slots)';
   }
 }

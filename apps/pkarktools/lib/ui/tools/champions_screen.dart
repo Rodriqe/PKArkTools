@@ -8,7 +8,6 @@ import '../../theme/app_theme.dart';
 import '../common/format.dart';
 import '../common/species_avatar.dart';
 import '../editor/pickers.dart';
-import 'tools_common.dart';
 
 /// Un Pokémon de una partida del Arca con su veredicto para el formato.
 class ChampionsCandidate {
@@ -109,11 +108,11 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
       initialIndex: widget.initialTab,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(tr(context, 'Formato oficial', 'Official format')),
+          title: Text(context.l10n.toolsOfficialFormat),
           bottom: TabBar(
             tabs: [
-              Tab(text: tr(context, 'Regulación', 'Regulation')),
-              Tab(text: tr(context, 'Tus Pokémon', 'Your Pokémon')),
+              Tab(text: context.l10n.toolsRegulation),
+              Tab(text: context.l10n.toolsYourPokemon),
             ],
           ),
         ),
@@ -127,7 +126,7 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
     controller: _searchCtl,
     decoration: InputDecoration(
       prefixIcon: const Icon(Icons.search_rounded),
-      hintText: tr(context, 'Buscar Pokémon', 'Search Pokémon'),
+      hintText: context.l10n.toolsSearchPokemon,
       border: const OutlineInputBorder(),
       isDense: true,
     ),
@@ -152,7 +151,7 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
         Text('Pokémon Champions · ${ChampionsFormat.formatName}', style: context.text.headlineSmall),
         const SizedBox(height: 4),
         Text(
-          '${tr(context, 'Regulación', 'Regulation')} ${reg.code}: ${date(reg.from)} – ${date(reg.until)}',
+          '${context.l10n.toolsRegulation} ${reg.code}: ${date(reg.from)} – ${date(reg.until)}',
           style: context.text.titleSmall,
         ),
         if (!reg.datesConfirmed)
@@ -164,11 +163,7 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    tr(
-                      context,
-                      'Fechas sin confirmar en una fuente oficial (${reg.datesSource}).',
-                      'Dates not confirmed by an official source (${reg.datesSource}).',
-                    ),
+                    context.l10n.toolsDatesNotConfirmedByAn(reg.datesSource),
                     key: const ValueKey('champions-dates-unconfirmed'),
                     style: muted,
                   ),
@@ -183,7 +178,7 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(tr(context, 'Reglas', 'Rules'), style: context.text.titleMedium),
+                Text(context.l10n.toolsRules, style: context.text.titleMedium),
                 const SizedBox(height: 8),
                 for (final r in _rules(context)) _bullet(context, r),
               ],
@@ -192,25 +187,21 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          tr(
-            context,
-            'Datos: Pokémon Showdown (mod «champions»), versión del ${ChampionsFormat.sourceDate}, commit ${ChampionsFormat.sourceCommit.substring(0, 7)}.',
-            'Data: Pokémon Showdown (“champions” mod), version of ${ChampionsFormat.sourceDate}, commit ${ChampionsFormat.sourceCommit.substring(0, 7)}.',
+          context.l10n.toolsDataPokemonShowdownChampions(
+            ChampionsFormat.sourceDate,
+            ChampionsFormat.sourceCommit.substring(0, 7),
           ),
           style: muted,
         ),
         TextButton.icon(
           onPressed: () => launchUrl(Uri.parse(ChampionsFormat.sourceUrl)),
           icon: const Icon(Icons.open_in_new_rounded, size: 16),
-          label: Text(tr(context, 'Ver la fuente', 'View source')),
+          label: Text(context.l10n.toolsViewSource),
         ),
         const SizedBox(height: 12),
         _search(context),
         const SizedBox(height: 14),
-        Text(
-          tr(context, 'Permitidos (${allowed.length})', 'Allowed (${allowed.length})'),
-          style: context.text.titleMedium,
-        ),
+        Text(context.l10n.toolsAllowed(allowed.length), style: context.text.titleMedium),
         const SizedBox(height: 8),
         Wrap(
           spacing: 8,
@@ -221,14 +212,7 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
           ],
         ),
         const SizedBox(height: 18),
-        Text(
-          tr(
-            context,
-            'Prohibidos: legendarios restringidos y singulares (${banned.length})',
-            'Banned: restricted legendaries and mythicals (${banned.length})',
-          ),
-          style: context.text.titleMedium,
-        ),
+        Text(context.l10n.toolsBannedRestrictedLegendariesAndMythicals(banned.length), style: context.text.titleMedium),
         const SizedBox(height: 8),
         Wrap(
           spacing: 8,
@@ -240,40 +224,18 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
   }
 
   List<String> _rules(BuildContext context) => [
-    tr(
-      context,
-      'Combates dobles (VGC): equipo de ${ChampionsFormat.teamSize}, se eligen ${ChampionsFormat.bringDoubles}. Individuales: se eligen ${ChampionsFormat.bringSingles}.',
-      'Double battles (VGC): team of ${ChampionsFormat.teamSize}, bring ${ChampionsFormat.bringDoubles}. Singles: bring ${ChampionsFormat.bringSingles}.',
+    context.l10n.toolsDoubleBattlesVGCTeamOf(
+      ChampionsFormat.teamSize,
+      ChampionsFormat.bringDoubles,
+      ChampionsFormat.bringSingles,
     ),
-    tr(
-      context,
-      'Nivel ${ChampionsFormat.level}: los Pokémon de más nivel se ajustan a ${ChampionsFormat.level}.',
-      'Level ${ChampionsFormat.level}: higher-level Pokémon are scaled down to ${ChampionsFormat.level}.',
-    ),
-    if (ChampionsFormat.speciesClause)
-      tr(context, 'Cláusula de especie: no se puede repetir especie.', 'Species clause: no repeated species.'),
-    tr(
-      context,
-      'Cláusula de objeto: cada objeto como mucho ${ChampionsFormat.itemClause} vez.',
-      'Item clause: each item at most ${ChampionsFormat.itemClause} time.',
-    ),
-    tr(
-      context,
-      'Prohibidos los legendarios restringidos y los singulares.',
-      'Restricted legendaries and mythicals are banned.',
-    ),
-    tr(
-      context,
-      'Megaevolución disponible para ${ChampionsFormat.megaSpecies.length} especies.',
-      'Mega Evolution available for ${ChampionsFormat.megaSpecies.length} species.',
-    ),
-    if (ChampionsFormat.openTeamSheets)
-      tr(context, 'Hojas de equipo abiertas (Open Team Sheets).', 'Open Team Sheets.'),
-    tr(
-      context,
-      'Objetos permitidos: la fuente no da una lista completa; consúltala en el juego.',
-      'Allowed items: the source has no complete list; check it in the game.',
-    ),
+    context.l10n.toolsLevelHigherLevelPokemon(ChampionsFormat.level),
+    if (ChampionsFormat.speciesClause) context.l10n.toolsSpeciesClauseNoRepeatedSpecies,
+    context.l10n.toolsItemClauseEachItemAt(ChampionsFormat.itemClause),
+    context.l10n.toolsRestrictedLegendariesAndMythicalsAre,
+    context.l10n.toolsMegaEvolutionAvailableForSpecies(ChampionsFormat.megaSpecies.length),
+    if (ChampionsFormat.openTeamSheets) context.l10n.toolsOpenTeamSheets,
+    context.l10n.toolsAllowedItemsTheSourceHas,
   ];
 
   Widget _bullet(BuildContext context, String text) => Padding(
@@ -302,33 +264,25 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
           children: [
             Text(
-              tr(
-                context,
-                '$eligible de ${all.length} Pokémon de tus partidas son elegibles para ${ChampionsFormat.formatName}.',
-                '$eligible of ${all.length} Pokémon in your saves are eligible for ${ChampionsFormat.formatName}.',
-              ),
+              context.l10n.toolsOfPokemonInYour(eligible, all.length, ChampionsFormat.formatName),
               key: const ValueKey('champions-summary'),
               style: context.text.titleSmall,
             ),
             const SizedBox(height: 4),
             Text(
-              tr(
-                context,
-                'Para usarlos hay que llevarlos a Pokémon Champions a través de Pokémon HOME.',
-                'To use them they must reach Pokémon Champions through Pokémon HOME.',
-              ),
+              context.l10n.toolsToUseThemTheyMust,
               style: context.text.bodySmall!.copyWith(color: context.tokens.muted),
             ),
             const SizedBox(height: 12),
             _search(context),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(tr(context, 'Solo elegibles', 'Eligible only')),
+              title: Text(context.l10n.toolsEligibleOnly),
               value: _onlyEligible,
               onChanged: (v) => setState(() => _onlyEligible = v),
             ),
             for (final c in list.take(500)) _CandidateTile(c: c, es: es),
-            if (all.isEmpty) Text(tr(context, 'No hay Pokémon en el Arca.', 'There are no Pokémon in the Ark.')),
+            if (all.isEmpty) Text(context.l10n.toolsThereAreNoPokemon),
           ],
         );
       },
@@ -360,7 +314,7 @@ class _SpeciesChip extends StatelessWidget {
         if (mega) ...[
           const SizedBox(width: 4),
           Tooltip(
-            message: tr(context, 'Tiene Megaevolución', 'Has a Mega Evolution'),
+            message: context.l10n.toolsHasAMegaEvolution,
             child: Text(
               'M',
               style: context.text.labelSmall!.copyWith(color: context.colors.primary, fontWeight: FontWeight.w800),

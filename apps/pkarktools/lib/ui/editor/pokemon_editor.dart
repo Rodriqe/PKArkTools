@@ -17,7 +17,6 @@ import 'ribbons_panel.dart';
 import '../tools/share_card.dart';
 import '../tools/showdown_ui.dart';
 import '../tools/stat_calculator.dart';
-import '../tools/tools_common.dart';
 
 /// Qué decidió el usuario al cerrar el editor.
 sealed class EditorResult {
@@ -232,8 +231,8 @@ class _PokemonEditorScreenState extends State<PokemonEditorScreen> {
                   if (widget.onExport != null)
                     PopupMenuItem(value: 'export', child: Text(l10n.exportPokemon(f.extension))),
                   if (widget.canTransfer) PopupMenuItem(value: 'transfer', child: Text(l10n.transferTo)),
-                  PopupMenuItem(value: 'showdown', child: Text(tr(context, 'Texto de Showdown', 'Showdown text'))),
-                  PopupMenuItem(value: 'card', child: Text(tr(context, 'Tarjeta para compartir', 'Share card'))),
+                  PopupMenuItem(value: 'showdown', child: Text(l10n.toolsShowdownText)),
+                  PopupMenuItem(value: 'card', child: Text(l10n.toolsShareCard)),
                   PopupMenuItem(value: 'clone', child: Text(l10n.clonePokemon)),
                   if (widget.canDelete) PopupMenuItem(value: 'delete', child: Text(l10n.deletePokemon)),
                 ],

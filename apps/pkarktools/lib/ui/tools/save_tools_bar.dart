@@ -7,7 +7,6 @@ import '../../editing/draft.dart';
 import '../common/format.dart';
 import 'box_sort_ui.dart';
 import 'showdown_ui.dart';
-import 'tools_common.dart';
 
 /// Herramientas de la sección Pokémon de una partida: Showdown (importar y
 /// exportar), ordenar cajas y formato oficial.
@@ -36,11 +35,7 @@ class SaveToolsBar extends ConsumerWidget {
       messenger.showSnackBar(SnackBar(content: Text(e.message)));
     }
     if (added > 0 && context.mounted) {
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(tr(context, '$added Pokémon añadidos al borrador.', '$added Pokémon added to the draft.')),
-        ),
-      );
+      messenger.showSnackBar(SnackBar(content: Text(context.l10n.toolsPokemonAddedToThe(added))));
     }
   }
 
@@ -52,8 +47,8 @@ class SaveToolsBar extends ConsumerWidget {
       _draft(ref).apply(RearrangeSlotsEdit(plan.layout));
       messenger.showSnackBar(
         SnackBar(
-          content: Text(tr(context, 'Cajas ordenadas.', 'Boxes sorted.')),
-          action: SnackBarAction(label: tr(context, 'Deshacer', 'Undo'), onPressed: () => _draft(ref).undo()),
+          content: Text(context.l10n.toolsBoxesSorted),
+          action: SnackBarAction(label: context.l10n.toolsUndo, onPressed: () => _draft(ref).undo()),
         ),
       );
     } on SaveEditException catch (e) {
@@ -81,27 +76,27 @@ class SaveToolsBar extends ConsumerWidget {
             key: const ValueKey('tool-showdown-import'),
             onPressed: () => _import(context, ref),
             icon: const Icon(Icons.content_paste_go_rounded),
-            label: Text(tr(context, 'Importar de Showdown', 'Import from Showdown')),
+            label: Text(context.l10n.toolsImportFromShowdown),
           ),
         if (editor.partyCapacity > 0)
           OutlinedButton.icon(
             key: const ValueKey('tool-showdown-export'),
             onPressed: () => showShowdownExport(context, editor.party, editor.game),
             icon: const Icon(Icons.ios_share_rounded),
-            label: Text(tr(context, 'Equipo a Showdown', 'Team to Showdown')),
+            label: Text(context.l10n.toolsTeamToShowdown),
           ),
         if (writable && hasBoxes)
           OutlinedButton.icon(
             key: const ValueKey('tool-sort'),
             onPressed: () => _sort(context, ref),
             icon: const Icon(Icons.sort_rounded),
-            label: Text(tr(context, 'Ordenar cajas', 'Sort boxes')),
+            label: Text(context.l10n.toolsSortBoxes),
           ),
         OutlinedButton.icon(
           key: const ValueKey('tool-official'),
           onPressed: () => context.push('/dex/formato-oficial'),
           icon: const Icon(Icons.emoji_events_outlined),
-          label: Text(tr(context, 'Formato oficial', 'Official format')),
+          label: Text(context.l10n.toolsOfficialFormat),
         ),
       ],
     );

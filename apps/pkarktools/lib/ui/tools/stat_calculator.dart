@@ -6,7 +6,6 @@ import '../../theme/app_theme.dart';
 import '../../theme/game_palette.dart';
 import '../common/format.dart';
 import '../editor/pickers.dart';
-import 'tools_common.dart';
 
 /// Calculadora del editor: stats finales a nivel 50 y 100 con los IVs, EVs y
 /// naturaleza actuales, Poder Oculto y cálculo inverso de IVs a partir de
@@ -47,9 +46,7 @@ class _StatCalculatorPanelState extends State<StatCalculatorPanel> {
     final values = [for (final c in _observed) int.tryParse(c.text.trim()) ?? -1];
     if (values.any((v) => v <= 0)) {
       setState(() => _ranges = null);
-      ScaffoldMessenger.maybeOf(
-        context,
-      )?.showSnackBar(SnackBar(content: Text(tr(context, 'Escribe las seis estadísticas.', 'Enter all six stats.'))));
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(SnackBar(content: Text(context.l10n.toolsEnterAllSixStats)));
       return;
     }
     setState(() => _ranges = StatCalc.inferFor(widget.pk, values));
@@ -93,7 +90,7 @@ class _StatCalculatorPanelState extends State<StatCalculatorPanel> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(tr(context, 'Calculadora', 'Calculator'), style: context.text.titleMedium),
+          Text(context.l10n.toolsCalculator, style: context.text.titleMedium),
           const SizedBox(height: 10),
           Table(
             columnWidths: const {
@@ -107,11 +104,11 @@ class _StatCalculatorPanelState extends State<StatCalculatorPanel> {
               TableRow(
                 children: [
                   const SizedBox.shrink(),
-                  Text(tr(context, 'Nv. 50', 'Lv. 50'), style: context.text.labelMedium, textAlign: TextAlign.right),
-                  Text(tr(context, 'Nv. 100', 'Lv. 100'), style: context.text.labelMedium, textAlign: TextAlign.right),
+                  Text(context.l10n.toolsLv50, style: context.text.labelMedium, textAlign: TextAlign.right),
+                  Text(context.l10n.toolsLv100, style: context.text.labelMedium, textAlign: TextAlign.right),
                   Padding(
                     padding: const EdgeInsets.only(left: 12),
-                    child: Text(tr(context, 'Observada', 'Observed'), style: context.text.labelMedium),
+                    child: Text(context.l10n.toolsObserved, style: context.text.labelMedium),
                   ),
                 ],
               ),
@@ -143,24 +140,10 @@ class _StatCalculatorPanelState extends State<StatCalculatorPanel> {
                 ),
             ],
           ),
-          if (gb) ...[
-            const SizedBox(height: 4),
-            Text(
-              tr(
-                context,
-                'En Gen 1/2 la Especial vale para ataque y defensa especiales.',
-                'In Gen 1/2 Special covers both special attack and defense.',
-              ),
-              style: context.text.bodySmall,
-            ),
-          ],
+          if (gb) ...[const SizedBox(height: 4), Text(context.l10n.toolsInGen12Special, style: context.text.bodySmall)],
           const SizedBox(height: 10),
           Text(
-            tr(
-              context,
-              'IVs a partir de stats: escribe las estadísticas que ves en el juego (con los EVs, nivel ${pk.level} y naturaleza actuales).',
-              'IVs from stats: enter the stats you see in the game (with the current EVs, level ${pk.level} and nature).',
-            ),
+            context.l10n.toolsIVsFromStatsEnterThe(pk.level),
             style: context.text.bodySmall!.copyWith(color: context.tokens.muted),
           ),
           const SizedBox(height: 8),
@@ -168,18 +151,18 @@ class _StatCalculatorPanelState extends State<StatCalculatorPanel> {
             spacing: 8,
             runSpacing: 8,
             children: [
-              OutlinedButton(onPressed: _fillCurrent, child: Text(tr(context, 'Usar las actuales', 'Use current'))),
+              OutlinedButton(onPressed: _fillCurrent, child: Text(context.l10n.toolsUseCurrent)),
               FilledButton.tonal(
                 key: const ValueKey('calc-infer'),
                 onPressed: _infer,
-                child: Text(tr(context, 'Calcular IVs', 'Calculate IVs')),
+                child: Text(context.l10n.toolsCalculateIVs),
               ),
               if (allExact)
                 FilledButton(
                   key: const ValueKey('calc-apply'),
                   onPressed: () =>
                       widget.onApplyIvs([for (var i = 0; i < 6; i++) gb && i == 4 ? ranges[3].min : ranges[i].min]),
-                  child: Text(tr(context, 'Aplicar IVs', 'Apply IVs')),
+                  child: Text(context.l10n.toolsApplyIVs),
                 ),
             ],
           ),
@@ -187,11 +170,7 @@ class _StatCalculatorPanelState extends State<StatCalculatorPanel> {
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text(
-                tr(
-                  context,
-                  'Alguna estadística no encaja con ningún IV: revisa los EVs, el nivel o la naturaleza.',
-                  'Some stat fits no IV: check EVs, level or nature.',
-                ),
+                context.l10n.toolsSomeStatFitsNoIV,
                 style: context.text.bodySmall!.copyWith(color: context.colors.error),
               ),
             ),
@@ -227,7 +206,7 @@ class _HiddenPowerRow extends StatelessWidget {
           child: Text(name, style: context.text.labelMedium),
         ),
         const SizedBox(width: 8),
-        Text(tr(context, 'potencia $power', 'power $power'), style: context.text.labelMedium),
+        Text(context.l10n.toolsPower(power), style: context.text.labelMedium),
       ],
     );
   }

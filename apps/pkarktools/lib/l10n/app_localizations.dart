@@ -6516,6 +6516,518 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No se pudo transferir: {error}'**
   String transferFailed(String error);
+
+  /// No description provided for @toolsDexNumber.
+  ///
+  /// In es, this message translates to:
+  /// **'Nº de Pokédex'**
+  String get toolsDexNumber;
+
+  /// No description provided for @toolsType.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo'**
+  String get toolsType;
+
+  /// No description provided for @toolsGeneration.
+  ///
+  /// In es, this message translates to:
+  /// **'Generación'**
+  String get toolsGeneration;
+
+  /// No description provided for @toolsLivingDexEachSpeciesIn.
+  ///
+  /// In es, this message translates to:
+  /// **'Living dex (cada especie en su hueco)'**
+  String get toolsLivingDexEachSpeciesIn;
+
+  /// No description provided for @toolsLevel.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel'**
+  String get toolsLevel;
+
+  /// No description provided for @toolsShinyFirst.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor primero'**
+  String get toolsShinyFirst;
+
+  /// No description provided for @toolsSortBoxes.
+  ///
+  /// In es, this message translates to:
+  /// **'Ordenar cajas'**
+  String get toolsSortBoxes;
+
+  /// No description provided for @toolsOrderBy.
+  ///
+  /// In es, this message translates to:
+  /// **'Criterio'**
+  String get toolsOrderBy;
+
+  /// No description provided for @toolsScope.
+  ///
+  /// In es, this message translates to:
+  /// **'Alcance'**
+  String get toolsScope;
+
+  /// No description provided for @toolsAllBoxes.
+  ///
+  /// In es, this message translates to:
+  /// **'Todas las cajas'**
+  String get toolsAllBoxes;
+
+  /// No description provided for @toolsFrom.
+  ///
+  /// In es, this message translates to:
+  /// **'De'**
+  String get toolsFrom;
+
+  /// No description provided for @toolsTo.
+  ///
+  /// In es, this message translates to:
+  /// **'a'**
+  String get toolsTo;
+
+  /// No description provided for @toolsAlreadySortedNothingToMove.
+  ///
+  /// In es, this message translates to:
+  /// **'Ya está ordenado: no hay nada que mover.'**
+  String get toolsAlreadySortedNothingToMove;
+
+  /// No description provided for @toolsSlotsChangeYouCanUndo.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambian {moved} huecos. Podrás deshacerlo.'**
+  String toolsSlotsChangeYouCanUndo(Object moved);
+
+  /// No description provided for @toolsDuplicatesGoAfterTheLast.
+  ///
+  /// In es, this message translates to:
+  /// **'{overflow} repetidos van detrás del último número.'**
+  String toolsDuplicatesGoAfterTheLast(Object overflow);
+
+  /// No description provided for @toolsApplyOrder.
+  ///
+  /// In es, this message translates to:
+  /// **'Aplicar orden'**
+  String get toolsApplyOrder;
+
+  /// No description provided for @toolsOfficialFormat.
+  ///
+  /// In es, this message translates to:
+  /// **'Formato oficial'**
+  String get toolsOfficialFormat;
+
+  /// No description provided for @toolsRegulation.
+  ///
+  /// In es, this message translates to:
+  /// **'Regulación'**
+  String get toolsRegulation;
+
+  /// No description provided for @toolsYourPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus Pokémon'**
+  String get toolsYourPokemon;
+
+  /// No description provided for @toolsSearchPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar Pokémon'**
+  String get toolsSearchPokemon;
+
+  /// No description provided for @toolsDatesNotConfirmedByAn.
+  ///
+  /// In es, this message translates to:
+  /// **'Fechas sin confirmar en una fuente oficial ({datesSource}).'**
+  String toolsDatesNotConfirmedByAn(Object datesSource);
+
+  /// No description provided for @toolsRules.
+  ///
+  /// In es, this message translates to:
+  /// **'Reglas'**
+  String get toolsRules;
+
+  /// No description provided for @toolsDataPokemonShowdownChampions.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos: Pokémon Showdown (mod «champions»), versión del {sourceDate}, commit {commit}.'**
+  String toolsDataPokemonShowdownChampions(Object sourceDate, Object commit);
+
+  /// No description provided for @toolsViewSource.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver la fuente'**
+  String get toolsViewSource;
+
+  /// No description provided for @toolsAllowed.
+  ///
+  /// In es, this message translates to:
+  /// **'Permitidos ({allowedCount})'**
+  String toolsAllowed(Object allowedCount);
+
+  /// No description provided for @toolsBannedRestrictedLegendariesAndMythicals.
+  ///
+  /// In es, this message translates to:
+  /// **'Prohibidos: legendarios restringidos y singulares ({bannedCount})'**
+  String toolsBannedRestrictedLegendariesAndMythicals(Object bannedCount);
+
+  /// No description provided for @toolsDoubleBattlesVGCTeamOf.
+  ///
+  /// In es, this message translates to:
+  /// **'Combates dobles (VGC): equipo de {teamSize}, se eligen {bringDoubles}. Individuales: se eligen {bringSingles}.'**
+  String toolsDoubleBattlesVGCTeamOf(
+    Object teamSize,
+    Object bringDoubles,
+    Object bringSingles,
+  );
+
+  /// No description provided for @toolsLevelHigherLevelPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel {level}: los Pokémon de más nivel se ajustan a {level}.'**
+  String toolsLevelHigherLevelPokemon(Object level);
+
+  /// No description provided for @toolsSpeciesClauseNoRepeatedSpecies.
+  ///
+  /// In es, this message translates to:
+  /// **'Cláusula de especie: no se puede repetir especie.'**
+  String get toolsSpeciesClauseNoRepeatedSpecies;
+
+  /// No description provided for @toolsItemClauseEachItemAt.
+  ///
+  /// In es, this message translates to:
+  /// **'Cláusula de objeto: cada objeto como mucho {itemClause} vez.'**
+  String toolsItemClauseEachItemAt(Object itemClause);
+
+  /// No description provided for @toolsRestrictedLegendariesAndMythicalsAre.
+  ///
+  /// In es, this message translates to:
+  /// **'Prohibidos los legendarios restringidos y los singulares.'**
+  String get toolsRestrictedLegendariesAndMythicalsAre;
+
+  /// No description provided for @toolsMegaEvolutionAvailableForSpecies.
+  ///
+  /// In es, this message translates to:
+  /// **'Megaevolución disponible para {megaSpeciesCount} especies.'**
+  String toolsMegaEvolutionAvailableForSpecies(Object megaSpeciesCount);
+
+  /// No description provided for @toolsOpenTeamSheets.
+  ///
+  /// In es, this message translates to:
+  /// **'Hojas de equipo abiertas (Open Team Sheets).'**
+  String get toolsOpenTeamSheets;
+
+  /// No description provided for @toolsAllowedItemsTheSourceHas.
+  ///
+  /// In es, this message translates to:
+  /// **'Objetos permitidos: la fuente no da una lista completa; consúltala en el juego.'**
+  String get toolsAllowedItemsTheSourceHas;
+
+  /// No description provided for @toolsOfPokemonInYour.
+  ///
+  /// In es, this message translates to:
+  /// **'{eligible} de {allCount} Pokémon de tus partidas son elegibles para {formatName}.'**
+  String toolsOfPokemonInYour(
+    Object eligible,
+    Object allCount,
+    Object formatName,
+  );
+
+  /// No description provided for @toolsToUseThemTheyMust.
+  ///
+  /// In es, this message translates to:
+  /// **'Para usarlos hay que llevarlos a Pokémon Champions a través de Pokémon HOME.'**
+  String get toolsToUseThemTheyMust;
+
+  /// No description provided for @toolsEligibleOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo elegibles'**
+  String get toolsEligibleOnly;
+
+  /// No description provided for @toolsThereAreNoPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay Pokémon en el Arca.'**
+  String get toolsThereAreNoPokemon;
+
+  /// No description provided for @toolsHasAMegaEvolution.
+  ///
+  /// In es, this message translates to:
+  /// **'Tiene Megaevolución'**
+  String get toolsHasAMegaEvolution;
+
+  /// No description provided for @toolsPokemonAddedToThe.
+  ///
+  /// In es, this message translates to:
+  /// **'{added} Pokémon añadidos al borrador.'**
+  String toolsPokemonAddedToThe(Object added);
+
+  /// No description provided for @toolsBoxesSorted.
+  ///
+  /// In es, this message translates to:
+  /// **'Cajas ordenadas.'**
+  String get toolsBoxesSorted;
+
+  /// No description provided for @toolsUndo.
+  ///
+  /// In es, this message translates to:
+  /// **'Deshacer'**
+  String get toolsUndo;
+
+  /// No description provided for @toolsImportFromShowdown.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar de Showdown'**
+  String get toolsImportFromShowdown;
+
+  /// No description provided for @toolsTeamToShowdown.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipo a Showdown'**
+  String get toolsTeamToShowdown;
+
+  /// No description provided for @toolsPasteOneOrMorePok.
+  ///
+  /// In es, this message translates to:
+  /// **'Pega uno o varios Pokémon en formato de Pokémon Showdown (nombres en inglés).'**
+  String get toolsPasteOneOrMorePok;
+
+  /// No description provided for @toolsAnalyze.
+  ///
+  /// In es, this message translates to:
+  /// **'Analizar'**
+  String get toolsAnalyze;
+
+  /// No description provided for @toolsParty.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipo'**
+  String get toolsParty;
+
+  /// No description provided for @toolsBoxes.
+  ///
+  /// In es, this message translates to:
+  /// **'Cajas'**
+  String get toolsBoxes;
+
+  /// No description provided for @toolsNoPokemonFoundIn.
+  ///
+  /// In es, this message translates to:
+  /// **'No se encontró ningún Pokémon en el texto.'**
+  String get toolsNoPokemonFoundIn;
+
+  /// No description provided for @toolsOnlyRoomForOf.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo hay sitio para {room} de {okCount}.'**
+  String toolsOnlyRoomForOf(Object room, Object okCount);
+
+  /// No description provided for @toolsAddToTheSave.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir {count} al save'**
+  String toolsAddToTheSave(Object count);
+
+  /// No description provided for @toolsNoWarnings.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin avisos.'**
+  String get toolsNoWarnings;
+
+  /// No description provided for @toolsShowdownText.
+  ///
+  /// In es, this message translates to:
+  /// **'Texto de Showdown'**
+  String get toolsShowdownText;
+
+  /// No description provided for @toolsNoPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'(sin Pokémon)'**
+  String get toolsNoPokemon;
+
+  /// No description provided for @toolsCopy.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiar'**
+  String get toolsCopy;
+
+  /// No description provided for @toolsShare.
+  ///
+  /// In es, this message translates to:
+  /// **'Compartir'**
+  String get toolsShare;
+
+  /// No description provided for @toolsShareCard.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta para compartir'**
+  String get toolsShareCard;
+
+  /// No description provided for @toolsSavedTo.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardada en'**
+  String get toolsSavedTo;
+
+  /// No description provided for @toolsSavePNG.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar PNG'**
+  String get toolsSavePNG;
+
+  /// No description provided for @toolsNoShareMenuOnThis.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay menú de compartir en este sistema: usa «Guardar PNG».'**
+  String get toolsNoShareMenuOnThis;
+
+  /// No description provided for @toolsShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor'**
+  String get toolsShiny;
+
+  /// No description provided for @toolsNature.
+  ///
+  /// In es, this message translates to:
+  /// **'Naturaleza'**
+  String get toolsNature;
+
+  /// No description provided for @toolsAbility.
+  ///
+  /// In es, this message translates to:
+  /// **'Habilidad'**
+  String get toolsAbility;
+
+  /// No description provided for @toolsItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Objeto'**
+  String get toolsItem;
+
+  /// No description provided for @toolsTeraType.
+  ///
+  /// In es, this message translates to:
+  /// **'Teratipo'**
+  String get toolsTeraType;
+
+  /// No description provided for @toolsStellar.
+  ///
+  /// In es, this message translates to:
+  /// **'Astral'**
+  String get toolsStellar;
+
+  /// No description provided for @toolsOrigin.
+  ///
+  /// In es, this message translates to:
+  /// **'Origen'**
+  String get toolsOrigin;
+
+  /// No description provided for @toolsRibbons.
+  ///
+  /// In es, this message translates to:
+  /// **'Cintas'**
+  String get toolsRibbons;
+
+  /// No description provided for @toolsMoves.
+  ///
+  /// In es, this message translates to:
+  /// **'Movimientos'**
+  String get toolsMoves;
+
+  /// No description provided for @toolsMadeWithPKArkTools.
+  ///
+  /// In es, this message translates to:
+  /// **'Hecho con PKArkTools'**
+  String get toolsMadeWithPKArkTools;
+
+  /// No description provided for @toolsEnterAllSixStats.
+  ///
+  /// In es, this message translates to:
+  /// **'Escribe las seis estadísticas.'**
+  String get toolsEnterAllSixStats;
+
+  /// No description provided for @toolsCalculator.
+  ///
+  /// In es, this message translates to:
+  /// **'Calculadora'**
+  String get toolsCalculator;
+
+  /// No description provided for @toolsLv50.
+  ///
+  /// In es, this message translates to:
+  /// **'Nv. 50'**
+  String get toolsLv50;
+
+  /// No description provided for @toolsLv100.
+  ///
+  /// In es, this message translates to:
+  /// **'Nv. 100'**
+  String get toolsLv100;
+
+  /// No description provided for @toolsObserved.
+  ///
+  /// In es, this message translates to:
+  /// **'Observada'**
+  String get toolsObserved;
+
+  /// No description provided for @toolsInGen12Special.
+  ///
+  /// In es, this message translates to:
+  /// **'En Gen 1/2 la Especial vale para ataque y defensa especiales.'**
+  String get toolsInGen12Special;
+
+  /// No description provided for @toolsIVsFromStatsEnterThe.
+  ///
+  /// In es, this message translates to:
+  /// **'IVs a partir de stats: escribe las estadísticas que ves en el juego (con los EVs, nivel {level} y naturaleza actuales).'**
+  String toolsIVsFromStatsEnterThe(Object level);
+
+  /// No description provided for @toolsUseCurrent.
+  ///
+  /// In es, this message translates to:
+  /// **'Usar las actuales'**
+  String get toolsUseCurrent;
+
+  /// No description provided for @toolsCalculateIVs.
+  ///
+  /// In es, this message translates to:
+  /// **'Calcular IVs'**
+  String get toolsCalculateIVs;
+
+  /// No description provided for @toolsApplyIVs.
+  ///
+  /// In es, this message translates to:
+  /// **'Aplicar IVs'**
+  String get toolsApplyIVs;
+
+  /// No description provided for @toolsSomeStatFitsNoIV.
+  ///
+  /// In es, this message translates to:
+  /// **'Alguna estadística no encaja con ningún IV: revisa los EVs, el nivel o la naturaleza.'**
+  String get toolsSomeStatFitsNoIV;
+
+  /// No description provided for @toolsPower.
+  ///
+  /// In es, this message translates to:
+  /// **'potencia {power}'**
+  String toolsPower(Object power);
+
+  /// No description provided for @toolsCopiedToClipboard.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiado al portapapeles'**
+  String get toolsCopiedToClipboard;
+
+  /// No description provided for @toolsBoxesSortedNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Cajas ordenadas ({count} huecos)'**
+  String toolsBoxesSortedNote(int count);
 }
 
 class _AppLocalizationsDelegate

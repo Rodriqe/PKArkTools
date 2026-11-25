@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -1541,7 +1540,8 @@ class AppLocalizationsEs extends AppLocalizations {
       locale: localeName,
       other:
           '$count archivos omitidos (temporales, parciales o copias de conflicto de la nube).',
-      one: '1 archivo omitido (temporal, parcial o copia de conflicto de la nube).',
+      one:
+          '1 archivo omitido (temporal, parcial o copia de conflicto de la nube).',
     );
     return '$_temp0';
   }
@@ -4078,5 +4078,311 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String transferFailed(String error) {
     return 'No se pudo transferir: $error';
+  }
+
+  @override
+  String get toolsDexNumber => 'Nº de Pokédex';
+
+  @override
+  String get toolsType => 'Tipo';
+
+  @override
+  String get toolsGeneration => 'Generación';
+
+  @override
+  String get toolsLivingDexEachSpeciesIn =>
+      'Living dex (cada especie en su hueco)';
+
+  @override
+  String get toolsLevel => 'Nivel';
+
+  @override
+  String get toolsShinyFirst => 'Variocolor primero';
+
+  @override
+  String get toolsSortBoxes => 'Ordenar cajas';
+
+  @override
+  String get toolsOrderBy => 'Criterio';
+
+  @override
+  String get toolsScope => 'Alcance';
+
+  @override
+  String get toolsAllBoxes => 'Todas las cajas';
+
+  @override
+  String get toolsFrom => 'De';
+
+  @override
+  String get toolsTo => 'a';
+
+  @override
+  String get toolsAlreadySortedNothingToMove =>
+      'Ya está ordenado: no hay nada que mover.';
+
+  @override
+  String toolsSlotsChangeYouCanUndo(Object moved) {
+    return 'Cambian $moved huecos. Podrás deshacerlo.';
+  }
+
+  @override
+  String toolsDuplicatesGoAfterTheLast(Object overflow) {
+    return '$overflow repetidos van detrás del último número.';
+  }
+
+  @override
+  String get toolsApplyOrder => 'Aplicar orden';
+
+  @override
+  String get toolsOfficialFormat => 'Formato oficial';
+
+  @override
+  String get toolsRegulation => 'Regulación';
+
+  @override
+  String get toolsYourPokemon => 'Tus Pokémon';
+
+  @override
+  String get toolsSearchPokemon => 'Buscar Pokémon';
+
+  @override
+  String toolsDatesNotConfirmedByAn(Object datesSource) {
+    return 'Fechas sin confirmar en una fuente oficial ($datesSource).';
+  }
+
+  @override
+  String get toolsRules => 'Reglas';
+
+  @override
+  String toolsDataPokemonShowdownChampions(Object sourceDate, Object commit) {
+    return 'Datos: Pokémon Showdown (mod «champions»), versión del $sourceDate, commit $commit.';
+  }
+
+  @override
+  String get toolsViewSource => 'Ver la fuente';
+
+  @override
+  String toolsAllowed(Object allowedCount) {
+    return 'Permitidos ($allowedCount)';
+  }
+
+  @override
+  String toolsBannedRestrictedLegendariesAndMythicals(Object bannedCount) {
+    return 'Prohibidos: legendarios restringidos y singulares ($bannedCount)';
+  }
+
+  @override
+  String toolsDoubleBattlesVGCTeamOf(
+    Object teamSize,
+    Object bringDoubles,
+    Object bringSingles,
+  ) {
+    return 'Combates dobles (VGC): equipo de $teamSize, se eligen $bringDoubles. Individuales: se eligen $bringSingles.';
+  }
+
+  @override
+  String toolsLevelHigherLevelPokemon(Object level) {
+    return 'Nivel $level: los Pokémon de más nivel se ajustan a $level.';
+  }
+
+  @override
+  String get toolsSpeciesClauseNoRepeatedSpecies =>
+      'Cláusula de especie: no se puede repetir especie.';
+
+  @override
+  String toolsItemClauseEachItemAt(Object itemClause) {
+    return 'Cláusula de objeto: cada objeto como mucho $itemClause vez.';
+  }
+
+  @override
+  String get toolsRestrictedLegendariesAndMythicalsAre =>
+      'Prohibidos los legendarios restringidos y los singulares.';
+
+  @override
+  String toolsMegaEvolutionAvailableForSpecies(Object megaSpeciesCount) {
+    return 'Megaevolución disponible para $megaSpeciesCount especies.';
+  }
+
+  @override
+  String get toolsOpenTeamSheets =>
+      'Hojas de equipo abiertas (Open Team Sheets).';
+
+  @override
+  String get toolsAllowedItemsTheSourceHas =>
+      'Objetos permitidos: la fuente no da una lista completa; consúltala en el juego.';
+
+  @override
+  String toolsOfPokemonInYour(
+    Object eligible,
+    Object allCount,
+    Object formatName,
+  ) {
+    return '$eligible de $allCount Pokémon de tus partidas son elegibles para $formatName.';
+  }
+
+  @override
+  String get toolsToUseThemTheyMust =>
+      'Para usarlos hay que llevarlos a Pokémon Champions a través de Pokémon HOME.';
+
+  @override
+  String get toolsEligibleOnly => 'Solo elegibles';
+
+  @override
+  String get toolsThereAreNoPokemon => 'No hay Pokémon en el Arca.';
+
+  @override
+  String get toolsHasAMegaEvolution => 'Tiene Megaevolución';
+
+  @override
+  String toolsPokemonAddedToThe(Object added) {
+    return '$added Pokémon añadidos al borrador.';
+  }
+
+  @override
+  String get toolsBoxesSorted => 'Cajas ordenadas.';
+
+  @override
+  String get toolsUndo => 'Deshacer';
+
+  @override
+  String get toolsImportFromShowdown => 'Importar de Showdown';
+
+  @override
+  String get toolsTeamToShowdown => 'Equipo a Showdown';
+
+  @override
+  String get toolsPasteOneOrMorePok =>
+      'Pega uno o varios Pokémon en formato de Pokémon Showdown (nombres en inglés).';
+
+  @override
+  String get toolsAnalyze => 'Analizar';
+
+  @override
+  String get toolsParty => 'Equipo';
+
+  @override
+  String get toolsBoxes => 'Cajas';
+
+  @override
+  String get toolsNoPokemonFoundIn =>
+      'No se encontró ningún Pokémon en el texto.';
+
+  @override
+  String toolsOnlyRoomForOf(Object room, Object okCount) {
+    return 'Solo hay sitio para $room de $okCount.';
+  }
+
+  @override
+  String toolsAddToTheSave(Object count) {
+    return 'Añadir $count al save';
+  }
+
+  @override
+  String get toolsNoWarnings => 'Sin avisos.';
+
+  @override
+  String get toolsShowdownText => 'Texto de Showdown';
+
+  @override
+  String get toolsNoPokemon => '(sin Pokémon)';
+
+  @override
+  String get toolsCopy => 'Copiar';
+
+  @override
+  String get toolsShare => 'Compartir';
+
+  @override
+  String get toolsShareCard => 'Tarjeta para compartir';
+
+  @override
+  String get toolsSavedTo => 'Guardada en';
+
+  @override
+  String get toolsSavePNG => 'Guardar PNG';
+
+  @override
+  String get toolsNoShareMenuOnThis =>
+      'No hay menú de compartir en este sistema: usa «Guardar PNG».';
+
+  @override
+  String get toolsShiny => 'Variocolor';
+
+  @override
+  String get toolsNature => 'Naturaleza';
+
+  @override
+  String get toolsAbility => 'Habilidad';
+
+  @override
+  String get toolsItem => 'Objeto';
+
+  @override
+  String get toolsTeraType => 'Teratipo';
+
+  @override
+  String get toolsStellar => 'Astral';
+
+  @override
+  String get toolsOrigin => 'Origen';
+
+  @override
+  String get toolsRibbons => 'Cintas';
+
+  @override
+  String get toolsMoves => 'Movimientos';
+
+  @override
+  String get toolsMadeWithPKArkTools => 'Hecho con PKArkTools';
+
+  @override
+  String get toolsEnterAllSixStats => 'Escribe las seis estadísticas.';
+
+  @override
+  String get toolsCalculator => 'Calculadora';
+
+  @override
+  String get toolsLv50 => 'Nv. 50';
+
+  @override
+  String get toolsLv100 => 'Nv. 100';
+
+  @override
+  String get toolsObserved => 'Observada';
+
+  @override
+  String get toolsInGen12Special =>
+      'En Gen 1/2 la Especial vale para ataque y defensa especiales.';
+
+  @override
+  String toolsIVsFromStatsEnterThe(Object level) {
+    return 'IVs a partir de stats: escribe las estadísticas que ves en el juego (con los EVs, nivel $level y naturaleza actuales).';
+  }
+
+  @override
+  String get toolsUseCurrent => 'Usar las actuales';
+
+  @override
+  String get toolsCalculateIVs => 'Calcular IVs';
+
+  @override
+  String get toolsApplyIVs => 'Aplicar IVs';
+
+  @override
+  String get toolsSomeStatFitsNoIV =>
+      'Alguna estadística no encaja con ningún IV: revisa los EVs, el nivel o la naturaleza.';
+
+  @override
+  String toolsPower(Object power) {
+    return 'potencia $power';
+  }
+
+  @override
+  String get toolsCopiedToClipboard => 'Copiado al portapapeles';
+
+  @override
+  String toolsBoxesSortedNote(int count) {
+    return 'Cajas ordenadas ($count huecos)';
   }
 }

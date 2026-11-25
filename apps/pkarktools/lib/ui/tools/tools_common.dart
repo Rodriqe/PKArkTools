@@ -7,7 +7,6 @@ import '../common/format.dart';
 /// Texto en el idioma de la app. Las herramientas (Showdown, calculadora,
 /// cajas, formato oficial, tarjeta y emuladores) llevan sus textos aquí
 /// en vez de en los `.arb` para no chocar con otras ramas al fusionar.
-String tr(BuildContext context, String es, String en) => context.isSpanish ? es : en;
 
 /// Origen del menú de compartir (iPad y macOS lo necesitan).
 Rect? shareOrigin(BuildContext context) {
@@ -20,7 +19,7 @@ Rect? shareOrigin(BuildContext context) {
 /// soporte, tests) lo copia al portapapeles.
 Future<void> shareText(BuildContext context, String text, {String? subject}) async {
   final messenger = ScaffoldMessenger.maybeOf(context);
-  final copied = tr(context, 'Copiado al portapapeles', 'Copied to clipboard');
+  final copied = context.l10n.toolsCopiedToClipboard;
   try {
     final r = await SharePlus.instance.share(
       ShareParams(text: text, subject: subject, sharePositionOrigin: shareOrigin(context)),
@@ -49,7 +48,7 @@ Future<bool> shareFile(BuildContext context, Uint8List bytes, String name, Strin
 
 Future<void> copyText(BuildContext context, String text) async {
   final messenger = ScaffoldMessenger.maybeOf(context);
-  final msg = tr(context, 'Copiado al portapapeles', 'Copied to clipboard');
+  final msg = context.l10n.toolsCopiedToClipboard;
   await Clipboard.setData(ClipboardData(text: text));
   messenger?.showSnackBar(SnackBar(content: Text(msg)));
 }

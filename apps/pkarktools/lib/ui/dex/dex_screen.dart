@@ -8,7 +8,6 @@ import '../../theme/app_theme.dart';
 import '../../theme/game_palette.dart';
 import '../common/adaptive.dart';
 import '../common/format.dart';
-import '../tools/tools_common.dart';
 import 'dex_text.dart';
 import 'dex_tile.dart';
 
@@ -134,7 +133,7 @@ class _DexBody extends ConsumerWidget {
               ),
               IconButton(
                 key: const ValueKey('dex-official-format'),
-                tooltip: tr(context, 'Formato oficial', 'Official format'),
+                tooltip: l10n.toolsOfficialFormat,
                 onPressed: () => context.go('/dex/formato-oficial'),
                 icon: const Icon(Icons.emoji_events_outlined),
               ),

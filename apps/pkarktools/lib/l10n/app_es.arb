@@ -2966,5 +2966,226 @@
         "type": "String"
       }
     }
+  },
+  "toolsDexNumber": "Nº de Pokédex",
+  "toolsType": "Tipo",
+  "toolsGeneration": "Generación",
+  "toolsLivingDexEachSpeciesIn": "Living dex (cada especie en su hueco)",
+  "toolsLevel": "Nivel",
+  "toolsShinyFirst": "Variocolor primero",
+  "toolsSortBoxes": "Ordenar cajas",
+  "toolsOrderBy": "Criterio",
+  "toolsScope": "Alcance",
+  "toolsAllBoxes": "Todas las cajas",
+  "toolsFrom": "De",
+  "toolsTo": "a",
+  "toolsAlreadySortedNothingToMove": "Ya está ordenado: no hay nada que mover.",
+  "toolsSlotsChangeYouCanUndo": "Cambian {moved} huecos. Podrás deshacerlo.",
+  "@toolsSlotsChangeYouCanUndo": {
+    "placeholders": {
+      "moved": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsDuplicatesGoAfterTheLast": "{overflow} repetidos van detrás del último número.",
+  "@toolsDuplicatesGoAfterTheLast": {
+    "placeholders": {
+      "overflow": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsApplyOrder": "Aplicar orden",
+  "toolsOfficialFormat": "Formato oficial",
+  "toolsRegulation": "Regulación",
+  "toolsYourPokemon": "Tus Pokémon",
+  "toolsSearchPokemon": "Buscar Pokémon",
+  "toolsDatesNotConfirmedByAn": "Fechas sin confirmar en una fuente oficial ({datesSource}).",
+  "@toolsDatesNotConfirmedByAn": {
+    "placeholders": {
+      "datesSource": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsRules": "Reglas",
+  "toolsDataPokemonShowdownChampions": "Datos: Pokémon Showdown (mod «champions»), versión del {sourceDate}, commit {commit}.",
+  "@toolsDataPokemonShowdownChampions": {
+    "placeholders": {
+      "sourceDate": {
+        "type": "Object"
+      },
+      "commit": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsViewSource": "Ver la fuente",
+  "toolsAllowed": "Permitidos ({allowedCount})",
+  "@toolsAllowed": {
+    "placeholders": {
+      "allowedCount": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsBannedRestrictedLegendariesAndMythicals": "Prohibidos: legendarios restringidos y singulares ({bannedCount})",
+  "@toolsBannedRestrictedLegendariesAndMythicals": {
+    "placeholders": {
+      "bannedCount": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsDoubleBattlesVGCTeamOf": "Combates dobles (VGC): equipo de {teamSize}, se eligen {bringDoubles}. Individuales: se eligen {bringSingles}.",
+  "@toolsDoubleBattlesVGCTeamOf": {
+    "placeholders": {
+      "teamSize": {
+        "type": "Object"
+      },
+      "bringDoubles": {
+        "type": "Object"
+      },
+      "bringSingles": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsLevelHigherLevelPokemon": "Nivel {level}: los Pokémon de más nivel se ajustan a {level}.",
+  "@toolsLevelHigherLevelPokemon": {
+    "placeholders": {
+      "level": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsSpeciesClauseNoRepeatedSpecies": "Cláusula de especie: no se puede repetir especie.",
+  "toolsItemClauseEachItemAt": "Cláusula de objeto: cada objeto como mucho {itemClause} vez.",
+  "@toolsItemClauseEachItemAt": {
+    "placeholders": {
+      "itemClause": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsRestrictedLegendariesAndMythicalsAre": "Prohibidos los legendarios restringidos y los singulares.",
+  "toolsMegaEvolutionAvailableForSpecies": "Megaevolución disponible para {megaSpeciesCount} especies.",
+  "@toolsMegaEvolutionAvailableForSpecies": {
+    "placeholders": {
+      "megaSpeciesCount": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsOpenTeamSheets": "Hojas de equipo abiertas (Open Team Sheets).",
+  "toolsAllowedItemsTheSourceHas": "Objetos permitidos: la fuente no da una lista completa; consúltala en el juego.",
+  "toolsOfPokemonInYour": "{eligible} de {allCount} Pokémon de tus partidas son elegibles para {formatName}.",
+  "@toolsOfPokemonInYour": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "allCount": {
+        "type": "Object"
+      },
+      "formatName": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsToUseThemTheyMust": "Para usarlos hay que llevarlos a Pokémon Champions a través de Pokémon HOME.",
+  "toolsEligibleOnly": "Solo elegibles",
+  "toolsThereAreNoPokemon": "No hay Pokémon en el Arca.",
+  "toolsHasAMegaEvolution": "Tiene Megaevolución",
+  "toolsPokemonAddedToThe": "{added} Pokémon añadidos al borrador.",
+  "@toolsPokemonAddedToThe": {
+    "placeholders": {
+      "added": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsBoxesSorted": "Cajas ordenadas.",
+  "toolsUndo": "Deshacer",
+  "toolsImportFromShowdown": "Importar de Showdown",
+  "toolsTeamToShowdown": "Equipo a Showdown",
+  "toolsPasteOneOrMorePok": "Pega uno o varios Pokémon en formato de Pokémon Showdown (nombres en inglés).",
+  "toolsAnalyze": "Analizar",
+  "toolsParty": "Equipo",
+  "toolsBoxes": "Cajas",
+  "toolsNoPokemonFoundIn": "No se encontró ningún Pokémon en el texto.",
+  "toolsOnlyRoomForOf": "Solo hay sitio para {room} de {okCount}.",
+  "@toolsOnlyRoomForOf": {
+    "placeholders": {
+      "room": {
+        "type": "Object"
+      },
+      "okCount": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsAddToTheSave": "Añadir {count} al save",
+  "@toolsAddToTheSave": {
+    "placeholders": {
+      "count": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsNoWarnings": "Sin avisos.",
+  "toolsShowdownText": "Texto de Showdown",
+  "toolsNoPokemon": "(sin Pokémon)",
+  "toolsCopy": "Copiar",
+  "toolsShare": "Compartir",
+  "toolsShareCard": "Tarjeta para compartir",
+  "toolsSavedTo": "Guardada en",
+  "toolsSavePNG": "Guardar PNG",
+  "toolsNoShareMenuOnThis": "No hay menú de compartir en este sistema: usa «Guardar PNG».",
+  "toolsShiny": "Variocolor",
+  "toolsNature": "Naturaleza",
+  "toolsAbility": "Habilidad",
+  "toolsItem": "Objeto",
+  "toolsTeraType": "Teratipo",
+  "toolsStellar": "Astral",
+  "toolsOrigin": "Origen",
+  "toolsRibbons": "Cintas",
+  "toolsMoves": "Movimientos",
+  "toolsMadeWithPKArkTools": "Hecho con PKArkTools",
+  "toolsEnterAllSixStats": "Escribe las seis estadísticas.",
+  "toolsCalculator": "Calculadora",
+  "toolsLv50": "Nv. 50",
+  "toolsLv100": "Nv. 100",
+  "toolsObserved": "Observada",
+  "toolsInGen12Special": "En Gen 1/2 la Especial vale para ataque y defensa especiales.",
+  "toolsIVsFromStatsEnterThe": "IVs a partir de stats: escribe las estadísticas que ves en el juego (con los EVs, nivel {level} y naturaleza actuales).",
+  "@toolsIVsFromStatsEnterThe": {
+    "placeholders": {
+      "level": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsUseCurrent": "Usar las actuales",
+  "toolsCalculateIVs": "Calcular IVs",
+  "toolsApplyIVs": "Aplicar IVs",
+  "toolsSomeStatFitsNoIV": "Alguna estadística no encaja con ningún IV: revisa los EVs, el nivel o la naturaleza.",
+  "toolsPower": "potencia {power}",
+  "@toolsPower": {
+    "placeholders": {
+      "power": {
+        "type": "Object"
+      }
+    }
+  },
+  "toolsCopiedToClipboard": "Copiado al portapapeles",
+  "toolsBoxesSortedNote": "Cajas ordenadas ({count} huecos)",
+  "@toolsBoxesSortedNote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

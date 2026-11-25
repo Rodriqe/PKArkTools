@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pkcore/pkcore.dart';
 
+import '../common/format.dart';
 import '../../theme/app_theme.dart';
 import '../common/species_avatar.dart';
-import 'tools_common.dart';
 
 String boxSortModeLabel(BuildContext context, BoxSortMode m) => switch (m) {
-  BoxSortMode.dex => tr(context, 'Nº de Pokédex', 'Dex number'),
-  BoxSortMode.type => tr(context, 'Tipo', 'Type'),
-  BoxSortMode.generation => tr(context, 'Generación', 'Generation'),
-  BoxSortMode.livingDex => tr(
-    context,
-    'Living dex (cada especie en su hueco)',
-    'Living dex (each species in its slot)',
-  ),
-  BoxSortMode.level => tr(context, 'Nivel', 'Level'),
-  BoxSortMode.shinyFirst => tr(context, 'Variocolor primero', 'Shiny first'),
+  BoxSortMode.dex => context.l10n.toolsDexNumber,
+  BoxSortMode.type => context.l10n.toolsType,
+  BoxSortMode.generation => context.l10n.toolsGeneration,
+  BoxSortMode.livingDex => context.l10n.toolsLivingDexEachSpeciesIn,
+  BoxSortMode.level => context.l10n.toolsLevel,
+  BoxSortMode.shinyFirst => context.l10n.toolsShinyFirst,
 };
 
 /// Diálogo de ordenar cajas: criterio, alcance y vista previa. Devuelve el
@@ -65,11 +61,11 @@ class _BoxSortScreenState extends State<BoxSortScreen> {
         if (plan.layout.entries.any((x) => x.key.box == b && x.value != null)) b,
     ].take(4).toList();
     return Scaffold(
-      appBar: AppBar(title: Text(tr(context, 'Ordenar cajas', 'Sort boxes'))),
+      appBar: AppBar(title: Text(context.l10n.toolsSortBoxes)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
         children: [
-          Text(tr(context, 'Criterio', 'Order by'), style: context.text.titleMedium),
+          Text(context.l10n.toolsOrderBy, style: context.text.titleMedium),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -85,7 +81,7 @@ class _BoxSortScreenState extends State<BoxSortScreen> {
             ],
           ),
           const SizedBox(height: 20),
-          Text(tr(context, 'Alcance', 'Scope'), style: context.text.titleMedium),
+          Text(context.l10n.toolsScope, style: context.text.titleMedium),
           const SizedBox(height: 8),
           Wrap(
             spacing: 12,
@@ -93,19 +89,19 @@ class _BoxSortScreenState extends State<BoxSortScreen> {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               ActionChip(
-                label: Text(tr(context, 'Todas las cajas', 'All boxes')),
+                label: Text(context.l10n.toolsAllBoxes),
                 onPressed: () => _update(() {
                   _first = 0;
                   _last = e.boxCount - 1;
                 }),
               ),
-              Text(tr(context, 'De', 'From')),
+              Text(context.l10n.toolsFrom),
               DropdownButton<int>(
                 value: _first,
                 items: [for (final b in boxes) DropdownMenuItem(value: b, child: Text(e.boxName(b)))],
                 onChanged: (v) => _update(() => _first = v ?? 0),
               ),
-              Text(tr(context, 'a', 'to')),
+              Text(context.l10n.toolsTo),
               DropdownButton<int>(
                 value: _last,
                 items: [
@@ -119,24 +115,13 @@ class _BoxSortScreenState extends State<BoxSortScreen> {
           const SizedBox(height: 20),
           Text(
             plan.isNoop
-                ? tr(context, 'Ya está ordenado: no hay nada que mover.', 'Already sorted: nothing to move.')
-                : tr(
-                    context,
-                    'Cambian ${plan.moved} huecos. Podrás deshacerlo.',
-                    '${plan.moved} slots change. You can undo it.',
-                  ),
+                ? context.l10n.toolsAlreadySortedNothingToMove
+                : context.l10n.toolsSlotsChangeYouCanUndo(plan.moved),
             key: const ValueKey('sort-summary'),
             style: context.text.bodyMedium!.copyWith(color: context.tokens.muted),
           ),
           if (_mode == BoxSortMode.livingDex && plan.overflow > 0)
-            Text(
-              tr(
-                context,
-                '${plan.overflow} repetidos van detrás del último número.',
-                '${plan.overflow} duplicates go after the last number.',
-              ),
-              style: context.text.bodySmall,
-            ),
+            Text(context.l10n.toolsDuplicatesGoAfterTheLast(plan.overflow), style: context.text.bodySmall),
           const SizedBox(height: 12),
           for (final b in preview) ...[
             Text(e.boxName(b), style: context.text.labelLarge),
@@ -153,7 +138,7 @@ class _BoxSortScreenState extends State<BoxSortScreen> {
             key: const ValueKey('sort-apply'),
             onPressed: plan.isNoop ? null : () => Navigator.of(context).pop(plan),
             icon: const Icon(Icons.sort_rounded),
-            label: Text(tr(context, 'Aplicar orden', 'Apply order')),
+            label: Text(context.l10n.toolsApplyOrder),
           ),
         ),
       ),

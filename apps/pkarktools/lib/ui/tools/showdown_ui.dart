@@ -82,16 +82,12 @@ class _ShowdownImportScreenState extends State<ShowdownImportScreen> {
     final room = placementFor(widget.editor, ok.length, _target).length;
     final hasParty = widget.editor.partyCapacity > 0;
     return Scaffold(
-      appBar: AppBar(title: Text(tr(context, 'Importar de Showdown', 'Import from Showdown'))),
+      appBar: AppBar(title: Text(context.l10n.toolsImportFromShowdown)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
         children: [
           Text(
-            tr(
-              context,
-              'Pega uno o varios Pokémon en formato de Pokémon Showdown (nombres en inglés).',
-              'Paste one or more Pokémon in Pokémon Showdown format.',
-            ),
+            context.l10n.toolsPasteOneOrMorePok,
             style: context.text.bodyMedium!.copyWith(color: context.tokens.muted),
           ),
           const SizedBox(height: 12),
@@ -116,13 +112,13 @@ class _ShowdownImportScreenState extends State<ShowdownImportScreen> {
                 key: const ValueKey('showdown-analyze'),
                 onPressed: _analyze,
                 icon: const Icon(Icons.manage_search_rounded),
-                label: Text(tr(context, 'Analizar', 'Analyze')),
+                label: Text(context.l10n.toolsAnalyze),
               ),
               if (hasParty)
                 SegmentedButton<ShowdownTarget>(
                   segments: [
-                    ButtonSegment(value: ShowdownTarget.party, label: Text(tr(context, 'Equipo', 'Party'))),
-                    ButtonSegment(value: ShowdownTarget.boxes, label: Text(tr(context, 'Cajas', 'Boxes'))),
+                    ButtonSegment(value: ShowdownTarget.party, label: Text(context.l10n.toolsParty)),
+                    ButtonSegment(value: ShowdownTarget.boxes, label: Text(context.l10n.toolsBoxes)),
                   ],
                   selected: {_target},
                   onSelectionChanged: (s) => setState(() => _target = s.first),
@@ -131,14 +127,13 @@ class _ShowdownImportScreenState extends State<ShowdownImportScreen> {
           ),
           if (results != null) ...[
             const SizedBox(height: 20),
-            if (results.isEmpty)
-              Text(tr(context, 'No se encontró ningún Pokémon en el texto.', 'No Pokémon found in the text.')),
+            if (results.isEmpty) Text(context.l10n.toolsNoPokemonFoundIn),
             for (final r in results) _ResultTile(result: r, game: widget.editor.game, es: es),
             if (ok.isNotEmpty && room < ok.length)
               Padding(
                 padding: const EdgeInsets.only(top: 12),
                 child: Text(
-                  tr(context, 'Solo hay sitio para $room de ${ok.length}.', 'Only room for $room of ${ok.length}.'),
+                  context.l10n.toolsOnlyRoomForOf(room, ok.length),
                   style: TextStyle(color: context.colors.error),
                 ),
               ),
@@ -155,13 +150,7 @@ class _ShowdownImportScreenState extends State<ShowdownImportScreen> {
                 : () =>
                       Navigator.of(context).pop(ShowdownImportResult([for (final r in ok.take(room)) r.pkm!], _target)),
             icon: const Icon(Icons.add_rounded),
-            label: Text(
-              tr(
-                context,
-                'Añadir ${ok.isEmpty ? '' : ok.length.clamp(0, room)} al save',
-                'Add ${ok.isEmpty ? '' : ok.length.clamp(0, room)} to the save',
-              ),
-            ),
+            label: Text(context.l10n.toolsAddToTheSave(ok.isEmpty ? '' : ok.length.clamp(0, room))),
           ),
         ),
       ),
@@ -210,7 +199,7 @@ class _ResultTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   if (warn.isEmpty)
-                    Text(tr(context, 'Sin avisos.', 'No warnings.'), style: TextStyle(color: context.tokens.muted))
+                    Text(context.l10n.toolsNoWarnings, style: TextStyle(color: context.tokens.muted))
                   else
                     for (final w in warn)
                       Padding(
@@ -242,12 +231,12 @@ Future<void> showShowdownExport(BuildContext context, List<Pkm> team, GameVersio
   return showDialog<void>(
     context: context,
     builder: (ctx) => AlertDialog(
-      title: Text(tr(ctx, 'Texto de Showdown', 'Showdown text')),
+      title: Text(ctx.l10n.toolsShowdownText),
       content: SizedBox(
         width: 480,
         child: SingleChildScrollView(
           child: SelectableText(
-            text.isEmpty ? tr(ctx, '(sin Pokémon)', '(no Pokémon)') : text,
+            text.isEmpty ? ctx.l10n.toolsNoPokemon : text,
             key: const ValueKey('showdown-export-text'),
             style: const TextStyle(fontFamily: 'monospace', fontSize: 13),
           ),
@@ -258,13 +247,13 @@ Future<void> showShowdownExport(BuildContext context, List<Pkm> team, GameVersio
         OutlinedButton.icon(
           onPressed: text.isEmpty ? null : () => copyText(ctx, text),
           icon: const Icon(Icons.copy_rounded),
-          label: Text(tr(ctx, 'Copiar', 'Copy')),
+          label: Text(ctx.l10n.toolsCopy),
         ),
         Builder(
           builder: (b) => FilledButton.icon(
             onPressed: text.isEmpty ? null : () => shareText(b, text, subject: 'Pokémon Showdown'),
             icon: const Icon(Icons.ios_share_rounded),
-            label: Text(tr(ctx, 'Compartir', 'Share')),
+            label: Text(ctx.l10n.toolsShare),
           ),
         ),
       ],
