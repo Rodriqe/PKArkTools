@@ -289,6 +289,10 @@ The video is rebuilt from the recordings with `tool/record_demo_video.sh` and
 |---|---|---|---|---|---|
 | <img src="docs/screenshots/ios/v2_pro_02_arca_colores.png" alt="iPhone: Ark"> | <img src="docs/screenshots/ios/v2_pro_05_ficha_iconos.png" alt="iPhone: Pokémon"> | <img src="docs/screenshots/ios/v2_pro_06_origen.png" alt="iPhone: origin"> | <img src="docs/screenshots/android/v2_02_arca_colores.png" alt="Android: Ark"> | <img src="docs/screenshots/android/v2_04_cajas_iconos.png" alt="Android: boxes"> | <img src="docs/screenshots/android/v2_07_cintas.png" alt="Android: ribbons"> |
 
+| Android 2.0 | | | | | |
+|---|---|---|---|---|---|
+| <img src="docs/screenshots/android/v2.0_03_living_dex_button.png" alt="Android: living dex button"> | <img src="docs/screenshots/android/v2.0_06_living_dex_summary.png" alt="Android: living dex summary"> | <img src="docs/screenshots/android/v2.0_07_transfer.png" alt="Android: transfer"> | <img src="docs/screenshots/android/v2.0_02_create_from_event.png" alt="Android: create from event"> | <img src="docs/screenshots/android/v2.0_09_stat_calculator.png" alt="Android: stat calculator"> | <img src="docs/screenshots/android/v2.0_11_share_card.png" alt="Android: share card"> |
+
 | App icon | |
 |---|---|
 | <img src="docs/screenshots/v2/mac_00_icono.png" width="160" alt="macOS icon"> | <img src="docs/screenshots/android/v2_09_lanzador.png" width="160" alt="Android launcher"> |
