@@ -29,6 +29,11 @@ class EditorDelete extends EditorResult {
   const EditorDelete();
 }
 
+/// «Transferir a otra partida…»: el Pokémon guardado (sin cambios sin aplicar).
+class EditorTransfer extends EditorResult {
+  const EditorTransfer();
+}
+
 class EditorClone extends EditorResult {
   const EditorClone(this.pk);
   final Pkm pk;
@@ -45,9 +50,11 @@ class PokemonEditorScreen extends StatefulWidget {
     this.isNew = false,
     this.onExport,
     this.canDelete = true,
+    this.canTransfer = false,
   });
 
   final GameVersion game;
+  final bool canTransfer;
   final Pkm initial;
   final String slotLabel;
   final bool isNew;
@@ -61,6 +68,7 @@ class PokemonEditorScreen extends StatefulWidget {
     required String slotLabel,
     bool isNew = false,
     bool canDelete = true,
+    bool canTransfer = false,
     Future<void> Function(Pkm pk)? onExport,
   }) =>
       // Navegador raíz: el editor ocupa toda la pantalla (sin la barra inferior).
@@ -72,6 +80,7 @@ class PokemonEditorScreen extends StatefulWidget {
           slotLabel: slotLabel,
           isNew: isNew,
           canDelete: canDelete,
+          canTransfer: canTransfer,
           onExport: onExport,
         ),
       ));
@@ -205,6 +214,8 @@ class _PokemonEditorScreenState extends State<PokemonEditorScreen> {
                       await widget.onExport?.call(pk);
                     case 'clone':
                       nav.pop(EditorClone(pk));
+                    case 'transfer':
+                      nav.pop(const EditorTransfer());
                     case 'delete':
                       nav.pop(const EditorDelete());
                   }
@@ -212,6 +223,7 @@ class _PokemonEditorScreenState extends State<PokemonEditorScreen> {
                 itemBuilder: (_) => [
                   if (widget.onExport != null)
                     PopupMenuItem(value: 'export', child: Text(l10n.exportPokemon(f.extension))),
+                  if (widget.canTransfer) PopupMenuItem(value: 'transfer', child: Text(l10n.transferTo)),
                   PopupMenuItem(value: 'clone', child: Text(l10n.clonePokemon)),
                   if (widget.canDelete) PopupMenuItem(value: 'delete', child: Text(l10n.deletePokemon)),
                 ],

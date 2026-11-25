@@ -273,7 +273,7 @@ class _SnapshotContentState extends ConsumerState<_SnapshotContent> {
       if (hasEvents) _Section.events,
     };
     final section = available.contains(_section) ? _section : _Section.pokemon;
-    final actions = StorageActions(context, ref, snapshot.id, game);
+    final actions = StorageActions(context, ref, snapshot.id, game, slotId: widget.slot.id, isLatest: widget.isLatest);
     final note = snapshot.note;
 
     return Column(
@@ -329,6 +329,14 @@ class _SnapshotContentState extends ConsumerState<_SnapshotContent> {
             child: switch (section) {
           _Section.pokemon when !hasStorage => _Notice(text: l10n.notSupportedStorage, accent: accent),
           _Section.pokemon => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              if (widget.isLatest && !editor.readOnly) ...[
+                OutlinedButton.icon(
+                  onPressed: () => actions.transfer(),
+                  icon: const Icon(Icons.swap_horiz_rounded),
+                  label: Text(l10n.transferPokemonMenu),
+                ),
+                const SizedBox(height: 24),
+              ],
               // Juegos de solo cajas (Stadium, Box, Rancho): sin equipo.
               if (editor.partyCapacity > 0) ...[
                 _SectionTitle(l10n.team),

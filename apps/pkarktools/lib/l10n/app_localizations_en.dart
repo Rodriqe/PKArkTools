@@ -3301,4 +3301,292 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get rmContestOrderG4 =>
       'Each condition is won in order: Normal → Great → Ultra → Master (Hearthome City). Any species except Ditto and Unown.';
+
+  @override
+  String get transferTo => 'Transfer to another save…';
+
+  @override
+  String get transferPokemonMenu => 'Transfer Pokémon…';
+
+  @override
+  String get transferTitle => 'Transfer Pokémon';
+
+  @override
+  String get transferIntro =>
+      'Take Pokémon to another save in the Ark, even from another generation, following the rules of Pal Park, Poké Transfer, Poké Transporter, Bank and HOME. Both saves are stored as new copies; the previous ones stay in the history.';
+
+  @override
+  String get transferStepPokemon => 'Pokémon';
+
+  @override
+  String transferSelectedCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n selected',
+      one: '1 selected',
+      zero: 'None selected',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get transferSelectAll => 'All';
+
+  @override
+  String get transferSelectNone => 'None';
+
+  @override
+  String get transferStepDestination => 'Destination save';
+
+  @override
+  String get transferNoDestinations =>
+      'There is no other save in the Ark to transfer to.';
+
+  @override
+  String get transferStepWhere => 'Where to put them';
+
+  @override
+  String get transferFirstFree => 'First free slot';
+
+  @override
+  String transferFromBox(String box) {
+    return 'From $box';
+  }
+
+  @override
+  String get transferStepPreview => 'Preview';
+
+  @override
+  String get transferStepMode => 'Mode';
+
+  @override
+  String get transferModeMove => 'Move';
+
+  @override
+  String get transferModeCopy => 'Copy';
+
+  @override
+  String get transferModeMoveDesc => 'It leaves the source save, as in HOME.';
+
+  @override
+  String get transferModeCopyDesc => 'The original stays where it is.';
+
+  @override
+  String get transferCloneWarning =>
+      'Some Pokémon have a HOME tracker: the copy would share it, and PKHeX (and HOME) would see it as a clone of the original.';
+
+  @override
+  String get transferCloneConfirm => 'Copy anyway as a clone';
+
+  @override
+  String transferConfirm(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Transfer $n Pokémon',
+      one: 'Transfer 1 Pokémon',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String transferDone(String game, int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n Pokémon transferred to $game.',
+      one: '1 Pokémon transferred to $game.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String transferNoteTo(String game, int n) {
+    return 'Received $n Pokémon from $game';
+  }
+
+  @override
+  String transferNoteFrom(String game, int n) {
+    return 'Sent $n Pokémon to $game';
+  }
+
+  @override
+  String get transferDirty =>
+      'Save or discard this save\'s changes before transferring.';
+
+  @override
+  String transferRoute(String route) {
+    return 'Route: $route';
+  }
+
+  @override
+  String transferGoesTo(String slot) {
+    return 'Goes to $slot';
+  }
+
+  @override
+  String get transferNoChanges => 'No relevant changes.';
+
+  @override
+  String transferChangeMoves(String after, String before) {
+    return 'Moves: $before → $after';
+  }
+
+  @override
+  String transferChangeBall(String after, String before) {
+    return 'Ball: $before → $after';
+  }
+
+  @override
+  String transferChangeItemRemoved(String item) {
+    return 'Held item removed: $item';
+  }
+
+  @override
+  String transferChangeItem(String after, String before) {
+    return 'Held item: $before → $after';
+  }
+
+  @override
+  String transferChangeRibbonsKept(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Keeps $n ribbons',
+      one: 'Keeps 1 ribbon',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String transferChangeRibbonsLost(String list) {
+    return 'Ribbons that don\'t exist at the destination: $list';
+  }
+
+  @override
+  String transferChangeNickname(String after, String before) {
+    return 'Name: $before → $after';
+  }
+
+  @override
+  String transferChangeAbility(String after, String before) {
+    return 'Ability: $before → $after';
+  }
+
+  @override
+  String transferChangeLevel(String after, String before) {
+    return 'Level: $before → $after';
+  }
+
+  @override
+  String get transferChangeForm => 'Changes form';
+
+  @override
+  String get transferChangeIvs =>
+      'New IVs: Virtual Console gives 3 perfect IVs (5 for Mew and Celebi)';
+
+  @override
+  String get transferChangeNature => 'Nature changes';
+
+  @override
+  String get transferBlockBackwards =>
+      'It can\'t go back to an older generation.';
+
+  @override
+  String get transferBlockNoRoute =>
+      'There\'s no official way to take it to that game.';
+
+  @override
+  String get transferBlockShadow =>
+      'It\'s a Shadow Pokémon: purify it in Colosseum or XD first.';
+
+  @override
+  String get transferBlockEgg =>
+      'Eggs can only be traded between games of the same generation.';
+
+  @override
+  String get transferBlockSpecies =>
+      'This species doesn\'t exist in the destination game.';
+
+  @override
+  String get transferBlockForm => 'This form can\'t go to that game.';
+
+  @override
+  String get transferBlockBdsp =>
+      'Spinda and Nincada can\'t enter or leave Brilliant Diamond and Shining Pearl.';
+
+  @override
+  String get transferBlockLetsGo =>
+      'Only Pokémon that came from Let\'s Go can return to it.';
+
+  @override
+  String get transferBlockGbLanguage =>
+      'Japanese and international Game Boy saves can\'t trade.';
+
+  @override
+  String get transferBlockGen1 =>
+      'The species, its moves or item don\'t exist in Gen 1.';
+
+  @override
+  String get transferBlockUnsupported =>
+      'Colosseum and XD can\'t receive Pokémon from other games here.';
+
+  @override
+  String get transferSkipNoSpace =>
+      'There\'s no room left in the destination boxes.';
+
+  @override
+  String get transferSkipLocked => 'It\'s in a locked slot.';
+
+  @override
+  String get transferSkipLastInParty =>
+      'It\'s the last one in the party: the party can\'t be empty.';
+
+  @override
+  String get transferHomeTitle => 'This transfer goes through Pokémon HOME';
+
+  @override
+  String get transferHomeBody =>
+      'The app can only guarantee continuity up to Alola (Gen 7: Sun/Moon, Ultra Sun/Ultra Moon and Pokémon Bank). To reach a Switch game, the Pokémon needs a HOME tracker: the app generates it on your device, not HOME\'s servers. PKHeX accepts it, but we can\'t guarantee how the real HOME would treat it: we recommend not uploading Pokémon transferred this way to HOME.';
+
+  @override
+  String get transferHomeAck => 'I understand';
+
+  @override
+  String get transferAlolaButton =>
+      'Take it to Alola and continue with Bank/HOME';
+
+  @override
+  String get transferAlolaRecommended =>
+      'Recommended: take it with the app to an Alola game and continue from there with the official Pokémon Bank and HOME, so HOME assigns its own tracker.';
+
+  @override
+  String get transferAlolaNone =>
+      'For that you need a Sun/Moon or Ultra Sun/Ultra Moon save in the Ark.';
+
+  @override
+  String get transferAlolaPick => 'Choose the Alola save';
+
+  @override
+  String get transferGuideButton => 'How to continue with Bank and HOME';
+
+  @override
+  String get transferGuideTitle => 'From Alola to Switch with Bank and HOME';
+
+  @override
+  String get transferGuideBody =>
+      '1. Export the Alola save from the Ark and put it on your 3DS.\n2. On the 3DS, open Pokémon Bank and deposit the Pokémon (Poké Transporter is only needed for Gen 5 and Virtual Console).\n3. In Pokémon HOME (mobile or Switch), use “Pokémon Bank” to move the Bank box to HOME.\n4. On the Switch, open HOME and take the Pokémon to Sword/Shield, Brilliant Diamond/Shining Pearl, Legends: Arceus, Scarlet/Violet or Legends: Z-A.\n\nPokémon Bank only works on a 3DS that already has it installed: the 3DS eShop closed in 2023. Let\'s Go doesn\'t use Bank: it goes to HOME directly from its own game.';
+
+  @override
+  String get transferLegality => 'Legality at the destination';
+
+  @override
+  String get transferNothingReady =>
+      'None of the selected Pokémon can be transferred to that save.';
+
+  @override
+  String transferFailed(String error) {
+    return 'Couldn\'t transfer: $error';
+  }
 }

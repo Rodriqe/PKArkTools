@@ -5322,6 +5322,414 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Cada categoría se gana en orden: Normal → Difícil → Superior → Experto (Ciudad Corazón). Todas las especies menos Ditto y Unown.'**
   String get rmContestOrderG4;
+
+  /// No description provided for @transferTo.
+  ///
+  /// In es, this message translates to:
+  /// **'Transferir a otra partida…'**
+  String get transferTo;
+
+  /// No description provided for @transferPokemonMenu.
+  ///
+  /// In es, this message translates to:
+  /// **'Transferir Pokémon…'**
+  String get transferPokemonMenu;
+
+  /// No description provided for @transferTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Transferir Pokémon'**
+  String get transferTitle;
+
+  /// No description provided for @transferIntro.
+  ///
+  /// In es, this message translates to:
+  /// **'Lleva Pokémon a otra partida del Arca, aunque sea de otra generación, con las reglas de Pal Park, Poké Transfer, Poké Transporter, Banco y HOME. Las dos partidas se guardan como copias nuevas; las anteriores siguen en el historial.'**
+  String get transferIntro;
+
+  /// No description provided for @transferStepPokemon.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon'**
+  String get transferStepPokemon;
+
+  /// No description provided for @transferSelectedCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =0{Ninguno seleccionado} =1{1 seleccionado} other{{n} seleccionados}}'**
+  String transferSelectedCount(int n);
+
+  /// No description provided for @transferSelectAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos'**
+  String get transferSelectAll;
+
+  /// No description provided for @transferSelectNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguno'**
+  String get transferSelectNone;
+
+  /// No description provided for @transferStepDestination.
+  ///
+  /// In es, this message translates to:
+  /// **'Partida de destino'**
+  String get transferStepDestination;
+
+  /// No description provided for @transferNoDestinations.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay otra partida en el Arca a la que transferir.'**
+  String get transferNoDestinations;
+
+  /// No description provided for @transferStepWhere.
+  ///
+  /// In es, this message translates to:
+  /// **'Dónde dejarlos'**
+  String get transferStepWhere;
+
+  /// No description provided for @transferFirstFree.
+  ///
+  /// In es, this message translates to:
+  /// **'Primer hueco libre'**
+  String get transferFirstFree;
+
+  /// No description provided for @transferFromBox.
+  ///
+  /// In es, this message translates to:
+  /// **'Desde {box}'**
+  String transferFromBox(String box);
+
+  /// No description provided for @transferStepPreview.
+  ///
+  /// In es, this message translates to:
+  /// **'Vista previa'**
+  String get transferStepPreview;
+
+  /// No description provided for @transferStepMode.
+  ///
+  /// In es, this message translates to:
+  /// **'Modo'**
+  String get transferStepMode;
+
+  /// No description provided for @transferModeMove.
+  ///
+  /// In es, this message translates to:
+  /// **'Mover'**
+  String get transferModeMove;
+
+  /// No description provided for @transferModeCopy.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiar'**
+  String get transferModeCopy;
+
+  /// No description provided for @transferModeMoveDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Se quita de la partida de origen, como en HOME.'**
+  String get transferModeMoveDesc;
+
+  /// No description provided for @transferModeCopyDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'El original se queda donde está.'**
+  String get transferModeCopyDesc;
+
+  /// No description provided for @transferCloneWarning.
+  ///
+  /// In es, this message translates to:
+  /// **'Algún Pokémon tiene rastreador de HOME: la copia tendría el mismo y PKHeX (y HOME) la verían como un clon del original.'**
+  String get transferCloneWarning;
+
+  /// No description provided for @transferCloneConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiar igualmente como clon'**
+  String get transferCloneConfirm;
+
+  /// No description provided for @transferConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =1{Transferir 1 Pokémon} other{Transferir {n} Pokémon}}'**
+  String transferConfirm(int n);
+
+  /// No description provided for @transferDone.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =1{1 Pokémon transferido a {game}.} other{{n} Pokémon transferidos a {game}.}}'**
+  String transferDone(String game, int n);
+
+  /// No description provided for @transferNoteTo.
+  ///
+  /// In es, this message translates to:
+  /// **'Recibidos {n} Pokémon de {game}'**
+  String transferNoteTo(String game, int n);
+
+  /// No description provided for @transferNoteFrom.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviados {n} Pokémon a {game}'**
+  String transferNoteFrom(String game, int n);
+
+  /// No description provided for @transferDirty.
+  ///
+  /// In es, this message translates to:
+  /// **'Guarda o descarta los cambios de esta partida antes de transferir.'**
+  String get transferDirty;
+
+  /// No description provided for @transferRoute.
+  ///
+  /// In es, this message translates to:
+  /// **'Ruta: {route}'**
+  String transferRoute(String route);
+
+  /// No description provided for @transferGoesTo.
+  ///
+  /// In es, this message translates to:
+  /// **'Irá a {slot}'**
+  String transferGoesTo(String slot);
+
+  /// No description provided for @transferNoChanges.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin cambios relevantes.'**
+  String get transferNoChanges;
+
+  /// No description provided for @transferChangeMoves.
+  ///
+  /// In es, this message translates to:
+  /// **'Movimientos: {before} → {after}'**
+  String transferChangeMoves(String after, String before);
+
+  /// No description provided for @transferChangeBall.
+  ///
+  /// In es, this message translates to:
+  /// **'Ball: {before} → {after}'**
+  String transferChangeBall(String after, String before);
+
+  /// No description provided for @transferChangeItemRemoved.
+  ///
+  /// In es, this message translates to:
+  /// **'Se retira el objeto: {item}'**
+  String transferChangeItemRemoved(String item);
+
+  /// No description provided for @transferChangeItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Objeto: {before} → {after}'**
+  String transferChangeItem(String after, String before);
+
+  /// No description provided for @transferChangeRibbonsKept.
+  ///
+  /// In es, this message translates to:
+  /// **'{n, plural, =1{Conserva 1 cinta} other{Conserva {n} cintas}}'**
+  String transferChangeRibbonsKept(int n);
+
+  /// No description provided for @transferChangeRibbonsLost.
+  ///
+  /// In es, this message translates to:
+  /// **'Cintas que no existen en el destino: {list}'**
+  String transferChangeRibbonsLost(String list);
+
+  /// No description provided for @transferChangeNickname.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre: {before} → {after}'**
+  String transferChangeNickname(String after, String before);
+
+  /// No description provided for @transferChangeAbility.
+  ///
+  /// In es, this message translates to:
+  /// **'Habilidad: {before} → {after}'**
+  String transferChangeAbility(String after, String before);
+
+  /// No description provided for @transferChangeLevel.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel: {before} → {after}'**
+  String transferChangeLevel(String after, String before);
+
+  /// No description provided for @transferChangeForm.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambia de forma'**
+  String get transferChangeForm;
+
+  /// No description provided for @transferChangeIvs.
+  ///
+  /// In es, this message translates to:
+  /// **'IV nuevos: la Consola Virtual da 3 IV perfectos (5 a Mew y Celebi)'**
+  String get transferChangeIvs;
+
+  /// No description provided for @transferChangeNature.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambia la naturaleza'**
+  String get transferChangeNature;
+
+  /// No description provided for @transferBlockBackwards.
+  ///
+  /// In es, this message translates to:
+  /// **'No puede volver a una generación anterior.'**
+  String get transferBlockBackwards;
+
+  /// No description provided for @transferBlockNoRoute.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay forma oficial de llevarlo a ese juego.'**
+  String get transferBlockNoRoute;
+
+  /// No description provided for @transferBlockShadow.
+  ///
+  /// In es, this message translates to:
+  /// **'Es un Pokémon oscuro: primero hay que purificarlo en Colosseum o XD.'**
+  String get transferBlockShadow;
+
+  /// No description provided for @transferBlockEgg.
+  ///
+  /// In es, this message translates to:
+  /// **'Los huevos solo se intercambian entre juegos de la misma generación.'**
+  String get transferBlockEgg;
+
+  /// No description provided for @transferBlockSpecies.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta especie no existe en el juego de destino.'**
+  String get transferBlockSpecies;
+
+  /// No description provided for @transferBlockForm.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta forma no puede ir a ese juego.'**
+  String get transferBlockForm;
+
+  /// No description provided for @transferBlockBdsp.
+  ///
+  /// In es, this message translates to:
+  /// **'Spinda y Nincada no pueden entrar ni salir de Diamante Brillante y Perla Reluciente.'**
+  String get transferBlockBdsp;
+
+  /// No description provided for @transferBlockLetsGo.
+  ///
+  /// In es, this message translates to:
+  /// **'A Let\'s Go solo vuelven Pokémon que salieron de Let\'s Go.'**
+  String get transferBlockLetsGo;
+
+  /// No description provided for @transferBlockGbLanguage.
+  ///
+  /// In es, this message translates to:
+  /// **'Las partidas japonesas y las internacionales de Game Boy no pueden intercambiar.'**
+  String get transferBlockGbLanguage;
+
+  /// No description provided for @transferBlockGen1.
+  ///
+  /// In es, this message translates to:
+  /// **'La especie, sus movimientos u objeto no existen en Gen 1.'**
+  String get transferBlockGen1;
+
+  /// No description provided for @transferBlockUnsupported.
+  ///
+  /// In es, this message translates to:
+  /// **'Colosseum y XD no reciben Pokémon de otros juegos aquí.'**
+  String get transferBlockUnsupported;
+
+  /// No description provided for @transferSkipNoSpace.
+  ///
+  /// In es, this message translates to:
+  /// **'No queda sitio en las cajas del destino.'**
+  String get transferSkipNoSpace;
+
+  /// No description provided for @transferSkipLocked.
+  ///
+  /// In es, this message translates to:
+  /// **'Está en un hueco bloqueado.'**
+  String get transferSkipLocked;
+
+  /// No description provided for @transferSkipLastInParty.
+  ///
+  /// In es, this message translates to:
+  /// **'Es el último del equipo: el equipo no puede quedarse vacío.'**
+  String get transferSkipLastInParty;
+
+  /// No description provided for @transferHomeTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Este traspaso pasa por Pokémon HOME'**
+  String get transferHomeTitle;
+
+  /// No description provided for @transferHomeBody.
+  ///
+  /// In es, this message translates to:
+  /// **'La app solo puede garantizar la continuidad hasta Alola (Gen 7: Sol/Luna, Ultrasol/Ultraluna y Pokémon Bank). Para llegar a un juego de Switch, el Pokémon necesita un rastreador de HOME: lo genera la app en tu dispositivo, no los servidores de HOME. PKHeX lo da por válido, pero no podemos garantizar cómo lo trataría el HOME real: te recomendamos no subir a HOME los Pokémon transferidos así.'**
+  String get transferHomeBody;
+
+  /// No description provided for @transferHomeAck.
+  ///
+  /// In es, this message translates to:
+  /// **'Entiendo'**
+  String get transferHomeAck;
+
+  /// No description provided for @transferAlolaButton.
+  ///
+  /// In es, this message translates to:
+  /// **'Llevar hasta Alola y continuar con Banco/HOME'**
+  String get transferAlolaButton;
+
+  /// No description provided for @transferAlolaRecommended.
+  ///
+  /// In es, this message translates to:
+  /// **'Recomendado: llévalo con la app hasta un juego de Alola y desde ahí usa Pokémon Bank y HOME oficiales, para que HOME le asigne su propio rastreador.'**
+  String get transferAlolaRecommended;
+
+  /// No description provided for @transferAlolaNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Para eso necesitas una partida de Sol/Luna o Ultrasol/Ultraluna en el Arca.'**
+  String get transferAlolaNone;
+
+  /// No description provided for @transferAlolaPick.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige la partida de Alola'**
+  String get transferAlolaPick;
+
+  /// No description provided for @transferGuideButton.
+  ///
+  /// In es, this message translates to:
+  /// **'Cómo seguir con Banco y HOME'**
+  String get transferGuideButton;
+
+  /// No description provided for @transferGuideTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'De Alola a Switch con Banco y HOME'**
+  String get transferGuideTitle;
+
+  /// No description provided for @transferGuideBody.
+  ///
+  /// In es, this message translates to:
+  /// **'1. Exporta la partida de Alola desde el Arca y ponla en tu 3DS.\n2. En la 3DS, abre Pokémon Bank y deposita el Pokémon (Poké Transporter solo hace falta para Gen 5 y la Consola Virtual).\n3. En Pokémon HOME (móvil o Switch), usa «Pokémon Bank» para pasar la caja de Bank a HOME.\n4. En la Switch, abre HOME y lleva el Pokémon a Espada/Escudo, Diamante Brillante/Perla Reluciente, Leyendas Arceus, Escarlata/Púrpura o Leyendas Z-A.\n\nPokémon Bank solo funciona en una 3DS que ya lo tenga instalado: la eShop de 3DS cerró en 2023. Let\'s Go no usa Bank: va a HOME directamente desde su propio juego.'**
+  String get transferGuideBody;
+
+  /// No description provided for @transferLegality.
+  ///
+  /// In es, this message translates to:
+  /// **'Legalidad en el destino'**
+  String get transferLegality;
+
+  /// No description provided for @transferNothingReady.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguno de los Pokémon elegidos se puede transferir a esa partida.'**
+  String get transferNothingReady;
+
+  /// No description provided for @transferFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo transferir: {error}'**
+  String transferFailed(String error);
 }
 
 class _AppLocalizationsDelegate
