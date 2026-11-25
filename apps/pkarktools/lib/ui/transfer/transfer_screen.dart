@@ -134,6 +134,7 @@ class _TransferScreenState extends ConsumerState<TransferScreen> {
       startBox: _startBox ?? 0,
       move: _move,
       language: context.isSpanish ? 7 : 2,
+      dataLang: context.dataLang,
     );
   }
 
@@ -396,7 +397,8 @@ class _Warning extends StatelessWidget {
             const SizedBox(height: 8),
           ],
           Text(text, style: context.text.bodyMedium),
-          ?child,
+          // Material propio: las casillas (ListTile) pintan su tinta sobre el fondo del aviso.
+          if (child != null) Material(type: MaterialType.transparency, child: child),
         ]),
       );
 }

@@ -67,6 +67,7 @@ abstract final class TransferService {
     SlotRef? startSlot,
     bool move = true,
     int language = 2,
+    DataLanguage dataLang = DataLanguage.es,
     DateTime? today,
   }) {
     final t = dst.readTrainer();
@@ -102,7 +103,7 @@ abstract final class TransferService {
         source: pk,
         result: r,
         target: target,
-        issues: r.pk == null ? const [] : Legality.check(r.pk!, toGame),
+        issues: r.pk == null ? const [] : Legality.check(r.pk!, toGame, lang: dataLang),
       ));
     }
     items.sort((a, b) => refs.indexOf(a.from).compareTo(refs.indexOf(b.from)));

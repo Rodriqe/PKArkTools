@@ -1025,7 +1025,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eventsWarningBody =>
-      'Flags and constants drive the story, collected items and battles. A wrong value can block progress or make characters vanish. Only change what you understand: the original stays safe in the Arca.';
+      'Flags and constants drive the story, collected items and battles. A wrong value can block progress or make characters vanish. Only change what you understand: the original stays safe in the Ark.';
 
   @override
   String eventsFlags(int n) {
@@ -1074,7 +1074,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String bulkDuplicates(int n) {
-    return 'Already in the Arca ($n)';
+    return 'Already in the Ark ($n)';
   }
 
   @override
@@ -1106,7 +1106,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get archiveExport => 'Export the Arca (zip)';
+  String get archiveExport => 'Export the Ark (zip)';
 
   @override
   String get archiveExportDesc =>
@@ -1121,15 +1121,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String archiveExported(int n) {
-    return 'Arca exported: $n copies.';
+    return 'Ark exported: $n copies.';
   }
 
   @override
-  String get archiveEmpty => 'The Arca is empty: nothing to export.';
+  String get archiveEmpty => 'The Ark is empty: nothing to export.';
 
   @override
   String get archiveInvalid =>
-      'That zip is not an Arca export (manifest.json is missing).';
+      'That zip is not an Ark export (manifest.json is missing).';
 
   @override
   String get compareAction => 'Compare with…';
@@ -1371,21 +1371,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get originAdopted => 'Adopted from the folder';
 
   @override
-  String get originMigrated => 'Migrated from the previous Arca';
+  String get originMigrated => 'Migrated from the previous Ark';
 
   @override
   String get onbEyebrow => 'Welcome to PKArkTools';
 
   @override
-  String get onbTitle => 'Your Arca, in your folder';
+  String get onbTitle => 'Your Ark, in your folder';
 
   @override
   String get onbBody =>
-      'Pick a folder and all your backups will live there. If the folder is in a syncing cloud, your devices will share the Arca with nothing else to do.';
+      'Pick a folder and all your backups will live there. If the folder is in a syncing cloud, your devices will share the Ark with nothing else to do.';
 
   @override
   String get onbSuggestICloud =>
-      'Tip: create a folder in iCloud Drive and you will have the same Arca on your iPhone, iPad and Mac.';
+      'Tip: create a folder in iCloud Drive and you will have the same Ark on your iPhone, iPad and Mac.';
 
   @override
   String get onbSuggestDocuments =>
@@ -1423,7 +1423,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get folderPreparing => 'Preparing the Arca…';
+  String get folderPreparing => 'Preparing the Ark…';
 
   @override
   String folderProgress(int done, int total) {
@@ -1438,7 +1438,7 @@ class AppLocalizationsEn extends AppLocalizations {
       other: '$count backups could not be migrated.',
       one: '1 backup could not be migrated.',
     );
-    return '$_temp0 The previous Arca is kept untouched so nothing is lost.';
+    return '$_temp0 The previous Ark is kept untouched so nothing is lost.';
   }
 
   @override
@@ -1447,7 +1447,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get accessLostTitle => 'We can\'t open your Arca';
+  String get accessLostTitle => 'We can\'t open your Ark';
 
   @override
   String get accessLostBody =>
@@ -1460,7 +1460,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accessChooseAgain => 'Choose the folder again';
 
   @override
-  String get folderSection => 'Arca folder';
+  String get folderSection => 'Ark folder';
 
   @override
   String get folderSectionDesc =>
@@ -1484,7 +1484,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get folderChange => 'Change folder…';
 
   @override
-  String get folderChangeTitle => 'Move or copy the Arca?';
+  String get folderChangeTitle => 'Move or copy the Ark?';
 
   @override
   String get folderChangeBody =>
@@ -1498,7 +1498,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String folderChangeDone(int copied, int skipped) {
-    return 'Arca in the new folder: $copied copied, $skipped already there.';
+    return 'Ark in the new folder: $copied copied, $skipped already there.';
   }
 
   @override
@@ -1545,7 +1545,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get snapshotDamaged => 'This backup is damaged in the Arca folder.';
+  String get snapshotDamaged => 'This backup is damaged in the Ark folder.';
 
   @override
   String get dexSearchShort => 'Name or number';
@@ -1559,15 +1559,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onbSuggestGoogleDrive =>
-      'Tip: pick a folder inside Google Drive to share the Arca with your other devices, or in Documents to keep it on this phone only.';
+      'Tip: pick a folder inside Google Drive to share the Ark with your other devices, or in Documents to keep it on this phone only.';
 
   @override
   String get onbSuggestOneDrive =>
-      'Tip: create a folder in OneDrive and you will have the same Arca on all your PCs.';
+      'Tip: create a folder in OneDrive and you will have the same Ark on all your PCs.';
 
   @override
   String get onbSuggestSyncthing =>
-      'Tip: a folder synced with Syncthing gives you the same Arca on all your machines, no accounts needed.';
+      'Tip: a folder synced with Syncthing gives you the same Ark on all your machines, no accounts needed.';
 
   @override
   String get boxPrevious => 'Previous box';
@@ -1680,7 +1680,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get spritesSectionDesc =>
-      'Pokémon, item, Ball, type and ribbon sprites don\'t ship with the app: they\'re downloaded the first time they\'re shown and kept in the app\'s cache (never in the Arca folder). Offline, initials are shown instead.';
+      'Pokémon, item, Ball, type and ribbon sprites don\'t ship with the app: they\'re downloaded the first time they\'re shown and kept in the app\'s cache (never in the Ark folder). Offline, initials are shown instead.';
 
   @override
   String spritesCacheSize(int count, String size, String total) {
@@ -2215,15 +2215,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inboxSee => 'View';
 
   @override
-  String get problemsNone => 'No problems in the Arca';
+  String get problemsNone => 'No problems in the Ark';
 
   @override
   String problemsSummary(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$n problems in the Arca',
-      one: '1 problem in the Arca',
+      other: '$n problems in the Ark',
+      one: '1 problem in the Ark',
     );
     return '$_temp0';
   }
@@ -2428,7 +2428,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String networkLostBody(String name) {
-    return 'Your Arca is in a network folder ($name) that isn\'t mounted or isn\'t responding right now. Connect to the NAS (on a Mac: Finder → Go → Connect to Server) and press Retry. Meanwhile nothing is created, moved or deleted.';
+    return 'Your Ark is in a network folder ($name) that isn\'t mounted or isn\'t responding right now. Connect to the NAS (on a Mac: Finder → Go → Connect to Server) and press Retry. Meanwhile nothing is created, moved or deleted.';
   }
 
   @override
@@ -3198,7 +3198,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rmSpecimensEmpty =>
-      'There are no specimens of this form in your Arca.';
+      'There are no specimens of this form in your Ark.';
 
   @override
   String rmMissingTitle(int n) {
@@ -3639,7 +3639,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String livingDexConfirmBody(String game, int n, int nBoxes, int nCurrent) {
-    return 'The $nBoxes boxes of this save will be overwritten ($nCurrent Pokémon stored now); the party is not touched. The previous version stays in the Arca history and you can go back to it.\n\n$n Pokémon from $game will be created, each from a real encounter in the game (egg, static or wild) or from an official event for mythicals and legendaries that only existed that way, with your name, ID, gender and language.';
+    return 'The $nBoxes boxes of this save will be overwritten ($nCurrent Pokémon stored now); the party is not touched. The previous version stays in the Ark history and you can go back to it.\n\n$n Pokémon from $game will be created, each from a real encounter in the game (egg, static or wild) or from an official event for mythicals and legendaries that only existed that way, with your name, ID, gender and language.';
   }
 
   @override
@@ -3665,7 +3665,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String livingDexDone(int n, int nShiny) {
-    return 'Living Dex saved to the Arca: $n Pokémon ($nShiny shiny).';
+    return 'Living Dex saved to the Ark: $n Pokémon ($nShiny shiny).';
   }
 
   @override
