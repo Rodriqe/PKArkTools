@@ -84,6 +84,15 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
   String _query = '';
   bool _onlyEligible = false;
 
+  /// Un solo controlador para el buscador de las dos pestañas.
+  final _searchCtl = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchCtl.dispose();
+    super.dispose();
+  }
+
   bool _matches(int species, int form) {
     if (_query.isEmpty) return true;
     final q = Showdown.norm(_query);
@@ -115,6 +124,7 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
 
   Widget _search(BuildContext context) => TextField(
     key: const ValueKey('champions-search'),
+    controller: _searchCtl,
     decoration: InputDecoration(
       prefixIcon: const Icon(Icons.search_rounded),
       hintText: tr(context, 'Buscar Pokémon', 'Search Pokémon'),
