@@ -1,7 +1,7 @@
 # Formato oficial (Pokémon Champions)
 
-**Dex → 🏆 Formato oficial** (o el botón **Formato oficial** de una partida)
-muestra el formato oficial **vigente** de combates de Pokémon, que desde 2026
+**Competitivo → Formato oficial** (o el botón **Formato oficial** de una
+partida, o el 🏆 de la Dex, que llevan al mismo sitio) muestra el formato oficial **vigente** de combates de Pokémon, que desde 2026
 se juega en **Pokémon Champions**.
 
 * **Regulación**: nombre (p. ej. *VGC 2026 Reg M-C*), fechas, reglas (nivel
@@ -136,3 +136,6 @@ Escribe `data/champions/champions.json` y `champions_data.dart` (sin
 fuentes oficiales en [`tool/fixtures/champions_official/`](../../tool/fixtures/champions_official/).
 Después pasa `dart test test/tools_test.dart` en `packages/pkcore` (comprueba,
 entre otras cosas, que todos los ids se traducen a especie y forma).
+
+El resto de herramientas de Champions (calculadoras de estadísticas y de
+daño, equipos, Showdown) están en [Competitivo](competitivo.md).

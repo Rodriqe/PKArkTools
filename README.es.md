@@ -94,9 +94,15 @@ transferencias. [Eventos](docs/usuario/eventos.md) ·
 **Herramientas.** Importa y exporta texto de **Pokémon Showdown**, una
 **calculadora de stats e IVs** con Poder Oculto, **ordenar cajas** (Pokédex,
 tipo, generación, living dex, nivel, variocolor) con vista previa y un solo
-deshacer, el **formato oficial** (la regulación vigente de Pokémon Champions y
-cuáles de tus Pokémon valen) y una **tarjeta para compartir**.
+deshacer y una **tarjeta para compartir**.
 [Guía de herramientas](docs/usuario/herramientas.md).
+
+**Competitivo (Pokémon Champions).** Pestaña propia con el **formato
+oficial** (la regulación vigente y cuáles de tus Pokémon valen), una
+**calculadora de estadísticas de Champions** (puntos de estadística, nivel 50,
+Megas), una **calculadora de daño** con probabilidad de KO que coincide tirada
+a tirada con Pokémon Showdown, **equipos** guardados en tu Arca y comprobación
+de Showdown. [Guía de Competitivo](docs/usuario/competitivo.md).
 
 **Pokémon oscuros** en Colosseum y XD: créalos como los capturaría el juego
 (PID/IV del RNG de GameCube respetando los bloqueos del equipo), cambia el
@@ -223,7 +229,10 @@ opcional. Se indexa en segundo plano y se cachea: abre al instante.
 
 **Herramientas**
 * Importar/exportar Pokémon Showdown, calculadora de stats e IVs, ordenar
-  cajas, formato oficial (Pokémon Champions) y tarjeta para compartir.
+  cajas y tarjeta para compartir.
+* Pestaña **Competitivo** de Pokémon Champions: formato oficial, calculadora
+  de estadísticas con puntos, calculadora de daño (exacta frente a Showdown) y
+  equipos guardados en el Arca.
 * Pokémon oscuros de Colosseum y XD.
 
 **Legalidad**

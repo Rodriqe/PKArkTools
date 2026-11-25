@@ -5,7 +5,9 @@ hasta que pulsas **Guardar en el Arca**, y cualquier cambio se puede deshacer.
 
 En el detalle de una partida, sección **Pokémon**, hay una fila de botones:
 **Transferir Pokémon…**, **Importar de Showdown**, **Equipo a Showdown**,
-**Ordenar cajas** y **Formato oficial**.
+**Ordenar cajas** y **Formato oficial** (este último abre la pestaña
+[Competitivo](competitivo.md), donde están también las calculadoras de
+estadísticas y de daño de Pokémon Champions y los equipos).
 
 ## Pokémon Showdown
 
@@ -35,6 +37,10 @@ del equipo y después las cajas) o **Cajas** y pulsa **Añadir**.
 Showdown** hace lo mismo con uno solo.
 
 ## Calculadora de estadísticas e IVs
+
+(Esta es la del editor, con los IVs y EVs del Pokémon. La de Champions, con
+puntos de estadística, y la clásica sin Pokémon están en
+[Competitivo](competitivo.md#calculadora-de-estadísticas).)
 
 En el editor, al final de la sección **Estadísticas**:
 

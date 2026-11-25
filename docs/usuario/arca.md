@@ -94,7 +94,8 @@ entrenador…) sobre un borrador; ver [Editor](editor.md).
 
 <img src="../screenshots/07_actividad.png" width="420" alt="Actividad">
 
-La pestaña **Actividad** lista todo lo que ha pasado en el Arca.
+La pestaña **Actividad** lista todo lo que ha pasado en el Arca (en el
+teléfono se abre con el botón 🕘 de la cabecera del Arca).
 
 ## Comparar copias
 

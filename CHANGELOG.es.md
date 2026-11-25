@@ -13,6 +13,41 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ### Añadido
 
+- **Pestaña Competitivo (Pokémon Champions)**: nueva entrada de la navegación
+  (🏆 *Competitivo*; *Combate* en la barra del teléfono) con todo lo del
+  formato competitivo oficial, siempre con la regulación vigente (sin
+  selector; una línea dice cuándo termina y cuál es la siguiente). Ver
+  [docs/usuario/competitivo.md](docs/usuario/competitivo.md).
+  - Se mueven aquí la pantalla de **Formato oficial** y **Showdown**
+    (comprobar un equipo pegado con la regulación vigente y exportar el equipo
+    de una partida); los atajos de siempre (botón *Formato oficial* de una
+    partida, 🏆 de la Dex) llevan aquí.
+  - **Calculadora de estadísticas de Champions**: nivel 50, IVs al máximo y
+    **puntos de estadística** (0–32 por estadística, 66 en total),
+    naturalezas y Megas, con las especies de la regulación vigente; cargar de
+    tus Pokémon del Arca (los EVs pasan a los puntos que dan la misma
+    estadística a nivel 50) o pegar de Showdown. El modo *Clásica* conserva la
+    calculadora de los juegos principales. Fórmulas del mod champions de
+    Pokémon Showdown; 400 casos de referencia calculados por Showdown
+    coinciden exactamente ([docs/champions-mecanicas.md](docs/champions-mecanicas.md)).
+  - **Calculadora de daño** (nueva): atacante contra defensor,
+    dobles/individuales, clima, campo, pantallas, crítico, ataque a varios
+    objetivos, Refuerzo, cambios de estadística, estado y PS; muestra el rango
+    de daño y % de PS, las 16 tiradas, la **probabilidad de KO** (OHKO,
+    2HKO… con %), los golpes y el texto habitual. Portada del código de daño de
+    Showdown con el mod champions: 317 casos de referencia (bordes y al azar)
+    generados con el simulador de Showdown coinciden tirada a tirada. Lo que no
+    modela se indica bajo el resultado. Se llega desde la calculadora de
+    estadísticas, un miembro de un equipo y el menú del editor de un Pokémon
+    (*Calcular daño*).
+  - **Mis equipos**: equipos de hasta 6 con el set completo de Champions,
+    comprobados con las reglas del formato; un miembro que deja de estar
+    permitido al cambiar la regulación se marca, no se borra. Se guardan **en
+    tu Arca**, en `Competitive/Teams/` (un JSON legible por equipo, escrituras
+    atómicas y comprobadas), así que tienen copia de seguridad, se sincronizan
+    con el resto y se mueven con el Arca; el Arca nunca trata esa carpeta como
+    partidas. Exportar e importar como texto de Showdown o `.json`.
+
 - **Marca de Pokémon oscuro (Colosseum y XD)**: en los saves de Colosseum y
   XD, los Pokémon oscuros muestran un halo morado suave y una pequeña insignia
   con un corazón roto en las cajas y el equipo; al mantenerla pulsada o pasar
@@ -29,6 +64,9 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ### Cambiado
 
+- Barra de navegación del teléfono: **Actividad** pasa a un botón 🕘 en la
+  cabecera del Arca para que las cinco entradas (con *Combate*) quepan a 320
+  puntos; la barra lateral del escritorio no cambia.
 - **Formato oficial desde las fuentes oficiales**: la Action diaria
   `champions-data.yml` genera ahora `data/champions/champions.json` a partir
   de las noticias del propio juego (páginas de cada regulación con fechas y

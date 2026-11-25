@@ -18,6 +18,7 @@ macOS, Windows y Linux, sin cuentas ni telemetría.
 | [El Arca](usuario/arca.md) | Historial, comparar copias, exportar y restaurar, zip del Arca, saves sueltos |
 | [Editor](usuario/editor.md) | Pokémon, cajas, entrenador, inventario, Pokédex, eventos, cintas y origen |
 | [Dex](usuario/dex.md) | Pokédex global de todas las partidas, formas especiales (Mega, Gigamax…) y sus reglas, living dex |
+| [Competitivo](usuario/competitivo.md) | Pokémon Champions: formato oficial, calculadoras de estadísticas y de daño, equipos en el Arca |
 | [Legalidad y avisos](usuario/legalidad.md) | Qué se comprueba, «Intentar corregir», límites |
 | [Saves dañados y reparar checksums](usuario/reparar-checksums.md) | Solo lectura, avisos leves y graves, reparar y exportar |
 | [Iconos](usuario/iconos.md) | Descarga bajo demanda, caché, sin conexión |
@@ -31,6 +32,7 @@ macOS, Windows y Linux, sin cuentas ni telemetría.
 |---|---|
 | [Arquitectura](arquitectura.md) | Monorepo, `pkcore`, app Flutter, flujo de datos (con diagramas) |
 | [Desarrollo](desarrollo.md) | Entorno, CI, generadores, oráculo PKHeX, capturas, añadir un formato, commits |
+| [Mecánicas de Champions](champions-mecanicas.md) | Estadísticas y daño de Champions con su fuente exacta en Showdown y cómo se comprueban |
 | [Publicación en tiendas](publicacion.md) | Auditoría técnica para App Store, Mac App Store y Google Play |
 | [Licencias](licencias.md) | GPL-3.0, código portado de PKHeX.Core, PokeAPI, sprites y logo |
 | [CHANGELOG](../CHANGELOG.es.md) | Fases y versiones (en inglés: [CHANGELOG.md](../CHANGELOG.md)) |

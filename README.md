@@ -89,9 +89,14 @@ PKHeX). Event and Living Dex Pokémon survive transfers.
 
 **Tools.** Import and export **Pokémon Showdown** text, a **stat and IV
 calculator** with Hidden Power, **sort boxes** (Dex, type, generation, living
-dex, level, shiny) with a preview and one undo, the **Official format**
-(current Pokémon Champions regulation and which of your Pokémon are eligible)
-and a **share card** image. [Tools guide](docs/usuario/herramientas.md).
+dex, level, shiny) with a preview and one undo and a **share card** image.
+[Tools guide](docs/usuario/herramientas.md).
+
+**Competitive (Pokémon Champions).** Its own tab with the **Official format**
+(current regulation and which of your Pokémon are eligible), a **Champions
+stat calculator** (Stat Points, level 50, Megas), a **damage calculator** with
+KO chances that matches Pokémon Showdown roll for roll, **teams** stored in
+your Ark and Showdown checks. [Competitive guide](docs/usuario/competitivo.md).
 
 **Shadow Pokémon** in Colosseum and XD: create them as the game would snag
 them (PID/IV from the GameCube RNG respecting team locks), change the heart
@@ -212,8 +217,11 @@ background and cached, it opens instantly. [Dex guide](docs/usuario/dex.md).
   with a legality preview and a HOME clone detector.
 
 **Tools**
-* Pokémon Showdown import/export, stat and IV calculator, box sorting,
-  Official format (Pokémon Champions) and share card.
+* Pokémon Showdown import/export, stat and IV calculator, box sorting and
+  share card.
+* **Competitive** tab for Pokémon Champions: Official format, stat calculator
+  with Stat Points, damage calculator (exact against Showdown) and teams saved
+  in the Ark.
 * Shadow Pokémon for Colosseum and XD.
 
 **Legality**
