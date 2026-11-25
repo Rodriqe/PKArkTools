@@ -25,9 +25,9 @@
 </p>
 
 > [!IMPORTANT]
-> **Disclaimer.** PKArkTools is an unofficial, non-commercial **fan project**. It
-> is **not affiliated with, endorsed or sponsored by Nintendo, Game Freak,
-> Creatures Inc. or The Pokémon Company**. Pokémon and all related names are
+> **Disclaimer.** PKArkTools is an unofficial, non-commercial **fan project**.
+> **PKArkTools is not affiliated with Nintendo, The Pokémon Company or Game
+> Freak**, nor endorsed or sponsored by them or Creatures Inc. Pokémon and all related names are
 > trademarks of their respective owners. The app and this repository include
 > **no ROMs, BIOS, console keys or sprites** (icons are optionally downloaded
 > on demand, see [Icons](docs/usuario/iconos.md)). Use it **only with your own
@@ -49,20 +49,54 @@ file back to your console or emulator.
 No accounts, no servers, no telemetry: put the Ark in iCloud Drive, Google
 Drive, OneDrive, Dropbox or Syncthing and all your devices share it.
 
-## Coming next: transfer Pokémon between saves
+## New in 2.0
 
-A "local HOME": move or copy Pokémon from one save in the Ark to another,
-even across generations, following the real rules of the Time Capsule, Pal
-Park, Poké Transfer, Poké Transporter, Pokémon Bank and Pokémon HOME, with a
-preview of what changes and the legality at the destination (every hop is
-validated against PKHeX). The app can only guarantee continuity **up to
-Alola** (Gen 7): beyond that, the HOME tracker is generated locally by the
-app, not by HOME's servers. PKHeX accepts it, but we can't guarantee how the
-real HOME would treat it, so we recommend not uploading those Pokémon to
-HOME. The recommended route to Switch: transfer with the app to Sun/Moon or
-Ultra Sun/Ultra Moon, then use the official Pokémon Bank → Pokémon HOME
-(Bank only works on a 3DS that already has it installed; Let's Go goes to
-HOME from its own game). [Transfer guide (Spanish)](docs/usuario/transferir.md).
+<p align="center">
+  <img src="docs/screenshots/v2.0/07_transfer.png" width="100%" alt="Transfer Pokémon from Ultra Sun to Scarlet, with the HOME notice and the Take it to Alola option">
+</p>
+
+**Transfer Pokémon between saves.** A "local HOME": move (default) or copy
+Pokémon from one save in the Ark to another, even across generations,
+following the real rules of the Time Capsule, Pal Park, Poké Transfer, Poké
+Transporter, Pokémon Bank and Pokémon HOME, with a preview of what changes and
+the legality at the destination (every hop is validated against PKHeX). The
+app can only guarantee continuity **up to Alola** (Gen 7): beyond that, the
+HOME tracker is generated locally by the app, not by HOME's servers, so we
+recommend not uploading those Pokémon to HOME. The recommended route to
+Switch: transfer with the app to Sun/Moon or Ultra Sun/Ultra Moon (**Take it
+to Alola and continue with Bank/HOME**), then use the official Pokémon Bank →
+Pokémon HOME. A **HOME clone detector** (Settings) finds Pokémon that share a
+tracker. [Transfer guide (Spanish)](docs/usuario/transferir.md).
+
+| Events | Create from an event | Living Dex |
+|---|---|---|
+| <img src="docs/screenshots/v2.0/01_events_explorer.png" alt="Mystery Gift event explorer"> | <img src="docs/screenshots/v2.0/02_create_from_event.png" alt="Create Zeraora from its HOME gift"> | <img src="docs/screenshots/v2.0/06_living_dex_summary.png" alt="Living Dex summary: what was not generated and why"> |
+
+**Mystery Gift events and the Living Dex.** PKHeX's whole event database
+(2922 gifts, Gen 3 to 9) with filters by game, generation, year, region,
+language, shiny and distribution; create any event Pokémon in a compatible
+save with your trainer data (0 invalid out of 5830 in PKHeX) and receive
+WC6/WC7 cards in the game's tray. **Generate a Living Dex in this save**:
+normal or shiny, one legal Pokémon of every species and form from a real
+encounter of that version, with your OT/ID, a warning before overwriting the
+boxes and a summary of the forms left out and why (0 invalid out of 16938 in
+PKHeX). Event and Living Dex Pokémon survive transfers.
+[Events](docs/usuario/eventos.md) · [Living Dex](docs/usuario/living-dex.md).
+
+| Official format | Stat calculator | Share card |
+|---|---|---|
+| <img src="docs/screenshots/v2.0/08_official_format.png" alt="Official format: Pokémon Champions regulation"> | <img src="docs/screenshots/v2.0/09_stat_calculator.png" alt="Stat and IV calculator"> | <img src="docs/screenshots/v2.0/11_share_card.png" alt="Share card"> |
+
+**Tools.** Import and export **Pokémon Showdown** text, a **stat and IV
+calculator** with Hidden Power, **sort boxes** (Dex, type, generation, living
+dex, level, shiny) with a preview and one undo, the **Official format**
+(current Pokémon Champions regulation and which of your Pokémon are eligible)
+and a **share card** image. [Tools guide](docs/usuario/herramientas.md).
+
+**Shadow Pokémon** in Colosseum and XD: create them as the game would snag
+them (PID/IV from the GameCube RNG respecting team locks), change the heart
+gauge, purify or revert them. **macOS** builds are signed with Developer ID
+and notarized by Apple.
 
 ## New in 1.1: Ribbon Hunter
 
@@ -170,6 +204,18 @@ background and cached, it opens instantly. [Dex guide](docs/usuario/dex.md).
   marks**, **origin** (game, location, date, OT).
 * Loose Pokémon files `.pk1` … `.pk9`, `.pb7`, `.pb8`, `.pa8`, `.pa9`.
 
+**Events, Living Dex and transfers**
+* Mystery Gift event explorer and **create from an event**; import and
+  export cards; receive WC6/WC7 cards in the game's tray.
+* **Living Dex** in the current save (normal or shiny).
+* **Transfer Pokémon** between saves of any generation (move or copy),
+  with a legality preview and a HOME clone detector.
+
+**Tools**
+* Pokémon Showdown import/export, stat and IV calculator, box sorting,
+  Official format (Pokémon Champions) and share card.
+* Shadow Pokémon for Colosseum and XD.
+
 **Legality**
 * Warnings ported from PKHeX.Core's rules and encounter tables (moves, stats,
   abilities, Balls, shiny locks, encounter location and level), with
@@ -206,6 +252,12 @@ background and cached, it opens instantly. [Dex guide](docs/usuario/dex.md).
 | Legends: Arceus | Switch | ✅ | ✅ + GVs | Hisui Pokédex by form, named blocks, `.pa8` |
 | Scarlet / Violet | Switch | ✅ | ✅ + tera type | Paldea, Kitakami, Blueberry Pokédex, `.pk9` |
 | Legends: Z-A | Switch | ✅ | ✅ | Lumiose & Hyperspace Pokédex, `.pa9` |
+
+New in 2.0, per game: **Living Dex** in every main-series game from Red/Blue
+to Legends: Z-A; **create from an event** in Gen 3–9 (Let's Go, Legends:
+Arceus and Z-A included); **transfer** between all of them along the real
+routes (Colosseum/XD only send purified Pokémon; Z-A only receives); **Shadow
+Pokémon** creation in Colosseum and XD.
 
 Details, containers and known limits: [docs/formatos.md](docs/formatos.md).
 
@@ -245,18 +297,18 @@ All screenshots use synthetic saves.
 
 ## Install
 
-The current version is **v1.1.0**. Download it from the
+The current version is **v2.0.0**. Download it from the
 [latest release](https://github.com/Rodriqe/PKArkTools/releases/latest)
 ([all releases](https://github.com/Rodriqe/PKArkTools/releases),
 [changelog](CHANGELOG.md)).
 
 | Platform | How |
 |---|---|
-| Android | `PKArkTools-v1.1.0.apk`: open it on the phone and allow installing from that source when Android asks. |
-| macOS | `PKArkTools-v1.1.0-macos.zip`: unzip it and move `PKArkTools.app` to Applications. It is not notarized, so the first time **right-click → Open → Open**. |
+| Android | `PKArkTools-v2.0.0.apk`: open it on the phone and allow installing from that source when Android asks. |
+| macOS | `PKArkTools-v2.0.0-macos.dmg`: open it and drag PKArkTools to Applications. It is signed and notarized by Apple, so it opens with a double-click (if a build ever ships without notarization, the release notes say so: then **right-click → Open** the first time). |
 | iPhone / iPad | No downloadable build yet: compile it from source with Xcode (below). |
-| Windows | `PKArkTools-v1.1.0-windows-x64-setup.exe` (installer) or `PKArkTools-v1.1.0-windows-x64.zip` (portable: unzip and run `PKArkTools.exe`). It is not signed: if SmartScreen warns, click **More info → Run anyway**. |
-| Linux | `PKArkTools-v1.1.0-linux-x64.tar.gz`: extract it and run `PKArkTools/pkarktools` (GTK 3; the folder picker needs `zenity` or `kdialog`). |
+| Windows | `PKArkTools-v2.0.0-windows-x64-setup.exe` (installer) or `PKArkTools-v2.0.0-windows-x64.zip` (portable: unzip and run `PKArkTools.exe`). It is not signed: if SmartScreen warns, click **More info → Run anyway**. |
+| Linux | `PKArkTools-v2.0.0-linux-x64.tar.gz`: extract it and run `PKArkTools/pkarktools` (GTK 3; the folder picker needs `zenity` or `kdialog`). |
 
 Once installed, the app checks for new versions itself (**Settings › About**) and on
 Android installs them after checking the APK signature.
