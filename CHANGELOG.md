@@ -11,6 +11,29 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+### Added
+
+- **Create Shadow Pokémon in Colosseum and XD.** An empty slot offers
+  “Shadow Pokémon”: pick one of the game's Shadow encounters (PKHeX
+  `Encounters3ColoShadow` / `Encounters3XD`, without the Japanese e-Reader
+  ones) and it is created as the game would snag it — species, level, moves,
+  place, ball, your OT/ID, Colosseum/XD origin, XD fateful flag, Shadow ID and
+  full heart gauge — already Shadow or purified with the National Ribbon. PID
+  and IVs come from the GameCube RNG with seeds that respect the NPC trainer's
+  team locks, so PKHeX accepts them. The editor can also turn any Pokémon of
+  those games into a Shadow one, change its Shadow encounter, set the heart
+  gauge and purify or revert it, with confirmation. In XD the Shadow table
+  entry is filled (species, snagged, gauge) and the Strategy Memo records the
+  species.
+- Legality notices for Shadow Pokémon: Shadow ID that does not exist in the
+  game, species that is never Shadow in that game, PID/IV not coming from the
+  CXD generator and shiny Shadow Pokémon in XD.
+
+### Changed
+
+- The sidebar logo is much larger (96 px on the extended rail, 72 px on the
+  compact one) with the name below it.
+
 ## [1.1.0] — 2026-11-24
 
 PKArkTools 1.1.0 brings two big additions: **Ribbon Hunter**, a per-species

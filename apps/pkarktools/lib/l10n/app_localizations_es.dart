@@ -3331,4 +3331,66 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get rmContestOrderG4 =>
       'Cada categoría se gana en orden: Normal → Difícil → Superior → Experto (Ciudad Corazón). Todas las especies menos Ditto y Unown.';
+
+  @override
+  String get shadowCreate => 'Pokémon oscuro';
+
+  @override
+  String get shadowCreateDesc =>
+      'Uno de los Pokémon oscuros que se capturan en este juego, tal como lo daría el juego.';
+
+  @override
+  String get shadowPickTitle => 'Elige un Pokémon oscuro';
+
+  @override
+  String get shadowPickSearch => 'Buscar especie o lugar';
+
+  @override
+  String shadowPickEntry(String id, String level, String place) {
+    return 'Nv. $level · id oscuro $id · $place';
+  }
+
+  @override
+  String get shadowPickEmpty => 'Ningún Pokémon oscuro coincide.';
+
+  @override
+  String get shadowPickShadow => 'Oscuro';
+
+  @override
+  String get shadowPickPurified => 'Purificado';
+
+  @override
+  String get shadowPickCreate => 'Crear';
+
+  @override
+  String get shadowPickHint =>
+      'Especie, nivel, movimientos, lugar, Ball, id oscuro y medidor de corazón como en el juego; PID e IV generados respetando los bloqueos del equipo del entrenador.';
+
+  @override
+  String get shadowMoveNoteColo =>
+      'Mientras es oscuro usa Ataque Oscuro: el juego lo pone por el id oscuro, no se guarda en el Pokémon.';
+
+  @override
+  String get shadowMoveNoteXd =>
+      'Mientras es oscuro usa sus movimientos oscuros: el juego los pone por el id oscuro, no se guardan en el Pokémon.';
+
+  @override
+  String get shadowMakeShadow => 'Hacer Pokémon oscuro…';
+
+  @override
+  String get shadowMakeShadowHint =>
+      'Sustitúyelo por uno de los Pokémon oscuros de este juego.';
+
+  @override
+  String get shadowChangeEncounter => 'Cambiar de Pokémon oscuro…';
+
+  @override
+  String get shadowApplyTitle => '¿Sustituir por este Pokémon oscuro?';
+
+  @override
+  String get shadowApplyBody =>
+      'Se cambian especie, nivel, movimientos, PID, IV, lugar, Ball y estado oscuro por los del encuentro, como lo capturaría el juego. El apodo y los demás cambios de este Pokémon se pierden.';
+
+  @override
+  String get shadowApplyConfirm => 'Sustituir';
 }

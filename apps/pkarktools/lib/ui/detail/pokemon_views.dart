@@ -12,6 +12,7 @@ import '../common/format.dart';
 import '../common/species_avatar.dart';
 import '../editor/legality_view.dart';
 import '../editor/pokemon_editor.dart';
+import '../editor/shadow_panel.dart';
 
 /// Lo que viaja al arrastrar un Pokémon.
 class SlotDrag {
@@ -111,6 +112,14 @@ class StorageActions {
             subtitle: Text(l10n.createPokemonDesc),
             onTap: () => Navigator.pop(ctx, 'create'),
           ),
+          if (game.isColosseumOrXd)
+            ListTile(
+              key: const ValueKey('create-shadow'),
+              leading: const Icon(Icons.heart_broken_outlined),
+              title: Text(l10n.shadowCreate),
+              subtitle: Text(l10n.shadowCreateDesc),
+              onTap: () => Navigator.pop(ctx, 'shadow'),
+            ),
           ListTile(
             leading: const Icon(Icons.file_open_outlined),
             title: Text(l10n.importPokemon(_importExts)),
@@ -125,6 +134,17 @@ class StorageActions {
     if (choice == 'create') {
       final t = _editor.readTrainer();
       final pk = PkmFactory.create(game, t, language: context.isSpanish ? 7 : 2, versionId: _editor.versionId);
+      final res = await PokemonEditorScreen.open(context, game: game, pk: pk, slotLabel: slotLabel(slot), isNew: true);
+      if (res is EditorApply && context.mounted) _apply(SetSlotEdit(slot, res.pk, label: 'Creado'));
+    } else if (choice == 'shadow') {
+      final pick = await ShadowPicker.show(context, game);
+      if (pick == null || !context.mounted) return;
+      final ed = _editor;
+      final pk = GcShadow.create(pick.encounter, ed.readTrainer(),
+          region: ed is GcEditor ? ed.region : GcRegion.ntscU,
+          language: context.isSpanish ? 7 : 2,
+          purified: pick.purified)
+        ..dataGame = game;
       final res = await PokemonEditorScreen.open(context, game: game, pk: pk, slotLabel: slotLabel(slot), isNew: true);
       if (res is EditorApply && context.mounted) _apply(SetSlotEdit(slot, res.pk, label: 'Creado'));
     } else {

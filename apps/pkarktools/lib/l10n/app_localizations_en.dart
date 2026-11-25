@@ -3301,4 +3301,66 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get rmContestOrderG4 =>
       'Each condition is won in order: Normal → Great → Ultra → Master (Hearthome City). Any species except Ditto and Unown.';
+
+  @override
+  String get shadowCreate => 'Shadow Pokémon';
+
+  @override
+  String get shadowCreateDesc =>
+      'One of the Shadow Pokémon snagged in this game, just as the game would give it.';
+
+  @override
+  String get shadowPickTitle => 'Choose a Shadow Pokémon';
+
+  @override
+  String get shadowPickSearch => 'Search species or place';
+
+  @override
+  String shadowPickEntry(String id, String level, String place) {
+    return 'Lv. $level · Shadow ID $id · $place';
+  }
+
+  @override
+  String get shadowPickEmpty => 'No Shadow Pokémon matches.';
+
+  @override
+  String get shadowPickShadow => 'Shadow';
+
+  @override
+  String get shadowPickPurified => 'Purified';
+
+  @override
+  String get shadowPickCreate => 'Create';
+
+  @override
+  String get shadowPickHint =>
+      'Species, level, moves, place, Ball, Shadow ID and heart gauge as in the game; PID and IVs generated respecting the trainer\'s team locks.';
+
+  @override
+  String get shadowMoveNoteColo =>
+      'While Shadow it uses Shadow Rush: the game adds it from the Shadow ID, it is not stored in the Pokémon.';
+
+  @override
+  String get shadowMoveNoteXd =>
+      'While Shadow it uses its Shadow moves: the game adds them from the Shadow ID, they are not stored in the Pokémon.';
+
+  @override
+  String get shadowMakeShadow => 'Make it a Shadow Pokémon…';
+
+  @override
+  String get shadowMakeShadowHint =>
+      'Replace it with one of this game\'s Shadow Pokémon.';
+
+  @override
+  String get shadowChangeEncounter => 'Change Shadow Pokémon…';
+
+  @override
+  String get shadowApplyTitle => 'Replace with this Shadow Pokémon?';
+
+  @override
+  String get shadowApplyBody =>
+      'Species, level, moves, PID, IVs, place, Ball and Shadow state are replaced with the encounter\'s, as the game would snag it. This Pokémon\'s nickname and other changes are lost.';
+
+  @override
+  String get shadowApplyConfirm => 'Replace';
 }

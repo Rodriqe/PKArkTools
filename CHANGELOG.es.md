@@ -11,6 +11,29 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+### Añadido
+
+- **Crear Pokémon oscuros en Colosseum y XD.** Un hueco vacío ofrece
+  «Pokémon oscuro»: eliges uno de los encuentros oscuros del juego (PKHeX
+  `Encounters3ColoShadow` / `Encounters3XD`, sin los de e-Reader japoneses) y
+  se crea como lo capturaría el juego —especie, nivel, movimientos, lugar,
+  Ball, tu OT/ID, origen Colosseum/XD, marca de encuentro fatídico en XD, id
+  oscuro y medidor de corazón lleno—, oscuro o ya purificado con la Cinta
+  Nacional. El PID y los IV salen del RNG de GameCube con semillas que
+  respetan los bloqueos del equipo del entrenador, así que PKHeX los acepta.
+  El editor también convierte cualquier Pokémon de esos juegos en oscuro,
+  cambia su encuentro oscuro, ajusta el medidor y lo purifica o lo vuelve
+  oscuro, con confirmación. En XD se rellena la entrada de la tabla de oscuros
+  (especie, capturado, medidor) y el Strategy Memo anota la especie.
+- Avisos de legalidad de Pokémon oscuros: id oscuro que no existe en el
+  juego, especie que nunca es oscura en ese juego, PID/IV que no salen del
+  generador CXD y oscuro variocolor en XD.
+
+### Cambiado
+
+- El logo de la barra lateral es mucho más grande (96 px en el rail
+  extendido, 72 px en el compacto) con el nombre debajo.
+
 ## [1.1.0] — 2026-11-24
 
 PKArkTools 1.1.0 trae dos grandes novedades: **Ribbon Hunter**, una guía de

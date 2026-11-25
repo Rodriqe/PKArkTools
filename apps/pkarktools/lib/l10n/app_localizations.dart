@@ -5322,6 +5322,114 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Cada categoría se gana en orden: Normal → Difícil → Superior → Experto (Ciudad Corazón). Todas las especies menos Ditto y Unown.'**
   String get rmContestOrderG4;
+
+  /// No description provided for @shadowCreate.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon oscuro'**
+  String get shadowCreate;
+
+  /// No description provided for @shadowCreateDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Uno de los Pokémon oscuros que se capturan en este juego, tal como lo daría el juego.'**
+  String get shadowCreateDesc;
+
+  /// No description provided for @shadowPickTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige un Pokémon oscuro'**
+  String get shadowPickTitle;
+
+  /// No description provided for @shadowPickSearch.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar especie o lugar'**
+  String get shadowPickSearch;
+
+  /// No description provided for @shadowPickEntry.
+  ///
+  /// In es, this message translates to:
+  /// **'Nv. {level} · id oscuro {id} · {place}'**
+  String shadowPickEntry(String id, String level, String place);
+
+  /// No description provided for @shadowPickEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Ningún Pokémon oscuro coincide.'**
+  String get shadowPickEmpty;
+
+  /// No description provided for @shadowPickShadow.
+  ///
+  /// In es, this message translates to:
+  /// **'Oscuro'**
+  String get shadowPickShadow;
+
+  /// No description provided for @shadowPickPurified.
+  ///
+  /// In es, this message translates to:
+  /// **'Purificado'**
+  String get shadowPickPurified;
+
+  /// No description provided for @shadowPickCreate.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear'**
+  String get shadowPickCreate;
+
+  /// No description provided for @shadowPickHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Especie, nivel, movimientos, lugar, Ball, id oscuro y medidor de corazón como en el juego; PID e IV generados respetando los bloqueos del equipo del entrenador.'**
+  String get shadowPickHint;
+
+  /// No description provided for @shadowMoveNoteColo.
+  ///
+  /// In es, this message translates to:
+  /// **'Mientras es oscuro usa Ataque Oscuro: el juego lo pone por el id oscuro, no se guarda en el Pokémon.'**
+  String get shadowMoveNoteColo;
+
+  /// No description provided for @shadowMoveNoteXd.
+  ///
+  /// In es, this message translates to:
+  /// **'Mientras es oscuro usa sus movimientos oscuros: el juego los pone por el id oscuro, no se guardan en el Pokémon.'**
+  String get shadowMoveNoteXd;
+
+  /// No description provided for @shadowMakeShadow.
+  ///
+  /// In es, this message translates to:
+  /// **'Hacer Pokémon oscuro…'**
+  String get shadowMakeShadow;
+
+  /// No description provided for @shadowMakeShadowHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Sustitúyelo por uno de los Pokémon oscuros de este juego.'**
+  String get shadowMakeShadowHint;
+
+  /// No description provided for @shadowChangeEncounter.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar de Pokémon oscuro…'**
+  String get shadowChangeEncounter;
+
+  /// No description provided for @shadowApplyTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Sustituir por este Pokémon oscuro?'**
+  String get shadowApplyTitle;
+
+  /// No description provided for @shadowApplyBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se cambian especie, nivel, movimientos, PID, IV, lugar, Ball y estado oscuro por los del encuentro, como lo capturaría el juego. El apodo y los demás cambios de este Pokémon se pierden.'**
+  String get shadowApplyBody;
+
+  /// No description provided for @shadowApplyConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'Sustituir'**
+  String get shadowApplyConfirm;
 }
 
 class _AppLocalizationsDelegate

@@ -2417,5 +2417,36 @@
     }
   },
   "rmContestOrderG3": "Cada categoría se gana en orden: Normal → Alto → Avanzado → Experto. Cualquier especie puede participar.",
-  "rmContestOrderG4": "Cada categoría se gana en orden: Normal → Difícil → Superior → Experto (Ciudad Corazón). Todas las especies menos Ditto y Unown."
+  "rmContestOrderG4": "Cada categoría se gana en orden: Normal → Difícil → Superior → Experto (Ciudad Corazón). Todas las especies menos Ditto y Unown.",
+  "shadowCreate": "Pokémon oscuro",
+  "shadowCreateDesc": "Uno de los Pokémon oscuros que se capturan en este juego, tal como lo daría el juego.",
+  "shadowPickTitle": "Elige un Pokémon oscuro",
+  "shadowPickSearch": "Buscar especie o lugar",
+  "shadowPickEntry": "Nv. {level} · id oscuro {id} · {place}",
+  "@shadowPickEntry": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      },
+      "level": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "shadowPickEmpty": "Ningún Pokémon oscuro coincide.",
+  "shadowPickShadow": "Oscuro",
+  "shadowPickPurified": "Purificado",
+  "shadowPickCreate": "Crear",
+  "shadowPickHint": "Especie, nivel, movimientos, lugar, Ball, id oscuro y medidor de corazón como en el juego; PID e IV generados respetando los bloqueos del equipo del entrenador.",
+  "shadowMoveNoteColo": "Mientras es oscuro usa Ataque Oscuro: el juego lo pone por el id oscuro, no se guarda en el Pokémon.",
+  "shadowMoveNoteXd": "Mientras es oscuro usa sus movimientos oscuros: el juego los pone por el id oscuro, no se guardan en el Pokémon.",
+  "shadowMakeShadow": "Hacer Pokémon oscuro…",
+  "shadowMakeShadowHint": "Sustitúyelo por uno de los Pokémon oscuros de este juego.",
+  "shadowChangeEncounter": "Cambiar de Pokémon oscuro…",
+  "shadowApplyTitle": "¿Sustituir por este Pokémon oscuro?",
+  "shadowApplyBody": "Se cambian especie, nivel, movimientos, PID, IV, lugar, Ball y estado oscuro por los del encuentro, como lo capturaría el juego. El apodo y los demás cambios de este Pokémon se pierden.",
+  "shadowApplyConfirm": "Sustituir"
 }

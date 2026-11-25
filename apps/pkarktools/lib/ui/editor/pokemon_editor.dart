@@ -474,7 +474,8 @@ class _EditorForm extends StatelessWidget {
       _Section(title: context.l10n.sectionMoves, child: _MoveFields(s: s)),
       _Section(title: context.l10n.sectionStats, child: _StatFields(s: s)),
       if (!pk.isEgg) _Section(title: context.l10n.sectionTrainer, child: _OtFields(s: s, gen: gen)),
-      if (ShadowPanel.applies(pk)) _Section(title: context.l10n.sectionShadow, child: ShadowPanel(pk: pk, mutate: s.mutate)),
+      if (ShadowPanel.applies(pk, s.widget.game))
+        _Section(title: context.l10n.sectionShadow, child: ShadowPanel(pk: pk, game: s.widget.game, mutate: s.mutate)),
       if (gen >= 3) _Section(title: context.l10n.sectionOrigin, child: OriginPanel(pk: pk, game: s.widget.game, mutate: s.mutate)),
       if (Ribbons.supports(pk.format))
         _Section(title: context.l10n.sectionRibbons, child: RibbonsPanel(pk: pk, mutate: s.mutate)),
