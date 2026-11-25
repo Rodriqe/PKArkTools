@@ -11,6 +11,17 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+## [2.1.1] — 2026-11-25
+
+### Corregido
+
+- **El menú lateral ahora se desplaza en pantallas bajas**, así que Ajustes
+  (con su botón de actualizar) siempre se puede alcanzar, por ejemplo en
+  teléfonos y consolas portátiles en horizontal como la AYN Odin3. El logo
+  conserva su tamaño y queda fijo arriba; una barra de desplazamiento y un
+  degradado sutil indican que hay más abajo, y la sección elegida se lleva a
+  la vista. Cuando todo cabe, el menú se ve exactamente igual que antes.
+
 ## [2.1.0] — 2026-11-25
 
 PKArkTools 2.1.0 añade la pestaña **Competitivo** de Pokémon Champions: el

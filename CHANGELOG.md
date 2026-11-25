@@ -11,6 +11,17 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+## [2.1.1] — 2026-11-25
+
+### Fixed
+
+- **The side menu now scrolls on short screens**, so Settings (and its
+  update button) is always reachable, for example on phones and handhelds in
+  landscape such as the AYN Odin3. The logo keeps its size and stays fixed at
+  the top; a scrollbar and a subtle fade show that there is more below, and
+  the selected section is scrolled into view. When everything fits, the menu
+  looks exactly as before.
+
 ## [2.1.0] — 2026-11-25
 
 PKArkTools 2.1.0 adds a **Competitive** tab for Pokémon Champions: the

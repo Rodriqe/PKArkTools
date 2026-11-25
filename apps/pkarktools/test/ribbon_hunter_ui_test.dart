@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pkarktools/app.dart';
 import 'package:pkarktools/data/arca_repository.dart';
 import 'package:pkarktools/data/folder/arca_folder.dart';
@@ -89,9 +90,9 @@ void main() {
     expect(find.text('${second.total} ribbons · ${second.length} species & forms'), findsOneWidget);
     // Todos los niveles están (el último, tras desplazarse).
     final last = tiers.last;
-    await tester.scrollUntilVisible(find.byKey(ValueKey('rm-tier-${last.total}')), 600, scrollable: find.byType(Scrollable).first);
+    await tester.scrollUntilVisible(find.byKey(ValueKey('rm-tier-${last.total}')), 600, scrollable: contentScrollable);
     expect(find.byKey(ValueKey('rm-tier-${last.total}')), findsOneWidget);
-    await tester.scrollUntilVisible(find.byKey(ValueKey('rm-tier-${top.total}')), -600, scrollable: find.byType(Scrollable).first);
+    await tester.scrollUntilVisible(find.byKey(ValueKey('rm-tier-${top.total}')), -600, scrollable: contentScrollable);
 
     // Al entrar se ve la lista completa del nivel, en orden de Dex.
     await tester.tap(find.byKey(ValueKey('rm-tier-${top.total}')));
@@ -104,9 +105,9 @@ void main() {
     expect(firstKeys, expected.sublist(0, firstKeys.length));
     final lastRow = top.routes.last;
     await tester.scrollUntilVisible(find.byKey(ValueKey('rm-tier-row-${lastRow.species}-${lastRow.form}')), 600,
-        scrollable: find.byType(Scrollable).first);
+        scrollable: contentScrollable);
     expect(find.byKey(ValueKey('rm-tier-row-${lastRow.species}-${lastRow.form}')), findsOneWidget);
-    await tester.scrollUntilVisible(find.byKey(const ValueKey('rm-tier-filter')), -600, scrollable: find.byType(Scrollable).first);
+    await tester.scrollUntilVisible(find.byKey(const ValueKey('rm-tier-filter')), -600, scrollable: contentScrollable);
 
     // Filtro por número de Dex.
     final pick = top.routes[top.length ~/ 2];
@@ -187,3 +188,8 @@ void main() {
     }
   }
 }
+
+/// Primera lista del contenido (no la de la barra lateral, que también se
+/// desplaza en pantallas bajas).
+Finder get contentScrollable =>
+    find.descendant(of: find.byType(StatefulNavigationShell), matching: find.byType(Scrollable)).first;

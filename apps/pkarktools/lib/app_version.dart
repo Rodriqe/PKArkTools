@@ -1,3 +1,3 @@
 /// Versión de la app (la de `pubspec.yaml`, sin el número de build). Un test
 /// comprueba que coinciden: al subir la versión hay que cambiar las dos.
-const String kAppVersion = '2.1.0';
+const String kAppVersion = '2.1.1';

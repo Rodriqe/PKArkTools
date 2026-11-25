@@ -44,20 +44,31 @@ class AppShell extends ConsumerWidget {
         final extended = c.maxWidth >= 1280;
         return Scaffold(
           body: Row(children: [
-            NavigationRail(
+            _ScrollableRail(
               extended: extended,
-              minExtendedWidth: 220,
               selectedIndex: shell.currentIndex,
-              onDestinationSelected: _go,
-              labelType: extended ? NavigationRailLabelType.none : NavigationRailLabelType.all,
-              leading: Padding(
+              header: Padding(
                 padding: EdgeInsets.only(top: 20, bottom: extended ? 28 : 20),
                 child: _Logo(extended: extended),
               ),
-              destinations: [
-                for (final (i, (icon, sel, label)) in destinations.indexed)
-                  NavigationRailDestination(icon: dot(i, icon), selectedIcon: dot(i, sel), label: Text(label)),
-              ],
+              rail: NavigationRail(
+                extended: extended,
+                minExtendedWidth: 220,
+                selectedIndex: shell.currentIndex,
+                onDestinationSelected: _go,
+                labelType: extended ? NavigationRailLabelType.none : NavigationRailLabelType.all,
+                destinations: [
+                  for (final (i, (icon, sel, label)) in destinations.indexed)
+                    NavigationRailDestination(
+                      icon: dot(i, icon),
+                      // Ancla para desplazar la lista hasta el destino elegido.
+                      selectedIcon: i == shell.currentIndex
+                          ? KeyedSubtree(key: _ScrollableRail.selectedKey, child: dot(i, sel))
+                          : dot(i, sel),
+                      label: Text(label),
+                    ),
+                ],
+              ),
             ),
             VerticalDivider(width: 1, color: context.tokens.hairline),
             Expanded(child: shell),
@@ -88,6 +99,151 @@ class AppShell extends ConsumerWidget {
         ),
       );
     }));
+  }
+}
+
+/// Barra lateral con el logo fijo arriba y la lista de secciones debajo, que
+/// se desplaza cuando no cabe (teléfonos en horizontal, como el AYN Odin3):
+/// así Ajustes, con el botón de actualizar, siempre se puede alcanzar. Cuando
+/// cabe, se ve igual que un `NavigationRail` normal con el logo de `leading`.
+class _ScrollableRail extends StatefulWidget {
+  const _ScrollableRail({
+    required this.extended,
+    required this.header,
+    required this.rail,
+    required this.selectedIndex,
+  });
+  final bool extended;
+  final Widget header;
+  final NavigationRail rail;
+  final int selectedIndex;
+
+  /// Envuelve el icono del destino seleccionado (solo hay uno a la vez).
+  static final selectedKey = GlobalKey(debugLabel: 'rail-selected');
+
+  @override
+  State<_ScrollableRail> createState() => _ScrollableRailState();
+}
+
+class _ScrollableRailState extends State<_ScrollableRail> {
+  final _controller = ScrollController();
+
+  /// Queda lista por debajo: se muestra un degradado sutil al pie.
+  final _moreBelow = ValueNotifier(false);
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_updateMore);
+    _revealSelected(animate: false);
+  }
+
+  @override
+  void didUpdateWidget(_ScrollableRail old) {
+    super.didUpdateWidget(old);
+    if (old.selectedIndex != widget.selectedIndex || old.extended != widget.extended) _revealSelected(animate: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _moreBelow.dispose();
+    super.dispose();
+  }
+
+  void _updateMore() {
+    _moreBelow.value =
+        _controller.hasClients && _controller.position.hasContentDimensions && _controller.position.extentAfter > 0.5;
+  }
+
+  /// Lleva a la vista el destino seleccionado si quedó fuera (desplazamiento
+  /// mínimo; con margen para la etiqueta que va debajo del icono).
+  void _revealSelected({required bool animate}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final box = _ScrollableRail.selectedKey.currentContext?.findRenderObject();
+      if (box is RenderBox && box.attached && box.hasSize) {
+        final s = box.size;
+        box.showOnScreen(
+          rect: Rect.fromLTRB(0, -16, s.width, s.height + 32),
+          duration: animate ? const Duration(milliseconds: 200) : Duration.zero,
+          curve: Curves.easeOut,
+        );
+      }
+      _updateMore();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final bg = theme.navigationRailTheme.backgroundColor ?? theme.colorScheme.surface;
+    return ColoredBox(
+      color: bg,
+      child: SafeArea(
+        right: false,
+        child: Column(
+          children: [
+            widget.header,
+            Expanded(
+              child: NotificationListener<ScrollMetricsNotification>(
+                onNotification: (_) {
+                  _updateMore();
+                  return false;
+                },
+                child: Stack(
+                  children: [
+                    LayoutBuilder(
+                      builder: (context, c) => Scrollbar(
+                        controller: _controller,
+                        thumbVisibility: true,
+                        // Sin la barra automática de escritorio (ya hay una).
+                        child: ScrollConfiguration(
+                          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                          child: SingleChildScrollView(
+                            key: const ValueKey('rail-scroll'),
+                            controller: _controller,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(minHeight: c.maxHeight),
+                              child: IntrinsicHeight(child: widget.rail),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: IgnorePointer(
+                        child: ValueListenableBuilder<bool>(
+                          valueListenable: _moreBelow,
+                          builder: (context, more, _) => AnimatedOpacity(
+                            key: const ValueKey('rail-more-fade'),
+                            opacity: more ? 1 : 0,
+                            duration: const Duration(milliseconds: 150),
+                            child: Container(
+                              height: 24,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [bg.withValues(alpha: 0), bg],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

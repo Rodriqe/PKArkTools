@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path/path.dart' as p;
 import 'package:pkarktools/app.dart';
 import 'package:pkarktools/app_version.dart';
@@ -597,7 +598,7 @@ void main() {
           final title = locale == 'es' ? 'PKArkTools 9.0.0 disponible' : 'PKArkTools 9.0.0 available';
           // Ajustes › Acerca de, hasta el final.
           final check = find.text(locale == 'es' ? 'Buscar actualizaciones' : 'Check for updates');
-          await tester.scrollUntilVisible(check, 300, scrollable: find.byType(Scrollable).first);
+          await tester.scrollUntilVisible(check, 300, scrollable: contentScrollable);
           await tester.pump(const Duration(milliseconds: 300));
           expect(tester.takeException(), isNull);
           await tester.tap(find.text(title).last);
@@ -704,3 +705,8 @@ class FakeUpdater extends AppUpdater {
     return true;
   }
 }
+
+/// Primera lista del contenido (no la de la barra lateral, que también se
+/// desplaza en pantallas bajas).
+Finder get contentScrollable =>
+    find.descendant(of: find.byType(StatefulNavigationShell), matching: find.byType(Scrollable)).first;
