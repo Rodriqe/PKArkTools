@@ -1,0 +1,58 @@
+name: Champions data
+
+# Cada día: vuelve a generar data/champions/champions.json (y su copia
+# integrada champions_data.dart) desde Pokémon Showdown y, solo si cambió, lo
+# sube a main. La app lo descarga al abrir «Formato oficial»
+# (docs/usuario/formato-oficial.md). Si Showdown cambia algo que el generador
+# no entiende, el job falla sin commit y la app sigue con la última versión buena.
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: champions-data
+  cancel-in-progress: false
+
+jobs:
+  champions:
+    name: Regenerate Champions data
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Download Showdown sources
+        id: src
+        run: python3 tool/fetch_champions_sources.py "$RUNNER_TEMP/champions" | tee -a "$GITHUB_OUTPUT"
+      - name: Regenerate
+        env:
+          COMMIT: ${{ steps.src.outputs.commit }}
+          DATE: ${{ steps.src.outputs.date }}
+        run: python3 tool/gen_champions_data.py "$RUNNER_TEMP/champions" "$COMMIT" "$DATE"
+      - name: Validate
+        env:
+          CHAMPIONS_SRC: ${{ runner.temp }}/champions
+        run: |
+          python3 tool/gen_champions_data.py --validate data/champions/champions.json
+          python3 tool/test_gen_champions_data.py
+      - name: Commit if changed
+        env:
+          COMMIT: ${{ steps.src.outputs.commit }}
+        run: |
+          files="data/champions/champions.json packages/pkcore/lib/src/data/generated/champions_data.dart"
+          if git diff --quiet -- $files; then
+            echo "No changes."
+            exit 0
+          fi
+          name=$(python3 -c "import json;print(json.load(open('data/champions/champions.json'))['regulation']['name'])")
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add $files
+          git commit -m "Champions data: $name from Showdown ${COMMIT:0:7}"
+          git push origin HEAD:main

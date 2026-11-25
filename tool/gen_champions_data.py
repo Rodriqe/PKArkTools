@@ -20,8 +20,8 @@ Uso:
       [--dates tool/champions_regulations.json] [--today AAAA-MM-DD]
   python3 tool/gen_champions_data.py --validate data/champions/champions.json
 
-Si el JSON nuevo solo cambia en `generatedAt`, no se reescribe (el workflow
-solo hace commit cuando cambian los datos). Si Showdown cambia algo que el
+Si los datos no cambian (aunque haya commits nuevos en Showdown), el JSON no
+se reescribe: el workflow solo hace commit cuando cambian los datos. Si Showdown cambia algo que el
 generador no entiende, termina con error y no escribe nada.
 Ver docs/usuario/formato-oficial.md.
 """
@@ -245,8 +245,10 @@ const kChampionsBuiltinJson = r'''
 """
 
 
-def without_generated_at(d):
-    return {k: v for k, v in d.items() if k != 'generatedAt'}
+def same_data(a, b):
+    """¿Mismos datos? (sin contar cuándo se generó ni de qué commit salió)."""
+    skip = ('generatedAt', 'source')
+    return {k: v for k, v in a.items() if k not in skip} == {k: v for k, v in b.items() if k not in skip}
 
 
 def main(argv=None):
@@ -273,12 +275,13 @@ def main(argv=None):
     except GenError as e:
         print(f'gen_champions_data: {e}', file=sys.stderr)
         return 1
-    # Solo cambia generatedAt: se deja el archivo como estaba.
+    # Si los datos no cambian (Showdown tocó otra cosa de formats.ts, por
+    # ejemplo), se deja el archivo como estaba: ni commit ni descarga nueva.
     if a.json.exists():
         try:
             old = json.loads(a.json.read_text(encoding='utf-8'))
-            if without_generated_at(old) == without_generated_at(data):
-                data['generatedAt'] = old['generatedAt']
+            if same_data(old, data):
+                data['generatedAt'], data['source'] = old['generatedAt'], old['source']
         except (ValueError, KeyError):
             pass
     text = dump_json(data)

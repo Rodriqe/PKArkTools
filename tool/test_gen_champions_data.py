@@ -5,19 +5,22 @@
 
 Con archivos sintéticos (siempre) y, si están descargados en
 .scratch/champions/ (formats-data.ts, formats.ts, rulesets.ts), contra los de
-Showdown actuales.
+Showdown actuales (o en $CHAMPIONS_SRC: el workflow champions-data.yml).
 """
 import json
+import os
+import re
 import sys
 import tempfile
 import unittest
 from pathlib import Path
 
+sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gen_champions_data as gen  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-CURRENT = ROOT / '.scratch/champions'
+CURRENT = Path(os.environ.get('CHAMPIONS_SRC') or ROOT / '.scratch/champions')
 COMMIT = 'b3131aec41150c9a68f59224b6da2d6dc5901dc7'
 
 RULESETS = '''export const Rulesets = {
@@ -127,7 +130,7 @@ class Synthetic(unittest.TestCase):
         self.assertEqual(d['nextRegulation']['code'], 'M-D')
         self.assertIsNone(d['nextRegulation']['from'])  # sin fechas en la tabla
 
-    def test_generated_at_kept_when_unchanged(self):
+    def test_unchanged_data_keeps_file(self):
         _, out, _ = self.run_gen()
         d = json.loads(out.read_text())
         d['generatedAt'] = '2000-01-01T00:00:00Z'
@@ -135,6 +138,15 @@ class Synthetic(unittest.TestCase):
         before = out.read_text()
         self.run_gen()
         self.assertEqual(out.read_text(), before)
+        # Un commit nuevo de Showdown que no cambia los datos tampoco.
+        gen.main([str(self.src), 'f' * 40, '2026-12-01', '--json', str(out), '--dart', str(self.dir / 'o.dart'),
+                  '--dates', str(self.dates), '--today', '2026-11-25'])
+        self.assertEqual(out.read_text(), before)
+        # Si cambian los datos, sí (con el commit nuevo).
+        self.write(formats(REG_MC), species(n_legal=199))
+        gen.main([str(self.src), 'f' * 40, '2026-12-01', '--json', str(out), '--dart', str(self.dir / 'o.dart'),
+                  '--dates', str(self.dates), '--today', '2026-11-25'])
+        self.assertEqual(json.loads(out.read_text())['source']['commit'], 'f' * 40)
 
     def test_fails_without_writing(self):
         # Formato irreconocible.
@@ -167,7 +179,7 @@ class Synthetic(unittest.TestCase):
 class CurrentShowdown(unittest.TestCase):
     def test_current_files(self):
         d = gen.build(CURRENT, COMMIT, '2026-11-25', gen.DEFAULT_DATES, '2026-11-25', 'now')
-        self.assertTrue(d['regulation']['name'].startswith('VGC 2026 Reg M-'))
+        self.assertRegex(d['regulation']['name'], r'^VGC \d{4} Reg ')
         self.assertIn('garchomp', d['allowed'])
         self.assertIn('garchompmega', d['megas'])
         self.assertNotIn('bulbasaur', d['allowed'])  # solo National Dex
