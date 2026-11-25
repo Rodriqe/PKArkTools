@@ -73,7 +73,7 @@ enum EventRegion {
 /// Un evento (Mystery Gift) de la base de PKHeX: datos fijos, tarjeta en bruto
 /// y plantilla legal (generada con PKHeX `ConvertToPKM`) para crearlo.
 class EventGift {
-  EventGift._(this.id, Map<String, Object?> m)
+  EventGift._(this._src, this.id, Map<String, Object?> m)
       : db = m['db'] as String,
         dbIndex = m['i'] as int,
         cardId = (m['c'] as int?) ?? 0,
@@ -103,8 +103,14 @@ class EventGift {
           for (final e in ((m['nk'] as Map?) ?? const {}).entries) int.parse(e.key as String): _nick(e.value as String),
         };
 
+  /// Base de datos de la que sale (la integrada o una descargada).
+  final EventData _src;
+
   /// Posición en [EventDb.all].
   final int id;
+
+  /// Identifica el evento entre versiones de la base (para marcar los nuevos).
+  String get key => '$db:$cardId:$species:$form:$level:$title';
 
   /// Base de PKHeX: wc3, pcny, pcjp, pcd, pgf, wc6, wc7, wb7, wc8, wb8, wa8, wc9, wa9.
   final String db;
@@ -157,7 +163,7 @@ class EventGift {
   /// La fecha de encuentro es la de recepción (hoy); si no, es fija.
   bool get metToday => _flags.contains('T');
 
-  bool get canCreate => format != null && kEventTpl[id].isNotEmpty && !needsRecipientRng;
+  bool get canCreate => format != null && _src._tpl[id].isNotEmpty && !needsRecipientRng;
 
   /// Gen 3 variocolor con el ID de quien lo recibe (Pichu huevo japonés,
   /// BACD_TS): el PID sale del RNG en función del ID, sin variante reutilizable.
@@ -188,22 +194,22 @@ class EventGift {
 
   /// Tarjeta en bruto tal como la guarda PKHeX (null en Gen 3).
   Uint8List? get rawCard {
-    final s = kEventRaw[id];
+    final s = _src._raw[id];
     return s.isEmpty ? null : base64Decode(s);
   }
 
   /// Pokémon de plantilla (copia nueva en cada llamada).
   Pkm? template([GameVersion? game]) {
     final f = format;
-    if (f == null || kEventTpl[id].isEmpty) return null;
-    return Pkm.fromDecrypted(f, base64Decode(kEventTpl[id]))..dataGame = game ?? _defaultGame;
+    if (f == null || _src._tpl[id].isEmpty) return null;
+    return Pkm.fromDecrypted(f, base64Decode(_src._tpl[id]))..dataGame = game ?? _defaultGame;
   }
 
   GameVersion? get _defaultGame => OriginPlace.gameOf(templateVersion);
 
   /// Variantes legales de PID/EC/IV/naturaleza/habilidad/género (Gen 4+).
   List<EventVariant> get variants {
-    final s = kEventVar[id];
+    final s = _src._var[id];
     if (s.isEmpty || hasFullVariants) return const [];
     final d = base64Decode(s);
     return [for (var o = 0; o + 20 <= d.length; o += 20) EventVariant._(Uint8List.sublistView(d, o, o + 20))];
@@ -215,7 +221,7 @@ class EventGift {
   bool get hasFullVariants => format == PkFormat.pk3 || format == PkFormat.pa9;
 
   List<Uint8List> get fullVariants {
-    final s = kEventVar[id];
+    final s = _src._var[id];
     final f = format;
     if (s.isEmpty || f == null || !hasFullVariants) return const [];
     final d = base64Decode(s);
@@ -266,15 +272,160 @@ class EventVariant {
   int get ability => _d[18] | (_d[19] << 8);
 }
 
+/// Un JSON de eventos que no se puede usar.
+class EventDataException implements Exception {
+  const EventDataException(this.message, {this.futureSchema});
+  final String message;
+
+  /// `schemaVersion` del JSON si es mayor que el que entiende esta versión.
+  final int? futureSchema;
+
+  @override
+  String toString() => 'EventDataException: $message';
+}
+
+/// Una versión de la base de eventos: la integrada (`event_data.dart`) o la
+/// descargada (`data/events/events.json`, que regenera cada día
+/// `.github/workflows/events-data.yml`). Las genera `tool/gen_event_data.py`.
+class EventData {
+  EventData._({
+    required this.schemaVersion,
+    required this.generatedAt,
+    required this.sourceCommit,
+    required this.sourceDate,
+    required List<Object> meta,
+    required List<String> tpl,
+    required List<String> raw,
+    required List<String> variants,
+  }) : _meta = meta,
+       _tpl = tpl,
+       _raw = raw,
+       _var = variants;
+
+  /// Versión del esquema que entiende esta versión de la app.
+  static const supportedSchemaVersion = 1;
+
+  /// Mínimo de eventos de una base válida (hoy hay unos 2900).
+  static const minEvents = 1000;
+
+  /// La copia que lleva la app.
+  static final EventData builtin = EventData._(
+    schemaVersion: supportedSchemaVersion,
+    generatedAt: DateTime.tryParse(kEventGeneratedAt) ?? DateTime.utc(2026),
+    sourceCommit: kEventSourceCommit,
+    sourceDate: kEventSourceDate,
+    meta: kEventMeta,
+    tpl: kEventTpl,
+    raw: kEventRaw,
+    variants: kEventVar,
+  );
+
+  final int schemaVersion;
+  final DateTime generatedAt;
+
+  /// Commit de PKHeX (vacío si no se conoce).
+  final String sourceCommit;
+
+  /// Fecha de ese commit (`AAAA-MM-DD`).
+  final String sourceDate;
+
+  /// Datos fijos de cada evento: JSON compacto (integrada) o ya decodificado.
+  final List<Object> _meta;
+  final List<String> _tpl, _raw, _var;
+
+  int get count => _meta.length;
+
+  /// ¿Es más reciente que [other]? (por la fecha en que se generó).
+  bool isNewerThan(EventData other) => generatedAt.isAfter(other.generatedAt);
+
+  late final List<EventGift> gifts = [
+    for (var i = 0; i < _meta.length; i++)
+      EventGift._(this, i, switch (_meta[i]) {
+        final String s => jsonDecode(s) as Map<String, Object?>,
+        final m => m as Map<String, Object?>,
+      }),
+  ];
+
+  static final _b64 = RegExp(r'^[A-Za-z0-9+/]*={0,2}$');
+  static final _commit = RegExp(r'^[0-9a-f]{40}$');
+  static final _day = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+
+  /// Lee y valida un JSON (lanza [EventDataException]).
+  static EventData parse(String text) {
+    final Object? root;
+    try {
+      root = jsonDecode(text);
+    } on FormatException catch (e) {
+      throw EventDataException('JSON: ${e.message}');
+    }
+    if (root is! Map<String, Object?>) throw const EventDataException('not an object');
+    final v = root['schemaVersion'];
+    if (v is! int || v < 1) throw const EventDataException('schemaVersion');
+    if (v > supportedSchemaVersion) throw EventDataException('schemaVersion $v', futureSchema: v);
+    Never bad(String what) => throw EventDataException(what);
+    final generatedAt = DateTime.tryParse('${root['generatedAt']}') ?? bad('generatedAt');
+    final source = root['source'];
+    if (source is! Map<String, Object?>) bad('source');
+    final commit = source['commit'], date = source['date'];
+    if (commit is! String || !_commit.hasMatch(commit)) bad('source.commit');
+    if (date is! String || !_day.hasMatch(date)) bad('source.date');
+    final events = root['events'];
+    if (events is! List || events.length < minEvents || root['count'] != events.length) bad('events');
+    final meta = <Object>[], tpl = <String>[], raw = <String>[], vars = <String>[];
+    for (final e in events) {
+      if (e is! Map<String, Object?>) bad('event');
+      final m = e['m'];
+      if (m is! Map<String, Object?>) bad('event.m');
+      final s = m['s'];
+      if (m['db'] is! String || m['i'] is! int || s is! int || s < 1 || s > 1025) bad('event.m');
+      for (final k in const ['t', 'r', 'v']) {
+        final x = e[k];
+        if (x is! String || x.length % 4 != 0 || !_b64.hasMatch(x)) bad('event.$k');
+      }
+      meta.add(m);
+      tpl.add(e['t']! as String);
+      raw.add(e['r']! as String);
+      vars.add(e['v']! as String);
+    }
+    final d = EventData._(
+      schemaVersion: v,
+      generatedAt: generatedAt,
+      sourceCommit: commit,
+      sourceDate: date,
+      meta: meta,
+      tpl: tpl,
+      raw: raw,
+      variants: vars,
+    );
+    // Cada evento tiene que poder leerse (tipos de cada campo).
+    try {
+      d.gifts;
+    } on Object catch (e) {
+      bad('event fields: $e');
+    }
+    return d;
+  }
+}
+
 /// Base de eventos de PKHeX (carga perezosa: se decodifica al primer uso).
 abstract final class EventDb {
-  static List<EventGift>? _all;
+  static EventData _data = EventData.builtin;
+
+  /// Base en uso: la integrada o la última descargada.
+  static EventData get data => _data;
+
+  /// Cambia la base en uso (la app, al descargar una nueva).
+  static void use(EventData d) {
+    if (identical(d, _data)) return;
+    _data = d;
+    _bySpecies = null;
+  }
+
+  /// Vuelve a la copia integrada.
+  static void reset() => use(EventData.builtin);
 
   /// Todos los eventos de Pokémon, en el orden de PKHeX (Gen 3 → Gen 9).
-  static List<EventGift> get all => _all ??= [
-        for (var i = 0; i < kEventMeta.length; i++)
-          EventGift._(i, jsonDecode(kEventMeta[i]) as Map<String, Object?>),
-      ];
+  static List<EventGift> get all => _data.gifts;
 
   static Map<int, List<EventGift>>? _bySpecies;
 
@@ -304,7 +455,7 @@ abstract final class EventDb {
   static EventGift? byRawCard(Uint8List bytes) {
     final b64 = base64Encode(bytes);
     for (final g in all) {
-      if (kEventRaw[g.id] == b64) return g;
+      if (_data._raw[g.id] == b64) return g;
     }
     return null;
   }

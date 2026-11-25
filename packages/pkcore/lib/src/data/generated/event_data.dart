@@ -2,6 +2,10 @@
 // Fuente: tools/pkhex_oracle, comando `events` (EncounterEvent y EncountersWC3).
 // ignore_for_file: lines_longer_than_80_chars
 
+const kEventSourceCommit = 'a5311f9f55a84376fd2e2499b25d9fb9640d9f2d';
+const kEventSourceDate = '2026-11-22';
+const kEventGeneratedAt = '2026-11-25T13:23:28Z';
+
 /// Eventos (Mystery Gift) de Pokémon: 2922.
 /// Datos fijos de cada evento (JSON compacto; ver `EventGift`).
 const List<String> kEventMeta = [

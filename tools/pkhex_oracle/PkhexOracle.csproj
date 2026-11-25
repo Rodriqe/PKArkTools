@@ -12,10 +12,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <!-- Otra copia de PKHeX: dotnet build -p:PkhexDir=/ruta (el workflow events-data.yml). -->
+    <PkhexDir Condition="'$(PkhexDir)' == ''">$(MSBuildThisFileDirectory)../../.ref/PKHeX</PkhexDir>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../.ref/PKHeX/PKHeX.Core/PKHeX.Core.csproj" />
+    <ProjectReference Include="$(PkhexDir)/PKHeX.Core/PKHeX.Core.csproj" />
   </ItemGroup>
 
 </Project>

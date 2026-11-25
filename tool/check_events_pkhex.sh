@@ -7,16 +7,19 @@
 #   tool/check_events_pkhex.sh            # resumen
 #   tool/check_events_pkhex.sh --detail   # además cada Pokémon inválido
 #
-# Requiere .NET SDK 10 y PKHeX en .ref/PKHeX (ver tools/pkhex_oracle/README.md).
+# Requiere .NET SDK 10 y PKHeX en .ref/PKHeX o en $PKHEX_DIR (ver
+# tools/pkhex_oracle/README.md).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-export NUGET_PACKAGES="$ROOT/.ref/nuget" DOTNET_CLI_HOME="$ROOT/.scratch/dotnet-home"
+PKHEX_DIR="${PKHEX_DIR:-$ROOT/.ref/PKHeX}"
+BIN="${ORACLE_BIN:-$ROOT/.scratch/oracle-bin}"
+export NUGET_PACKAGES="${NUGET_PACKAGES:-$ROOT/.ref/nuget}" DOTNET_CLI_HOME="${DOTNET_CLI_HOME:-$ROOT/.scratch/dotnet-home}"
 export DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1 TMPDIR="$ROOT/.scratch/tmp"
 OUT="$ROOT/.scratch/events_check"
 rm -rf "$OUT" && mkdir -p "$OUT/pk" "$TMPDIR"
-dotnet build "$ROOT/tools/pkhex_oracle" -c Release -o "$ROOT/.scratch/oracle-bin" -v quiet -nologo >/dev/null
+dotnet build "$ROOT/tools/pkhex_oracle" -c Release -o "$BIN" -p:PkhexDir="$PKHEX_DIR" -v quiet -nologo >/dev/null
 (cd "$ROOT/packages/pkcore" && EVENTS_OUT="$OUT/pk" dart test test/events_test.dart -n "oráculo" >/dev/null)
-dotnet "$ROOT/.scratch/oracle-bin/PkhexOracle.dll" legal "$OUT/pk" "$OUT/legal.jsonl"
+dotnet "$BIN/PkhexOracle.dll" legal "$OUT/pk" "$OUT/legal.jsonl"
 python3 - "$OUT/legal.jsonl" "${1:-}" <<'PY'
 import collections, json, sys
 rows = [json.loads(l) for l in open(sys.argv[1])]
