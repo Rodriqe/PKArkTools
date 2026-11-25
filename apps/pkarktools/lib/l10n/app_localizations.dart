@@ -7028,6 +7028,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Cajas ordenadas ({count} huecos)'**
   String toolsBoxesSortedNote(int count);
+
+  /// No description provided for @clonesSection.
+  ///
+  /// In es, this message translates to:
+  /// **'Clones de HOME'**
+  String get clonesSection;
+
+  /// No description provided for @clonesSectionDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Cada Pokémon que pasa por HOME recibe un rastreador único. Si dos Pokémon de tus partidas tienen el mismo, son copias del mismo Pokémon: HOME puede rechazarlos o marcarlos.'**
+  String get clonesSectionDesc;
+
+  /// No description provided for @clonesCheck.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar clones en el Arca'**
+  String get clonesCheck;
+
+  /// No description provided for @clonesNone.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay clones: ningún rastreador de HOME se repite.'**
+  String get clonesNone;
+
+  /// No description provided for @clonesFound.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{1 Pokémon está repetido} other{{count} Pokémon están repetidos}} (mismo rastreador de HOME).'**
+  String clonesFound(int count);
+
+  /// No description provided for @clonesRecheck.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver a buscar'**
+  String get clonesRecheck;
+
+  /// No description provided for @clonesTracker.
+  ///
+  /// In es, this message translates to:
+  /// **'Rastreador {tracker} · {count} copias'**
+  String clonesTracker(String tracker, int count);
+
+  /// No description provided for @aboutNotAffiliated.
+  ///
+  /// In es, this message translates to:
+  /// **'PKArkTools no está afiliado a Nintendo, The Pokémon Company ni Game Freak. Pokémon y los nombres de sus personajes son marcas registradas de sus respectivos dueños.'**
+  String get aboutNotAffiliated;
 }
 
 class _AppLocalizationsDelegate

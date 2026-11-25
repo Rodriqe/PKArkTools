@@ -4385,4 +4385,41 @@ class AppLocalizationsEs extends AppLocalizations {
   String toolsBoxesSortedNote(int count) {
     return 'Cajas ordenadas ($count huecos)';
   }
+
+  @override
+  String get clonesSection => 'Clones de HOME';
+
+  @override
+  String get clonesSectionDesc =>
+      'Cada Pokémon que pasa por HOME recibe un rastreador único. Si dos Pokémon de tus partidas tienen el mismo, son copias del mismo Pokémon: HOME puede rechazarlos o marcarlos.';
+
+  @override
+  String get clonesCheck => 'Buscar clones en el Arca';
+
+  @override
+  String get clonesNone =>
+      'No hay clones: ningún rastreador de HOME se repite.';
+
+  @override
+  String clonesFound(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Pokémon están repetidos',
+      one: '1 Pokémon está repetido',
+    );
+    return '$_temp0 (mismo rastreador de HOME).';
+  }
+
+  @override
+  String get clonesRecheck => 'Volver a buscar';
+
+  @override
+  String clonesTracker(String tracker, int count) {
+    return 'Rastreador $tracker · $count copias';
+  }
+
+  @override
+  String get aboutNotAffiliated =>
+      'PKArkTools no está afiliado a Nintendo, The Pokémon Company ni Game Freak. Pokémon y los nombres de sus personajes son marcas registradas de sus respectivos dueños.';
 }

@@ -8,6 +8,7 @@ import '../../data/sprites/sprite_manifest.g.dart';
 import '../common/brand_mark.dart';
 import '../common/format.dart';
 import '../import/import_flow.dart';
+import '../transfer/clone_check.dart';
 import 'folder_section.dart';
 import 'sprites_section.dart';
 import 'update_section.dart';
@@ -108,6 +109,7 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   body: '${l10n.archiveExportDesc} ${l10n.archiveRestoreDesc}',
                 ),
+                section(l10n.clonesSection, const ArkClonesSection(), body: l10n.clonesSectionDesc),
                 section(l10n.spritesSection, const SpritesSection(), body: l10n.spritesSectionDesc),
                 section(
                   l10n.sampleData,
@@ -143,6 +145,12 @@ class SettingsScreen extends ConsumerWidget {
                             ),
                           ),
                         ],
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        l10n.aboutNotAffiliated,
+                        key: const ValueKey('about-not-affiliated'),
+                        style: context.text.bodySmall!.copyWith(color: context.tokens.muted),
                       ),
                       const SizedBox(height: 12),
                       const UpdateAboutControls(),

@@ -4353,4 +4353,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String toolsBoxesSortedNote(int count) {
     return 'Boxes sorted ($count slots)';
   }
+
+  @override
+  String get clonesSection => 'HOME clones';
+
+  @override
+  String get clonesSectionDesc =>
+      'Every Pokémon that goes through HOME gets a unique tracker. If two Pokémon in your saves share one, they are copies of the same Pokémon: HOME may reject or flag them.';
+
+  @override
+  String get clonesCheck => 'Find clones in the Ark';
+
+  @override
+  String get clonesNone => 'No clones: no HOME tracker is repeated.';
+
+  @override
+  String clonesFound(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Pokémon are repeated',
+      one: '1 Pokémon is repeated',
+    );
+    return '$_temp0 (same HOME tracker).';
+  }
+
+  @override
+  String get clonesRecheck => 'Check again';
+
+  @override
+  String clonesTracker(String tracker, int count) {
+    return 'Tracker $tracker · $count copies';
+  }
+
+  @override
+  String get aboutNotAffiliated =>
+      'PKArkTools is not affiliated with Nintendo, The Pokémon Company or Game Freak. Pokémon and Pokémon character names are trademarks of their respective owners.';
 }

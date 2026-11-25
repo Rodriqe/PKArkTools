@@ -1152,5 +1152,13 @@
   "toolsSomeStatFitsNoIV": "Some stat fits no IV: check EVs, level or nature.",
   "toolsPower": "power {power}",
   "toolsCopiedToClipboard": "Copied to clipboard",
-  "toolsBoxesSortedNote": "Boxes sorted ({count} slots)"
+  "toolsBoxesSortedNote": "Boxes sorted ({count} slots)",
+  "clonesSection": "HOME clones",
+  "clonesSectionDesc": "Every Pokémon that goes through HOME gets a unique tracker. If two Pokémon in your saves share one, they are copies of the same Pokémon: HOME may reject or flag them.",
+  "clonesCheck": "Find clones in the Ark",
+  "clonesNone": "No clones: no HOME tracker is repeated.",
+  "clonesFound": "{count, plural, =1{1 Pokémon is repeated} other{{count} Pokémon are repeated}} (same HOME tracker).",
+  "clonesRecheck": "Check again",
+  "clonesTracker": "Tracker {tracker} · {count} copies",
+  "aboutNotAffiliated": "PKArkTools is not affiliated with Nintendo, The Pokémon Company or Game Freak. Pokémon and Pokémon character names are trademarks of their respective owners."
 }

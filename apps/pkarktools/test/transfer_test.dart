@@ -1,9 +1,11 @@
+import 'dart:typed_data';
 import 'dart:io';
 
 import 'package:drift/drift.dart' show DatabaseConnection;
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pkcore/pkcore.dart';
 import 'package:pkcore/testing.dart';
@@ -13,7 +15,10 @@ import 'package:pkarktools/data/db/arca_database.dart';
 import 'package:pkarktools/data/folder/arca_folder.dart';
 import 'package:pkarktools/data/folder/folder_fs.dart';
 import 'package:pkarktools/data/transfer_service.dart';
+import 'package:pkarktools/l10n/app_localizations.dart';
 import 'package:pkarktools/providers.dart';
+import 'package:pkarktools/theme/app_theme.dart';
+import 'package:pkarktools/ui/transfer/clone_check.dart';
 
 import 'arca_screen_test.dart' show settle;
 
@@ -163,6 +168,51 @@ void main() {
         for (var s = 0; s < ed.boxSlotCount; s++) ed.get(SlotRef.box(0, s))?.species,
       ];
       expect(found, contains(133));
+    });
+    testWidgets('detector de clones: el mismo rastreador de HOME en dos partidas', (tester) async {
+      // Un Pokémon de USUM llevado a Escarlata (con rastreador) y copiado en dos partidas.
+      final src = SaveEditor.open(_ultraSun).party.first;
+      final pk = PkTransfer.convert(src, GameVersion.ultraSunUltraMoon, GameVersion.scarletViolet).pk!;
+      expect(pk.homeTracker, isNot(0));
+      Uint8List withClone(String name) {
+        final e = SaveEditor.open(SyntheticSaves.scarletViolet(
+          trainer: SynthTrainer(name: name, versionId: 50),
+          party: const [SynthMon(906, level: 10)],
+        ));
+        e.writeBoxSlot(0, 0, pk.clone());
+        return e.build();
+      }
+
+      await tester.runAsync(() async {
+        await repo.importBytes(withClone('Ana'), fileName: 'a/main', origin: ImportOrigin.demo);
+        await repo.importBytes(withClone('Bea'), fileName: 'b/main', origin: ImportOrigin.demo);
+      });
+      tester.view.physicalSize = const Size(1000, 1400);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(ProviderScope(
+        overrides: [arcaRepositoryProvider.overrideWithValue(repo)],
+        child: MaterialApp(
+          theme: AppTheme.dark(),
+          locale: const Locale('es'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          home: const Scaffold(body: SingleChildScrollView(child: ArkClonesSection())),
+        ),
+      ));
+      await tester.tap(find.byKey(const ValueKey('ark-clones-check')));
+      for (var i = 0; i < 40 && find.textContaining('repetido').evaluate().isEmpty; i++) {
+        await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 200)));
+        await tester.pump();
+      }
+      expect(find.textContaining('1 Pokémon está repetido'), findsOneWidget);
+      expect(find.textContaining('2 copias'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
     });
   });
 }

@@ -3187,5 +3187,30 @@
         "type": "int"
       }
     }
-  }
+  },
+  "clonesSection": "Clones de HOME",
+  "clonesSectionDesc": "Cada Pokémon que pasa por HOME recibe un rastreador único. Si dos Pokémon de tus partidas tienen el mismo, son copias del mismo Pokémon: HOME puede rechazarlos o marcarlos.",
+  "clonesCheck": "Buscar clones en el Arca",
+  "clonesNone": "No hay clones: ningún rastreador de HOME se repite.",
+  "clonesFound": "{count, plural, =1{1 Pokémon está repetido} other{{count} Pokémon están repetidos}} (mismo rastreador de HOME).",
+  "@clonesFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "clonesRecheck": "Volver a buscar",
+  "clonesTracker": "Rastreador {tracker} · {count} copias",
+  "@clonesTracker": {
+    "placeholders": {
+      "tracker": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aboutNotAffiliated": "PKArkTools no está afiliado a Nintendo, The Pokémon Company ni Game Freak. Pokémon y los nombres de sus personajes son marcas registradas de sus respectivos dueños."
 }
