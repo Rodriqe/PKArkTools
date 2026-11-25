@@ -19,6 +19,7 @@ export 'src/dex/dex_scan.dart';
 export 'src/dex/evolutions.dart';
 export 'src/dex/global_dex.dart';
 export 'src/dex/special_forms.dart';
+export 'src/livingdex/living_dex.dart';
 export 'src/legal/balls.dart';
 export 'src/legal/encounters.dart';
 export 'src/legal/gc_legality.dart';

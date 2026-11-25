@@ -8,7 +8,7 @@ import 'pokedex.dart';
 import 'save_editor.dart';
 
 /// Tipo de edición (para que la interfaz genere descripciones localizadas).
-enum SaveEditKind { setSlot, clearSlot, swapSlots, trainer, inventory, boxName, pokedex, events }
+enum SaveEditKind { setSlot, clearSlot, swapSlots, trainer, inventory, boxName, pokedex, events, fillBoxes }
 
 /// Edición aplicable sobre un [SaveEditor]. Inmutable: guarda copias de los datos.
 sealed class SaveEditOp implements SaveEdit {
@@ -36,6 +36,34 @@ class SetSlotEdit extends SaveEditOp {
 
   @override
   String get description => '${label ?? 'Editado'}: ${Species.name(pk.species)} ($ref)';
+}
+
+/// Sustituye el contenido de todas las cajas (no el equipo) por [pokemon], en
+/// orden desde la caja 1, hueco 1 (Living Dex). Los huecos bloqueados se saltan;
+/// lo que no cabe se descarta.
+class FillBoxesEdit extends SaveEditOp {
+  FillBoxesEdit(List<Pkm> pokemon, {this.label}) : pokemon = [for (final p in pokemon) p.clone()];
+
+  final List<Pkm> pokemon;
+  final String? label;
+
+  @override
+  SaveEditKind get kind => SaveEditKind.fillBoxes;
+
+  @override
+  void applyTo(SaveEditor editor) {
+    var i = 0;
+    for (var b = 0; b < editor.boxCount; b++) {
+      for (var s = 0; s < editor.boxSlotCount; s++) {
+        final ref = SlotRef.box(b, s);
+        if (editor.isSlotLocked(ref)) continue;
+        editor.set(ref, i < pokemon.length ? pokemon[i++].clone() : null);
+      }
+    }
+  }
+
+  @override
+  String get description => '${label ?? 'Cajas sustituidas'}: ${pokemon.length} Pokémon';
 }
 
 /// Vacía un hueco (en el equipo, compacta).

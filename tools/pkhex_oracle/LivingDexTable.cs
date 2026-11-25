@@ -76,9 +76,12 @@ static class LivingDexTable
         for (ushort s = 1; s <= pt.MaxSpeciesID; s++)
         {
             var fc = pt[s].FormCount;
+            // Unown en Gen 2–3: la letra sale de los DV / del PID (una sola entrada en la tabla personal).
+            var unownLetters = s == (int)Species.Unown && v.Generation is 2 or 3;
+            if (unownLetters) fc = (byte)(v.Generation == 2 ? 26 : 28);
             for (byte f = 0; f < Math.Max((byte)1, fc); f++)
             {
-                if (!pt.IsPresentInGame(s, f)) continue;
+                if (!pt.IsPresentInGame(s, unownLetters ? (byte)0 : f)) continue;
                 if (Excluded(s, f, v) is { } why)
                 {
                     w.WriteLine(new JsonObject { ["v"] = (int)v, ["s"] = s, ["f"] = f, ["skip"] = why }.ToJsonString());
@@ -142,7 +145,7 @@ static class LivingDexTable
     {
         var pk = EntityBlank.GetBlank(Trainer(v));
         pk.Species = s;
-        pk.Form = f;
+        pk.Form = s == (int)Species.Unown && v.Generation <= 2 ? (byte)0 : f;
         pk.Version = v;
         return pk;
     }
@@ -156,6 +159,7 @@ static class LivingDexTable
     static int Kind(IEncounterable e) => e switch
     {
         IEncounterEgg => 0,
+        _ when e.GetType().Name == "EncounterStatic8U" => 3,
         _ when e.GetType().Name.Contains("Static") || e.GetType().Name.Contains("Gift") => 1,
         _ => 2,
     };
@@ -167,18 +171,21 @@ static class LivingDexTable
         var blank = Blank(v, s, f);
         var tr = Trainer(v);
         var encs = EncounterMovesetGenerator.GenerateEncounters(blank, tr, ReadOnlyMemory<ushort>.Empty, v)
-            .Where(e => !e.GetType().Name.StartsWith("EncounterTrade") && e is not MysteryGift && e.Version != GameVersion.GO)
+            .Where(e => !e.GetType().Name.StartsWith("EncounterTrade") && e is not MysteryGift && e.Version != GameVersion.GO
+                // Entree Forest (Dream World, en línea): fuera. Max Lair: el último recurso.
+                && !e.GetType().Name.Contains("Entree"))
             .OrderBy(Kind)
-            .Take(24).ToList();
+            .Take(s == (int)Species.Unown ? 400 : 24).ToList();
         if (encs.Count == 0) { row["err"] = "noenc"; return row; }
         string? firstErr = null;
         foreach (var enc in encs)
         {
             PKM? pk = null;
             string err = "";
-            for (var k = 0; k < 6 && pk == null; k++) pk = Make(enc, tr, s, f, out err);
+            var tries = s == (int)Species.Unown && v.Generation <= 3 ? (v.Generation == 2 ? 2000 : 60) : 6;
+            for (var k = 0; k < tries && pk == null; k++) pk = Make(enc, tr, s, f, out err);
             if (pk == null) { firstErr ??= err; continue; }
-            row["kind"] = new[] { "egg", "static", "wild" }[Kind(enc)];
+            row["kind"] = new[] { "egg", "static", "wild", "static" }[Kind(enc)];
             row["enc"] = enc.LongName;
             row["encSpecies"] = enc.Species;
             row["shinyFixed"] = enc.Shiny is PKHeX.Core.Shiny.Always or PKHeX.Core.Shiny.AlwaysSquare or PKHeX.Core.Shiny.AlwaysStar;
@@ -228,10 +235,11 @@ static class LivingDexTable
     {
         err = "";
         PKM pk;
-        var crit = new EncounterCriteria { Shiny = PKHeX.Core.Shiny.Never, Gender = GenderFor(s, f) };
+        var crit = new EncounterCriteria { Shiny = PKHeX.Core.Shiny.Never, Gender = GenderFor(s, f), Form = s == (int)Species.Unown && tr.Version.Generation == 3 ? (sbyte)f : (sbyte)-1 };
         try { pk = ((IEncounterConvertible)enc).ConvertToPKM(tr, crit); }
         catch (Exception e) { err = "convert: " + e.Message; return null; }
         if (pk.IsShiny) { err = "shiny"; return null; }
+        if (s == (int)Species.Unown && pk.Format <= 3 && pk.Form != f) { err = "letter"; return null; }
         if (pk.Species != s || pk.Form != f)
         {
             // Evolución; las de intercambio necesitan haber pasado por otro entrenador (Gen 6+:
@@ -353,6 +361,15 @@ static class LivingDexTable
 
     static void Finish(PKM pk)
     {
+        // Subido de nivel: algo de experiencia sobre el umbral y algunos EV (si no, PKHeX avisa Fishy).
+        if (pk.CurrentLevel > Math.Max((byte)1, pk.MetLevel) && pk.Format >= 3)
+        {
+            var lvl = pk.CurrentLevel;
+            var exp = Experience.GetEXP(lvl, pk.PersonalInfo.EXPGrowth);
+            var next = lvl < 100 ? Experience.GetEXP((byte)(lvl + 1), pk.PersonalInfo.EXPGrowth) : exp + 1;
+            if (pk.EXP == exp && next > exp + 1) pk.EXP = exp + Math.Min(37u, next - exp - 1);
+            if (pk.EVTotal == 0 && pk is not PB7 && pk is not PA8 && pk is not PA9) pk.EV_HP = Math.Min(252, 4 * (lvl - pk.MetLevel));
+        }
         if (pk is IScaledSizeValue sv) { sv.ResetHeight(); sv.ResetWeight(); }
         if (pk is PB7 b7) { b7.AwakeningMinimum(); b7.ResetCalculatedValues(); }
         if (pk is PA9 z && z.PersonalInfo is IPermitPlus pp) z.SetPlusFlags(pp, PlusRecordApplicatorOption.LegalCurrent);
@@ -386,7 +403,7 @@ static class LivingDexTable
     static bool ProbeMode(PKM tpl, string mode, bool shiny)
     {
         var b = Trainer(tpl.Version, alt: true);
-        for (var k = 0; k < 4; k++)
+        for (var k = 0; k < (mode == "m1" ? 12 : 4); k++)
         {
             var pk = tpl.Clone();
             ReId(pk, b);
