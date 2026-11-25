@@ -359,7 +359,7 @@ class _MovesPicker extends StatelessWidget {
             width: 220,
             child: SearchPicker(
               key: ValueKey('$prefix-move-$i'),
-              label: '${context.l10n.toolsMoves} ${i + 1}',
+              label: '${context.l10n.compMove} ${i + 1}',
               allowNone: true,
               dense: true,
               options: options,

@@ -49,6 +49,34 @@ file back to your console or emulator.
 No accounts, no servers, no telemetry: put the Ark in iCloud Drive, Google
 Drive, OneDrive, Dropbox or Syncthing and all your devices share it.
 
+## New in 2.1: Competitive (Pokémon Champions)
+
+<p align="center">
+  <img src="docs/screenshots/v2.1/04_damage_calculator.png" width="100%" alt="Damage calculator: Garchomp's Draco Meteor against Incineroar, with the 16 rolls and the KO chance">
+</p>
+
+**A Competitive tab for Pokémon Champions**, always on the regulation in
+force (it updates itself; no selector). The **damage calculator** gives the
+damage range, the 16 rolls, the **KO chance** and the usual one-line text,
+for doubles or singles with weather, terrain, screens, crits, spread moves,
+Helping Hand, stat stages and status; it is ported from Pokémon Showdown's
+Champions mod and matches it **roll for roll** in 317 reference cases. The
+**stat calculator** uses Champions' rules (level 50, Stat Points, Megas) and
+can load a Pokémon from your saves or a Showdown set. **My teams** keeps your
+teams in your Ark under `Competitive/Teams/`, checked against the format's
+rules, with Showdown and `.json` export. The **Official format** screen lives
+here too. [Competitive guide (Spanish)](docs/usuario/competitivo.md).
+
+| Competitive | Champions stats | My teams |
+|---|---|---|
+| <img src="docs/screenshots/v2.1/01_competitive.png" alt="Competitive tab"> | <img src="docs/screenshots/v2.1/03_champions_stats.png" alt="Champions stat calculator with Stat Points"> | <img src="docs/screenshots/v2.1/05_my_teams.png" alt="My teams stored in the Ark"> |
+
+Also in 2.1: **Shadow Pokémon** in Colosseum and XD saves show a purple mark
+in the party and boxes ([screenshot](docs/screenshots/v2.1/06_shadow_mark.png)),
+every release ships an **`.ipa` for AltStore**, the Champions data comes from
+the game's **official sources**, and the classic stat calculator left the
+editor. On phones, **Activity** moved to a button in the Ark header.
+
 ## New in 2.0
 
 <p align="center">
@@ -83,19 +111,13 @@ boxes and a summary of the forms left out and why (0 invalid out of 16938 in
 PKHeX). Event and Living Dex Pokémon survive transfers.
 [Events](docs/usuario/eventos.md) · [Living Dex](docs/usuario/living-dex.md).
 
-| Official format | Stat calculator | Share card |
-|---|---|---|
-| <img src="docs/screenshots/v2.0/08_official_format.png" alt="Official format: Pokémon Champions regulation"> | <img src="docs/screenshots/v2.0/09_stat_calculator.png" alt="Stat and IV calculator"> | <img src="docs/screenshots/v2.0/11_share_card.png" alt="Share card"> |
+| Official format | Share card |
+|---|---|
+| <img src="docs/screenshots/v2.0/08_official_format.png" alt="Official format: Pokémon Champions regulation"> | <img src="docs/screenshots/v2.0/11_share_card.png" alt="Share card"> |
 
 **Tools.** Import and export **Pokémon Showdown** text, **sort boxes** (Dex, type, generation, living
 dex, level, shiny) with a preview and one undo and a **share card** image.
 [Tools guide](docs/usuario/herramientas.md).
-
-**Competitive (Pokémon Champions).** Its own tab with the **Official format**
-(current regulation and which of your Pokémon are eligible), a **Champions
-stat calculator** (Stat Points, level 50, Megas), a **damage calculator** with
-KO chances that matches Pokémon Showdown roll for roll, **teams** stored in
-your Ark and Showdown checks. [Competitive guide](docs/usuario/competitivo.md).
 
 **Shadow Pokémon** in Colosseum and XD: create them as the game would snag
 them (PID/IV from the GameCube RNG respecting team locks), change the heart
@@ -307,18 +329,18 @@ All screenshots use synthetic saves.
 
 ## Install
 
-The current version is **v2.0.0**. Download it from the
+The current version is **v2.1.0**. Download it from the
 [latest release](https://github.com/Rodriqe/PKArkTools/releases/latest)
 ([all releases](https://github.com/Rodriqe/PKArkTools/releases),
 [changelog](CHANGELOG.md)).
 
 | Platform | How |
 |---|---|
-| Android | `PKArkTools-v2.0.0.apk`: open it on the phone and allow installing from that source when Android asks. |
-| macOS | `PKArkTools-v2.0.0-macos.dmg`: open it and drag PKArkTools to Applications. It is signed and notarized by Apple, so it opens with a double-click (if a build ever ships without notarization, the release notes say so: then **right-click → Open** the first time). |
-| iPhone / iPad | `PKArkTools-vX.Y.Z-ios-unsigned.ipa`, installed with AltStore and your own Apple ID (it signs it; refresh every 7 days with a free Apple ID). Step by step: [docs/usuario/instalar.md](docs/usuario/instalar.md#iphone-y-ipad-con-altstore) (Spanish). Developers can also build it from source with Xcode (below). |
-| Windows | `PKArkTools-v2.0.0-windows-x64-setup.exe` (installer) or `PKArkTools-v2.0.0-windows-x64.zip` (portable: unzip and run `PKArkTools.exe`). It is not signed: if SmartScreen warns, click **More info → Run anyway**. |
-| Linux | `PKArkTools-v2.0.0-linux-x64.tar.gz`: extract it and run `PKArkTools/pkarktools` (GTK 3; the folder picker needs `zenity` or `kdialog`). |
+| Android | `PKArkTools-v2.1.0.apk`: open it on the phone and allow installing from that source when Android asks. |
+| macOS | `PKArkTools-v2.1.0-macos.dmg`: open it and drag PKArkTools to Applications. It is signed and notarized by Apple, so it opens with a double-click (if a build ever ships without notarization, the release notes say so: then **right-click → Open** the first time). |
+| iPhone / iPad | `PKArkTools-v2.1.0-ios-unsigned.ipa`, installed with AltStore and your own Apple ID (it signs it; refresh every 7 days with a free Apple ID). Step by step: [docs/usuario/instalar.md](docs/usuario/instalar.md#iphone-y-ipad-con-altstore) (Spanish). Developers can also build it from source with Xcode (below). |
+| Windows | `PKArkTools-v2.1.0-windows-x64-setup.exe` (installer) or `PKArkTools-v2.1.0-windows-x64.zip` (portable: unzip and run `PKArkTools.exe`). It is not signed: if SmartScreen warns, click **More info → Run anyway**. |
+| Linux | `PKArkTools-v2.1.0-linux-x64.tar.gz`: extract it and run `PKArkTools/pkarktools` (GTK 3; the folder picker needs `zenity` or `kdialog`). |
 
 Once installed, the app checks for new versions itself (**Settings › About**) and on
 Android installs them after checking the APK signature.

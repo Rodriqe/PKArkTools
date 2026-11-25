@@ -92,8 +92,14 @@ class _DamageScreenState extends ConsumerState<DamageScreen> {
       return;
     }
     final learn = ChampionsDex.learnset(s).where(ChampionsDamage.moveSupported).toList()
-      ..sort((x, y) => y.basePower - x.basePower);
+      // La más fuerte con STAB primero (sin las que obligan a recargar).
+      ..sort((x, y) => _score(s, y).compareTo(_score(s, x)));
     _move = learn.isEmpty ? '' : learn.first.id;
+  }
+
+  static double _score(ChampionsSpecies s, ChampionsMove m) {
+    if (m.extra['recharge'] != null || m.id == 'hyperbeam' || m.id == 'gigaimpact') return m.basePower * 0.5;
+    return m.basePower * (s.types.contains(m.type) ? 1.5 : 1.0);
   }
 
   void _swap() => setState(() {
@@ -425,7 +431,7 @@ class _DamageScreenState extends ConsumerState<DamageScreen> {
                 child: SelectableText(
                   text,
                   key: const ValueKey('damage-text'),
-                  style: const TextStyle(fontFamily: 'monospace', fontSize: 12.5),
+                  style: context.text.bodyMedium!.copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
                 ),
               ),
               IconButton(

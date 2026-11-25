@@ -52,6 +52,37 @@ Sin cuentas, sin servidores, sin telemetría: pon el Arca en iCloud Drive,
 Google Drive, OneDrive, Dropbox o Syncthing y todos tus dispositivos la
 comparten.
 
+## Novedades de la 2.1: Competitivo (Pokémon Champions)
+
+<p align="center">
+  <img src="docs/screenshots/v2.1/04_damage_calculator.png" width="100%" alt="Calculadora de daño: Cometa Draco de Garchomp contra Incineroar, con las 16 tiradas y la probabilidad de KO">
+</p>
+
+**Una pestaña Competitivo para Pokémon Champions**, siempre con la
+regulación vigente (se actualiza sola; sin selector). La **calculadora de
+daño** da el rango de daño, las 16 tiradas, la **probabilidad de KO** y el
+texto habitual, en dobles o individuales con clima, campo, pantallas,
+críticos, ataques a varios objetivos, Refuerzo, cambios de estadística y
+estado; está portada del mod de Champions de Pokémon Showdown y coincide con
+él **tirada a tirada** en 317 casos de referencia. La **calculadora de
+estadísticas** usa las reglas de Champions (nivel 50, puntos de estadística,
+Megas) y carga un Pokémon de tus partidas o un set de Showdown. **Mis
+equipos** guarda tus equipos en tu Arca, en `Competitive/Teams/`,
+comprobados con las reglas del formato, y los exporta a Showdown o `.json`.
+La pantalla de **formato oficial** también está aquí.
+[Guía de Competitivo](docs/usuario/competitivo.md).
+
+| Competitivo | Estadísticas de Champions | Mis equipos |
+|---|---|---|
+| <img src="docs/screenshots/v2.1/01_competitive.png" alt="Pestaña Competitivo"> | <img src="docs/screenshots/v2.1/03_champions_stats.png" alt="Calculadora de estadísticas de Champions con puntos"> | <img src="docs/screenshots/v2.1/05_my_teams.png" alt="Mis equipos guardados en el Arca"> |
+
+También en la 2.1: los **Pokémon oscuros** de Colosseum y XD llevan una
+marca morada en el equipo y las cajas
+([captura](docs/screenshots/v2.1/06_shadow_mark.png)), cada release incluye
+un **`.ipa` para AltStore**, los datos de Champions salen de las **fuentes
+oficiales** del juego y la calculadora de stats clásica sale del editor. En
+el teléfono, **Actividad** pasa a un botón de la cabecera del Arca.
+
 ## Novedades de la 2.0
 
 <p align="center">
@@ -87,21 +118,14 @@ las cajas y un resumen de las formas que quedan fuera y por qué (0 inválidos d
 transferencias. [Eventos](docs/usuario/eventos.md) ·
 [Living Dex](docs/usuario/living-dex.md).
 
-| Formato oficial | Calculadora | Tarjeta para compartir |
-|---|---|---|
-| <img src="docs/screenshots/v2.0/08_official_format.png" alt="Formato oficial: regulación de Pokémon Champions"> | <img src="docs/screenshots/v2.0/09_stat_calculator.png" alt="Calculadora de stats e IVs"> | <img src="docs/screenshots/v2.0/11_share_card.png" alt="Tarjeta para compartir"> |
+| Formato oficial | Tarjeta para compartir |
+|---|---|
+| <img src="docs/screenshots/v2.0/08_official_format.png" alt="Formato oficial: regulación de Pokémon Champions"> | <img src="docs/screenshots/v2.0/11_share_card.png" alt="Tarjeta para compartir"> |
 
 **Herramientas.** Importa y exporta texto de **Pokémon Showdown**, **ordenar cajas** (Pokédex,
 tipo, generación, living dex, nivel, variocolor) con vista previa y un solo
 deshacer y una **tarjeta para compartir**.
 [Guía de herramientas](docs/usuario/herramientas.md).
-
-**Competitivo (Pokémon Champions).** Pestaña propia con el **formato
-oficial** (la regulación vigente y cuáles de tus Pokémon valen), una
-**calculadora de estadísticas de Champions** (puntos de estadística, nivel 50,
-Megas), una **calculadora de daño** con probabilidad de KO que coincide tirada
-a tirada con Pokémon Showdown, **equipos** guardados en tu Arca y comprobación
-de Showdown. [Guía de Competitivo](docs/usuario/competitivo.md).
 
 **Pokémon oscuros** en Colosseum y XD: créalos como los capturaría el juego
 (PID/IV del RNG de GameCube respetando los bloqueos del equipo), cambia el
@@ -321,18 +345,18 @@ Todas las capturas usan saves sintéticos.
 
 ## Instalar
 
-La versión actual es la **v2.0.0**. Descárgala desde el
+La versión actual es la **v2.1.0**. Descárgala desde el
 [último release](https://github.com/Rodriqe/PKArkTools/releases/latest)
 ([todos los releases](https://github.com/Rodriqe/PKArkTools/releases),
 [CHANGELOG](CHANGELOG.es.md)).
 
 | Plataforma | Cómo |
 |---|---|
-| Android | `PKArkTools-v2.0.0.apk`: ábrelo en el teléfono y permite instalar desde ese origen cuando Android lo pida. |
-| macOS | `PKArkTools-v2.0.0-macos.dmg`: ábrelo y arrastra PKArkTools a Aplicaciones. Está firmada y notarizada por Apple, así que se abre con doble clic (si alguna build saliera sin notarizar, las notas del release lo dicen: entonces, la primera vez, **clic derecho → Abrir**). |
-| iPhone / iPad | `PKArkTools-vX.Y.Z-ios-unsigned.ipa`, que se instala con AltStore y tu propio Apple ID (él lo firma; con un Apple ID gratuito hay que refrescarlo cada 7 días). Paso a paso: [docs/usuario/instalar.md](docs/usuario/instalar.md#iphone-y-ipad-con-altstore). Si eres desarrollador, también puedes compilarla desde el código con Xcode (abajo). |
-| Windows | `PKArkTools-v2.0.0-windows-x64-setup.exe` (instalador) o `PKArkTools-v2.0.0-windows-x64.zip` (portátil: descomprímelo y abre `PKArkTools.exe`). No está firmado: si SmartScreen avisa, pulsa **Más información → Ejecutar de todas formas**. |
-| Linux | `PKArkTools-v2.0.0-linux-x64.tar.gz`: extráelo y ejecuta `PKArkTools/pkarktools` (GTK 3; el selector de carpetas necesita `zenity` o `kdialog`). |
+| Android | `PKArkTools-v2.1.0.apk`: ábrelo en el teléfono y permite instalar desde ese origen cuando Android lo pida. |
+| macOS | `PKArkTools-v2.1.0-macos.dmg`: ábrelo y arrastra PKArkTools a Aplicaciones. Está firmada y notarizada por Apple, así que se abre con doble clic (si alguna build saliera sin notarizar, las notas del release lo dicen: entonces, la primera vez, **clic derecho → Abrir**). |
+| iPhone / iPad | `PKArkTools-v2.1.0-ios-unsigned.ipa`, que se instala con AltStore y tu propio Apple ID (él lo firma; con un Apple ID gratuito hay que refrescarlo cada 7 días). Paso a paso: [docs/usuario/instalar.md](docs/usuario/instalar.md#iphone-y-ipad-con-altstore). Si eres desarrollador, también puedes compilarla desde el código con Xcode (abajo). |
+| Windows | `PKArkTools-v2.1.0-windows-x64-setup.exe` (instalador) o `PKArkTools-v2.1.0-windows-x64.zip` (portátil: descomprímelo y abre `PKArkTools.exe`). No está firmado: si SmartScreen avisa, pulsa **Más información → Ejecutar de todas formas**. |
+| Linux | `PKArkTools-v2.1.0-linux-x64.tar.gz`: extráelo y ejecuta `PKArkTools/pkarktools` (GTK 3; el selector de carpetas necesita `zenity` o `kdialog`). |
 
 Una vez instalada, la app busca versiones nuevas sola (**Ajustes › Acerca de**) y en
 Android las instala tras comprobar la firma del APK.
