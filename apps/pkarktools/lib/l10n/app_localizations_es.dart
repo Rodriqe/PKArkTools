@@ -4620,4 +4620,144 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get compFromArkNote =>
       'Se pasa a las reglas de Champions: los EVs se convierten en los puntos que dan la misma estadística a nivel 50 (no es la conversión oficial de HOME).';
+
+  @override
+  String get compAttacker => 'Atacante';
+
+  @override
+  String get compDefender => 'Defensor';
+
+  @override
+  String get compSwap => 'Intercambiar';
+
+  @override
+  String get compStatus => 'Estado';
+
+  @override
+  String get compStatusNone => 'Ninguno';
+
+  @override
+  String get compStatusBurn => 'Quemado';
+
+  @override
+  String get compStatusPar => 'Paralizado';
+
+  @override
+  String get compStatusPoison => 'Envenenado';
+
+  @override
+  String get compStatusSleep => 'Dormido';
+
+  @override
+  String get compHp => 'PS';
+
+  @override
+  String get compMove => 'Movimiento';
+
+  @override
+  String get compDoubles => 'Dobles';
+
+  @override
+  String get compSingles => 'Individuales';
+
+  @override
+  String get compWeather => 'Clima';
+
+  @override
+  String get compTerrain => 'Campo';
+
+  @override
+  String get compNone => 'Ninguno';
+
+  @override
+  String get compSun => 'Sol';
+
+  @override
+  String get compRain => 'Lluvia';
+
+  @override
+  String get compSand => 'Tormenta de arena';
+
+  @override
+  String get compSnow => 'Nieve';
+
+  @override
+  String get compElectricTerrain => 'Eléctrico';
+
+  @override
+  String get compGrassyTerrain => 'De Hierba';
+
+  @override
+  String get compPsychicTerrain => 'Psíquico';
+
+  @override
+  String get compMistyTerrain => 'De Niebla';
+
+  @override
+  String get compCrit => 'Crítico';
+
+  @override
+  String get compSpread => 'A varios objetivos';
+
+  @override
+  String get compHelpingHand => 'Refuerzo';
+
+  @override
+  String get compReflect => 'Reflejo';
+
+  @override
+  String get compLightScreen => 'Pantalla de Luz';
+
+  @override
+  String get compAuroraVeil => 'Velo Aurora';
+
+  @override
+  String get compPickMove => 'Elige un movimiento.';
+
+  @override
+  String get compNoEffect => 'No le afecta';
+
+  @override
+  String get compNoKo => 'Sin KO';
+
+  @override
+  String compKoGuaranteed(String ko) {
+    return '$ko asegurado';
+  }
+
+  @override
+  String compKoChance(String chance, String ko) {
+    return '$chance % de $ko';
+  }
+
+  @override
+  String compDamageRange(int hp, int max, int min) {
+    return '$min–$max de $hp PS';
+  }
+
+  @override
+  String compHits(int count) {
+    return '$count golpes';
+  }
+
+  @override
+  String get compHitsVariable => '2–5 golpes (35/35/15/15 %)';
+
+  @override
+  String get compRolls => 'Tiradas';
+
+  @override
+  String compNotConsidered(String what) {
+    return 'No se tiene en cuenta: $what.';
+  }
+
+  @override
+  String get compDamageLimits =>
+      'Mecánicas de Pokémon Showdown (mod Champions). El KO no cuenta curaciones, Banda Focus ni daño residual.';
+
+  @override
+  String get compUseInDamage => 'Usar en la calculadora de daño';
+
+  @override
+  String get compCalcDamage => 'Calcular daño';
 }

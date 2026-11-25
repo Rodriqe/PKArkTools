@@ -8,6 +8,7 @@ import '../../theme/app_theme.dart';
 import '../common/format.dart';
 import '../editor/pickers.dart';
 import 'build_editor.dart';
+import 'damage_screen.dart';
 
 /// Un set de ejemplo para empezar: el primero permitido (Garchomp si está).
 ChampionsBuild defaultChampionsBuild() {
@@ -88,6 +89,12 @@ class _StatsScreenState extends ConsumerState<StatsScreen> {
                   onPressed: _fromShowdown,
                   icon: const Icon(Icons.content_paste_rounded),
                   label: Text(l10n.compPasteShowdown),
+                ),
+                FilledButton.tonalIcon(
+                  key: const ValueKey('stats-to-damage'),
+                  onPressed: () => openDamageCalc(context, ref, _build),
+                  icon: const Icon(Icons.flash_on_rounded),
+                  label: Text(l10n.compUseInDamage),
                 ),
               ],
             ),

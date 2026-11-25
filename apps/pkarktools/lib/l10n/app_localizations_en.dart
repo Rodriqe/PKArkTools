@@ -4586,4 +4586,144 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get compFromArkNote =>
       'Converted to Champions rules: EVs become the points that give the same stat at level 50 (not HOME\'s official conversion).';
+
+  @override
+  String get compAttacker => 'Attacker';
+
+  @override
+  String get compDefender => 'Defender';
+
+  @override
+  String get compSwap => 'Swap';
+
+  @override
+  String get compStatus => 'Status';
+
+  @override
+  String get compStatusNone => 'None';
+
+  @override
+  String get compStatusBurn => 'Burned';
+
+  @override
+  String get compStatusPar => 'Paralyzed';
+
+  @override
+  String get compStatusPoison => 'Poisoned';
+
+  @override
+  String get compStatusSleep => 'Asleep';
+
+  @override
+  String get compHp => 'HP';
+
+  @override
+  String get compMove => 'Move';
+
+  @override
+  String get compDoubles => 'Doubles';
+
+  @override
+  String get compSingles => 'Singles';
+
+  @override
+  String get compWeather => 'Weather';
+
+  @override
+  String get compTerrain => 'Terrain';
+
+  @override
+  String get compNone => 'None';
+
+  @override
+  String get compSun => 'Sun';
+
+  @override
+  String get compRain => 'Rain';
+
+  @override
+  String get compSand => 'Sandstorm';
+
+  @override
+  String get compSnow => 'Snow';
+
+  @override
+  String get compElectricTerrain => 'Electric';
+
+  @override
+  String get compGrassyTerrain => 'Grassy';
+
+  @override
+  String get compPsychicTerrain => 'Psychic';
+
+  @override
+  String get compMistyTerrain => 'Misty';
+
+  @override
+  String get compCrit => 'Critical hit';
+
+  @override
+  String get compSpread => 'Hits both foes';
+
+  @override
+  String get compHelpingHand => 'Helping Hand';
+
+  @override
+  String get compReflect => 'Reflect';
+
+  @override
+  String get compLightScreen => 'Light Screen';
+
+  @override
+  String get compAuroraVeil => 'Aurora Veil';
+
+  @override
+  String get compPickMove => 'Pick a move.';
+
+  @override
+  String get compNoEffect => 'No effect';
+
+  @override
+  String get compNoKo => 'No KO';
+
+  @override
+  String compKoGuaranteed(String ko) {
+    return 'Guaranteed $ko';
+  }
+
+  @override
+  String compKoChance(String chance, String ko) {
+    return '$chance% chance to $ko';
+  }
+
+  @override
+  String compDamageRange(int hp, int max, int min) {
+    return '$min–$max of $hp HP';
+  }
+
+  @override
+  String compHits(int count) {
+    return '$count hits';
+  }
+
+  @override
+  String get compHitsVariable => '2–5 hits (35/35/15/15%)';
+
+  @override
+  String get compRolls => 'Rolls';
+
+  @override
+  String compNotConsidered(String what) {
+    return 'Not considered: $what.';
+  }
+
+  @override
+  String get compDamageLimits =>
+      'Pokémon Showdown mechanics (Champions mod). KO odds ignore healing, Focus Sash and residual damage.';
+
+  @override
+  String get compUseInDamage => 'Use in damage calc';
+
+  @override
+  String get compCalcDamage => 'Calculate damage';
 }

@@ -20,6 +20,7 @@ import 'ui/ribbons/ribbon_hunter_screen.dart';
 import 'ui/settings/settings_screen.dart';
 import 'ui/shell.dart';
 import 'ui/competitive/competitive_screen.dart';
+import 'ui/competitive/damage_screen.dart';
 import 'ui/competitive/showdown_screen.dart';
 import 'ui/competitive/stats_screen.dart';
 import 'ui/tools/champions_screen.dart';
@@ -89,6 +90,7 @@ GoRouter buildRouter({String initialLocation = '/arca', ValueNotifier<ArcaSetup>
                 routes: [
                   GoRoute(path: 'formato', builder: (_, _) => const ChampionsScreen()),
                   GoRoute(path: 'estadisticas', builder: (_, _) => const StatsScreen()),
+                  GoRoute(path: 'danio', builder: (_, _) => const DamageScreen()),
                   GoRoute(path: 'showdown', builder: (_, _) => const ShowdownScreen()),
                 ],
               ),

@@ -7388,6 +7388,264 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Se pasa a las reglas de Champions: los EVs se convierten en los puntos que dan la misma estadística a nivel 50 (no es la conversión oficial de HOME).'**
   String get compFromArkNote;
+
+  /// No description provided for @compAttacker.
+  ///
+  /// In es, this message translates to:
+  /// **'Atacante'**
+  String get compAttacker;
+
+  /// No description provided for @compDefender.
+  ///
+  /// In es, this message translates to:
+  /// **'Defensor'**
+  String get compDefender;
+
+  /// No description provided for @compSwap.
+  ///
+  /// In es, this message translates to:
+  /// **'Intercambiar'**
+  String get compSwap;
+
+  /// No description provided for @compStatus.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado'**
+  String get compStatus;
+
+  /// No description provided for @compStatusNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguno'**
+  String get compStatusNone;
+
+  /// No description provided for @compStatusBurn.
+  ///
+  /// In es, this message translates to:
+  /// **'Quemado'**
+  String get compStatusBurn;
+
+  /// No description provided for @compStatusPar.
+  ///
+  /// In es, this message translates to:
+  /// **'Paralizado'**
+  String get compStatusPar;
+
+  /// No description provided for @compStatusPoison.
+  ///
+  /// In es, this message translates to:
+  /// **'Envenenado'**
+  String get compStatusPoison;
+
+  /// No description provided for @compStatusSleep.
+  ///
+  /// In es, this message translates to:
+  /// **'Dormido'**
+  String get compStatusSleep;
+
+  /// No description provided for @compHp.
+  ///
+  /// In es, this message translates to:
+  /// **'PS'**
+  String get compHp;
+
+  /// No description provided for @compMove.
+  ///
+  /// In es, this message translates to:
+  /// **'Movimiento'**
+  String get compMove;
+
+  /// No description provided for @compDoubles.
+  ///
+  /// In es, this message translates to:
+  /// **'Dobles'**
+  String get compDoubles;
+
+  /// No description provided for @compSingles.
+  ///
+  /// In es, this message translates to:
+  /// **'Individuales'**
+  String get compSingles;
+
+  /// No description provided for @compWeather.
+  ///
+  /// In es, this message translates to:
+  /// **'Clima'**
+  String get compWeather;
+
+  /// No description provided for @compTerrain.
+  ///
+  /// In es, this message translates to:
+  /// **'Campo'**
+  String get compTerrain;
+
+  /// No description provided for @compNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguno'**
+  String get compNone;
+
+  /// No description provided for @compSun.
+  ///
+  /// In es, this message translates to:
+  /// **'Sol'**
+  String get compSun;
+
+  /// No description provided for @compRain.
+  ///
+  /// In es, this message translates to:
+  /// **'Lluvia'**
+  String get compRain;
+
+  /// No description provided for @compSand.
+  ///
+  /// In es, this message translates to:
+  /// **'Tormenta de arena'**
+  String get compSand;
+
+  /// No description provided for @compSnow.
+  ///
+  /// In es, this message translates to:
+  /// **'Nieve'**
+  String get compSnow;
+
+  /// No description provided for @compElectricTerrain.
+  ///
+  /// In es, this message translates to:
+  /// **'Eléctrico'**
+  String get compElectricTerrain;
+
+  /// No description provided for @compGrassyTerrain.
+  ///
+  /// In es, this message translates to:
+  /// **'De Hierba'**
+  String get compGrassyTerrain;
+
+  /// No description provided for @compPsychicTerrain.
+  ///
+  /// In es, this message translates to:
+  /// **'Psíquico'**
+  String get compPsychicTerrain;
+
+  /// No description provided for @compMistyTerrain.
+  ///
+  /// In es, this message translates to:
+  /// **'De Niebla'**
+  String get compMistyTerrain;
+
+  /// No description provided for @compCrit.
+  ///
+  /// In es, this message translates to:
+  /// **'Crítico'**
+  String get compCrit;
+
+  /// No description provided for @compSpread.
+  ///
+  /// In es, this message translates to:
+  /// **'A varios objetivos'**
+  String get compSpread;
+
+  /// No description provided for @compHelpingHand.
+  ///
+  /// In es, this message translates to:
+  /// **'Refuerzo'**
+  String get compHelpingHand;
+
+  /// No description provided for @compReflect.
+  ///
+  /// In es, this message translates to:
+  /// **'Reflejo'**
+  String get compReflect;
+
+  /// No description provided for @compLightScreen.
+  ///
+  /// In es, this message translates to:
+  /// **'Pantalla de Luz'**
+  String get compLightScreen;
+
+  /// No description provided for @compAuroraVeil.
+  ///
+  /// In es, this message translates to:
+  /// **'Velo Aurora'**
+  String get compAuroraVeil;
+
+  /// No description provided for @compPickMove.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige un movimiento.'**
+  String get compPickMove;
+
+  /// No description provided for @compNoEffect.
+  ///
+  /// In es, this message translates to:
+  /// **'No le afecta'**
+  String get compNoEffect;
+
+  /// No description provided for @compNoKo.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin KO'**
+  String get compNoKo;
+
+  /// No description provided for @compKoGuaranteed.
+  ///
+  /// In es, this message translates to:
+  /// **'{ko} asegurado'**
+  String compKoGuaranteed(String ko);
+
+  /// No description provided for @compKoChance.
+  ///
+  /// In es, this message translates to:
+  /// **'{chance} % de {ko}'**
+  String compKoChance(String chance, String ko);
+
+  /// No description provided for @compDamageRange.
+  ///
+  /// In es, this message translates to:
+  /// **'{min}–{max} de {hp} PS'**
+  String compDamageRange(int hp, int max, int min);
+
+  /// No description provided for @compHits.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} golpes'**
+  String compHits(int count);
+
+  /// No description provided for @compHitsVariable.
+  ///
+  /// In es, this message translates to:
+  /// **'2–5 golpes (35/35/15/15 %)'**
+  String get compHitsVariable;
+
+  /// No description provided for @compRolls.
+  ///
+  /// In es, this message translates to:
+  /// **'Tiradas'**
+  String get compRolls;
+
+  /// No description provided for @compNotConsidered.
+  ///
+  /// In es, this message translates to:
+  /// **'No se tiene en cuenta: {what}.'**
+  String compNotConsidered(String what);
+
+  /// No description provided for @compDamageLimits.
+  ///
+  /// In es, this message translates to:
+  /// **'Mecánicas de Pokémon Showdown (mod Champions). El KO no cuenta curaciones, Banda Focus ni daño residual.'**
+  String get compDamageLimits;
+
+  /// No description provided for @compUseInDamage.
+  ///
+  /// In es, this message translates to:
+  /// **'Usar en la calculadora de daño'**
+  String get compUseInDamage;
+
+  /// No description provided for @compCalcDamage.
+  ///
+  /// In es, this message translates to:
+  /// **'Calcular daño'**
+  String get compCalcDamage;
 }
 
 class _AppLocalizationsDelegate

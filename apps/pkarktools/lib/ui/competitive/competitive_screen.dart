@@ -38,6 +38,13 @@ class CompetitiveScreen extends ConsumerWidget {
         route: '/competitivo/estadisticas',
       ),
       _Section(
+        key: const ValueKey('comp-damage'),
+        icon: Icons.flash_on_rounded,
+        title: l10n.compDamageTitle,
+        body: l10n.compDamageDesc,
+        route: '/competitivo/danio',
+      ),
+      _Section(
         key: const ValueKey('comp-showdown'),
         icon: Icons.content_paste_rounded,
         title: l10n.compShowdownTitle,

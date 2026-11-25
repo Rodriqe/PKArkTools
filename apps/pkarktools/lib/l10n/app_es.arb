@@ -3405,5 +3405,92 @@
   },
   "compLoadFromArk": "Cargar de mis Pokémon",
   "compPasteShowdown": "Pegar de Showdown",
-  "compFromArkNote": "Se pasa a las reglas de Champions: los EVs se convierten en los puntos que dan la misma estadística a nivel 50 (no es la conversión oficial de HOME)."
+  "compFromArkNote": "Se pasa a las reglas de Champions: los EVs se convierten en los puntos que dan la misma estadística a nivel 50 (no es la conversión oficial de HOME).",
+  "compAttacker": "Atacante",
+  "compDefender": "Defensor",
+  "compSwap": "Intercambiar",
+  "compStatus": "Estado",
+  "compStatusNone": "Ninguno",
+  "compStatusBurn": "Quemado",
+  "compStatusPar": "Paralizado",
+  "compStatusPoison": "Envenenado",
+  "compStatusSleep": "Dormido",
+  "compHp": "PS",
+  "compMove": "Movimiento",
+  "compDoubles": "Dobles",
+  "compSingles": "Individuales",
+  "compWeather": "Clima",
+  "compTerrain": "Campo",
+  "compNone": "Ninguno",
+  "compSun": "Sol",
+  "compRain": "Lluvia",
+  "compSand": "Tormenta de arena",
+  "compSnow": "Nieve",
+  "compElectricTerrain": "Eléctrico",
+  "compGrassyTerrain": "De Hierba",
+  "compPsychicTerrain": "Psíquico",
+  "compMistyTerrain": "De Niebla",
+  "compCrit": "Crítico",
+  "compSpread": "A varios objetivos",
+  "compHelpingHand": "Refuerzo",
+  "compReflect": "Reflejo",
+  "compLightScreen": "Pantalla de Luz",
+  "compAuroraVeil": "Velo Aurora",
+  "compPickMove": "Elige un movimiento.",
+  "compNoEffect": "No le afecta",
+  "compNoKo": "Sin KO",
+  "compKoGuaranteed": "{ko} asegurado",
+  "@compKoGuaranteed": {
+    "placeholders": {
+      "ko": {
+        "type": "String"
+      }
+    }
+  },
+  "compKoChance": "{chance} % de {ko}",
+  "@compKoChance": {
+    "placeholders": {
+      "chance": {
+        "type": "String"
+      },
+      "ko": {
+        "type": "String"
+      }
+    }
+  },
+  "compDamageRange": "{min}–{max} de {hp} PS",
+  "@compDamageRange": {
+    "placeholders": {
+      "hp": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      },
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "compHits": "{count} golpes",
+  "@compHits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "compHitsVariable": "2–5 golpes (35/35/15/15 %)",
+  "compRolls": "Tiradas",
+  "compNotConsidered": "No se tiene en cuenta: {what}.",
+  "@compNotConsidered": {
+    "placeholders": {
+      "what": {
+        "type": "String"
+      }
+    }
+  },
+  "compDamageLimits": "Mecánicas de Pokémon Showdown (mod Champions). El KO no cuenta curaciones, Banda Focus ni daño residual.",
+  "compUseInDamage": "Usar en la calculadora de daño",
+  "compCalcDamage": "Calcular daño"
 }

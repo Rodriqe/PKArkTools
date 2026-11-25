@@ -16,6 +16,7 @@ import 'shadow_panel.dart';
 import 'pickers.dart';
 import 'ribbons_panel.dart';
 import '../tools/share_card.dart';
+import '../competitive/damage_screen.dart';
 import '../tools/showdown_ui.dart';
 import '../tools/stat_calculator.dart';
 
@@ -218,6 +219,9 @@ class _PokemonEditorScreenState extends State<PokemonEditorScreen> {
                       await widget.onExport?.call(pk);
                     case 'showdown':
                       await showShowdownExport(context, [pk], widget.game);
+                    case 'damage':
+                      final b = ChampionsBuild.fromPkm(pk);
+                      if (b != null) await pushDamageCalc(context, b);
                     case 'card':
                       await showShareCard(context, pk, widget.game);
                     case 'clone':
@@ -233,6 +237,12 @@ class _PokemonEditorScreenState extends State<PokemonEditorScreen> {
                     PopupMenuItem(value: 'export', child: Text(l10n.exportPokemon(f.extension))),
                   if (widget.canTransfer) PopupMenuItem(value: 'transfer', child: Text(l10n.transferTo)),
                   PopupMenuItem(value: 'showdown', child: Text(l10n.toolsShowdownText)),
+                  if (ChampionsDex.byKey(pk.species, pk.form) != null || ChampionsDex.byKey(pk.species, 0) != null)
+                    PopupMenuItem(
+                      key: const ValueKey('editor-damage'),
+                      value: 'damage',
+                      child: Text(l10n.compCalcDamage),
+                    ),
                   PopupMenuItem(value: 'card', child: Text(l10n.toolsShareCard)),
                   PopupMenuItem(value: 'clone', child: Text(l10n.clonePokemon)),
                   if (widget.canDelete) PopupMenuItem(value: 'delete', child: Text(l10n.deletePokemon)),
