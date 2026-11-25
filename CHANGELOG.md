@@ -11,6 +11,23 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+### Changed
+
+- **Official format from the official sources**: the daily
+  `champions-data.yml` Action now builds `data/champions/champions.json` from
+  the game's own news feed (regulation pages with exact UTC dates) and the
+  official *Eligible Pokémon* list (`tool/champions_official.py`,
+  `tool/fetch_champions_official.py`); Pokémon Showdown is kept for Flat Rules
+  and Megas, as a cross-check (differences are workflow warnings) and as the
+  list fallback only while the official one is not published. Reg M-C now
+  shows its official dates (Sep 9 – Dec 2, 2026, no "unconfirmed" notice) and
+  "Next: VGC 2026 Reg M-D (from Dec 2, 2026)"; the Action runs at 02:30 UTC so
+  M-D takes over on 2026-12-02 by itself. Only the current and next
+  regulation are written. Same schema v1, so PKArkTools 2.0 picks this up
+  without an update. With the official list, female Meowstic is now eligible
+  and the battle-only Castform/Aegislash forms are no longer listed.
+  `tool/champions_regulations.json` (hand-kept dates) is gone.
+
 ## [2.0.0] — 2026-11-25
 
 PKArkTools 2.0.0 brings four big additions: **Mystery Gift events and the

@@ -11,6 +11,24 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
+### Cambiado
+
+- **Formato oficial desde las fuentes oficiales**: la Action diaria
+  `champions-data.yml` genera ahora `data/champions/champions.json` a partir
+  de las noticias del propio juego (páginas de cada regulación con fechas y
+  horas exactas en UTC) y de la lista oficial *Eligible Pokémon*
+  (`tool/champions_official.py`, `tool/fetch_champions_official.py`);
+  Pokémon Showdown queda para Flat Rules y Megas, para comprobar (las
+  diferencias son avisos en el log) y como lista de reserva solo mientras la
+  oficial no esté publicada. La Reg M-C muestra sus fechas oficiales (9 sept –
+  2 dic 2026, sin aviso de «sin confirmar») y «Siguiente: VGC 2026 Reg M-D
+  (desde el 2 dic 2026)»; la Action se ejecuta a las 02:30 UTC, así que M-D
+  pasa a ser la vigente sola el 2026-12-02. Solo se escriben la regulación
+  vigente y la siguiente. Mismo esquema v1: PKArkTools 2.0 lo recibe sin
+  actualizar la app. Con la lista oficial, Meowstic hembra pasa a ser
+  elegible y ya no salen las formas de combate de Castform/Aegislash. Se
+  elimina `tool/champions_regulations.json` (fechas a mano).
+
 ## [2.0.0] — 2026-11-25
 
 PKArkTools 2.0.0 reúne cuatro grandes novedades: **eventos del Regalo
