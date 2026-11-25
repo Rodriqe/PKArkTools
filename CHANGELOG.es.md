@@ -25,7 +25,18 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   Variocolor solo donde el juego lo permite. Avisa de que se sobrescriben las
   cajas (la versión anterior queda en el historial del Arca) y de lo que no
   cabe. `tool/check_living_dex_pkhex.sh` comprueba la Living Dex completa,
-  normal y variocolor, de 16 juegos leída del save: 0 inválidos de 16886.
+  normal y variocolor, de 16 juegos leída del save: 0 inválidos de 16938.
+  Incluye los cortes de Furfrou donde se guardan en caja (Sol/Luna, USUL; en
+  X/Y y ROZA vuelven a la forma base al dejarlos en la caja, así que se genera
+  la base), 18 dibujos de Vivillon (Elegante y Poké Ball son de evento),
+  Meowstic hembra en Gen 6–7, las 28 letras de Unown en DBPR y sus
+  evoluciones por intercambio (con el entrenador del intercambio como último
+  entrenador). Al guardar, un resumen lista todo lo que no se generó agrupado
+  por motivo (forma de combate, fusión/dominante, vuelve a la base en la caja,
+  solo por evento, necesita otra región, sin encuentro en esta versión,
+  variocolor imposible, no cupo). Límites: los encuentros con semilla
+  (algunos salvajes de Gen 3–4, símbolos de Espada/Escudo, Z-A) quedan
+  normales si se pide variocolor; los míticos de Let's Go no se incluyen.
 - **Eventos (Regalo Misterioso).** Toda la base de eventos de PKHeX (2922
   regalos de Pokémon, de Gen 3 a Gen 9: WC3/PCNY/PCJP, PCD/PGT, PGF, WC6, WC7,
   WB7, WC8, WB8, WA8, WC9, WA9), regenerada con `tool/gen_event_data.sh` y con

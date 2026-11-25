@@ -25,7 +25,17 @@ developer documentation in `docs/` is in Spanish.
   only where the game allows it. It warns that the boxes are overwritten (the
   previous version stays in the Arca history) and what does not fit.
   `tool/check_living_dex_pkhex.sh` checks the full normal and shiny Living
-  Dex of 16 games read back from the save: 0 invalid out of 16886.
+  Dex of 16 games read back from the save: 0 invalid out of 16938.
+  Covered forms include Furfrou's trims where they stay in a box (Sun/Moon,
+  USUM; in X/Y and ORAS they revert to the base form when deposited, so only
+  the base form is generated), 18 Vivillon patterns (Fancy and Poké Ball are
+  event-only), female Meowstic in Gen 6-7, all 28 Unown in BDSP and BDSP trade
+  evolutions (with the trade partner as handler). After saving, a summary
+  lists everything not generated grouped by reason (battle-only form,
+  fusion/Totem, reverts in the box, event only, needs another region, no
+  encounter in this version, impossible shiny, did not fit). Known limits:
+  seed-correlated encounters (some Gen 3-4 wild ones, SWSH symbols, Z-A) stay
+  normal when shiny is asked; Let's Go mythicals are not included.
 - **Mystery Gift events.** PKHeX's whole event database (2922 Pokémon gifts,
   Gen 3 to Gen 9: WC3/PCNY/PCJP, PCD/PGT, PGF, WC6, WC7, WB7, WC8, WB8, WA8,
   WC9, WA9), regenerated with `tool/gen_event_data.sh` and loaded lazily.

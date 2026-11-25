@@ -53,9 +53,40 @@ variocolor al pasarlo a Gen 2 o a Pokémon Bank.
 - **Pokémon dominantes** (Sol/Luna) y **nobles** (Leyendas Arceus).
 - Especies **sin encuentro propio en tu versión** (exclusivas de la otra
   versión, solo por HOME o por intercambio).
+- En X/Y y Rubí Omega/Zafiro Alfa, los **cortes de Furfrou** y **Hoopa
+  desatado**: en Gen 6 vuelven a su forma base al dejarlos en la caja (solo
+  existen en el equipo), así que se genera la forma base. En Sol/Luna y
+  Ultrasol/Ultraluna sí se guardan los diez cortes.
+- Los dibujos **Elegante** y **Poké Ball** de Vivillon (y sus
+  preevoluciones): solo se repartieron por evento.
+
+Las evoluciones por intercambio (Alakazam, Gengar…) se incluyen en todos los
+juegos, también en Diamante Brillante/Perla Reluciente: llevan como último
+entrenador al de un intercambio, como las acepta PKHeX.
+
+## Resumen al terminar
+
+Tras guardar, la app muestra cuántos Pokémon se generaron (y cuántos
+variocolor) y **todo lo que no se generó, agrupado por motivo**, con los
+Pokémon y formas de cada grupo: formas de combate; fusiones, dominantes y
+nobles; formas que vuelven a la base en la caja; solo por evento; necesitan
+la región de otra consola; sin encuentro en esta versión; variocolor
+imposible (quedaron normales) y los que no cupieron.
+
+## Límites conocidos
+
+- **Variocolor con semilla**: algunos salvajes de Gen 3–4, los símbolos de
+  Espada/Escudo y Leyendas Z-A sacan PID/IV de una semilla que la app no
+  reproduce: quedan normales.
+- **Míticos de Let's Go** (Mew, Meltan, Melmetal): llegan por Poké Ball Plus o
+  GO con una ventana de fecha que PKHeX no acepta para un regalo recibido hoy;
+  no se incluyen.
+- La **bandeja del Regalo Misterioso** solo se rellena en Gen 6–7 (ver
+  [Eventos](eventos.md)).
 
 Sí se incluyen las formas regionales (Alola, Galar, Hisui, Paldea) y las
-cosméticas que se guardan en una caja: letras de Unown, dibujos de Vivillon
+cosméticas que se guardan en una caja: letras de Unown (también las 28 de
+Diamante Brillante/Perla Reluciente), dibujos de Vivillon
 (Gen 6–7 con la región de consola de cada dibujo), Alcremie, flores de
 Flabébé, Shellos/Gastrodon, Burmy/Wormadam, estaciones de Deerling, Rotom,
 Oricorio, Lycanroc, núcleos de Minior, Toxtricity, Urshifu, Furfrou, géneros
