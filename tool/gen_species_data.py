@@ -17,6 +17,11 @@ maxid = max(int(r['id']) for r in species)
 growth = [0] * (maxid + 1)
 for r in species:
     growth[int(r['id'])] = int(r['growth_rate_id'])
+# PokéAPI difiere de los datos del juego (PKHeX personal_sv): Dipplin es
+# errático y Poltchageist/Sinistcha, medio-rápido.
+for sp, g in ((1011, 5), (1012, 2), (1013, 2)):
+    if sp <= maxid:
+        growth[sp] = g
 
 names = {7: [''] * (maxid + 1), 9: [''] * (maxid + 1), 1: [''] * (maxid + 1)}
 for r in rows('pokemon_species_names.csv'):
