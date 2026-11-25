@@ -178,7 +178,8 @@ class ChampionsBuild {
       for (final g in const [GameVersion.scarletViolet, GameVersion.legendsZA]) {
         final r = Showdown.resolveSpecies(set.speciesText, g);
         if (r != null) {
-          s = ChampionsDex.byKey(r.species, r.form) ??
+          s =
+              ChampionsDex.byKey(r.species, r.form) ??
               (SpeciesForms.formsDiffer(r.species, 0, r.form, g) ? null : ChampionsDex.byKey(r.species, 0));
           if (s != null) break;
         }
@@ -186,7 +187,8 @@ class ChampionsBuild {
     }
     if (s == null) return null;
     final raw = [for (var i = 0; i < 6; i++) set.evs[i] ?? 0];
-    final classic = raw.any((v) => v > ChampionsStats.maxPerStat) || raw.fold(0, (a, b) => a + b) > ChampionsStats.maxTotal;
+    final classic =
+        raw.any((v) => v > ChampionsStats.maxPerStat) || raw.fold(0, (a, b) => a + b) > ChampionsStats.maxTotal;
     final item = ChampionsDex.toId(set.item ?? '');
     // Con la megapiedra de la especie se activa su Mega.
     if (megaId.isEmpty) {

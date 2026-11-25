@@ -59,3 +59,56 @@ node node_modules/esbuild/install.js && node build
 cd ../../.. && node tool/gen_champions_dex.js .scratch/sd/ps
 node tool/showdown_ref/stats_ref.js .scratch/sd/ps > packages/pkcore/test/data/champions_stats_ref.json
 ```
+
+## Daño
+
+`packages/pkcore/lib/src/tools/champions_damage.dart` reproduce
+`getDamage` (`sim/battle-actions.ts:1643-1780`) y el `modifyDamage` del mod
+(`data/mods/champions/scripts.ts:196-310`). En Champions no hay
+teracristalización, así que no hay STAB ×2 de Tera ni el mínimo de 60 de
+potencia.
+
+Orden (todo en enteros, como Showdown):
+
+1. Tipo del movimiento (Bola Clima, Normalidad, -ate y Dragonize, Voz Fluida)
+   e inmunidades: tabla de tipos, Levitación/Eelevate/Globo Helio para Tierra,
+   absorciones (Absorbe Fuego, Absorbe Agua, Pararrayos…), Antibalas,
+   Insonorizar, Superguarda y Campo Psíquico contra movimientos con prioridad.
+2. Potencia base: las fórmulas propias de cada movimiento (peso, PS, velocidad,
+   cambios de estadística…) y luego el evento `BasePower`.
+3. Ataque y Defensa con sus cambios (el crítico ignora los que perjudican) y
+   los eventos `ModifyAtk`/`ModifySpA`/`ModifyDef`/`ModifySpD`.
+4. `⌊⌊⌊2·50/5+2⌋ · potencia · A / D⌋ / 50⌋ + 2`, varios objetivos ×0,75,
+   clima, crítico ×1,5, tirada (85–100 %), STAB ×1,5 (Adaptabilidad ×2),
+   tipos, quemadura ×0,5 y el evento `ModifyDamage` (Vidasfera, Cinta Experto,
+   bayas, Multiescamas, pantallas: ×0,5 en individuales y ×2732/4096 en dobles).
+
+Los modificadores de cada evento se encadenan en base 4096 (`chainModify`,
+`sim/battle.ts:2337-2346`) en el orden en que el simulador ejecuta los
+manejadores (`comparePriority`, `sim/battle.ts:409-416`): prioridad,
+velocidad del Pokémon que lo lleva y tipo de efecto (`resolvePriority`,
+`sim/battle.ts:957-1022`). Si atacante y defensor tienen exactamente la misma
+velocidad, Showdown sortea el orden y el resultado puede variar en 1 punto de
+daño; la calculadora pone primero al atacante.
+
+**Comprobación**: `tool/showdown_ref/damage_ref.js` monta un combate real del
+mod para cada caso (dobles con un compañero neutro, o individuales), pone
+clima, campo, pantallas, cambios, estado y PS, y llama a `getDamage` forzando
+cada una de las 16 tiradas. `packages/pkcore/test/champions_damage_test.dart`
+compara las 16 tiradas de 317 casos (16 de bordes y 300 al azar entre las
+especies, Megas, habilidades, objetos y movimientos de la regulación vigente):
+**317/317 (100 %)**. Una pasada más larga de 2017 casos también dio 100 %.
+
+**No se tiene en cuenta** (la app lo avisa cuando aparece):
+
+* Habilidades: Analítico, Ímpetu Ardiente/Tóxico, Unaware, Compiescolta,
+  Cloud Nine/Air Lock, Metal Pesado/Liviano, Paleosíntesis/Carga Cuark,
+  Rastro, Impostor, Libero/Mutatipo, Sturdy y las que dependen del turno o de
+  aliados (ver `unsupportedAbilities`).
+* Objetos: Gema Normal, Metrónomo, Banda Focus/Cinta Focus, Baya Zidra y Restos
+  (no cambian el daño de un golpe, pero sí el KO).
+* Movimientos con daño que depende de lo que pasó antes (Contraataque, Puño
+  Furia, Desquite, Represalia, Último Lugar…), los de KO directo y Premonición.
+* Varios golpes: los golpes siguientes ya no tienen la baya ni Multiescamas;
+  2–5 golpes se reparten 35/35/15/15 % (`sim/battle-actions.ts`, muestra de
+  `multihit`). El KO no cuenta la curación ni el daño residual.

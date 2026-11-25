@@ -10,8 +10,17 @@ import 'stat_calc.dart';
 /// Una especie (o forma, o Megaevolución) de Pokémon Champions con sus datos
 /// de combate, tal como los tiene el mod `champions` de Pokémon Showdown.
 class ChampionsSpecies {
-  ChampionsSpecies._(this.id, this.name, this.num, this.baseStats, this.types, this.abilities, this.weightKg,
-      this.megaOf, this.megaStone);
+  ChampionsSpecies._(
+    this.id,
+    this.name,
+    this.num,
+    this.baseStats,
+    this.types,
+    this.abilities,
+    this.weightKg,
+    this.megaOf,
+    this.megaStone,
+  );
 
   /// Id de Showdown (`garchomp`, `charizardmegax`, `rotomwash`).
   final String id;
@@ -51,8 +60,22 @@ class ChampionsSpecies {
 
 /// Un movimiento de Champions.
 class ChampionsMove {
-  ChampionsMove._(this.index, this.id, this.name, this.num, this.type, this.category, this.basePower, this.target,
-      this.priority, this.flags, this.minHits, this.maxHits, this.critRatio, this.extra);
+  ChampionsMove._(
+    this.index,
+    this.id,
+    this.name,
+    this.num,
+    this.type,
+    this.category,
+    this.basePower,
+    this.target,
+    this.priority,
+    this.flags,
+    this.minHits,
+    this.maxHits,
+    this.critRatio,
+    this.extra,
+  );
   final int index;
   final String id;
   final String name;
@@ -144,7 +167,8 @@ abstract final class ChampionsDex {
   static final Map<String, ChampionsMove> _moves = {for (final m in allMoves) m.id: m};
 
   static final List<ChampionsItem> allItems = [
-    for (final e in (_raw['items'] as List).cast<List<Object?>>()) ChampionsItem._(e[0] as String, e[1] as String, e[2] as int),
+    for (final e in (_raw['items'] as List).cast<List<Object?>>())
+      ChampionsItem._(e[0] as String, e[1] as String, e[2] as int),
   ];
   static final Map<String, ChampionsItem> _items = {for (final i in allItems) i.id: i};
 

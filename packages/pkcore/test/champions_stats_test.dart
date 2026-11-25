@@ -28,7 +28,14 @@ void main() {
   test('fórmula: PS = base + SP + 75; resto (base + SP + 20) × naturaleza', () {
     final g = ChampionsDex.species('garchomp')!;
     final jolly = Showdown.natureId('Jolly')!;
-    expect(ChampionsStats.all(base: g.baseStats, sp: [2, 32, 0, 0, 0, 32], nature: jolly), [185, 182, 115, 90, 105, 169]);
+    expect(ChampionsStats.all(base: g.baseStats, sp: [2, 32, 0, 0, 0, 32], nature: jolly), [
+      185,
+      182,
+      115,
+      90,
+      105,
+      169,
+    ]);
   });
 
   test('límites de puntos: 32 por estadística y 66 en total', () {
@@ -46,7 +53,11 @@ void main() {
     for (final base in [45, 80, 130]) {
       for (var ev = 0; ev <= 252; ev++) {
         final classic = StatCalc.stat(1, base: base, iv: 31, ev: ev, level: 50);
-        expect(ChampionsStats.stat(1, base: base, sp: ChampionsStats.spFromEv(ev)), classic, reason: 'base $base ev $ev');
+        expect(
+          ChampionsStats.stat(1, base: base, sp: ChampionsStats.spFromEv(ev)),
+          classic,
+          reason: 'base $base ev $ev',
+        );
         final hp = StatCalc.stat(0, base: base, iv: 31, ev: ev, level: 50);
         expect(ChampionsStats.stat(0, base: base, sp: ChampionsStats.spFromEv(ev)), hp);
       }
@@ -92,7 +103,9 @@ Jolly Nature
     expect(b.stats[0], 185);
 
     final classic = ChampionsBuild.fromShowdown(
-      Showdown.parse('Incineroar @ Sitrus Berry\nAbility: Intimidate\nEVs: 252 HP / 4 Atk / 252 SpD\nCareful Nature\n- Fake Out').single,
+      Showdown.parse(
+        'Incineroar @ Sitrus Berry\nAbility: Intimidate\nEVs: 252 HP / 4 Atk / 252 SpD\nCareful Nature\n- Fake Out',
+      ).single,
     )!;
     expect(classic.convertedEvs, isTrue);
     expect(classic.build.sp, [32, 1, 0, 0, 32, 0]);
