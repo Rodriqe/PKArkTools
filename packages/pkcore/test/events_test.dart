@@ -74,10 +74,26 @@ void main() {
       expect(kor, greaterThan(50));
     });
 
-    test('tarjeta en bruto: se reconoce al importarla', () {
+    test('tarjeta en bruto: se reconoce al importarla (también con bytes cambiados)', () {
       final g = all.firstWhere((g) => g.db == 'wc7' && g.canCreate);
       final raw = g.rawCard!;
       expect(EventDb.byRawCard(raw), same(g));
+      expect(EventCards.identify('wc7', raw), same(g));
+      final tocada = Uint8List.fromList(raw)..[0x4C] ^= 0xFF;
+      expect(EventCards.identify('wc7', tocada), same(g));
+      // .wc7full: cabecera de redistribución y la tarjeta al final.
+      final full = Uint8List(0x310)..setRange(0x208, 0x310, raw);
+      expect(EventCards.identify('wc7full', full), same(g));
+      expect(EventCards.identify('wc7', Uint8List(0x108)), isNull);
+      expect(EventCards.fileName(g, 'Mr. Mime'), endsWith('.wc7'));
+      for (final db in ['pcd', 'pgf', 'wc6', 'wb7', 'wc8', 'wb8', 'wa8', 'wc9', 'wa9']) {
+        final x = all.firstWhere((e) => e.db == db);
+        final ext = x.cardExtension!;
+        expect(EventCards.identify(ext, x.rawCard!), same(x), reason: db);
+      }
+      final pcd = all.firstWhere((e) => e.db == 'pcd');
+      expect(EventCards.identify('pgt', Uint8List.sublistView(pcd.rawCard!, 0, 0x104)), isNotNull);
+      expect(all.firstWhere((e) => e.db == 'wc3').cardExtension, isNull);
     });
   });
 
