@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../data/forms.dart';
 import '../data/game_data.dart';
 import '../data/generated/champions_data.dart';
@@ -6,15 +8,14 @@ import '../model/game.dart';
 import '../pkm/pkm.dart';
 import 'showdown.dart';
 
-/// Regulación oficial de Pokémon Champions.
+/// Una regulación de Pokémon Champions con sus fechas.
 ///
-/// La lista de especies y las reglas del formato salen de Pokémon Showdown
-/// (`tool/gen_champions_data.py`, tabla generada `champions_data.dart`); las
-/// fechas no están en Showdown y se escriben aquí a mano con su fuente.
-/// Cómo actualizarla: `docs/usuario/formato-oficial.md`.
+/// Las fechas no están en Showdown: salen de `tool/champions_regulations.json`
+/// (con su fuente) y pueden faltar (una regulación anunciada sin calendario).
 class ChampionsRegulation {
   const ChampionsRegulation({
     required this.code,
+    this.name = '',
     required this.from,
     required this.until,
     required this.datesSource,
@@ -23,8 +24,12 @@ class ChampionsRegulation {
 
   /// Código de la regulación (`M-C`).
   final String code;
-  final DateTime from;
-  final DateTime until;
+
+  /// Nombre del formato en Showdown (`VGC 2026 Reg M-C`); vacío si solo se
+  /// conoce por la tabla de fechas.
+  final String name;
+  final DateTime? from;
+  final DateTime? until;
 
   /// De dónde salen las fechas.
   final String datesSource;
@@ -32,6 +37,197 @@ class ChampionsRegulation {
   /// `false` si las fechas no se han podido confirmar en una fuente oficial:
   /// la interfaz lo indica.
   final bool datesConfirmed;
+}
+
+/// Un JSON de datos del formato que no se puede usar.
+class ChampionsDataException implements Exception {
+  const ChampionsDataException(this.message, {this.futureSchema});
+  final String message;
+
+  /// `schemaVersion` del JSON si es mayor que el que entiende esta versión de
+  /// la app (hay que actualizar la app para usarlo).
+  final int? futureSchema;
+
+  @override
+  String toString() => 'ChampionsDataException: $message';
+}
+
+/// Datos del formato oficial: los genera `tool/gen_champions_data.py` desde
+/// Pokémon Showdown (`data/champions/champions.json`, que la app descarga de
+/// GitHub, y su copia integrada `champions_data.dart`).
+class ChampionsData {
+  ChampionsData._({
+    required this.schemaVersion,
+    required this.generatedAt,
+    required this.sourceCommit,
+    required this.sourceDate,
+    required this.sourceUrl,
+    required this.regulation,
+    required this.nextRegulation,
+    required this.regulations,
+    required this.ruleset,
+    required this.flatRulesDesc,
+    required this.flatRules,
+    required this.flatBanlist,
+    required this.allowedIds,
+    required this.megaIds,
+  });
+
+  /// Versión del esquema que entiende esta versión de la app.
+  static const supportedSchemaVersion = 1;
+
+  /// El JSON de la copia que lleva la app.
+  static String get builtinJson => kChampionsBuiltinJson;
+
+  /// La copia que lleva la app.
+  static final ChampionsData builtin = ChampionsData.parse(kChampionsBuiltinJson);
+
+  final int schemaVersion;
+  final DateTime generatedAt;
+  final String sourceCommit;
+
+  /// Fecha del commit de Showdown (`AAAA-MM-DD`).
+  final String sourceDate;
+  final String sourceUrl;
+  final ChampionsRegulation regulation;
+
+  /// La siguiente regulación, si Showdown ya la tiene.
+  final ChampionsRegulation? nextRegulation;
+
+  /// Calendario de todas las regulaciones conocidas.
+  final List<ChampionsRegulation> regulations;
+  final List<String> ruleset;
+  final String flatRulesDesc;
+  final List<String> flatRules;
+  final List<String> flatBanlist;
+
+  /// Especies y formas legales (ids de Showdown), sin Megaevoluciones.
+  final List<String> allowedIds;
+
+  /// Megaevoluciones disponibles (ids de Showdown).
+  final List<String> megaIds;
+
+  static final _date = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+  static final _id = RegExp(r'^[a-z0-9]+$');
+
+  /// Lee y valida un JSON (lanza [ChampionsDataException]).
+  static ChampionsData parse(String text) {
+    final Object? root;
+    try {
+      root = jsonDecode(text);
+    } on FormatException catch (e) {
+      throw ChampionsDataException('JSON: ${e.message}');
+    }
+    if (root is! Map<String, Object?>) throw const ChampionsDataException('not an object');
+    final v = root['schemaVersion'];
+    if (v is! int || v < 1) throw const ChampionsDataException('schemaVersion');
+    if (v > supportedSchemaVersion) throw ChampionsDataException('schemaVersion $v', futureSchema: v);
+    return fromJson(root);
+  }
+
+  static ChampionsData fromJson(Map<String, Object?> j) {
+    Never bad(String what) => throw ChampionsDataException(what);
+    T get<T>(Map<String, Object?> m, String k) => m[k] is T ? m[k] as T : bad(k);
+    List<String> strings(Object? l, String k) =>
+        l is List && l.every((e) => e is String) ? l.cast<String>().toList(growable: false) : bad(k);
+    DateTime? day(Object? s, String k) {
+      if (s == null) return null;
+      if (s is! String || !_date.hasMatch(s)) bad(k);
+      return DateTime.parse(s);
+    }
+
+    ChampionsRegulation reg(Object? o, String k) {
+      if (o is! Map<String, Object?>) bad(k);
+      final code = get<String>(o, 'code');
+      final name = get<String>(o, 'name');
+      if (code.isEmpty || !name.startsWith('VGC ') || !name.endsWith('Reg $code')) bad('$k.name');
+      return ChampionsRegulation(
+        code: code,
+        name: name,
+        from: day(o['from'], '$k.from'),
+        until: day(o['until'], '$k.until'),
+        datesSource: get<String>(o, 'datesSource'),
+        datesConfirmed: get<bool>(o, 'datesConfirmed'),
+      );
+    }
+
+    final generatedAt = DateTime.tryParse(get<String>(j, 'generatedAt')) ?? bad('generatedAt');
+    final source = get<Map<String, Object?>>(j, 'source');
+    final commit = get<String>(source, 'commit');
+    if (!RegExp(r'^[0-9a-f]{40}$').hasMatch(commit)) bad('source.commit');
+    final sourceDate = get<String>(source, 'date');
+    day(sourceDate, 'source.date');
+    final sourceUrl = get<String>(source, 'url');
+    final url = Uri.tryParse(sourceUrl);
+    if (url == null || url.scheme != 'https' || url.host != 'github.com') bad('source.url');
+    final regulation = reg(j['regulation'], 'regulation');
+    if (regulation.from == null || regulation.until == null || !regulation.from!.isBefore(regulation.until!)) {
+      bad('regulation dates');
+    }
+    final next = j['nextRegulation'] == null ? null : reg(j['nextRegulation'], 'nextRegulation');
+    final regs = j['regulations'];
+    if (regs is! List) bad('regulations');
+    final regulations = [
+      for (final r in regs)
+        if (r is Map<String, Object?>)
+          ChampionsRegulation(
+            code: get<String>(r, 'code'),
+            from: day(r['from'], 'regulations.from'),
+            until: day(r['until'], 'regulations.until'),
+            datesSource: get<String>(r, 'source'),
+            datesConfirmed: get<bool>(r, 'confirmed'),
+          )
+        else
+          bad('regulations'),
+    ];
+    final flat = get<Map<String, Object?>>(j, 'flatRules');
+    final allowed = strings(j['allowed'], 'allowed');
+    final megas = strings(j['megas'], 'megas');
+    // Una lista de la regulación tiene unas 200-300 especies y formas.
+    if (allowed.length < 150 || allowed.length > 600 || allowed.toSet().length != allowed.length) bad('allowed');
+    if (megas.isEmpty) bad('megas');
+    if (![...allowed, ...megas].every(_id.hasMatch)) bad('ids');
+    final rules = strings(flat['rules'], 'flatRules.rules');
+    final ban = strings(flat['banlist'], 'flatRules.banlist');
+    final ruleset = strings(j['ruleset'], 'ruleset');
+    if (!ruleset.contains('Flat Rules') || !rules.contains('Species Clause')) bad('ruleset');
+    if (!ban.contains('Mythical') || !ban.contains('Restricted Legendary')) bad('flatRules.banlist');
+    return ChampionsData._(
+      schemaVersion: get<int>(j, 'schemaVersion'),
+      generatedAt: generatedAt,
+      sourceCommit: commit,
+      sourceDate: sourceDate,
+      sourceUrl: sourceUrl,
+      regulation: regulation,
+      nextRegulation: next,
+      regulations: regulations,
+      ruleset: ruleset,
+      flatRulesDesc: get<String>(flat, 'desc'),
+      flatRules: rules,
+      flatBanlist: ban,
+      allowedIds: allowed,
+      megaIds: megas,
+    );
+  }
+
+  /// ¿Es más reciente que [other]? (por la fecha en que se generó).
+  bool isNewerThan(ChampionsData other) => generatedAt.isAfter(other.generatedAt);
+
+  // Tablas derivadas (se calculan una vez por juego de datos).
+  late final List<(int, int)> allowed = [for (final id in allowedIds) ?_resolveOne(id)];
+  late final Set<int> allowedKeys = {for (final (s, f) in allowed) s * 100 + f};
+  late final Set<int> allowedSpecies = {for (final (s, _) in allowed) s};
+  late final Set<int> megaSpecies = {
+    for (final id in megaIds)
+      if (Showdown.resolveId(id.replaceAll(RegExp(r'mega[xyz]?$'), ''), GameVersion.scarletViolet) case (final s, _)) s,
+  };
+  late final List<String> unresolved = [
+    for (final id in allowedIds)
+      if (_resolveOne(id) == null) id,
+  ];
+
+  static (int, int)? _resolveOne(String id) =>
+      Showdown.resolveId(id, GameVersion.scarletViolet) ?? Showdown.resolveId(id, GameVersion.legendsZA);
 }
 
 /// Por qué un Pokémon no puede (o quizá no pueda) usarse en el formato.
@@ -85,34 +281,43 @@ enum ChampionsTeamIssue { tooFew, duplicateSpecies, duplicateItem }
 
 /// Formato oficial vigente de Pokémon Champions.
 abstract final class ChampionsFormat {
-  /// Regulación vigente (actualízala junto con la tabla generada).
-  static final regulation = ChampionsRegulation(
-    code: 'M-C',
-    from: DateTime(2026, 9, 9),
-    until: DateTime(2026, 12, 2),
-    datesSource: 'Bulbapedia (calendario de regulaciones de Pokémon Champions)',
-    datesConfirmed: false,
-  );
+  static ChampionsData _data = ChampionsData.builtin;
+
+  /// Datos en uso: la copia integrada o la última descargada
+  /// (ver `docs/usuario/formato-oficial.md`).
+  static ChampionsData get data => _data;
+
+  /// Cambia los datos en uso (la app, al descargar unos nuevos).
+  static void use(ChampionsData d) => _data = d;
+
+  /// Vuelve a la copia integrada.
+  static void reset() => _data = ChampionsData.builtin;
+
+  /// Regulación vigente.
+  static ChampionsRegulation get regulation => _data.regulation;
+
+  /// La siguiente regulación, si ya se conoce.
+  static ChampionsRegulation? get nextRegulation => _data.nextRegulation;
 
   /// Nombre del formato en Showdown (`VGC 2026 Reg M-C`).
-  static String get formatName => kChampionsFormatName;
-  static String get sourceCommit => kChampionsSourceCommit;
-  static String get sourceDate => kChampionsSourceDate;
-  static const sourceUrl = 'https://github.com/smogon/pokemon-showdown/blob/master/data/mods/champions/formats-data.ts';
-  static List<String> get ruleset => kChampionsRuleset;
-  static List<String> get flatRules => kChampionsFlatRules;
-  static List<String> get flatBanlist => kChampionsFlatBanlist;
+  static String get formatName => _data.regulation.name;
+  static String get sourceCommit => _data.sourceCommit;
+  static String get sourceDate => _data.sourceDate;
+  static String get sourceUrl => _data.sourceUrl;
+  static List<String> get ruleset => _data.ruleset;
+  static List<String> get flatRules => _data.flatRules;
+  static List<String> get flatBanlist => _data.flatBanlist;
 
   /// Nivel al que se ajustan los Pokémon («Adjust Level Down = 50»).
   static int get level => _intRule('Adjust Level Down', 50);
 
   /// Máximo de Pokémon con el mismo objeto («Item Clause = 1»).
   static int get itemClause => _intRule('Item Clause', 1);
-  static bool get speciesClause => kChampionsFlatRules.contains('Species Clause');
-  static bool get openTeamSheets => kChampionsRuleset.any((r) => r.contains('Open Team Sheets'));
+  static bool get speciesClause => flatRules.contains('Species Clause');
+  static bool get openTeamSheets => ruleset.any((r) => r.contains('Open Team Sheets'));
 
   static int _intRule(String name, int fallback) {
-    for (final r in kChampionsFlatRules) {
+    for (final r in flatRules) {
       if (r.startsWith(name)) return int.tryParse(r.split('=').last.trim()) ?? fallback;
     }
     return fallback;
@@ -132,30 +337,14 @@ abstract final class ChampionsFormat {
     789, 790, 791, 792, 800, 888, 889, 890, 898, 1007, 1008, 1024,
   };
 
-  static final List<(int, int)> _allowed = _resolve(kChampionsAllowed);
-  static final Set<int> _allowedKeys = {for (final (s, f) in _allowed) s * 100 + f};
-  static final Set<int> _allowedSpecies = {for (final (s, _) in _allowed) s};
-  static final Set<int> _megaSpecies = {
-    for (final id in kChampionsMegas)
-      if (Showdown.resolveId(id.replaceAll(RegExp(r'mega[xyz]?$'), ''), GameVersion.scarletViolet) case (final s, _)) s,
-  };
-
   /// Ids de Showdown que no se pudieron traducir a especie y forma.
-  static final List<String> unresolved = [
-    for (final id in kChampionsAllowed)
-      if (_resolveOne(id) == null) id,
-  ];
-
-  static (int, int)? _resolveOne(String id) =>
-      Showdown.resolveId(id, GameVersion.scarletViolet) ?? Showdown.resolveId(id, GameVersion.legendsZA);
-
-  static List<(int, int)> _resolve(List<String> ids) => [for (final id in ids) ?_resolveOne(id)];
+  static List<String> get unresolved => _data.unresolved;
 
   /// Especies y formas permitidas (orden de la tabla: Pokédex Nacional).
-  static List<(int, int)> get allowed => _allowed;
+  static List<(int, int)> get allowed => _data.allowed;
 
   /// Especies con Megaevolución en la regulación.
-  static Set<int> get megaSpecies => _megaSpecies;
+  static Set<int> get megaSpecies => _data.megaSpecies;
 
   /// Singulares y legendarios restringidos (prohibidos por «Flat Rules»).
   static Set<int> get mythicalSpecies => _mythicals;
@@ -174,11 +363,11 @@ abstract final class ChampionsFormat {
       reasons.add(ChampionsReason.mythical);
     } else if (_restricted.contains(s)) {
       reasons.add(ChampionsReason.restricted);
-    } else if (!_allowedSpecies.contains(s)) {
+    } else if (!_data.allowedSpecies.contains(s)) {
       reasons.add(ChampionsReason.speciesNotAllowed);
-    } else if (!_allowedKeys.contains(s * 100 + f)) {
+    } else if (!_data.allowedKeys.contains(s * 100 + f)) {
       // Formas solo estéticas (Vivillon, Alcremie…): cuentan como la forma base.
-      final cosmetic = _allowedKeys.contains(s * 100) && !SpeciesForms.formsDiffer(s, 0, f, game);
+      final cosmetic = _data.allowedKeys.contains(s * 100) && !SpeciesForms.formsDiffer(s, 0, f, game);
       if (!cosmetic) reasons.add(ChampionsReason.formNotAllowed);
     }
     var detail = '';
@@ -189,7 +378,7 @@ abstract final class ChampionsFormat {
         detail = warn.first.message(lang);
       }
     }
-    return ChampionsEligibility(reasons, canMega: _megaSpecies.contains(s), detail: detail);
+    return ChampionsEligibility(reasons, canMega: _data.megaSpecies.contains(s), detail: detail);
   }
 
   /// Problemas del equipo como conjunto (cláusulas y tamaño mínimo).

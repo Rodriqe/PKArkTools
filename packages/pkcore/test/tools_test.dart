@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:pkcore/pkcore.dart';
@@ -431,6 +433,75 @@ Bashful Nature
         ChampionsTeamIssue.duplicateItem,
       });
       expect(ChampionsFormat.teamIssueText((ChampionsTeamIssue.tooFew, '4'), es: true), contains('4'));
+    });
+  });
+
+  group('ChampionsData (JSON)', () {
+    Map<String, Object?> base() => jsonDecode(ChampionsData.builtinJson) as Map<String, Object?>;
+    ChampionsData parse(Map<String, Object?> j) => ChampionsData.parse(jsonEncode(j));
+    Matcher invalid({int? future}) => throwsA(
+      isA<ChampionsDataException>().having((e) => e.futureSchema, 'futureSchema', future),
+    );
+
+    test('la copia integrada es la misma que data/champions/champions.json', () {
+      final file = File('../../data/champions/champions.json').readAsStringSync();
+      expect(ChampionsData.builtinJson.trim(), file.trim());
+      final d = ChampionsData.builtin;
+      expect(d.schemaVersion, ChampionsData.supportedSchemaVersion);
+      expect(d.regulation.code, 'M-C');
+      expect(d.regulation.name, 'VGC 2026 Reg M-C');
+      expect(d.regulation.until, DateTime(2026, 12, 2));
+      expect(d.regulation.datesConfirmed, isFalse);
+      expect(d.regulations.map((r) => r.code), containsAll(['M-A', 'M-B', 'M-C']));
+      expect(d.megaIds, contains('garchompmega'));
+    });
+
+    test('válido: otra regulación cambia lo que se permite', () {
+      final j = base()
+        ..['generatedAt'] = '2030-01-01T00:00:00Z'
+        ..['allowed'] = [...(base()['allowed'] as List).where((id) => id != 'garchomp')]
+        ..['nextRegulation'] = {
+          'code': 'M-D',
+          'name': 'VGC 2026 Reg M-D',
+          'from': null,
+          'until': null,
+          'datesSource': '',
+          'datesConfirmed': false,
+        };
+      final d = parse(j);
+      expect(d.isNewerThan(ChampionsData.builtin), isTrue);
+      expect(d.nextRegulation!.code, 'M-D');
+      expect(d.nextRegulation!.from, isNull);
+      final t = const TrainerData(name: 'Juliana', tid: 12345, sid: 54321);
+      final chomp = Showdown.toPkm(Showdown.parse('Garchomp').single, GameVersion.scarletViolet, t).pkm!;
+      addTearDown(ChampionsFormat.reset);
+      ChampionsFormat.use(d);
+      expect(ChampionsFormat.check(chomp, GameVersion.scarletViolet).reasons, [ChampionsReason.speciesNotAllowed]);
+      ChampionsFormat.reset();
+      expect(ChampionsFormat.check(chomp, GameVersion.scarletViolet).eligible, isTrue);
+    });
+
+    test('no válido', () {
+      expect(() => ChampionsData.parse('no es json'), invalid());
+      expect(() => ChampionsData.parse('[]'), invalid());
+      expect(() => parse(base()..remove('schemaVersion')), invalid());
+      expect(() => parse(base()..['schemaVersion'] = '1'), invalid());
+      expect(() => parse(base()..remove('regulation')), invalid());
+      expect(() => parse(base()..['allowed'] = ['garchomp']), invalid());
+      expect(() => parse(base()..['allowed'] = [...base()['allowed'] as List, 'garchomp']), invalid());
+      expect(() => parse(base()..['allowed'] = [...base()['allowed'] as List, 'Bad Id']), invalid());
+      expect(() => parse(base()..['megas'] = []), invalid());
+      expect(() => parse(base()..['source'] = {...base()['source'] as Map, 'commit': 'abc'}), invalid());
+      expect(() => parse(base()..['source'] = {...base()['source'] as Map, 'url': 'http://evil.example/'}), invalid());
+      final reg = {...base()['regulation'] as Map, 'from': '2026-12-02', 'until': '2026-09-09'};
+      expect(() => parse(base()..['regulation'] = reg), invalid());
+      expect(() => parse(base()..['regulation'] = {...reg, 'name': 'National Dex'}), invalid());
+    });
+
+    test('esquema futuro: se ignora y se avisa', () {
+      expect(() => parse(base()..['schemaVersion'] = 2), invalid(future: 2));
+      // Aunque el resto no se entienda.
+      expect(() => ChampionsData.parse('{"schemaVersion": 7}'), invalid(future: 7));
     });
   });
 

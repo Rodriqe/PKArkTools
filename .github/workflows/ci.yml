@@ -53,6 +53,8 @@ jobs:
         run: flutter test
       - name: docs — links
         run: python3 tool/check_links.py
+      - name: Champions data generator — tests
+        run: python3 tool/test_gen_champions_data.py
 
   android:
     name: Android APK (release)
