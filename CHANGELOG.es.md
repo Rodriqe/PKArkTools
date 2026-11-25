@@ -117,6 +117,42 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   (`tool/transfer_oracle.sh`, orígenes sintéticos legales generados con las
   plantillas de encuentro de PKHeX); todos los Pokémon convertidos son legales
   en PKHeX y los saves hacen round-trip con checksums válidos.
+### Añadido — Herramientas
+- **Pokémon Showdown**: importa uno o varios sets (especie y forma, apodo,
+  género, objeto, habilidad, nivel, variocolor, naturaleza, EVs/IVs,
+  movimientos, teratipo, felicidad, Gigamax, tipo del Poder Oculto) al equipo
+  o a las cajas de la partida abierta, avisando de todo lo que el juego no
+  permite y de los avisos graves de legalidad; los datos de origen que
+  Showdown no trae se rellenan con las correcciones seguras del comprobador.
+  Exporta el equipo o un Pokémon como texto de Showdown (copiar o menú de
+  compartir del sistema).
+- **Calculadora de stats e IVs** en el editor: estadísticas finales a nivel 50
+  y 100, rangos de IVs a partir de las estadísticas que ves en el juego (con
+  *Aplicar IVs* si son exactos) y tipo y potencia del Poder Oculto (Gen 2–7).
+- **Ordenar cajas** por número de Pokédex, tipo, generación, living dex (cada
+  especie en su hueco, repetidos detrás del último número), nivel o
+  variocolor primero; todas las cajas o un rango, con vista previa y un solo
+  paso de deshacer.
+- **Formato oficial**: la regulación vigente de Pokémon Champions (VGC 2026
+  Reg M-C) con sus reglas, listas de permitidos y prohibidos con buscador,
+  marca de Megaevolución y qué Pokémon de tus partidas son elegibles y por qué
+  no lo son los demás. Lista de especies generada desde el mod `champions` de
+  Pokémon Showdown (`tool/gen_champions_data.py`, versionada con commit y
+  fecha); la app indica las fechas sin confirmar y que falta la lista de
+  objetos.
+- **Tarjeta para compartir**: una imagen de un Pokémon (logo de la app, icono,
+  nombre y forma, nivel, tipos, variocolor, naturaleza, habilidad, objeto,
+  teratipo, origen, cintas, IVs/EVs y movimientos), en PNG o por el menú de
+  compartir del sistema.
+- **Emuladores** (Ajustes): vincula la carpeta de saves de RetroArch, mGBA,
+  melonDS, Azahar/Lime3DS, Dolphin, la carpeta de sincronización de Delta o
+  los ports de Switch en Android (con permiso del usuario) y respáldala en el
+  Arca con un toque; en Windows y Linux se encuentran las carpetas por
+  defecto. **Abrir en …** abre el emulador instalado en Android (intent) y
+  Delta en iOS (esquema de URL); en el resto el botón no aparece. Tabla de
+  compatibilidad en `docs/usuario/emuladores.md`.
+- Guías: `herramientas.md`, `formato-oficial.md`, `emuladores.md` e
+  `instalar.md` (con iPhone/iPad mediante AltStore y el refresco cada 7 días).
 
 ## [1.1.0] — 2026-11-24
 

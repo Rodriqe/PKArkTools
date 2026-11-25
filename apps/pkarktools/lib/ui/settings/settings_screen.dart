@@ -8,6 +8,8 @@ import '../../data/sprites/sprite_manifest.g.dart';
 import '../common/brand_mark.dart';
 import '../common/format.dart';
 import '../import/import_flow.dart';
+import '../tools/emulators_section.dart';
+import '../tools/tools_common.dart';
 import 'folder_section.dart';
 import 'sprites_section.dart';
 import 'update_section.dart';
@@ -89,6 +91,10 @@ class SettingsScreen extends ConsumerWidget {
                   ]),
                   body: '${l10n.archiveExportDesc} ${l10n.archiveRestoreDesc}',
                 ),
+                section(tr(context, 'Emuladores', 'Emulators'), const EmulatorsSection(),
+                    body: tr(context,
+                        'Vincula la carpeta de saves de tu emulador (RetroArch, mGBA, melonDS, Azahar, Dolphin…) para respaldarla en el Arca con un toque.',
+                        'Link your emulator save folder (RetroArch, mGBA, melonDS, Azahar, Dolphin…) to back it up to the Ark in one tap.')),
                 section(l10n.spritesSection, const SpritesSection(), body: l10n.spritesSectionDesc),
                 section(
                   l10n.sampleData,

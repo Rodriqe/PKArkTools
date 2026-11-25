@@ -19,6 +19,7 @@ import '../editor/inventory_panel.dart';
 import '../editor/pokedex_panel.dart';
 import '../editor/trainer_panel.dart';
 import '../livingdex/living_dex_flow.dart';
+import '../tools/save_tools_bar.dart';
 import 'pokemon_views.dart';
 import 'compare_screen.dart';
 import 'damage_notice.dart';
@@ -330,14 +331,12 @@ class _SnapshotContentState extends ConsumerState<_SnapshotContent> {
             child: switch (section) {
           _Section.pokemon when !hasStorage => _Notice(text: l10n.notSupportedStorage, accent: accent),
           _Section.pokemon => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              if (widget.isLatest && !editor.readOnly) ...[
-                OutlinedButton.icon(
-                  onPressed: () => actions.transfer(),
-                  icon: const Icon(Icons.swap_horiz_rounded),
-                  label: Text(l10n.transferPokemonMenu),
-                ),
-                const SizedBox(height: 24),
-              ],
+              SaveToolsBar(
+                snapshotId: snapshot.id,
+                editor: editor,
+                onTransfer: widget.isLatest && !editor.readOnly ? () => actions.transfer() : null,
+              ),
+              const SizedBox(height: 24),
               // Juegos de solo cajas (Stadium, Box, Rancho): sin equipo.
               if (editor.partyCapacity > 0) ...[
                 _SectionTitle(l10n.team),

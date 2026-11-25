@@ -54,6 +54,7 @@ export 'src/pkm/pk_format.dart';
 export 'src/pkm/pkm.dart';
 export 'src/pkm/pkm_factory.dart';
 export 'src/strings/string_codec.dart';
+export 'src/tools/tools.dart';
 export 'src/util/checksums.dart';
 export 'src/write/save_writer.dart';
 export 'src/events/event_db.dart';

@@ -14,6 +14,10 @@ import 'origin_panel.dart';
 import 'shadow_panel.dart';
 import 'pickers.dart';
 import 'ribbons_panel.dart';
+import '../tools/share_card.dart';
+import '../tools/showdown_ui.dart';
+import '../tools/stat_calculator.dart';
+import '../tools/tools_common.dart';
 
 /// Qué decidió el usuario al cerrar el editor.
 sealed class EditorResult {
@@ -212,6 +216,10 @@ class _PokemonEditorScreenState extends State<PokemonEditorScreen> {
                   switch (v) {
                     case 'export':
                       await widget.onExport?.call(pk);
+                    case 'showdown':
+                      await showShowdownExport(context, [pk], widget.game);
+                    case 'card':
+                      await showShareCard(context, pk, widget.game);
                     case 'clone':
                       nav.pop(EditorClone(pk));
                     case 'transfer':
@@ -224,6 +232,8 @@ class _PokemonEditorScreenState extends State<PokemonEditorScreen> {
                   if (widget.onExport != null)
                     PopupMenuItem(value: 'export', child: Text(l10n.exportPokemon(f.extension))),
                   if (widget.canTransfer) PopupMenuItem(value: 'transfer', child: Text(l10n.transferTo)),
+                  PopupMenuItem(value: 'showdown', child: Text(tr(context, 'Texto de Showdown', 'Showdown text'))),
+                  PopupMenuItem(value: 'card', child: Text(tr(context, 'Tarjeta para compartir', 'Share card'))),
                   PopupMenuItem(value: 'clone', child: Text(l10n.clonePokemon)),
                   if (widget.canDelete) PopupMenuItem(value: 'delete', child: Text(l10n.deletePokemon)),
                 ],
@@ -936,6 +946,10 @@ class _StatFields extends StatelessWidget {
         for (var i = 0; i < 6; i++)
           row(Legality.statName(i, context.dataLang), pk.gvs[i], 10, (v) => s.mutate((p) => p.setGv(i, v)),
               const Color(0xFFE8A14A)),
+      ],
+      if (!pk.isEgg) ...[
+        const SizedBox(height: 18),
+        StatCalculatorPanel(pk: pk, onApplyIvs: (v) => s.mutate((p) => p.setIvs(v))),
       ],
     ]);
   }

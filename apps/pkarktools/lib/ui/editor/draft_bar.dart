@@ -28,6 +28,9 @@ String describeEdits(BuildContext context, List<SaveEditOp> edits, SaveEditor ed
       EventEdit() => l10n.editEvents,
       ReceiveGiftCardEdit(:final title) => l10n.editGiftCard(title),
       FillBoxesEdit(:final label, :final pokemon) => label ?? l10n.livingDexNote(l10n.livingDexKindNormal, pokemon.length),
+      RearrangeSlotsEdit(:final layout) => context.isSpanish
+          ? 'Cajas ordenadas (${layout.length} huecos)'
+          : 'Boxes sorted (${layout.length} slots)',
     });
   }
   final unique = <String>[];
