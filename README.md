@@ -49,6 +49,21 @@ file back to your console or emulator.
 No accounts, no servers, no telemetry: put the Ark in iCloud Drive, Google
 Drive, OneDrive, Dropbox or Syncthing and all your devices share it.
 
+## Coming next: transfer Pokémon between saves
+
+A "local HOME": move or copy Pokémon from one save in the Ark to another,
+even across generations, following the real rules of the Time Capsule, Pal
+Park, Poké Transfer, Poké Transporter, Pokémon Bank and Pokémon HOME, with a
+preview of what changes and the legality at the destination (every hop is
+validated against PKHeX). The app can only guarantee continuity **up to
+Alola** (Gen 7): beyond that, the HOME tracker is generated locally by the
+app, not by HOME's servers. PKHeX accepts it, but we can't guarantee how the
+real HOME would treat it, so we recommend not uploading those Pokémon to
+HOME. The recommended route to Switch: transfer with the app to Sun/Moon or
+Ultra Sun/Ultra Moon, then use the official Pokémon Bank → Pokémon HOME
+(Bank only works on a 3DS that already has it installed; Let's Go goes to
+HOME from its own game). [Transfer guide (Spanish)](docs/usuario/transferir.md).
+
 ## New in 1.1: Ribbon Hunter
 
 <p align="center">
@@ -279,6 +294,7 @@ Read [Data safety and privacy](docs/seguridad-datos.md).
 Full documentation (in Spanish) lives in [`docs/`](docs/README.md):
 [user guide](docs/usuario/README.md) ·
 [Dex](docs/usuario/dex.md) ·
+[Transfer](docs/usuario/transferir.md) ·
 [Ribbon Hunter](docs/usuario/ribbon-hunter.md) ·
 [supported formats](docs/formatos.md) ·
 [data safety](docs/seguridad-datos.md) ·

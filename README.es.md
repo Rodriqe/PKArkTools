@@ -51,6 +51,22 @@ Sin cuentas, sin servidores, sin telemetría: pon el Arca en iCloud Drive,
 Google Drive, OneDrive, Dropbox o Syncthing y todos tus dispositivos la
 comparten.
 
+## Próximamente: transferir Pokémon entre partidas
+
+Un «HOME local»: mueve o copia Pokémon de una partida del Arca a otra, aunque
+sean de generaciones distintas, con las reglas reales de la Cápsula del
+Tiempo, Pal Park, Poké Transfer, Poké Transporter, Pokémon Bank y Pokémon
+HOME, y una vista previa de qué cambia y de la legalidad en el destino (cada
+salto se valida contra PKHeX). La app solo puede garantizar la continuidad
+**hasta Alola** (Gen 7): a partir de ahí, el rastreador de HOME lo genera la
+app localmente, no los servidores de HOME. PKHeX lo da por válido, pero no
+podemos garantizar cómo lo trataría el HOME real, así que recomendamos no
+subir esos Pokémon a HOME. La ruta recomendada a Switch: transferir con la
+app hasta Sol/Luna o Ultrasol/Ultraluna y seguir con Pokémon Bank → Pokémon
+HOME oficiales (Bank solo funciona en una 3DS que ya lo tenga instalado;
+Let's Go va a HOME desde su propio juego).
+[Guía de transferencias](docs/usuario/transferir.md).
+
 ## Novedad de la 1.1: Ribbon Hunter
 
 <p align="center">
@@ -290,6 +306,7 @@ iconos. Lee [Seguridad de datos y privacidad](docs/seguridad-datos.md).
 Toda la documentación está en [`docs/`](docs/README.md):
 [guía de usuario](docs/usuario/README.md) ·
 [Dex](docs/usuario/dex.md) ·
+[Transferir](docs/usuario/transferir.md) ·
 [Ribbon Hunter](docs/usuario/ribbon-hunter.md) ·
 [formatos soportados](docs/formatos.md) ·
 [seguridad de datos](docs/seguridad-datos.md) ·

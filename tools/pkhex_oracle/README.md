@@ -34,3 +34,11 @@ Comandos de la consola (`dotnet <bin>/PkhexOracle.dll …`):
   `packages/pkcore/lib/src/data/generated/form_names.dart` y la tabla
   versionada `packages/pkcore/test/data/form_oracle.csv.gz` del test
   `form_data_pkhex_test.dart` (no necesita PKHeX para ejecutarse).
+- `transfer <manifest.json> <out.json>`: convierte cada Pokémon con
+  `EntityConverter` y analiza la legalidad del resultado de PKHeX y del de
+  pkcore. `transfersrc <cases.json> <dir>` genera orígenes legales con las
+  plantillas de encuentro y `transfertables <out.dart>` regenera
+  `packages/pkcore/lib/src/data/generated/transfer_data.dart`.
+  `tool/transfer_oracle.sh [--sources]` hace todo y actualiza
+  `packages/pkcore/test/data/transfer_oracle.json` (fixture de
+  `transfer_test.dart`, que no necesita .NET).
