@@ -3755,4 +3755,40 @@ class AppLocalizationsEs extends AppLocalizations {
   String editGiftCard(String title) {
     return 'Tarjeta de Regalo Misterioso: $title';
   }
+
+  @override
+  String get livingDexSummaryTitle => 'Living Dex guardada';
+
+  @override
+  String get livingDexSummaryNone => 'Se generó todo lo que admite el juego.';
+
+  @override
+  String get livingDexSummaryMissing =>
+      'Lo que no se generó (o quedó normal), por motivo:';
+
+  @override
+  String get ldReasonBattleOnly => 'Formas que solo existen en combate';
+
+  @override
+  String get ldReasonFused => 'Fusiones, dominantes y nobles';
+
+  @override
+  String get ldReasonBoxReverts => 'Vuelven a su forma base en la caja';
+
+  @override
+  String get ldReasonEventOnly => 'Solo por evento (distribución terminada)';
+
+  @override
+  String get ldReasonNeedsRegion => 'Necesitan la región de otra consola';
+
+  @override
+  String get ldReasonNotObtainable =>
+      'Sin encuentro propio en esta versión (otra versión, intercambio o HOME)';
+
+  @override
+  String get ldReasonShinyImpossible =>
+      'Variocolor imposible: quedaron normales';
+
+  @override
+  String get ldReasonDoesNotFit => 'No cupieron en las cajas';
 }

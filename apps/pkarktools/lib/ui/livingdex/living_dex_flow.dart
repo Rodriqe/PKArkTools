@@ -6,6 +6,7 @@ import 'package:pkcore/pkcore.dart';
 
 import '../../editing/draft.dart';
 import '../common/adaptive.dart';
+import '../../l10n/app_localizations.dart';
 import '../common/format.dart';
 
 /// Botón «Generar Living Dex en la partida actual» de la ficha de la partida.
@@ -133,8 +134,72 @@ Future<void> runLivingDexFlow(
         if (r.left.isNotEmpty) l10n.livingDexDoneLeft(r.left.length),
       ].join(' ')),
     ));
+    final summaryContext = nav.context;
+    if (summaryContext.mounted) {
+      await showDialog<void>(
+        context: summaryContext,
+        builder: (_) => LivingDexSummaryDialog(game: game, result: r, missing: livingDexMissing(plan, r)),
+      );
+    }
   } catch (e) {
     nav.pop();
     messenger.showSnackBar(SnackBar(content: Text(l10n.loadError('$e'))));
+  }
+}
+
+/// Resumen al terminar: cuántos se generaron y todo lo que no, agrupado por motivo.
+class LivingDexSummaryDialog extends StatelessWidget {
+  const LivingDexSummaryDialog({super.key, required this.game, required this.result, required this.missing});
+  final GameVersion game;
+  final LivingDexResult result;
+  final Map<LivingDexMissingReason, List<(int, int)>> missing;
+
+  static String reasonLabel(AppLocalizations l10n, LivingDexMissingReason r) => switch (r) {
+        LivingDexMissingReason.battleOnly => l10n.ldReasonBattleOnly,
+        LivingDexMissingReason.fusedOrTotem => l10n.ldReasonFused,
+        LivingDexMissingReason.boxReverts => l10n.ldReasonBoxReverts,
+        LivingDexMissingReason.eventOnly => l10n.ldReasonEventOnly,
+        LivingDexMissingReason.needsRegion => l10n.ldReasonNeedsRegion,
+        LivingDexMissingReason.notObtainable => l10n.ldReasonNotObtainable,
+        LivingDexMissingReason.shinyImpossible => l10n.ldReasonShinyImpossible,
+        LivingDexMissingReason.doesNotFit => l10n.ldReasonDoesNotFit,
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final groups = [for (final r in LivingDexMissingReason.values) if (missing[r]?.isNotEmpty ?? false) r];
+    return AlertDialog(
+      key: const Key('livingDexSummary'),
+      title: Text(l10n.livingDexSummaryTitle),
+      content: SizedBox(
+        width: 560,
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Text(l10n.livingDexDone(result.written, result.shiny)),
+            const SizedBox(height: 12),
+            Text(groups.isEmpty ? l10n.livingDexSummaryNone : l10n.livingDexSummaryMissing),
+            for (final g in groups)
+              ExpansionTile(
+                key: Key('livingDexMissing-${g.name}'),
+                tilePadding: EdgeInsets.zero,
+                title: Text('${reasonLabel(l10n, g)} (${missing[g]!.length})'),
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      missing[g]!.map((m) => pokemonName(context, m.$1, m.$2, game)).toSet().join(', '),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+              ),
+          ],
+        ),
+      ),
+      actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text(MaterialLocalizations.of(context).okButtonLabel))],
+    );
   }
 }

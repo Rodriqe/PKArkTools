@@ -6042,6 +6042,72 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Tarjeta de Regalo Misterioso: {title}'**
   String editGiftCard(String title);
+
+  /// No description provided for @livingDexSummaryTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Living Dex guardada'**
+  String get livingDexSummaryTitle;
+
+  /// No description provided for @livingDexSummaryNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Se generó todo lo que admite el juego.'**
+  String get livingDexSummaryNone;
+
+  /// No description provided for @livingDexSummaryMissing.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo que no se generó (o quedó normal), por motivo:'**
+  String get livingDexSummaryMissing;
+
+  /// No description provided for @ldReasonBattleOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Formas que solo existen en combate'**
+  String get ldReasonBattleOnly;
+
+  /// No description provided for @ldReasonFused.
+  ///
+  /// In es, this message translates to:
+  /// **'Fusiones, dominantes y nobles'**
+  String get ldReasonFused;
+
+  /// No description provided for @ldReasonBoxReverts.
+  ///
+  /// In es, this message translates to:
+  /// **'Vuelven a su forma base en la caja'**
+  String get ldReasonBoxReverts;
+
+  /// No description provided for @ldReasonEventOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo por evento (distribución terminada)'**
+  String get ldReasonEventOnly;
+
+  /// No description provided for @ldReasonNeedsRegion.
+  ///
+  /// In es, this message translates to:
+  /// **'Necesitan la región de otra consola'**
+  String get ldReasonNeedsRegion;
+
+  /// No description provided for @ldReasonNotObtainable.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin encuentro propio en esta versión (otra versión, intercambio o HOME)'**
+  String get ldReasonNotObtainable;
+
+  /// No description provided for @ldReasonShinyImpossible.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor imposible: quedaron normales'**
+  String get ldReasonShinyImpossible;
+
+  /// No description provided for @ldReasonDoesNotFit.
+  ///
+  /// In es, this message translates to:
+  /// **'No cupieron en las cajas'**
+  String get ldReasonDoesNotFit;
 }
 
 class _AppLocalizationsDelegate

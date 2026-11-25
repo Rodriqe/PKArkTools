@@ -2734,5 +2734,16 @@
         "type": "String"
       }
     }
-  }
+  },
+  "livingDexSummaryTitle": "Living Dex guardada",
+  "livingDexSummaryNone": "Se generó todo lo que admite el juego.",
+  "livingDexSummaryMissing": "Lo que no se generó (o quedó normal), por motivo:",
+  "ldReasonBattleOnly": "Formas que solo existen en combate",
+  "ldReasonFused": "Fusiones, dominantes y nobles",
+  "ldReasonBoxReverts": "Vuelven a su forma base en la caja",
+  "ldReasonEventOnly": "Solo por evento (distribución terminada)",
+  "ldReasonNeedsRegion": "Necesitan la región de otra consola",
+  "ldReasonNotObtainable": "Sin encuentro propio en esta versión (otra versión, intercambio o HOME)",
+  "ldReasonShinyImpossible": "Variocolor imposible: quedaron normales",
+  "ldReasonDoesNotFit": "No cupieron en las cajas"
 }

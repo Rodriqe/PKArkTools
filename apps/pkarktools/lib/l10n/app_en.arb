@@ -989,5 +989,16 @@
   "giftTrayInSlot": "Create the Pokémon in this slot",
   "giftTrayInSlotDesc": "With the data the game applies when receiving it",
   "giftTrayDone": "Card “{title}” is in the game's tray: pick it up from the delivery person.",
-  "editGiftCard": "Mystery Gift card: {title}"
+  "editGiftCard": "Mystery Gift card: {title}",
+  "livingDexSummaryTitle": "Living Dex saved",
+  "livingDexSummaryNone": "Everything the game supports was generated.",
+  "livingDexSummaryMissing": "What was not generated (or stayed normal), by reason:",
+  "ldReasonBattleOnly": "Battle-only forms",
+  "ldReasonFused": "Fusions, Totem and Noble Pokémon",
+  "ldReasonBoxReverts": "Revert to their base form in the box",
+  "ldReasonEventOnly": "Event only (distribution ended)",
+  "ldReasonNeedsRegion": "Need another console region",
+  "ldReasonNotObtainable": "No encounter of their own in this version (other version, trade or HOME)",
+  "ldReasonShinyImpossible": "Shiny impossible: they stayed normal",
+  "ldReasonDoesNotFit": "Did not fit in the boxes"
 }

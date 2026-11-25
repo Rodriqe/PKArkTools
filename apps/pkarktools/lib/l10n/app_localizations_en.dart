@@ -3725,4 +3725,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String editGiftCard(String title) {
     return 'Mystery Gift card: $title';
   }
+
+  @override
+  String get livingDexSummaryTitle => 'Living Dex saved';
+
+  @override
+  String get livingDexSummaryNone =>
+      'Everything the game supports was generated.';
+
+  @override
+  String get livingDexSummaryMissing =>
+      'What was not generated (or stayed normal), by reason:';
+
+  @override
+  String get ldReasonBattleOnly => 'Battle-only forms';
+
+  @override
+  String get ldReasonFused => 'Fusions, Totem and Noble Pokémon';
+
+  @override
+  String get ldReasonBoxReverts => 'Revert to their base form in the box';
+
+  @override
+  String get ldReasonEventOnly => 'Event only (distribution ended)';
+
+  @override
+  String get ldReasonNeedsRegion => 'Need another console region';
+
+  @override
+  String get ldReasonNotObtainable =>
+      'No encounter of their own in this version (other version, trade or HOME)';
+
+  @override
+  String get ldReasonShinyImpossible => 'Shiny impossible: they stayed normal';
+
+  @override
+  String get ldReasonDoesNotFit => 'Did not fit in the boxes';
 }

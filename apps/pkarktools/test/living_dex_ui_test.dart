@@ -77,7 +77,18 @@ void main() {
     expect(find.textContaining('solo existen en combate'), findsOneWidget);
     await tester.tap(find.text('Generar y guardar'));
     await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 600)));
-    await settle(tester, until: find.textContaining('Living Dex guardada en el Arca'));
+    for (var i = 0; i < 5 && find.byKey(const Key('livingDexSummary')).evaluate().isEmpty; i++) {
+      await settle(tester, until: find.byKey(const Key('livingDexSummary')));
+    }
+
+    // Resumen: lo que no se generó, agrupado por motivo (Rojo/Azul: exclusivas de Verde/Azul, Mew…).
+    expect(find.text('Living Dex guardada'), findsOneWidget);
+    expect(find.byKey(const Key('livingDexMissing-notObtainable')), findsOneWidget);
+    expect(find.byKey(const Key('livingDexMissing-doesNotFit')), findsNothing);
+    await tester.tap(find.byKey(const Key('livingDexMissing-notObtainable')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.descendant(of: find.byKey(const Key('livingDexSummary')), matching: find.byType(TextButton)));
+    await tester.pumpAndSettle();
 
     // 3) Versión nueva con las cajas llenas; la anterior sigue en el historial.
     final snaps = await tester.runAsync(() => repo.watchSnapshots(slotId).first);
