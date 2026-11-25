@@ -38,6 +38,18 @@ macOS app is signed and notarized.
   - **Import event cards** (.pgt, .pcd/.wc4, .pgf, .wc6/.wc6full,
     .wc7/.wc7full, .wb7, .wc8, .wb8, .wa8, .wc9, .wa9) and receive them in a
     slot.
+  - **The event database updates itself.** A daily GitHub Action
+    (`events-data.yml`) clones PKHeX's latest commit in the runner,
+    regenerates `data/events/events.json`, validates it with
+    `check_events_pkhex.sh` (a single invalid event, or a drop of more than
+    10%, fails without committing) and commits it only when the events change.
+    PKHeX fills templates at random, so unchanged events keep their previous
+    entry. The explorer downloads it at most every 24 h, or with **Check for
+    new events**, through a plain anonymous GET. It caches the file and falls
+    back to the cache or the built-in copy. The screen shows "N events ·
+    updated on <date> · PKHeX <commit>" and marks events that are new since
+    the last view. Current data: PKHeX a5311f9 (2026-11-22), 0 invalid out of
+    5830.
   - **Receive cards in the game's Mystery Gift tray** (X/Y, Omega Ruby/Alpha
     Sapphire, Sun/Moon, Ultra Sun/Ultra Moon): importing a WC6/WC7 card now
     offers to leave it as a received card to pick up in the game from the

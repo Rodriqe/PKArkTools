@@ -40,6 +40,18 @@ Colosseum y XD. La app de macOS llega firmada y notarizada.
     inválidos de 5830.
   - **Importar tarjetas de evento** (.pgt, .pcd/.wc4, .pgf, .wc6/.wc6full,
     .wc7/.wc7full, .wb7, .wc8, .wb8, .wa8, .wc9, .wa9) y recibirlas en un hueco.
+  - **La base de eventos se actualiza sola.** Una GitHub Action diaria
+    (`events-data.yml`) clona el último commit de PKHeX en el runner, regenera
+    `data/events/events.json`, lo valida con `check_events_pkhex.sh` (un solo
+    evento inválido, o una bajada de más del 10 %, hace fallar el job sin
+    commit) y solo hace commit si cambian los eventos. PKHeX rellena las
+    plantillas al azar, así que los eventos sin cambios conservan su entrada
+    anterior. El explorador lo descarga como mucho cada 24 h, o con **Buscar
+    eventos nuevos**, con un GET anónimo. Guarda el archivo y, si falla, usa
+    la copia guardada o la integrada. La pantalla muestra «N eventos ·
+    actualizados el <fecha> · PKHeX <commit>» y marca los eventos nuevos desde
+    la última vez. Datos actuales: PKHeX a5311f9 (2026-11-22), 0 inválidos de
+    5830.
   - **Recibir tarjetas en la bandeja del Regalo Misterioso del juego** (X/Y,
     Rubí Omega/Zafiro Alfa, Sol/Luna, Ultrasol/Ultraluna): al importar una
     tarjeta WC6/WC7 se ofrece dejarla como tarjeta recibida para recogerla en

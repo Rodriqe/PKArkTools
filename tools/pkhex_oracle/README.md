@@ -5,7 +5,9 @@ Consola C# que carga un save con [PKHeX.Core](https://github.com/kwsch/PKHeX)
 `packages/pkcore/tool/pkhex_dump.dart`, para comparar lectura y legalidad
 campo por campo con pkcore.
 
-PKHeX no se versiona aquí: el proyecto lo referencia en `.ref/PKHeX`.
+PKHeX no se versiona aquí: el proyecto lo referencia en `.ref/PKHeX` (otra
+copia: `dotnet build -p:PkhexDir=/ruta`, o `PKHEX_DIR=/ruta` en
+`tool/gen_event_data.sh` y `tool/check_events_pkhex.sh`).
 
 ```bash
 git clone https://github.com/kwsch/PKHeX .ref/PKHeX   # una vez

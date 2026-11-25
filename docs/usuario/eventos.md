@@ -16,6 +16,54 @@ recordables, objeto, IV y naturaleza fijos, cintas, fechas e idiomas) y, si
 tiene archivo de tarjeta, **exportarla** (`.pcd`, `.pgf`, `.wc6`… como en
 PKHeX). Gen 3 no tiene formato de tarjeta.
 
+## Se actualiza sola
+
+La base no espera a una versión nueva de PKArkTools:
+
+1. Cada día, la GitHub Action
+   [`events-data.yml`](../../.github/workflows/events-data.yml) clona el
+   último commit de [PKHeX](https://github.com/kwsch/PKHeX) en la carpeta
+   temporal del runner (nunca en el repositorio), regenera
+   [`data/events/events.json`](../../data/events/events.json) con
+   `tool/gen_event_data.sh` y lo valida: el esquema,
+   `tool/check_events_pkhex.sh` (crea cada evento para dos entrenadores y
+   PKHeX los analiza; **un solo inválido** hace fallar el job) y los tests de
+   eventos de pkcore. Si el total baja más de un 10 %, también falla. **Solo
+   si cambiaron los eventos** lo sube a `main` (autor `github-actions[bot]`).
+   Si algo falla no se sube nada y la app sigue con la última versión buena.
+2. Al abrir el explorador (como mucho una vez cada 24 horas) la app descarga
+   ese JSON, comprueba que es válido y lo guarda en su carpeta de datos.
+   **Buscar eventos nuevos** consulta en el momento.
+3. Sin conexión, o si la descarga falla o no es válida, usa la copia guardada
+   o la que lleva la app (la más reciente de las dos).
+
+La pantalla indica **«N eventos · actualizados el … · PKHeX …»** (fecha de
+los datos y commit de PKHeX) y marca con **Nuevo** los eventos que no estaban
+la última vez que abriste el explorador.
+
+**Privacidad**: es un GET anónimo a GitHub, sin cabeceras propias ni
+identificadores; no se envía nada de tus partidas.
+
+Si el JSON publicado tiene un `schemaVersion` más nuevo del que entiende tu
+versión de la app, se ignora y se sugiere actualizar PKArkTools.
+
+**Por qué los eventos sin cambios conservan su entrada**: PKHeX genera las
+plantillas con números al azar y la fecha del día, así que dos ejecuciones
+nunca dan el mismo archivo. Cada evento cuya huella estable (tarjeta,
+especie, forma, nivel, variocolor, método, fechas de distribución) ya estaba
+reutiliza su entrada anterior, y el JSON solo cambia cuando cambian los
+eventos. `check_events_pkhex.sh` los vuelve a comprobar igualmente con el
+PKHeX nuevo. Para generarlo todo de nuevo: `EVENTS_FRESH=1
+tool/gen_event_data.sh` (o la opción *fresh* al lanzar la Action a mano).
+
+En local, con otra copia de PKHeX:
+
+```bash
+git clone --depth 1 https://github.com/kwsch/PKHeX .scratch/PKHeX
+PKHEX_DIR=$PWD/.scratch/PKHeX tool/gen_event_data.sh
+PKHEX_DIR=$PWD/.scratch/PKHeX tool/check_events_pkhex.sh
+```
+
 ## Crear un Pokémon de evento
 
 En una caja, toca un hueco vacío y elige **Desde un evento**. Solo aparecen los
