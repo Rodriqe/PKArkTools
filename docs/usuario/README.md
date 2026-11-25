@@ -17,7 +17,7 @@ editarla y exportarla lista para el juego o el emulador.
 10. [Iconos](iconos.md): sprites bajo demanda y su caché.
 11. [Eventos](eventos.md): explorador del Regalo Misterioso, crear Pokémon de evento e importar/exportar tarjetas.
 12. [Living Dex](living-dex.md): llenar las cajas de una partida con un Pokémon legal de cada especie y forma.
-13. [Herramientas](herramientas.md): importar y exportar texto de Showdown, calculadora de stats e IVs, ordenar cajas y tarjeta para compartir.
+13. [Herramientas](herramientas.md): importar y exportar texto de Showdown, ordenar cajas y tarjeta para compartir.
 14. [Formato oficial](formato-oficial.md): la regulación vigente de Pokémon Champions y qué Pokémon de tus partidas valen.
 15. [Competitivo](competitivo.md): calculadoras de estadísticas y de daño de Champions, equipos guardados en el Arca y Showdown.
 16. [Instalar](instalar.md): todas las plataformas, y iPhone/iPad con AltStore.

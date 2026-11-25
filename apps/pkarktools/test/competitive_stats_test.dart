@@ -81,12 +81,4 @@ void main() {
     expect(stat(tester, 1), '222');
     expect(stat(tester, 5), '158');
   });
-
-  testWidgets('modo clásico', (tester) async {
-    await pump(tester);
-    await tester.tap(find.byKey(const ValueKey('stats-mode-classic')));
-    await settle(tester);
-    // Garchomp, nivel 50, IVs 31, sin EVs, Fuerte.
-    expect(tester.widget<Text>(find.byKey(const ValueKey('classic-stat-0'))).data, '183');
-  });
 }

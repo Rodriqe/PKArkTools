@@ -26,8 +26,7 @@ que es el que usan las notas de los Releases; se actualizan a la par.
     **puntos de estadística** (0–32 por estadística, 66 en total),
     naturalezas y Megas, con las especies de la regulación vigente; cargar de
     tus Pokémon del Arca (los EVs pasan a los puntos que dan la misma
-    estadística a nivel 50) o pegar de Showdown. El modo *Clásica* conserva la
-    calculadora de los juegos principales. Fórmulas del mod champions de
+    estadística a nivel 50) o pegar de Showdown. Fórmulas del mod champions de
     Pokémon Showdown; 400 casos de referencia calculados por Showdown
     coinciden exactamente ([docs/champions-mecanicas.md](docs/champions-mecanicas.md)).
   - **Calculadora de daño** (nueva): atacante contra defensor,
@@ -82,6 +81,13 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   actualizar la app. Con la lista oficial, Meowstic hembra pasa a ser
   elegible y ya no salen las formas de combate de Castform/Aegislash. Se
   elimina `tool/champions_regulations.json` (fechas a mano).
+
+### Eliminado
+
+- Se quita la calculadora de stats clásica del editor (columnas Nv. 50 / Nv.
+  100, IVs a partir de stats y Poder Oculto); usa **Competitivo →
+  Estadísticas**. El editor sigue editando IVs y EVs y mostrando las
+  estadísticas al nivel actual.
 
 ## [2.0.0] — 2026-11-25
 

@@ -35,8 +35,7 @@ Mega si la tiene, naturaleza y puntos, y ves las estadísticas finales.
 los puntos que dan la misma estadística a nivel 50 (no es la conversión
 oficial de HOME, la app lo indica). **Pegar de Showdown** acepta un set de
 Showdown (en Champions, la línea `EVs:` lleva los puntos; si son EVs clásicos
-se convierten). **Clásica** es la calculadora de siempre (IVs, EVs y nivel
-libres). Las fórmulas y su fuente exacta en Showdown están en
+se convierten). Las fórmulas y su fuente exacta en Showdown están en
 [Mecánicas de Champions](../champions-mecanicas.md).
 
 ## Calculadora de daño

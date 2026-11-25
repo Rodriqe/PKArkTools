@@ -1,4 +1,4 @@
-# Herramientas: Showdown, calculadora, ordenar cajas y tarjeta
+# Herramientas: Showdown, ordenar cajas y tarjeta
 
 Todas trabajan sobre el **borrador** de la partida: nada se escribe en el Arca
 hasta que pulsas **Guardar en el Arca**, y cualquier cambio se puede deshacer.
@@ -36,27 +36,13 @@ del equipo y después las cajas) o **Cajas** y pulsa **Añadir**.
 **Copiar** y **Compartir**; en el editor de un Pokémon, menú ⋮ → **Texto de
 Showdown** hace lo mismo con uno solo.
 
-## Calculadora de estadísticas e IVs
+## Calculadora de estadísticas
 
-(Esta es la del editor, con los IVs y EVs del Pokémon. La de Champions, con
-puntos de estadística, y la clásica sin Pokémon están en
-[Competitivo](competitivo.md#calculadora-de-estadísticas).)
-
-En el editor, al final de la sección **Estadísticas**:
-
-* **Nv. 50 / Nv. 100**: estadísticas finales con los IVs, EVs y naturaleza
-  actuales (la barra de la ficha sigue mostrando el nivel real).
-* **IVs a partir de stats**: escribe las estadísticas que ves en el juego (o
-  pulsa **Usar las actuales**) y **Calcular IVs**. Se muestra el rango
-  posible de cada IV con los EVs, nivel y naturaleza actuales; si todos son
-  exactos aparece **Aplicar IVs**. Un rango vacío indica EVs, nivel o
-  naturaleza mal puestos. A nivel bajo los rangos son amplios: sube de nivel
-  o usa un Pokémon sin EVs para afinarlos.
-* **Poder Oculto**: tipo y potencia según los IVs (Gen 2–7; en Gen 2 según
-  los DVs).
-
-Let's Go y Leyendas Arceus usan fórmulas propias (AV/GV): ahí solo se ve la
-vista previa de la ficha.
+La calculadora está en la pestaña **Competitivo → Calculadora de
+estadísticas**, con las reglas de Pokémon Champions (nivel 50, puntos de
+estadística, Megas): ver [Competitivo](competitivo.md#calculadora-de-estadísticas).
+El editor de un Pokémon sigue mostrando sus estadísticas al nivel actual
+mientras cambias IVs, EVs y naturaleza.
 
 ## Ordenar cajas
 

@@ -4332,48 +4332,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get toolsMadeWithPKArkTools => 'Hecho con PKArkTools';
 
   @override
-  String get toolsEnterAllSixStats => 'Escribe las seis estadísticas.';
-
-  @override
-  String get toolsCalculator => 'Calculadora';
-
-  @override
-  String get toolsLv50 => 'Nv. 50';
-
-  @override
-  String get toolsLv100 => 'Nv. 100';
-
-  @override
-  String get toolsObserved => 'Observada';
-
-  @override
-  String get toolsInGen12Special =>
-      'En Gen 1/2 la Especial vale para ataque y defensa especiales.';
-
-  @override
-  String toolsIVsFromStatsEnterThe(Object level) {
-    return 'IVs a partir de stats: escribe las estadísticas que ves en el juego (con los EVs, nivel $level y naturaleza actuales).';
-  }
-
-  @override
-  String get toolsUseCurrent => 'Usar las actuales';
-
-  @override
-  String get toolsCalculateIVs => 'Calcular IVs';
-
-  @override
-  String get toolsApplyIVs => 'Aplicar IVs';
-
-  @override
-  String get toolsSomeStatFitsNoIV =>
-      'Alguna estadística no encaja con ningún IV: revisa los EVs, el nivel o la naturaleza.';
-
-  @override
-  String toolsPower(Object power) {
-    return 'potencia $power';
-  }
-
-  @override
   String get toolsCopiedToClipboard => 'Copiado al portapapeles';
 
   @override
@@ -4583,12 +4541,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get compTeamOk => 'El equipo cumple las reglas del formato.';
-
-  @override
-  String get compClassic => 'Clásica';
-
-  @override
-  String get compClassicDesc => 'Juegos principales: IVs, EVs y nivel libres.';
 
   @override
   String get compSpecies => 'Especie';

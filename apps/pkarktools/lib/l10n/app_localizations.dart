@@ -6939,78 +6939,6 @@ abstract class AppLocalizations {
   /// **'Hecho con PKArkTools'**
   String get toolsMadeWithPKArkTools;
 
-  /// No description provided for @toolsEnterAllSixStats.
-  ///
-  /// In es, this message translates to:
-  /// **'Escribe las seis estadísticas.'**
-  String get toolsEnterAllSixStats;
-
-  /// No description provided for @toolsCalculator.
-  ///
-  /// In es, this message translates to:
-  /// **'Calculadora'**
-  String get toolsCalculator;
-
-  /// No description provided for @toolsLv50.
-  ///
-  /// In es, this message translates to:
-  /// **'Nv. 50'**
-  String get toolsLv50;
-
-  /// No description provided for @toolsLv100.
-  ///
-  /// In es, this message translates to:
-  /// **'Nv. 100'**
-  String get toolsLv100;
-
-  /// No description provided for @toolsObserved.
-  ///
-  /// In es, this message translates to:
-  /// **'Observada'**
-  String get toolsObserved;
-
-  /// No description provided for @toolsInGen12Special.
-  ///
-  /// In es, this message translates to:
-  /// **'En Gen 1/2 la Especial vale para ataque y defensa especiales.'**
-  String get toolsInGen12Special;
-
-  /// No description provided for @toolsIVsFromStatsEnterThe.
-  ///
-  /// In es, this message translates to:
-  /// **'IVs a partir de stats: escribe las estadísticas que ves en el juego (con los EVs, nivel {level} y naturaleza actuales).'**
-  String toolsIVsFromStatsEnterThe(Object level);
-
-  /// No description provided for @toolsUseCurrent.
-  ///
-  /// In es, this message translates to:
-  /// **'Usar las actuales'**
-  String get toolsUseCurrent;
-
-  /// No description provided for @toolsCalculateIVs.
-  ///
-  /// In es, this message translates to:
-  /// **'Calcular IVs'**
-  String get toolsCalculateIVs;
-
-  /// No description provided for @toolsApplyIVs.
-  ///
-  /// In es, this message translates to:
-  /// **'Aplicar IVs'**
-  String get toolsApplyIVs;
-
-  /// No description provided for @toolsSomeStatFitsNoIV.
-  ///
-  /// In es, this message translates to:
-  /// **'Alguna estadística no encaja con ningún IV: revisa los EVs, el nivel o la naturaleza.'**
-  String get toolsSomeStatFitsNoIV;
-
-  /// No description provided for @toolsPower.
-  ///
-  /// In es, this message translates to:
-  /// **'potencia {power}'**
-  String toolsPower(Object power);
-
   /// No description provided for @toolsCopiedToClipboard.
   ///
   /// In es, this message translates to:
@@ -7322,18 +7250,6 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'El equipo cumple las reglas del formato.'**
   String get compTeamOk;
-
-  /// No description provided for @compClassic.
-  ///
-  /// In es, this message translates to:
-  /// **'Clásica'**
-  String get compClassic;
-
-  /// No description provided for @compClassicDesc.
-  ///
-  /// In es, this message translates to:
-  /// **'Juegos principales: IVs, EVs y nivel libres.'**
-  String get compClassicDesc;
 
   /// No description provided for @compSpecies.
   ///

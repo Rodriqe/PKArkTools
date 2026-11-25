@@ -24,8 +24,7 @@ developer documentation in `docs/` is in Spanish.
   - **Champions stat calculator**: level 50, maxed IVs and **Stat Points**
     (0–32 per stat, 66 total), natures and Megas, species limited to the
     current regulation; load from your Ark Pokémon (EVs converted to the
-    points that give the same level-50 stat) or paste from Showdown. A
-    *Classic* mode keeps the main-series calculator. Formulas follow Pokémon
+    points that give the same level-50 stat) or paste from Showdown. Formulas follow Pokémon
     Showdown's champions mod; 400 reference cases computed by Showdown match
     exactly ([docs/champions-mecanicas.md](docs/champions-mecanicas.md)).
   - **Damage calculator** (new): attacker vs defender, doubles/singles,
@@ -76,6 +75,12 @@ developer documentation in `docs/` is in Spanish.
   without an update. With the official list, female Meowstic is now eligible
   and the battle-only Castform/Aegislash forms are no longer listed.
   `tool/champions_regulations.json` (hand-kept dates) is gone.
+
+### Removed
+
+- Removed the classic stat calculator from the editor (Lv. 50 / Lv. 100
+  columns, IVs from stats and Hidden Power); use **Competitive → Stats**. The
+  editor still edits IVs and EVs and shows the stats at the current level.
 
 ## [2.0.0] — 2026-11-25
 

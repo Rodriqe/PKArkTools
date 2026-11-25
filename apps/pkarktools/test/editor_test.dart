@@ -199,4 +199,47 @@ void main() {
     await tester.pump();
     expect(find.textContaining('El total de EVs'), findsNothing);
   });
+
+  testWidgets('sin la calculadora clásica: los IVs y EVs se siguen editando y aplicando', (tester) async {
+    final editor = SaveEditor.open(SyntheticSaves.scarletViolet(party: const [SynthMon(25, level: 30)]));
+    final pk = editor.get(const SlotRef.party(0))!
+      ..setIvs(const [1, 2, 3, 4, 5, 6])
+      ..setEvs(const [0, 0, 0, 0, 0, 0]);
+    tester.view.physicalSize = const Size(1300, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    EditorResult? result;
+    await tester.pumpWidget(MaterialApp(
+      theme: AppTheme.dark(),
+      locale: const Locale('es'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Builder(
+        builder: (context) => TextButton(
+          onPressed: () async => result =
+              await PokemonEditorScreen.open(context, game: GameVersion.scarletViolet, pk: pk, slotLabel: 'Equipo, hueco 1'),
+          child: const Text('abrir'),
+        ),
+      ),
+    ));
+    await tester.tap(find.text('abrir'));
+    await tester.pumpAndSettle();
+    // Secciones de IVs y EVs con sus campos; el panel de la calculadora ya no está.
+    expect(find.text('IVs (valores individuales)'), findsOneWidget);
+    expect(find.text('EVs (puntos de esfuerzo)'), findsOneWidget);
+    expect(find.byKey(const ValueKey('calc-infer')), findsNothing);
+    expect(find.byKey(const ValueKey('stat-calculator')), findsNothing);
+    await tester.ensureVisible(find.text('IVs perfectos'));
+    await tester.tap(find.text('IVs perfectos'));
+    await tester.pump();
+    await tester.ensureVisible(find.text('Atacante físico'));
+    await tester.tap(find.text('Atacante físico'));
+    await tester.pump();
+    expect(find.textContaining('Estadísticas a nivel 30'), findsOneWidget);
+    await tester.tap(find.text('Aplicar cambios'));
+    await tester.pumpAndSettle();
+    final applied = (result! as EditorApply).pk;
+    expect(applied.ivs, everyElement(31));
+    expect(applied.evs, [4, 252, 0, 0, 0, 252]);
+  });
 }

@@ -87,8 +87,7 @@ PKHeX). Event and Living Dex Pokémon survive transfers.
 |---|---|---|
 | <img src="docs/screenshots/v2.0/08_official_format.png" alt="Official format: Pokémon Champions regulation"> | <img src="docs/screenshots/v2.0/09_stat_calculator.png" alt="Stat and IV calculator"> | <img src="docs/screenshots/v2.0/11_share_card.png" alt="Share card"> |
 
-**Tools.** Import and export **Pokémon Showdown** text, a **stat and IV
-calculator** with Hidden Power, **sort boxes** (Dex, type, generation, living
+**Tools.** Import and export **Pokémon Showdown** text, **sort boxes** (Dex, type, generation, living
 dex, level, shiny) with a preview and one undo and a **share card** image.
 [Tools guide](docs/usuario/herramientas.md).
 
@@ -217,8 +216,7 @@ background and cached, it opens instantly. [Dex guide](docs/usuario/dex.md).
   with a legality preview and a HOME clone detector.
 
 **Tools**
-* Pokémon Showdown import/export, stat and IV calculator, box sorting and
-  share card.
+* Pokémon Showdown import/export, box sorting and share card.
 * **Competitive** tab for Pokémon Champions: Official format, stat calculator
   with Stat Points, damage calculator (exact against Showdown) and teams saved
   in the Ark.

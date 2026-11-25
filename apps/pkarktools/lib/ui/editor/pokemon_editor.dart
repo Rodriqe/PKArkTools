@@ -18,7 +18,6 @@ import 'ribbons_panel.dart';
 import '../tools/share_card.dart';
 import '../competitive/damage_screen.dart';
 import '../tools/showdown_ui.dart';
-import '../tools/stat_calculator.dart';
 
 /// Qué decidió el usuario al cerrar el editor.
 sealed class EditorResult {
@@ -964,10 +963,6 @@ class _StatFields extends StatelessWidget {
         for (var i = 0; i < 6; i++)
           row(Legality.statName(i, context.dataLang), pk.gvs[i], 10, (v) => s.mutate((p) => p.setGv(i, v)),
               const Color(0xFFE8A14A)),
-      ],
-      if (!pk.isEgg) ...[
-        const SizedBox(height: 18),
-        StatCalculatorPanel(pk: pk, onApplyIvs: (v) => s.mutate((p) => p.setIvs(v))),
       ],
     ]);
   }

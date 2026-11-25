@@ -15,10 +15,8 @@ import 'package:pkarktools/data/folder/arca_folder.dart';
 import 'package:pkarktools/data/folder/folder_fs.dart';
 import 'package:pkarktools/data/sprites/sprite_cache.dart';
 import 'package:pkarktools/providers.dart';
-import 'package:pkarktools/ui/editor/pokemon_editor.dart';
 import 'package:pkarktools/ui/events/event_explorer.dart';
 import 'package:pkarktools/ui/tools/share_card.dart';
-import 'package:pkarktools/ui/tools/stat_calculator.dart';
 import 'package:pkcore/pkcore.dart';
 import 'package:pkcore/testing.dart';
 
@@ -209,16 +207,10 @@ void main() {
       lead.setMove(i, m, context: GameDataTable.forGame(GameVersion.scarletViolet).context);
     }
     lead.refreshPartyStats();
-    unawaited(PokemonEditorScreen.open(appContext(), game: GameVersion.scarletViolet, pk: lead, slotLabel: 'Party 1'));
-    await settle(15);
-    final calc = find.byKey(const ValueKey('calc-infer'));
-    await until(calc);
-    final panel = tester.element(find.byType(StatCalculatorPanel));
-    await tester.runAsync(() => Scrollable.ensureVisible(panel, alignment: 0.05));
-    await settle(10);
+    // 9. Calculadora de estadísticas de Champions (pestaña Competitivo).
+    await open('/competitivo/estadisticas', const Size(1440, 1000));
     await write('09_stat_calculator');
-    Navigator.of(appContext(), rootNavigator: true).pop();
-    await settle(10);
+    await open('/arca/save/$sv', const Size(1440, 1000));
 
     await until(find.byKey(const ValueKey('tool-showdown-export')));
     await tester.tap(find.byKey(const ValueKey('tool-showdown-export')));

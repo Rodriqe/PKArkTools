@@ -3142,32 +3142,6 @@
   "toolsRibbons": "Cintas",
   "toolsMoves": "Movimientos",
   "toolsMadeWithPKArkTools": "Hecho con PKArkTools",
-  "toolsEnterAllSixStats": "Escribe las seis estadísticas.",
-  "toolsCalculator": "Calculadora",
-  "toolsLv50": "Nv. 50",
-  "toolsLv100": "Nv. 100",
-  "toolsObserved": "Observada",
-  "toolsInGen12Special": "En Gen 1/2 la Especial vale para ataque y defensa especiales.",
-  "toolsIVsFromStatsEnterThe": "IVs a partir de stats: escribe las estadísticas que ves en el juego (con los EVs, nivel {level} y naturaleza actuales).",
-  "@toolsIVsFromStatsEnterThe": {
-    "placeholders": {
-      "level": {
-        "type": "Object"
-      }
-    }
-  },
-  "toolsUseCurrent": "Usar las actuales",
-  "toolsCalculateIVs": "Calcular IVs",
-  "toolsApplyIVs": "Aplicar IVs",
-  "toolsSomeStatFitsNoIV": "Alguna estadística no encaja con ningún IV: revisa los EVs, el nivel o la naturaleza.",
-  "toolsPower": "potencia {power}",
-  "@toolsPower": {
-    "placeholders": {
-      "power": {
-        "type": "Object"
-      }
-    }
-  },
   "toolsCopiedToClipboard": "Copiado al portapapeles",
   "toolsBoxesSortedNote": "Cajas ordenadas ({count} huecos)",
   "@toolsBoxesSortedNote": {
@@ -3375,8 +3349,6 @@
   "compShowdownExportTitle": "Exportar el equipo de una partida",
   "compShowdownImportHint": "Para importar a una partida, ábrela en el Arca y usa «Importar de Showdown».",
   "compTeamOk": "El equipo cumple las reglas del formato.",
-  "compClassic": "Clásica",
-  "compClassicDesc": "Juegos principales: IVs, EVs y nivel libres.",
   "compSpecies": "Especie",
   "compSoon": "Próximamente",
   "compNoMega": "Sin Mega",

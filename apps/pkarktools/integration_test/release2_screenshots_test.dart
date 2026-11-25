@@ -17,10 +17,8 @@ import 'package:pkarktools/data/folder/arca_folder.dart';
 import 'package:pkarktools/data/folder/memory_folder_fs.dart';
 import 'package:pkarktools/data/sprites/sprite_cache.dart';
 import 'package:pkarktools/providers.dart';
-import 'package:pkarktools/ui/editor/pokemon_editor.dart';
 import 'package:pkarktools/ui/events/event_explorer.dart';
 import 'package:pkarktools/ui/tools/share_card.dart';
-import 'package:pkarktools/ui/tools/stat_calculator.dart';
 
 /// Capturas de las novedades de la 2.0 en un teléfono (emulador -no-window o
 /// simulador headless; nunca abre la app de escritorio):
@@ -161,7 +159,7 @@ void main() {
     await settle(6);
     await shot('07_transfer');
 
-    await open('/dex/formato-oficial');
+    await open('/competitivo/formato');
     await shot('08_official_format');
 
     await open('/arca/save/$sv');
@@ -175,13 +173,10 @@ void main() {
       lead.setMove(i, m, context: context);
     }
     lead.refreshPartyStats();
-    unawaited(PokemonEditorScreen.open(ctx(), game: GameVersion.scarletViolet, pk: lead, slotLabel: es ? 'Equipo 1' : 'Party 1'));
-    await settle(15);
-    await until(find.byType(StatCalculatorPanel));
-    await tester.runAsync(() => Scrollable.ensureVisible(tester.element(find.byType(StatCalculatorPanel)), alignment: 0.05));
-    await settle(10);
+    // 9. Calculadora de estadísticas de Champions (pestaña Competitivo).
+    await open('/competitivo/estadisticas');
     await shot('09_stat_calculator');
-    Navigator.of(ctx(), rootNavigator: true).pop();
+    await open('/arca/save/$sv');
     await settle(10);
 
     final sd = find.byKey(const ValueKey('tool-showdown-export'));

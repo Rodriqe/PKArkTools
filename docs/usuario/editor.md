@@ -20,7 +20,9 @@ Especie y forma, apodo, nivel/EXP, naturaleza (y menta en Gen 8+), habilidad,
 objeto, movimientos y PP, IVs/EVs (AVs en Let's Go, GVs en Leyendas Arceus) con
 presets, variocolor (PID/EC regenerados según la generación), género, amistad,
 Poké Ball, OT/TID/SID, idioma y teratipo (Escarlata/Púrpura). Los buscadores
-tienen autocompletado y las estadísticas se calculan en vivo.
+tienen autocompletado y las estadísticas (al nivel actual) se calculan en
+vivo. La calculadora de estadísticas está en
+[Competitivo](competitivo.md#calculadora-de-estadísticas).
 
 <p>
   <img src="../screenshots/10_editor_pokemon.png" width="420" alt="Editor de Pokémon">

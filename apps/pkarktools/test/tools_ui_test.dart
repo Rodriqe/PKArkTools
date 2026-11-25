@@ -24,7 +24,6 @@ import 'package:pkarktools/data/update/champions_update.dart';
 import 'package:pkarktools/ui/tools/champions_screen.dart';
 import 'package:pkarktools/ui/tools/share_card.dart';
 import 'package:pkarktools/ui/tools/showdown_ui.dart';
-import 'package:pkarktools/ui/tools/stat_calculator.dart';
 
 import 'arca_screen_test.dart' show settle;
 
@@ -164,33 +163,6 @@ void main() {
     await settle(tester);
     final back = container.read(draftProvider(id)).editor!;
     expect([for (var s = 0; s < 4; s++) back.get(SlotRef.box(0, s))?.species], [150, null, 1, 4]);
-  });
-
-  testWidgets('calculadora: IVs a partir de las estadísticas y Poder Oculto', (tester) async {
-    bigView(tester);
-    final mon =
-        SaveEditor.open(SyntheticSaves.gen3(party: const [SynthMon(376, level: 100)])).get(const SlotRef.party(0))!
-          ..dataGame = GameVersion.emerald
-          ..setIvs(const [12, 31, 0, 17, 25, 30])
-          ..setEvs(const [0, 0, 0, 0, 0, 0]);
-    List<int>? applied;
-    await tester.pumpWidget(
-      wrap(
-        SingleChildScrollView(
-          child: StatCalculatorPanel(pk: mon, onApplyIvs: (v) => applied = v),
-        ),
-      ),
-    );
-    await tester.pump();
-    expect(find.byKey(const ValueKey('hidden-power')), findsOneWidget);
-    final stats = mon.computeStats()!;
-    for (var i = 0; i < 6; i++) {
-      await tester.enterText(find.byKey(ValueKey('calc-observed-$i')), '${stats[i]}');
-    }
-    await tester.tap(find.byKey(const ValueKey('calc-infer')));
-    await tester.pump();
-    await tester.tap(find.byKey(const ValueKey('calc-apply')));
-    expect(applied, [12, 31, 0, 17, 25, 30]);
   });
 
   testWidgets('tarjeta para compartir: se dibuja y se exporta a PNG', (tester) async {

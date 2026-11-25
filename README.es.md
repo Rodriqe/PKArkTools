@@ -91,8 +91,7 @@ transferencias. [Eventos](docs/usuario/eventos.md) ·
 |---|---|---|
 | <img src="docs/screenshots/v2.0/08_official_format.png" alt="Formato oficial: regulación de Pokémon Champions"> | <img src="docs/screenshots/v2.0/09_stat_calculator.png" alt="Calculadora de stats e IVs"> | <img src="docs/screenshots/v2.0/11_share_card.png" alt="Tarjeta para compartir"> |
 
-**Herramientas.** Importa y exporta texto de **Pokémon Showdown**, una
-**calculadora de stats e IVs** con Poder Oculto, **ordenar cajas** (Pokédex,
+**Herramientas.** Importa y exporta texto de **Pokémon Showdown**, **ordenar cajas** (Pokédex,
 tipo, generación, living dex, nivel, variocolor) con vista previa y un solo
 deshacer y una **tarjeta para compartir**.
 [Guía de herramientas](docs/usuario/herramientas.md).
@@ -228,8 +227,7 @@ opcional. Se indexa en segundo plano y se cachea: abre al instante.
   copiar), con vista previa de legalidad y detector de clones de HOME.
 
 **Herramientas**
-* Importar/exportar Pokémon Showdown, calculadora de stats e IVs, ordenar
-  cajas y tarjeta para compartir.
+* Importar/exportar Pokémon Showdown, ordenar cajas y tarjeta para compartir.
 * Pestaña **Competitivo** de Pokémon Champions: formato oficial, calculadora
   de estadísticas con puntos, calculadora de daño (exacta frente a Showdown) y
   equipos guardados en el Arca.
