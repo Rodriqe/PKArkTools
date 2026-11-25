@@ -212,10 +212,14 @@ void main() {
           await tester.pump(const Duration(milliseconds: 300));
         }
         // Las cajas cambian con las flechas.
-        await tester.ensureVisible(find.byTooltip('Caja siguiente'));
+        // En el centro de la vista: en el borde la barra inferior las tapa.
+        await Scrollable.ensureVisible(tester.element(find.byTooltip('Caja siguiente')), alignment: 0.5);
+        await tester.pump(const Duration(milliseconds: 300));
         await tester.tap(find.byTooltip('Caja siguiente'));
         await settle(tester);
         noOverflow(tester, 'caja siguiente');
+        await Scrollable.ensureVisible(tester.element(find.byTooltip('Caja anterior')), alignment: 0.5);
+        await tester.pump(const Duration(milliseconds: 300));
         await tester.tap(find.byTooltip('Caja anterior'));
         await settle(tester);
 

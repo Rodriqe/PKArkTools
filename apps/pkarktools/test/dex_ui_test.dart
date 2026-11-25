@@ -150,7 +150,8 @@ void main() {
 
     await t.tap(find.byKey(const ValueKey('dex-game')));
     await settle(t);
-    await t.tap(find.text('Legends: Z-A').last);
+    // Se toca la opción del menú (su texto no recibe toques: avisaría de un toque fallido).
+    await t.tap(find.ancestor(of: find.text('Legends: Z-A').last, matching: find.byType(CheckedPopupMenuItem<int>)));
     await settle(t);
     expect(find.text('1025 species'), findsNothing, reason: 'solo las especies de Z-A');
   });

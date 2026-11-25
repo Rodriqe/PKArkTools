@@ -28,8 +28,10 @@ import 'package:pkarktools/ui/tools/stat_calculator.dart';
 
 import 'arca_screen_test.dart' show settle;
 
+// Con género explícito: sin él, el género sale al azar según la proporción de
+// la especie (Swampert: 1 de cada 8 hembra) y la exportación cambia.
 const _showdown = '''
-Swampert @ Leftovers
+Swampert (M) @ Leftovers
 Ability: Torrent
 Level: 60
 Relaxed Nature
