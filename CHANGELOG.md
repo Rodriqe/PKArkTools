@@ -13,6 +13,19 @@ developer documentation in `docs/` is in Spanish.
 
 ### Added
 
+- **Living Dex generator.** “Generate a Living Dex in this save” on the save
+  sheet fills the boxes with one Pokémon of every species and form the game
+  supports (regional forms and box-storable cosmetic forms included,
+  battle-only forms, fusions and Totem/Noble Pokémon left out), in National
+  Dex order, normal or shiny, with the save's OT, ID, gender and language.
+  Each one comes from a real encounter of that version (hatched egg, static or
+  wild, evolved at the lowest legal level) chosen by PKHeX
+  (`tool/gen_living_dex_data.sh`, oracle command `livingdex`), or from an
+  official event for mythicals/legendaries that only existed that way. Shiny
+  only where the game allows it. It warns that the boxes are overwritten (the
+  previous version stays in the Arca history) and what does not fit.
+  `tool/check_living_dex_pkhex.sh` checks the full normal and shiny Living
+  Dex of 16 games read back from the save: 0 invalid out of 16886.
 - **Mystery Gift events.** PKHeX's whole event database (2922 Pokémon gifts,
   Gen 3 to Gen 9: WC3/PCNY/PCJP, PCD/PGT, PGF, WC6, WC7, WB7, WC8, WB8, WA8,
   WC9, WA9), regenerated with `tool/gen_event_data.sh` and loaded lazily.

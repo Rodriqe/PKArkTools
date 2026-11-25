@@ -13,6 +13,19 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ### Añadido
 
+- **Generador de Living Dex.** «Generar Living Dex en la partida actual» en la
+  ficha de la partida llena las cajas con un Pokémon de cada especie y forma
+  que admite el juego (con formas regionales y cosméticas que se guardan en
+  caja; sin formas de combate, fusiones ni dominantes/nobles), en orden de la
+  Pokédex nacional, normal o variocolor, con el OT, ID, género e idioma del
+  save. Cada uno sale de un encuentro real de esa versión (huevo eclosionado,
+  estático o salvaje, evolucionado al nivel mínimo legal) elegido por PKHeX
+  (`tool/gen_living_dex_data.sh`, comando `livingdex` del oráculo), o de un
+  evento oficial para los míticos/legendarios que solo existieron así.
+  Variocolor solo donde el juego lo permite. Avisa de que se sobrescriben las
+  cajas (la versión anterior queda en el historial del Arca) y de lo que no
+  cabe. `tool/check_living_dex_pkhex.sh` comprueba la Living Dex completa,
+  normal y variocolor, de 16 juegos leída del save: 0 inválidos de 16886.
 - **Eventos (Regalo Misterioso).** Toda la base de eventos de PKHeX (2922
   regalos de Pokémon, de Gen 3 a Gen 9: WC3/PCNY/PCJP, PCD/PGT, PGF, WC6, WC7,
   WB7, WC8, WB8, WA8, WC9, WA9), regenerada con `tool/gen_event_data.sh` y con

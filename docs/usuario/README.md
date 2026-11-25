@@ -15,7 +15,8 @@ editarla y exportarla lista para el juego o el emulador.
 8. [Saves dañados y reparar checksums](reparar-checksums.md).
 9. [Iconos](iconos.md): sprites bajo demanda y su caché.
 10. [Eventos](eventos.md): explorador del Regalo Misterioso, crear Pokémon de evento e importar/exportar tarjetas.
-11. [Preguntas frecuentes y solución de problemas](faq.md).
+11. [Living Dex](living-dex.md): llenar las cajas de una partida con un Pokémon legal de cada especie y forma.
+12. [Preguntas frecuentes y solución de problemas](faq.md).
 
 Consulta también [Formatos soportados](../formatos.md) y
 [Seguridad de datos y privacidad](../seguridad-datos.md).
