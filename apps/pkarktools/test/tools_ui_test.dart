@@ -19,6 +19,8 @@ import 'package:pkarktools/editing/draft.dart';
 import 'package:pkarktools/l10n/app_localizations.dart';
 import 'package:pkarktools/providers.dart';
 import 'package:pkarktools/theme/app_theme.dart';
+import 'package:pkarktools/data/update/app_update.dart' show MemoryUpdateStore;
+import 'package:pkarktools/data/update/champions_update.dart';
 import 'package:pkarktools/ui/tools/champions_screen.dart';
 import 'package:pkarktools/ui/tools/share_card.dart';
 import 'package:pkarktools/ui/tools/showdown_ui.dart';
@@ -228,10 +230,22 @@ void main() {
         origin: ImportOrigin.demo,
       ),
     );
-    await tester.pumpWidget(wrap(const ChampionsScreen()));
+    // Sin conexión: se usa la copia integrada.
+    final updater = ChampionsUpdater(
+      store: MemoryUpdateStore(),
+      fetch: (_) async => throw const SocketException('offline'),
+    );
+    await tester.pumpWidget(
+      wrap(const ChampionsScreen(), overrides: [championsUpdaterProvider.overrideWithValue(updater)]),
+    );
     await settle(tester);
     expect(find.textContaining(ChampionsFormat.formatName), findsWidgets);
     expect(find.byKey(const ValueKey('champions-dates-unconfirmed')), findsOneWidget);
+    expect(find.textContaining('Siguiente: aún sin anunciar'), findsOneWidget);
+    expect(find.textContaining('fuente: Showdown ${ChampionsFormat.sourceCommit.substring(0, 7)}'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('champions-check')));
+    await settle(tester);
+    expect(find.textContaining('No se pudo comprobar'), findsOneWidget);
     await tester.enterText(find.byKey(const ValueKey('champions-search')), 'garch');
     await tester.pump();
     expect(find.text('Garchomp'), findsOneWidget);

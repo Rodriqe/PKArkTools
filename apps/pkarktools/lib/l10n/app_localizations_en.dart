@@ -4125,11 +4125,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolsRules => 'Rules';
 
   @override
-  String toolsDataPokemonShowdownChampions(Object sourceDate, Object commit) {
-    return 'Data: Pokémon Showdown (“champions” mod), version of $sourceDate, commit $commit.';
-  }
-
-  @override
   String get toolsViewSource => 'View source';
 
   @override
@@ -4389,4 +4384,38 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aboutNotAffiliated =>
       'PKArkTools is not affiliated with Nintendo, The Pokémon Company or Game Freak. Pokémon and Pokémon character names are trademarks of their respective owners.';
+
+  @override
+  String toolsChampionsUpdatedOn(String commit, String date) {
+    return 'Updated on $date · source: Showdown $commit';
+  }
+
+  @override
+  String toolsChampionsEndsNext(String date, String next) {
+    return 'Ends on $date. Next: $next.';
+  }
+
+  @override
+  String toolsChampionsNextFrom(String date, String name) {
+    return '$name (from $date)';
+  }
+
+  @override
+  String get toolsChampionsNextNotAnnounced => 'not announced yet';
+
+  @override
+  String get toolsChampionsUpToDate => 'The format data is up to date.';
+
+  @override
+  String toolsChampionsUpdated(String name) {
+    return 'Format data updated: $name.';
+  }
+
+  @override
+  String get toolsChampionsCheckFailed =>
+      'Could not check (offline?): using the saved data.';
+
+  @override
+  String get toolsChampionsFutureSchema =>
+      'There is newer format data that this version cannot read: update PKArkTools.';
 }

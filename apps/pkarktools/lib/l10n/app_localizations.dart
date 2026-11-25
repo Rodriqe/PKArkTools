@@ -6649,12 +6649,6 @@ abstract class AppLocalizations {
   /// **'Reglas'**
   String get toolsRules;
 
-  /// No description provided for @toolsDataPokemonShowdownChampions.
-  ///
-  /// In es, this message translates to:
-  /// **'Datos: Pokémon Showdown (mod «champions»), versión del {sourceDate}, commit {commit}.'**
-  String toolsDataPokemonShowdownChampions(Object sourceDate, Object commit);
-
   /// No description provided for @toolsViewSource.
   ///
   /// In es, this message translates to:
@@ -7076,6 +7070,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'PKArkTools no está afiliado a Nintendo, The Pokémon Company ni Game Freak. Pokémon y los nombres de sus personajes son marcas registradas de sus respectivos dueños.'**
   String get aboutNotAffiliated;
+
+  /// No description provided for @toolsChampionsUpdatedOn.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado el {date} · fuente: Showdown {commit}'**
+  String toolsChampionsUpdatedOn(String commit, String date);
+
+  /// No description provided for @toolsChampionsEndsNext.
+  ///
+  /// In es, this message translates to:
+  /// **'Termina el {date}. Siguiente: {next}.'**
+  String toolsChampionsEndsNext(String date, String next);
+
+  /// No description provided for @toolsChampionsNextFrom.
+  ///
+  /// In es, this message translates to:
+  /// **'{name} (desde el {date})'**
+  String toolsChampionsNextFrom(String date, String name);
+
+  /// No description provided for @toolsChampionsNextNotAnnounced.
+  ///
+  /// In es, this message translates to:
+  /// **'aún sin anunciar'**
+  String get toolsChampionsNextNotAnnounced;
+
+  /// No description provided for @toolsChampionsUpToDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Los datos del formato ya están al día.'**
+  String get toolsChampionsUpToDate;
+
+  /// No description provided for @toolsChampionsUpdated.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos del formato actualizados: {name}.'**
+  String toolsChampionsUpdated(String name);
+
+  /// No description provided for @toolsChampionsCheckFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo comprobar (¿sin conexión?): se usan los datos guardados.'**
+  String get toolsChampionsCheckFailed;
+
+  /// No description provided for @toolsChampionsFutureSchema.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay datos más nuevos del formato que esta versión no sabe leer: actualiza PKArkTools.'**
+  String get toolsChampionsFutureSchema;
 }
 
 class _AppLocalizationsDelegate

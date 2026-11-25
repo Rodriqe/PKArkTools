@@ -1091,7 +1091,6 @@
   "toolsSearchPokemon": "Search Pokémon",
   "toolsDatesNotConfirmedByAn": "Dates not confirmed by an official source ({datesSource}).",
   "toolsRules": "Rules",
-  "toolsDataPokemonShowdownChampions": "Data: Pokémon Showdown (“champions” mod), version of {sourceDate}, commit {commit}.",
   "toolsViewSource": "View source",
   "toolsAllowed": "Allowed ({allowedCount})",
   "toolsBannedRestrictedLegendariesAndMythicals": "Banned: restricted legendaries and mythicals ({bannedCount})",
@@ -1160,5 +1159,13 @@
   "clonesFound": "{count, plural, =1{1 Pokémon is repeated} other{{count} Pokémon are repeated}} (same HOME tracker).",
   "clonesRecheck": "Check again",
   "clonesTracker": "Tracker {tracker} · {count} copies",
-  "aboutNotAffiliated": "PKArkTools is not affiliated with Nintendo, The Pokémon Company or Game Freak. Pokémon and Pokémon character names are trademarks of their respective owners."
+  "aboutNotAffiliated": "PKArkTools is not affiliated with Nintendo, The Pokémon Company or Game Freak. Pokémon and Pokémon character names are trademarks of their respective owners.",
+  "toolsChampionsUpdatedOn": "Updated on {date} · source: Showdown {commit}",
+  "toolsChampionsEndsNext": "Ends on {date}. Next: {next}.",
+  "toolsChampionsNextFrom": "{name} (from {date})",
+  "toolsChampionsNextNotAnnounced": "not announced yet",
+  "toolsChampionsUpToDate": "The format data is up to date.",
+  "toolsChampionsUpdated": "Format data updated: {name}.",
+  "toolsChampionsCheckFailed": "Could not check (offline?): using the saved data.",
+  "toolsChampionsFutureSchema": "There is newer format data that this version cannot read: update PKArkTools."
 }

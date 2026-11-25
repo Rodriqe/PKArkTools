@@ -439,9 +439,8 @@ Bashful Nature
   group('ChampionsData (JSON)', () {
     Map<String, Object?> base() => jsonDecode(ChampionsData.builtinJson) as Map<String, Object?>;
     ChampionsData parse(Map<String, Object?> j) => ChampionsData.parse(jsonEncode(j));
-    Matcher invalid({int? future}) => throwsA(
-      isA<ChampionsDataException>().having((e) => e.futureSchema, 'futureSchema', future),
-    );
+    Matcher invalid({int? future}) =>
+        throwsA(isA<ChampionsDataException>().having((e) => e.futureSchema, 'futureSchema', future));
 
     test('la copia integrada es la misma que data/champions/champions.json', () {
       final file = File('../../data/champions/champions.json').readAsStringSync();

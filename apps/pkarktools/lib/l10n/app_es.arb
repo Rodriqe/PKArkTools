@@ -3010,17 +3010,6 @@
     }
   },
   "toolsRules": "Reglas",
-  "toolsDataPokemonShowdownChampions": "Datos: Pokémon Showdown (mod «champions»), versión del {sourceDate}, commit {commit}.",
-  "@toolsDataPokemonShowdownChampions": {
-    "placeholders": {
-      "sourceDate": {
-        "type": "Object"
-      },
-      "commit": {
-        "type": "Object"
-      }
-    }
-  },
   "toolsViewSource": "Ver la fuente",
   "toolsAllowed": "Permitidos ({allowedCount})",
   "@toolsAllowed": {
@@ -3212,5 +3201,50 @@
       }
     }
   },
-  "aboutNotAffiliated": "PKArkTools no está afiliado a Nintendo, The Pokémon Company ni Game Freak. Pokémon y los nombres de sus personajes son marcas registradas de sus respectivos dueños."
+  "aboutNotAffiliated": "PKArkTools no está afiliado a Nintendo, The Pokémon Company ni Game Freak. Pokémon y los nombres de sus personajes son marcas registradas de sus respectivos dueños.",
+  "toolsChampionsUpdatedOn": "Actualizado el {date} · fuente: Showdown {commit}",
+  "@toolsChampionsUpdatedOn": {
+    "placeholders": {
+      "commit": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "toolsChampionsEndsNext": "Termina el {date}. Siguiente: {next}.",
+  "@toolsChampionsEndsNext": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "next": {
+        "type": "String"
+      }
+    }
+  },
+  "toolsChampionsNextFrom": "{name} (desde el {date})",
+  "@toolsChampionsNextFrom": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "toolsChampionsNextNotAnnounced": "aún sin anunciar",
+  "toolsChampionsUpToDate": "Los datos del formato ya están al día.",
+  "toolsChampionsUpdated": "Datos del formato actualizados: {name}.",
+  "@toolsChampionsUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "toolsChampionsCheckFailed": "No se pudo comprobar (¿sin conexión?): se usan los datos guardados.",
+  "toolsChampionsFutureSchema": "Hay datos más nuevos del formato que esta versión no sabe leer: actualiza PKArkTools."
 }

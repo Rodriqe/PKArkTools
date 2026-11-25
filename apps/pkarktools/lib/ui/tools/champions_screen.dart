@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pkcore/pkcore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../data/update/champions_update.dart';
 import '../../providers.dart';
 import '../../theme/app_theme.dart';
 import '../common/format.dart';
@@ -32,6 +33,8 @@ final championsCandidatesProvider = FutureProvider.autoDispose.family<List<Champ
   ref,
   lang,
 ) async {
+  // Se vuelve a revisar si llegan datos nuevos del formato.
+  await ref.watch(championsDataProvider.future);
   final repo = ref.watch(arcaRepositoryProvider);
   final entries = await ref.watch(arcaEntriesProvider.future);
   final out = <ChampionsCandidate>[];
@@ -82,6 +85,7 @@ class ChampionsScreen extends ConsumerStatefulWidget {
 class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
   String _query = '';
   bool _onlyEligible = false;
+  bool _checking = false;
 
   /// Un solo controlador para el buscador de las dos pestañas.
   final _searchCtl = TextEditingController();
@@ -133,8 +137,26 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
     onChanged: (v) => setState(() => _query = v),
   );
 
+  Future<void> _checkNow() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
+    setState(() => _checking = true);
+    final r = await ref.read(championsDataProvider.notifier).checkNow();
+    if (!mounted) return;
+    setState(() => _checking = false);
+    final text = switch (r) {
+      ChampionsCheck.updated => l10n.toolsChampionsUpdated(ChampionsFormat.formatName),
+      ChampionsCheck.upToDate => l10n.toolsChampionsUpToDate,
+      ChampionsCheck.failed => l10n.toolsChampionsCheckFailed,
+      ChampionsCheck.none => null,
+    };
+    if (text != null) messenger.showSnackBar(SnackBar(content: Text(text)));
+  }
+
   Widget _regulationTab(BuildContext context, bool es) {
+    final status = ref.watch(championsDataProvider).value;
     final reg = ChampionsFormat.regulation;
+    final next = ChampionsFormat.nextRegulation;
     final allowed = [
       for (final (s, f) in ChampionsFormat.allowed)
         if (_matches(s, f)) (s, f),
@@ -143,7 +165,8 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
       for (final s in {...ChampionsFormat.restrictedSpecies, ...ChampionsFormat.mythicalSpecies}.toList()..sort())
         if (_matches(s, 0)) s,
     ];
-    String date(DateTime d) => formatDate(context, d);
+    String date(DateTime? d) => d == null ? '?' : formatDate(context, d);
+    final data = status?.data ?? ChampionsFormat.data;
     final muted = context.text.bodySmall!.copyWith(color: context.tokens.muted);
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
@@ -154,6 +177,19 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
           '${context.l10n.toolsRegulation} ${reg.code}: ${date(reg.from)} – ${date(reg.until)}',
           style: context.text.titleSmall,
         ),
+        if (reg.until != null)
+          Text(
+            context.l10n.toolsChampionsEndsNext(
+              date(reg.until),
+              next == null
+                  ? context.l10n.toolsChampionsNextNotAnnounced
+                  : next.from == null
+                  ? next.name
+                  : context.l10n.toolsChampionsNextFrom(date(next.from), next.name),
+            ),
+            key: const ValueKey('champions-next'),
+            style: context.text.bodyMedium,
+          ),
         if (!reg.datesConfirmed)
           Padding(
             padding: const EdgeInsets.only(top: 4),
@@ -187,16 +223,37 @@ class _ChampionsScreenState extends ConsumerState<ChampionsScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          context.l10n.toolsDataPokemonShowdownChampions(
-            ChampionsFormat.sourceDate,
+          context.l10n.toolsChampionsUpdatedOn(
             ChampionsFormat.sourceCommit.substring(0, 7),
+            date(data.generatedAt.toLocal()),
           ),
+          key: const ValueKey('champions-updated'),
           style: muted,
         ),
-        TextButton.icon(
-          onPressed: () => launchUrl(Uri.parse(ChampionsFormat.sourceUrl)),
-          icon: const Icon(Icons.open_in_new_rounded, size: 16),
-          label: Text(context.l10n.toolsViewSource),
+        if (status?.futureSchema != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              context.l10n.toolsChampionsFutureSchema,
+              key: const ValueKey('champions-future-schema'),
+              style: context.text.bodySmall!.copyWith(color: context.colors.error),
+            ),
+          ),
+        Wrap(
+          spacing: 4,
+          children: [
+            TextButton.icon(
+              key: const ValueKey('champions-check'),
+              onPressed: _checking || status == null ? null : _checkNow,
+              icon: const Icon(Icons.refresh_rounded, size: 16),
+              label: Text(context.l10n.updateCheck),
+            ),
+            TextButton.icon(
+              onPressed: () => launchUrl(Uri.parse(ChampionsFormat.sourceUrl)),
+              icon: const Icon(Icons.open_in_new_rounded, size: 16),
+              label: Text(context.l10n.toolsViewSource),
+            ),
+          ],
         ),
         const SizedBox(height: 12),
         _search(context),
