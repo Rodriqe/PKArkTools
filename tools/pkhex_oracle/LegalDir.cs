@@ -10,6 +10,8 @@ static class LegalDir
 {
     static EntityContext ContextOf(string ext) => ext switch
     {
+        ".pk1" => EntityContext.Gen1,
+        ".pk2" => EntityContext.Gen2,
         ".pk3" => EntityContext.Gen3,
         ".pk4" => EntityContext.Gen4,
         ".pk5" => EntityContext.Gen5,
