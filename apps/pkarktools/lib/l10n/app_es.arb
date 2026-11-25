@@ -2713,5 +2713,26 @@
   "livingDexUnsupported": "La Living Dex no está disponible en este juego.",
   "livingDexReadOnly": "Esta partida está dañada y se abrió en solo lectura.",
   "dexEventOnlyEnded": "Solo por evento · distribución terminada",
-  "dexEventOnlyEndedDesc": "Esta especie solo se obtuvo en eventos o repartos oficiales que ya terminaron; su origen es el evento."
+  "dexEventOnlyEndedDesc": "Esta especie solo se obtuvo en eventos o repartos oficiales que ya terminaron; su origen es el evento.",
+  "giftTrayTitle": "¿Cómo quieres recibir la tarjeta?",
+  "giftTrayInGame": "En la bandeja del juego",
+  "giftTrayInGameDesc": "Queda como tarjeta recibida y la recoges en el juego con el repartidor, como en la distribución original",
+  "giftTrayInSlot": "Crear el Pokémon en este hueco",
+  "giftTrayInSlotDesc": "Con los datos que el juego aplica al recibirlo",
+  "giftTrayDone": "Tarjeta «{title}» en la bandeja del juego: recógela con el repartidor.",
+  "@giftTrayDone": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "editGiftCard": "Tarjeta de Regalo Misterioso: {title}",
+  "@editGiftCard": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  }
 }

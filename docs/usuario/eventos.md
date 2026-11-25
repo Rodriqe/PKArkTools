@@ -39,3 +39,25 @@ legales y dos huevos japoneses de Gen 3 cuyo PID variocolor depende de tu ID.
 Al validar, PKArkTools reconoce los Pokémon que vienen de un evento (por su OT,
 ID, Ball, lugar y nivel fijos): sus movimientos especiales, objeto y Ball no
 generan avisos. Ver [Legalidad y avisos](legalidad.md).
+
+## Recibir una tarjeta en la bandeja del juego
+
+En X/Y, Rubí Omega/Zafiro Alfa, Sol/Luna y Ultrasol/Ultraluna, al **importar
+una tarjeta** (.wc6/.wc6full, .wc7/.wc7full) la app pregunta cómo recibirla:
+
+- **En la bandeja del juego**: queda como tarjeta recibida (sin recoger) y la
+  recoges en el juego con el repartidor del Centro Pokémon, como en la
+  distribución original. Si ya está o la bandeja está llena, se avisa.
+- **Crear el Pokémon en este hueco**: como antes.
+
+En Gen 4 y Gen 5 las tarjetas se guardan cifradas con el resto del bloque y en
+Let's Go y la Switch el juego no guarda tarjetas pendientes (el regalo se
+recibe al momento): ahí la tarjeta se recibe creando el Pokémon en un hueco.
+
+## Distribución terminada
+
+En la Dex, los legendarios y míticos que ningún juego da sin un evento (Mew,
+Celebi, Jirachi, Deoxys, Manaphy, Shaymin, Arceus, Magearna, Zarude…)
+muestran «Solo por evento · distribución terminada». En Ribbon Hunter, las
+cintas de evento cuentan como cintas de origen y aparecen en «No disponibles
+hoy».

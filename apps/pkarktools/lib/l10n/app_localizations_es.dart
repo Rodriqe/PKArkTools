@@ -3728,4 +3728,31 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get dexEventOnlyEndedDesc =>
       'Esta especie solo se obtuvo en eventos o repartos oficiales que ya terminaron; su origen es el evento.';
+
+  @override
+  String get giftTrayTitle => '¿Cómo quieres recibir la tarjeta?';
+
+  @override
+  String get giftTrayInGame => 'En la bandeja del juego';
+
+  @override
+  String get giftTrayInGameDesc =>
+      'Queda como tarjeta recibida y la recoges en el juego con el repartidor, como en la distribución original';
+
+  @override
+  String get giftTrayInSlot => 'Crear el Pokémon en este hueco';
+
+  @override
+  String get giftTrayInSlotDesc =>
+      'Con los datos que el juego aplica al recibirlo';
+
+  @override
+  String giftTrayDone(String title) {
+    return 'Tarjeta «$title» en la bandeja del juego: recógela con el repartidor.';
+  }
+
+  @override
+  String editGiftCard(String title) {
+    return 'Tarjeta de Regalo Misterioso: $title';
+  }
 }

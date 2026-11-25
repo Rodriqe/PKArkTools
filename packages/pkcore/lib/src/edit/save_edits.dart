@@ -4,11 +4,12 @@ import '../data/species.dart';
 import '../model/save.dart';
 import '../pkm/pkm.dart';
 import '../write/save_writer.dart';
+import '../events/gift_tray.dart';
 import 'pokedex.dart';
 import 'save_editor.dart';
 
 /// Tipo de edición (para que la interfaz genere descripciones localizadas).
-enum SaveEditKind { setSlot, clearSlot, swapSlots, trainer, inventory, boxName, pokedex, events, fillBoxes }
+enum SaveEditKind { setSlot, clearSlot, swapSlots, trainer, inventory, boxName, pokedex, events, fillBoxes, giftCard }
 
 /// Edición aplicable sobre un [SaveEditor]. Inmutable: guarda copias de los datos.
 sealed class SaveEditOp implements SaveEdit {
@@ -64,6 +65,28 @@ class FillBoxesEdit extends SaveEditOp {
 
   @override
   String get description => '${label ?? 'Cajas sustituidas'}: ${pokemon.length} Pokémon';
+}
+
+/// Deja una tarjeta de Regalo Misterioso en la bandeja del juego (Gen 6–7), en el
+/// primer hueco libre, para recogerla en el juego como si se hubiera recibido.
+class ReceiveGiftCardEdit extends SaveEditOp {
+  ReceiveGiftCardEdit(Uint8List card, {this.title = ''}) : card = Uint8List.fromList(card);
+
+  final Uint8List card;
+  final String title;
+
+  @override
+  SaveEditKind get kind => SaveEditKind.giftCard;
+
+  @override
+  void applyTo(SaveEditor editor) {
+    final tray = GiftTray.of(editor);
+    if (tray == null) throw const SaveEditException('Este juego no guarda tarjetas de Regalo Misterioso.');
+    tray.receive(card);
+  }
+
+  @override
+  String get description => 'Tarjeta de Regalo Misterioso: $title';
 }
 
 /// Vacía un hueco (en el equipo, compacta).

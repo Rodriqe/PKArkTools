@@ -251,7 +251,41 @@ class CtrEditor extends SaveEditor {
         _ => Gen7Pokedex(_d, 0x2C00, game),
       };
 
-  /// PKHeX `EventWork6` (bloque 19) y `EventWork7SM/USUM` (bloque 5): constantes u16 y después flags.
+  // ---------------------------------------------------------- Regalo Misterioso
+
+  /// Bandeja de tarjetas del Regalo Misterioso (PKHeX `MysteryBlock6/7`, bloque 41 en
+  /// Gen 6 y 27 en Gen 7): 0x100 bytes de flags de recibido y después las tarjetas
+  /// WC6/WC7 de 0x108 bytes que el juego guarda para recogerlas con el repartidor.
+  int get _giftBlock => switch (game) {
+        GameVersion.xy => 0x1BC00,
+        GameVersion.omegaRubyAlphaSapphire => 0x1CC00,
+        GameVersion.sunMoon => 0x65C00,
+        _ => 0x66200,
+      };
+
+  static const int giftCardSize = 0x108;
+
+  /// Tarjetas que caben en la bandeja: 24 en X/Y y ROZA, 48 en Sol/Luna y USUL.
+  int get giftTrayCapacity => _gen7 ? 48 : 24;
+
+  int _giftOfs(int i) => _giftBlock + 0x100 + i * giftCardSize;
+
+  /// Tarjeta del hueco [i] de la bandeja (null si está vacío).
+  Uint8List? giftCard(int i) {
+    final o = _giftOfs(i);
+    final c = Uint8List.sublistView(_d, o, o + giftCardSize);
+    return c.every((b) => b == 0) ? null : Uint8List.fromList(c);
+  }
+
+  /// Pone [card] (WC6/WC7 de 0x108 bytes) en el hueco [i] de la bandeja.
+  void setGiftCard(int i, Uint8List card) {
+    checkWritable();
+    if (card.length != giftCardSize) throw const SaveEditException('Tarjeta de tamaño incorrecto.');
+    if (i < 0 || i >= giftTrayCapacity) throw const SaveEditException('Hueco de la bandeja fuera de rango.');
+    _d.setRange(_giftOfs(i), _giftOfs(i) + giftCardSize, card);
+  }
+
+
   @override
   EventStore get events => switch (game) {
         GameVersion.xy || GameVersion.omegaRubyAlphaSapphire => BitEventStore(_d,

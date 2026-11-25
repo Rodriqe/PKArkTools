@@ -982,5 +982,12 @@
   "livingDexUnsupported": "The Living Dex is not available for this game.",
   "livingDexReadOnly": "This save is damaged and was opened read-only.",
   "dexEventOnlyEnded": "Event only · distribution ended",
-  "dexEventOnlyEndedDesc": "This species was only obtainable from official events or distributions that have ended; its origin is the event."
+  "dexEventOnlyEndedDesc": "This species was only obtainable from official events or distributions that have ended; its origin is the event.",
+  "giftTrayTitle": "How do you want to receive the card?",
+  "giftTrayInGame": "In the game's Mystery Gift tray",
+  "giftTrayInGameDesc": "It stays as a received card and you pick it up in the game from the delivery person, as in the original distribution",
+  "giftTrayInSlot": "Create the Pokémon in this slot",
+  "giftTrayInSlotDesc": "With the data the game applies when receiving it",
+  "giftTrayDone": "Card “{title}” is in the game's tray: pick it up from the delivery person.",
+  "editGiftCard": "Mystery Gift card: {title}"
 }

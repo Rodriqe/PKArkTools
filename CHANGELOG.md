@@ -43,6 +43,16 @@ developer documentation in `docs/` is in Spanish.
   - **Import event cards** (.pgt, .pcd/.wc4, .pgf, .wc6/.wc6full,
     .wc7/.wc7full, .wb7, .wc8, .wb8, .wa8, .wc9, .wa9) and receive them in a
     slot.
+  - **Receive cards in the game's Mystery Gift tray** (X/Y, Omega Ruby/Alpha
+    Sapphire, Sun/Moon, Ultra Sun/Ultra Moon): importing a WC6/WC7 card now
+    offers to leave it as a received card to pick up in the game from the
+    delivery person, like the original distribution (checked with PKHeX's
+    oracle, command `gifts`). Gen 4/5 store cards encrypted with the rest of
+    the block and Let's Go/Switch games keep no pending cards, so there the
+    card is still received by creating the Pokémon in a slot.
+  - **Dex and Ribbon Hunter**: legendaries/mythicals that no game gives
+    without an event are marked “Event only · distribution ended”; event
+    ribbons count as origin ribbons and are listed as not obtainable today.
   - **Legality** now recognizes Pokémon that come from an event (fixed OT/ID,
     Ball, place and level): their special moves, item and Ball no longer raise
     notices and the encounter tables are not applied.

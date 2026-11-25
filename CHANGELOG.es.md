@@ -45,6 +45,16 @@ que es el que usan las notas de los Releases; se actualizan a la par.
     inválidos de 5830.
   - **Importar tarjetas de evento** (.pgt, .pcd/.wc4, .pgf, .wc6/.wc6full,
     .wc7/.wc7full, .wb7, .wc8, .wb8, .wa8, .wc9, .wa9) y recibirlas en un hueco.
+  - **Recibir tarjetas en la bandeja del Regalo Misterioso del juego** (X/Y,
+    Rubí Omega/Zafiro Alfa, Sol/Luna, Ultrasol/Ultraluna): al importar una
+    tarjeta WC6/WC7 se ofrece dejarla como tarjeta recibida para recogerla en
+    el juego con el repartidor, como en la distribución original (comprobado
+    con el oráculo PKHeX, comando `gifts`). Gen 4/5 guardan las tarjetas
+    cifradas con el resto del bloque y Let's Go/Switch no guardan tarjetas
+    pendientes: ahí se sigue recibiendo creando el Pokémon en un hueco.
+  - **Dex y Ribbon Hunter**: los legendarios/míticos que ningún juego da sin
+    un evento se marcan «Solo por evento · distribución terminada»; las
+    cintas de evento cuentan como de origen y figuran como no obtenibles hoy.
   - **Legalidad**: reconoce los Pokémon que vienen de un evento (OT/ID, Ball,
     lugar y nivel fijos): sus movimientos especiales, objeto y Ball ya no dan
     avisos y no se aplican las tablas de encuentros.

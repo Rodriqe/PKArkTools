@@ -3698,4 +3698,31 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dexEventOnlyEndedDesc =>
       'This species was only obtainable from official events or distributions that have ended; its origin is the event.';
+
+  @override
+  String get giftTrayTitle => 'How do you want to receive the card?';
+
+  @override
+  String get giftTrayInGame => 'In the game\'s Mystery Gift tray';
+
+  @override
+  String get giftTrayInGameDesc =>
+      'It stays as a received card and you pick it up in the game from the delivery person, as in the original distribution';
+
+  @override
+  String get giftTrayInSlot => 'Create the Pokémon in this slot';
+
+  @override
+  String get giftTrayInSlotDesc =>
+      'With the data the game applies when receiving it';
+
+  @override
+  String giftTrayDone(String title) {
+    return 'Card “$title” is in the game\'s tray: pick it up from the delivery person.';
+  }
+
+  @override
+  String editGiftCard(String title) {
+    return 'Mystery Gift card: $title';
+  }
 }

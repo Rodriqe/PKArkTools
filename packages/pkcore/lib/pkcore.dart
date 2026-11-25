@@ -61,3 +61,4 @@ export 'src/events/event_factory.dart';
 export 'src/events/event_match.dart';
 export 'src/events/event_card.dart';
 export 'src/events/event_details.dart';
+export 'src/events/gift_tray.dart';

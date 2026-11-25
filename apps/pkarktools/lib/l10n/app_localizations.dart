@@ -6000,6 +6000,48 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Esta especie solo se obtuvo en eventos o repartos oficiales que ya terminaron; su origen es el evento.'**
   String get dexEventOnlyEndedDesc;
+
+  /// No description provided for @giftTrayTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo quieres recibir la tarjeta?'**
+  String get giftTrayTitle;
+
+  /// No description provided for @giftTrayInGame.
+  ///
+  /// In es, this message translates to:
+  /// **'En la bandeja del juego'**
+  String get giftTrayInGame;
+
+  /// No description provided for @giftTrayInGameDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Queda como tarjeta recibida y la recoges en el juego con el repartidor, como en la distribución original'**
+  String get giftTrayInGameDesc;
+
+  /// No description provided for @giftTrayInSlot.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear el Pokémon en este hueco'**
+  String get giftTrayInSlot;
+
+  /// No description provided for @giftTrayInSlotDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Con los datos que el juego aplica al recibirlo'**
+  String get giftTrayInSlotDesc;
+
+  /// No description provided for @giftTrayDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta «{title}» en la bandeja del juego: recógela con el repartidor.'**
+  String giftTrayDone(String title);
+
+  /// No description provided for @editGiftCard.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta de Regalo Misterioso: {title}'**
+  String editGiftCard(String title);
 }
 
 class _AppLocalizationsDelegate

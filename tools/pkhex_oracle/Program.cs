@@ -10,6 +10,7 @@
 //   shadows <outdir>              encuentros oscuros de Colosseum/XD con semillas PID/IV válidas (ShadowTable.cs)
 //   legal <dir> [out.jsonl]       legalidad de cada .pk3 … .pa9 de la carpeta (LegalDir.cs)
 //   events <outdir> [db]          base de eventos (Mystery Gift) con plantillas legales (EventTable.cs)
+//   gifts <save>                  tarjetas de la bandeja del Regalo Misterioso (una línea JSON por tarjeta)
 //   livingdex <outdir> [versión]  Living Dex: un Pokémon legal por versión/especie/forma (LivingDexTable.cs)
 //
 // Los volcados de saves reales contienen datos personales: guárdalos en .scratch/.
@@ -60,6 +61,19 @@ static class Program
                 for (var i = 0; i < Math.Min(output.Length, data.Length); i++)
                     if (output[i] != data[i]) diff++;
                 Console.WriteLine($"PKHeX round-trip: {output.Length} vs {data.Length} bytes, distintos={diff}");
+                return 0;
+            case "gifts":
+                Console.WriteLine($"checksums={sav.ChecksumsValid}");
+                if (sav is IMysteryGiftStorageProvider mp)
+                {
+                    var st = mp.MysteryGiftStorage;
+                    for (var i = 0; i < st.GiftCountMax; i++)
+                    {
+                        var g = st.GetMysteryGift(i);
+                        if (g.IsEmpty) continue;
+                        Console.WriteLine(new JsonObject { ["slot"] = i, ["card"] = g.CardID, ["title"] = g.CardTitle, ["species"] = g.Species, ["entity"] = g.IsEntity, ["used"] = g.GiftUsed }.ToJsonString());
+                    }
+                }
                 return 0;
             case "write":
                 File.WriteAllBytes(args[2], sav.Write().ToArray());

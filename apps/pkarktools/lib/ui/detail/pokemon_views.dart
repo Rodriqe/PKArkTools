@@ -207,6 +207,41 @@ class StorageActions {
       messenger.showSnackBar(SnackBar(content: Text(l10n.eventCardWrongGame(games.isEmpty ? 'Gen ${gift.generation}' : games))));
       return;
     }
+    // X/Y, ROZA, Sol/Luna y USUL guardan las tarjetas recibidas: se ofrece dejarla en la bandeja.
+    if (GiftTray.of(_editor) != null && GiftTray.accepts(gift, game)) {
+      final inTray = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => SimpleDialog(
+          title: Text(l10n.giftTrayTitle),
+          children: [
+            ListTile(
+              key: const Key('giftTrayInGame'),
+              leading: const Icon(Icons.card_giftcard_rounded),
+              title: Text(l10n.giftTrayInGame),
+              subtitle: Text(l10n.giftTrayInGameDesc),
+              onTap: () => Navigator.pop(ctx, true),
+            ),
+            ListTile(
+              key: const Key('giftTrayInSlot'),
+              leading: const Icon(Icons.catching_pokemon_rounded),
+              title: Text(l10n.giftTrayInSlot),
+              subtitle: Text(l10n.giftTrayInSlotDesc),
+              onTap: () => Navigator.pop(ctx, false),
+            ),
+          ],
+        ),
+      );
+      if (inTray == null || !context.mounted) return;
+      if (inTray) {
+        try {
+          _draft.apply(ReceiveGiftCardEdit(gift.rawCard!, title: gift.title));
+          messenger.showSnackBar(SnackBar(content: Text(l10n.giftTrayDone(gift.title))));
+        } on SaveEditException catch (e) {
+          messenger.showSnackBar(SnackBar(content: Text(e.message)));
+        }
+        return;
+      }
+    }
     final lang = guessSaveLanguage(_editor, fallback: context.isSpanish ? 7 : 2);
     await _createEvent(slot, gift, language: EventFactory.languageFor(gift, lang));
   }
