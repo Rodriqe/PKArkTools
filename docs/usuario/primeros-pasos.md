@@ -215,7 +215,9 @@ Sin red, la búsqueda automática no muestra nada.
 - **macOS, Windows y Linux**: **Descargar** baja el archivo del release y te
   deja elegir dónde guardarlo (empieza en Descargas). Luego:
   - macOS: cierra PKArkTools, descomprime el zip y arrastra `PKArkTools.app` a
-    Aplicaciones sustituyendo la anterior.
+    Aplicaciones sustituyendo la anterior. La app está firmada y notarizada
+    por Apple: se abre con doble clic. Desde la web del release también
+    puedes bajar el `.dmg` y arrastrar la app a Aplicaciones.
   - Windows: cierra PKArkTools y ejecuta el instalador (`…-setup.exe`).
   - Linux: descomprime el `tar.gz` y sustituye la carpeta anterior.
 
