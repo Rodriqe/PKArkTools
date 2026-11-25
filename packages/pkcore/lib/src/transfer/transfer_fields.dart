@@ -253,9 +253,12 @@ extension G6FieldAccess on Pkm {
 
   /// Fija el apodo tal cual (sin tocar la marca de apodado).
   void setNicknameRaw(String v) {
-    final len = (format == PkFormat.pk6 || format == PkFormat.pk7 || format == PkFormat.pb7) ? 24 : 26;
+    final g67 = format == PkFormat.pk6 || format == PkFormat.pk7 || format == PkFormat.pb7;
+    final len = g67 ? 24 : 26;
     data.setRange(_nickOfsG6, _nickOfsG6 + len, Uint8List(len));
-    data.setRange(_nickOfsG6, _nickOfsG6 + len, StringCodec.encodeUtf16(v.characters(12), len));
+    // ♂/♀ van en la fuente privada solo hasta Gen 7; en Switch, Unicode normal
+    // (si no, PKHeX da NickMatchLanguageFail a Nidoran).
+    data.setRange(_nickOfsG6, _nickOfsG6 + len, StringCodec.encodeUtf16(v.characters(12), len, remapGender: g67));
   }
 }
 

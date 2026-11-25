@@ -455,7 +455,11 @@ abstract final class Legality {
         continue;
       }
       if (!MoveData.existsIn(m, ctx)) {
-        issues.add(LegalityIssue(LegalityCode.moveNotInGame, LegalitySeverity.warning,
+        // Traído de otro juego (HOME no borra los movimientos que el destino no
+        // tiene; PKHeX lo acepta): solo un aviso informativo.
+        final transferred = pk.format != OriginPlace.nativeFormat(pk.version);
+        issues.add(LegalityIssue(LegalityCode.moveNotInGame,
+            transferred ? LegalitySeverity.notice : LegalitySeverity.warning,
             field: 'move${i + 1}', args: {'move': name}));
         continue;
       }

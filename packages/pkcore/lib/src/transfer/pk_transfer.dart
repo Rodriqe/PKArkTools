@@ -420,7 +420,8 @@ abstract final class PkTransfer {
     if (species == 493) {
       d.form = 0;
       d.heldItem = 0;
-    } else if (!kHeldItemsBW.contains(s.heldItem)) {
+    } else if (!kHeldItemsBW.contains(s.heldItem) || (s.heldItem >= 260 && s.heldItem <= 264)) {
+      // Pañuelos de concurso: no salieron en Gen 5 (PKHeX ItemUnreleased).
       d.heldItem = 0;
     }
     d.data[0x41] = s.pid % 25; // naturaleza separada del PID
