@@ -185,9 +185,20 @@ class GcSaveData {
 
   /// Escribe el estado oscuro de un XK3 en la tabla (solo lo que cambió, como PKHeX
   /// `SAV3XD.SetPKM`: purificación, PID e IV; y el bit «purificado» si se editó).
-  void writeXdShadow(int id, {required int purification, required bool purified, required int pid, required List<int> ivsGc}) {
+  ///
+  /// Con [speciesRaw] (Pokémon oscuro creado o importado) la entrada queda como
+  /// la deja el juego al capturarlo: especie si estaba vacía, bit «capturado» e
+  /// índice.
+  void writeXdShadow(int id,
+      {required int purification, required bool purified, required int pid, required List<int> ivsGc, int? speciesRaw}) {
     if (isColosseum || id <= 0 || id >= shadowEntryCount) return;
     final o = shadowEntry(id);
+    if (speciesRaw != null) {
+      if (slot.u16be(o + 0x1A) == 0) slot.setU16be(o + 0x1A, speciesRaw);
+      if (slot[o] >> 6 == 0) slot[o] |= 0x40;
+      final idx = o + (xdJapanese ? 0x35 : 0x3F);
+      if (slot[idx] == 0 && id < 256) slot[idx] = id;
+    }
     if (slot.u32be(o + 0x24) != (purification & 0xFFFFFFFF)) {
       final v = purification & 0xFFFFFFFF;
       slot[o + 0x24] = v >> 24;

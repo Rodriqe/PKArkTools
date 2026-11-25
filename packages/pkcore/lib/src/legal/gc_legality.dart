@@ -4,6 +4,7 @@ import '../model/game.dart';
 import '../pkm/gc_pkm.dart';
 import '../pkm/pkm.dart';
 import 'encounters.dart';
+import 'gc_shadow.dart';
 import 'legality.dart';
 import 'ribbons.dart';
 
@@ -57,9 +58,26 @@ abstract final class GcLegality {
     // Id oscuro: debe corresponder a la especie (o su preevolución) en ese juego.
     final enc = GcEncounter.matching(pk);
     if (gc != null && gc.shadowId != 0) {
-      final byId = GcEncounter.byShadowId(gc.shadowId, xd: gc.kind == GcKind.xk3);
+      final xd = gc.kind == GcKind.xk3;
+      final gameName = xd ? 'Pokémon XD' : 'Pokémon Colosseum';
+      final byId = GcEncounter.byShadowId(gc.shadowId, xd: xd);
       final chain = EncounterTables.evolutionChain(pk.species);
-      if (byId.isNotEmpty && !byId.any((e) => chain.contains(e.species))) {
+      final everShadow = GcEncounter.all.any((e) => e.isShadow && e.xd == xd && chain.contains(e.species));
+      if (byId.isEmpty) {
+        out.add(LegalityIssue(LegalityCode.shadowIdUnknown, LegalitySeverity.warning,
+            field: 'shadow', args: {'id': gc.shadowId, 'game': gameName}));
+      } else if (!everShadow) {
+        out.add(LegalityIssue(LegalityCode.shadowSpeciesNotShadow, LegalitySeverity.warning,
+            field: 'shadow', args: {'species': speciesName, 'game': gameName}));
+      }
+      // PID/IV del RNG de GameCube (PKHeX `MethodCXD`); los bloqueos de equipo no se comprueban.
+      if (!GcShadowRoll.isCxd(pk.pid, pk.ivs)) {
+        out.add(const LegalityIssue(LegalityCode.shadowPidIvMismatch, LegalitySeverity.notice, field: 'pid'));
+      }
+      if (xd && pk.isShiny) {
+        out.add(const LegalityIssue(LegalityCode.xdShadowShiny, LegalitySeverity.warning, field: 'pid'));
+      }
+      if (byId.isNotEmpty && everShadow && !byId.any((e) => chain.contains(e.species))) {
         out.add(LegalityIssue(LegalityCode.shadowIdMismatch, LegalitySeverity.warning, field: 'shadow', args: {
           'species': speciesName,
           'id': gc.shadowId,

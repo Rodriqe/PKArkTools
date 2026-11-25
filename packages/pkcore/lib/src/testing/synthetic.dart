@@ -24,6 +24,7 @@ import '../data/species.dart';
 import '../data/species_convert.dart';
 import '../formats/ctr_saves.dart';
 import '../legal/encounters.dart';
+import '../legal/gc_shadow.dart';
 import '../legal/origin.dart';
 import '../legal/ribbons.dart';
 import '../formats/nds_saves.dart';
@@ -1103,6 +1104,19 @@ abstract final class SyntheticSaves {
       pk.setMove(i, i < moves.length ? moves.reversed.toList()[i] : 0, context: '3');
     }
     pk.setIvs([for (var i = 0; i < 6; i++) (salt * 7 + i * 5) % 32]);
+    // Oscuros: PID/IV de una semilla del juego (con los bloqueos del entrenador).
+    if (m.shadow != 0 && enc != null && enc.$2 == 0) {
+      final seeds = GcShadowEncounter.byShadowId(colo ? GameVersion.colosseum : GameVersion.xd, enc.$7)
+          .expand((e) => e.seeds)
+          .toList();
+      for (var i = 0; i < seeds.length; i++) {
+        final r = GcShadowRoll.fromSeed(seeds[(salt + i) % seeds.length]);
+        if (!colo && r.shinyFor(t.tid, t.sid)) continue;
+        pk.pid = r.pid;
+        pk.setIvs(r.ivs);
+        break;
+      }
+    }
     if (m.shadow == 2) Ribbons.set(pk, 'RibbonNational', 1);
     if (!colo && enc != null) pk.fatefulEncounter = true; // XD: obediencia
     if (m.nickname != null) {

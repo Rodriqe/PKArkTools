@@ -102,13 +102,18 @@ class GcEditor extends SaveEditor {
     final bytes = GcPkm.write(pk, _s.kind, region: region);
     _s.slot.setRange(ofs, ofs + _s.monSize, bytes);
     final gc = pk.gc;
+    // Un Pokémon oscuro queda en el Strategy Memo (el juego lo anota al verlo en combate).
+    if (gc != null && gc.shadowId != 0) {
+      StrategyMemoDex(_s.slot, _s.memo, xd: !_colo).register(pk.species, tid: pk.tid, sid: pk.sid, pid: pk.pid);
+    }
     if (!_colo && gc != null && gc.kind == GcKind.xk3) {
       final iv = pk.data.u32le(0x48);
       _s.writeXdShadow(bytes.u16be(0xBA),
           purification: gc.xdPurification,
           purified: gc.xdPurified,
           pid: pk.pid,
-          ivsGc: [for (final s in const [0, 1, 2, 4, 5, 3]) (iv >> (5 * s)) & 0x1F]);
+          ivsGc: [for (final s in const [0, 1, 2, 4, 5, 3]) (iv >> (5 * s)) & 0x1F],
+          speciesRaw: bytes.u16be(0));
     }
   }
 
@@ -313,6 +318,22 @@ class StrategyMemoDex extends Pokedex {
     if (xd) return false;
     final i = _find(species);
     return i != null && (_flag0(i) || !_flag1(i));
+  }
+
+  /// Anota [species] como la anota el juego al verla (y, en Colosseum, al
+  /// capturarla) con el ID y PID del Pokémon, si aún no está.
+  void register(int species, {required int tid, required int sid, required int pid}) {
+    if (_find(species) != null) return;
+    final n = _count;
+    if (n >= _max) return;
+    final o = _at(n);
+    _d.fillRange(o, o + _entry, 0);
+    _d.setU16be(o, SpeciesConvert.gen3FromNational(species) & 0x1FF);
+    _d.setU16be(o + 4, sid & 0xFFFF);
+    _d.setU16be(o + 6, tid & 0xFFFF);
+    _d.setU16be(o + 8, (pid >> 16) & 0xFFFF);
+    _d.setU16be(o + 10, pid & 0xFFFF);
+    _d.setU16be(_ofs, n + 1);
   }
 
   void _setFlag1(int i, bool v) => _d[_at(i)] = (_d[_at(i)] & 0x7F) | (v ? 0x80 : 0);

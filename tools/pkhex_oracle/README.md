@@ -34,3 +34,10 @@ Comandos de la consola (`dotnet <bin>/PkhexOracle.dll …`):
   `packages/pkcore/lib/src/data/generated/form_names.dart` y la tabla
   versionada `packages/pkcore/test/data/form_oracle.csv.gz` del test
   `form_data_pkhex_test.dart` (no necesita PKHeX para ejecutarse).
+- `shadows <dir>`: encuentros oscuros de Colosseum y XD (`shadow_oracle.csv`:
+  id oscuro, especie, nivel, lugar, medidor, Ball fija, amistad base,
+  movimientos y semillas de origen del RNG de GameCube cuyo PID/IV pasa los
+  bloqueos del equipo del entrenador y `LegalityAnalysis`). La usa
+  `tool/gen_gc_shadow_data.sh`, que regenera
+  `packages/pkcore/lib/src/data/generated/gc_shadow_data.dart` (crear Pokémon
+  oscuros como los genera el juego).

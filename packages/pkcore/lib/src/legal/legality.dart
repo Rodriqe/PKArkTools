@@ -7,6 +7,7 @@ import '../pkm/pkm.dart';
 import 'balls.dart';
 import 'encounters.dart';
 import 'gc_legality.dart';
+import 'gc_shadow.dart';
 import 'origin.dart';
 import 'plus_moves.dart';
 import 'ribbons.dart';
@@ -65,6 +66,10 @@ enum LegalityCode {
   shadowGaugeInvalid,
   shadowNationalRibbon,
   xdFatefulMissing,
+  shadowIdUnknown,
+  shadowSpeciesNotShadow,
+  shadowPidIvMismatch,
+  xdShadowShiny,
 }
 
 /// Agrupación de avisos en la vista detallada.
@@ -121,8 +126,11 @@ class LegalityIssue {
         LegalityCode.encounterWrongLevel ||
         LegalityCode.shadowIdMismatch ||
         LegalityCode.shadowGaugeInvalid ||
+        LegalityCode.shadowIdUnknown ||
+        LegalityCode.shadowSpeciesNotShadow ||
         LegalityCode.shadowCannotLeave =>
           LegalityArea.encounter,
+        LegalityCode.shadowPidIvMismatch || LegalityCode.xdShadowShiny => LegalityArea.origin,
         LegalityCode.shadowNationalRibbon || LegalityCode.xdFatefulMissing => LegalityArea.origin,
         LegalityCode.moveNotInGame ||
         LegalityCode.moveNotLearnable ||
@@ -206,6 +214,18 @@ class LegalityIssue {
       LegalityCode.shadowIdMismatch => es
           ? 'El id de Pokémon oscuro ${a('id')} corresponde a ${a('expected')} en este juego, no a ${a('species')}. El juego usa ese id para el medidor de corazón y el registro de capturas.'
           : 'Shadow ID ${a('id')} belongs to ${a('expected')} in this game, not ${a('species')}. The game uses that ID for the heart gauge and the snag records.',
+      LegalityCode.shadowIdUnknown => es
+          ? '${a('game')} no tiene ningún Pokémon oscuro con el id ${a('id')}. El juego usa ese id para el medidor de corazón y el registro de capturas: elige uno de la lista de oscuros del juego.'
+          : '${a('game')} has no Shadow Pokémon with ID ${a('id')}. The game uses that ID for the heart gauge and the snag records: pick one from the game\'s Shadow list.',
+      LegalityCode.shadowSpeciesNotShadow => es
+          ? 'Ni ${a('species')} ni su preevolución son nunca un Pokémon oscuro en ${a('game')}, así que no puede tener un id oscuro de este juego.'
+          : 'Neither ${a('species')} nor its pre-evolution is ever a Shadow Pokémon in ${a('game')}, so it cannot have a Shadow ID from this game.',
+      LegalityCode.shadowPidIvMismatch => es
+          ? 'El PID y los IV no salen del generador de números de Colosseum/XD (método CXD), como los de cualquier Pokémon oscuro del juego, y PKHeX lo marca. Crearlo con «Pokémon oscuro» los genera bien (respetando los bloqueos del equipo del entrenador).'
+          : 'The PID and IVs do not come from the Colosseum/XD number generator (CXD method), as for every Shadow Pokémon in the game, and PKHeX flags it. Creating it with “Shadow Pokémon” generates them properly (respecting the trainer\'s team locks).',
+      LegalityCode.xdShadowShiny => es
+          ? 'En XD los Pokémon oscuros nunca son variocolor para el jugador: el juego vuelve a generar el PID si lo fuera.'
+          : 'In XD Shadow Pokémon are never shiny for the player: the game re-rolls the PID if it would be.',
       LegalityCode.shadowGaugeInvalid => es
           ? 'El medidor de corazón (${a('value')}) está fuera del rango del juego (0–${a('max')}). No se corrige solo: purificar a la fuerza no es lo mismo que purificar en el juego.'
           : 'The heart gauge (${a('value')}) is outside the game range (0–${a('max')}). It is not fixed automatically: forcing purification is not the same as purifying in-game.',
@@ -325,6 +345,11 @@ class LegalityIssue {
         es ? '${a('species')} es un Pokémon oscuro sin purificar.' : '${a('species')} is an unpurified Shadow Pokémon.',
       LegalityCode.shadowIdMismatch => es ? 'Id de Pokémon oscuro de otra especie.' : 'Shadow ID of another species.',
       LegalityCode.shadowGaugeInvalid => es ? 'Medidor de corazón fuera de rango.' : 'Heart gauge out of range.',
+      LegalityCode.shadowIdUnknown => es ? 'Id oscuro inexistente en este juego.' : 'Shadow ID not in this game.',
+      LegalityCode.shadowSpeciesNotShadow =>
+        es ? '${a('species')} no es oscuro en ${a('game')}.' : '${a('species')} is not a Shadow Pokémon in ${a('game')}.',
+      LegalityCode.shadowPidIvMismatch => es ? 'PID/IV sin correlación CXD.' : 'PID/IV not CXD-correlated.',
+      LegalityCode.xdShadowShiny => es ? 'Oscuro variocolor en XD.' : 'Shiny Shadow Pokémon in XD.',
       LegalityCode.shadowNationalRibbon => es
           ? (args['required'] == true ? 'Falta la Cinta Nacional (purificado).' : 'Cinta Nacional imposible.')
           : (args['required'] == true ? 'Missing National Ribbon (purified).' : 'Impossible National Ribbon.'),
@@ -404,7 +429,14 @@ abstract final class Legality {
       issues.add(const LegalityIssue(LegalityCode.noMoves, LegalitySeverity.warning, field: 'move1', fix: LegalityFix.moves));
     }
     // Los eventos traen movimientos especiales que no están en los learnsets: no se avisa.
-    final learnable = pk.fatefulEncounter ? const <int>{} : learnableMoves(pk, game);
+    final learnable = pk.fatefulEncounter ? const <int>{} : {...learnableMoves(pk, game)};
+    // Colosseum/XD: los movimientos con los que se captura un Pokémon oscuro (Smeargle de Colosseum: esquemas).
+    if (learnable.isNotEmpty && pk.version == EncounterTables.cxd) {
+      final chain = EncounterTables.evolutionChain(pk.species);
+      for (final e in GcShadowEncounter.all) {
+        if (chain.contains(e.species) && e.location == pk.metLocation) learnable.addAll(e.moves);
+      }
+    }
     final seen = <int>{};
     for (var i = 0; i < 4; i++) {
       final m = moves[i];

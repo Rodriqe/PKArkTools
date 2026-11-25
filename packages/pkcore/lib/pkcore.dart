@@ -22,6 +22,7 @@ export 'src/dex/special_forms.dart';
 export 'src/legal/balls.dart';
 export 'src/legal/encounters.dart';
 export 'src/legal/gc_legality.dart';
+export 'src/legal/gc_shadow.dart';
 export 'src/legal/legality.dart';
 export 'src/legal/origin.dart';
 export 'src/legal/plus_moves.dart';
