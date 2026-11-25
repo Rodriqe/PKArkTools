@@ -5080,7 +5080,7 @@ abstract class AppLocalizations {
   /// No description provided for @rmUnavailableBody.
   ///
   /// In es, this message translates to:
-  /// **'Cintas de eventos y de servicios en línea cerrados. No suman al máximo.'**
+  /// **'Cintas de evento (vienen del origen; la distribución terminó) y de servicios en línea cerrados. No suman al máximo.'**
   String get rmUnavailableBody;
 
   /// No description provided for @rmClosedOnline.
@@ -5092,7 +5092,7 @@ abstract class AppLocalizations {
   /// No description provided for @rmEventOnly.
   ///
   /// In es, this message translates to:
-  /// **'Solo eventos'**
+  /// **'De origen en eventos (distribución terminada)'**
   String get rmEventOnly;
 
   /// No description provided for @rmOnline.
@@ -5248,7 +5248,7 @@ abstract class AppLocalizations {
   /// No description provided for @rmKindEvent.
   ///
   /// In es, this message translates to:
-  /// **'evento'**
+  /// **'evento (distribución terminada)'**
   String get rmKindEvent;
 
   /// No description provided for @rmNoGuide.
@@ -5278,7 +5278,7 @@ abstract class AppLocalizations {
   /// No description provided for @rmOriginEvent.
   ///
   /// In es, this message translates to:
-  /// **'Esta especie solo tiene origen en eventos o repartos.'**
+  /// **'Esta especie solo tiene origen en eventos o repartos, con la distribución terminada: las cintas de evento cuentan como de origen y no se pueden conseguir hoy.'**
   String get rmOriginEvent;
 
   /// No description provided for @rmStepCount.
@@ -5988,6 +5988,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Esta partida está dañada y se abrió en solo lectura.'**
   String get livingDexReadOnly;
+
+  /// No description provided for @dexEventOnlyEnded.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo por evento · distribución terminada'**
+  String get dexEventOnlyEnded;
+
+  /// No description provided for @dexEventOnlyEndedDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta especie solo se obtuvo en eventos o repartos oficiales que ya terminaron; su origen es el evento.'**
+  String get dexEventOnlyEndedDesc;
 }
 
 class _AppLocalizationsDelegate

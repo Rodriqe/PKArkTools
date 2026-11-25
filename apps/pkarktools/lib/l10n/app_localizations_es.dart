@@ -3163,13 +3163,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get rmUnavailableBody =>
-      'Cintas de eventos y de servicios en línea cerrados. No suman al máximo.';
+      'Cintas de evento (vienen del origen; la distribución terminó) y de servicios en línea cerrados. No suman al máximo.';
 
   @override
   String get rmClosedOnline => 'Servicio cerrado';
 
   @override
-  String get rmEventOnly => 'Solo eventos';
+  String get rmEventOnly => 'De origen en eventos (distribución terminada)';
 
   @override
   String get rmOnline => 'En línea';
@@ -3280,7 +3280,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get rmKindGo => 'Pokémon GO';
 
   @override
-  String get rmKindEvent => 'evento';
+  String get rmKindEvent => 'evento (distribución terminada)';
 
   @override
   String get rmNoGuide => 'No hay guía para esta forma.';
@@ -3299,7 +3299,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get rmOriginEvent =>
-      'Esta especie solo tiene origen en eventos o repartos.';
+      'Esta especie solo tiene origen en eventos o repartos, con la distribución terminada: las cintas de evento cuentan como de origen y no se pueden conseguir hoy.';
 
   @override
   String rmStepCount(int n) {
@@ -3721,4 +3721,11 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get livingDexReadOnly =>
       'Esta partida está dañada y se abrió en solo lectura.';
+
+  @override
+  String get dexEventOnlyEnded => 'Solo por evento · distribución terminada';
+
+  @override
+  String get dexEventOnlyEndedDesc =>
+      'Esta especie solo se obtuvo en eventos o repartos oficiales que ya terminaron; su origen es el evento.';
 }

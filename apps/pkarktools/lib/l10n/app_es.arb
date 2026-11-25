@@ -2281,9 +2281,9 @@
     }
   },
   "rmUnavailable": "No disponibles hoy",
-  "rmUnavailableBody": "Cintas de eventos y de servicios en línea cerrados. No suman al máximo.",
+  "rmUnavailableBody": "Cintas de evento (vienen del origen; la distribución terminó) y de servicios en línea cerrados. No suman al máximo.",
   "rmClosedOnline": "Servicio cerrado",
-  "rmEventOnly": "Solo eventos",
+  "rmEventOnly": "De origen en eventos (distribución terminada)",
   "rmOnline": "En línea",
   "rmMarks": "Marcas",
   "rmMarksPost": "Ya capturado, puede ganar en Escarlata/Púrpura: {list}.",
@@ -2370,7 +2370,7 @@
   "rmKindShadow": "Pokémon oscuro",
   "rmKindRaid": "incursión",
   "rmKindGo": "Pokémon GO",
-  "rmKindEvent": "evento",
+  "rmKindEvent": "evento (distribución terminada)",
   "rmNoGuide": "No hay guía para esta forma.",
   "rmResults": "{n} resultados",
   "@rmResults": {
@@ -2382,7 +2382,7 @@
   },
   "rmHowTitle": "Cómo se calcula",
   "rmHowBody": "Se elige el origen que permite más cintas (el más antiguo posible), se recorre el grafo de transferencias solo hacia adelante y se suman las cintas que se pueden ganar hoy jugando, sin conexión o en línea. Cada cinta cuenta una vez, en el primer juego donde se puede ganar. Las reglas y la disponibilidad de cada especie y forma están comprobadas contra PKHeX.",
-  "rmOriginEvent": "Esta especie solo tiene origen en eventos o repartos.",
+  "rmOriginEvent": "Esta especie solo tiene origen en eventos o repartos, con la distribución terminada: las cintas de evento cuentan como de origen y no se pueden conseguir hoy.",
   "rmStepCount": "+{n}",
   "@rmStepCount": {
     "placeholders": {
@@ -2711,5 +2711,7 @@
   "livingDexKindNormal": "normal",
   "livingDexKindShiny": "variocolor",
   "livingDexUnsupported": "La Living Dex no está disponible en este juego.",
-  "livingDexReadOnly": "Esta partida está dañada y se abrió en solo lectura."
+  "livingDexReadOnly": "Esta partida está dañada y se abrió en solo lectura.",
+  "dexEventOnlyEnded": "Solo por evento · distribución terminada",
+  "dexEventOnlyEndedDesc": "Esta especie solo se obtuvo en eventos o repartos oficiales que ya terminaron; su origen es el evento."
 }

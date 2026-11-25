@@ -9,7 +9,7 @@ Salida: tres listas paralelas (una entrada por versión(es)/especie/forma), deco
 con carga perezosa por `LivingDexDb` (lib/src/livingdex/living_dex.dart):
 
 * kLivingDexMeta: 'versiones|especie|forma|estado' donde estado es
-    'k,m,sm,fl,es,nv'  (tipo e/s/w, modo f/1/k, modo variocolor f/1/-, flags L=bloqueado,
+    'k,m,sm,fl,es,nv'  (tipo e/s/w, modo f/1/k, modo variocolor f/1/-, flags L=bloqueado, S=variocolor fijo, F=objeto de evento,
                         especie del encuentro, nivel)  si hay plantilla, o
     '!motivo'          (battle, fused, totem, lord, noenc, err) si no.
 * kLivingDexTpl: Pokémon almacenado (descifrado) que generó PKHeX, con los ceros
@@ -42,7 +42,7 @@ for r in rows:
         k = {'egg': 'e', 'static': 's', 'wild': 'w'}[r['kind']]
         m = {'free': 'f', 'm1': '1', 'keep': 'k'}[r['mode']]
         sm = {'free': 'f', 'm1': '1'}.get(r.get('smode'), '-')
-        fl = ('L' if r.get('locked') else '') + ('S' if r.get('shinyFixed') else '')
+        fl = ('L' if r.get('locked') else '') + ('S' if r.get('shinyFixed') else '') + ('F' if r.get('fateful') else '')
         st = f"{k},{m},{sm},{fl},{r['encSpecies']},{r['level']}"
         tpl.append(rle(base64.b64decode(r['tpl'])))
         alt.append(rle(base64.b64decode(r['alt'])) if r.get('alt') else '')

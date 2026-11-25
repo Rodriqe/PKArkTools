@@ -133,6 +133,21 @@ class _DexSpeciesScreenState extends ConsumerState<DexSpeciesScreen> {
                       ),
                     ),
                   ),
+                if (LivingDexDb.eventOnly(s))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Tooltip(
+                        message: l10n.dexEventOnlyEndedDesc,
+                        child: Chip(
+                          key: const ValueKey('dex-event-only-ended'),
+                          avatar: const Icon(Icons.event_busy_rounded, size: 18),
+                          label: Text(l10n.dexEventOnlyEnded),
+                        ),
+                      ),
+                    ),
+                  ),
                 if (EventDb.forSpecies(s).isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 12),

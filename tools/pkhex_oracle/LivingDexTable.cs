@@ -185,11 +185,15 @@ static class LivingDexTable
             var tries = s == (int)Species.Unown && v.Generation <= 3 ? (v.Generation == 2 ? 2000 : 60) : 6;
             for (var k = 0; k < tries && pk == null; k++) pk = Make(enc, tr, s, f, out err);
             if (pk == null) { firstErr ??= err; continue; }
+            // Solo encuentros de esta versión (PKHeX puede dar un huevo de otra del mismo formato).
+            if (pk.Format >= 3 && pk.Version != v) { firstErr ??= "otherversion"; continue; }
             row["kind"] = new[] { "egg", "static", "wild", "static" }[Kind(enc)];
             row["enc"] = enc.LongName;
             row["encSpecies"] = enc.Species;
             row["shinyFixed"] = enc.Shiny is PKHeX.Core.Shiny.Always or PKHeX.Core.Shiny.AlwaysSquare or PKHeX.Core.Shiny.AlwaysStar;
             row["level"] = pk.CurrentLevel;
+            // Encuentro que exige un objeto de evento (Isla Lejana, Ticket Libertad…): «encuentro del destino».
+            if (pk.FatefulEncounter) row["fateful"] = true;
             row["fmt"] = pk.GetType().Name.ToLowerInvariant();
             row["tpl"] = Bytes(pk);
             LastPk = pk;

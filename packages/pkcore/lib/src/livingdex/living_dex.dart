@@ -48,7 +48,7 @@ enum LivingDexMode {
 /// Una fila de la tabla: especie/forma de una o varias versiones (ids de PKHeX).
 class LivingDexEntry {
   LivingDexEntry._(this._index, this.versions, this.species, this.form,
-      {this.source, this.mode, this.shinyMode, this.shinyLocked = false, this.encounterSpecies = 0, this.level = 0, this.exclusion});
+      {this.source, this.mode, this.shinyMode, this.shinyLocked = false, this.fateful = false, this.encounterSpecies = 0, this.level = 0, this.exclusion});
 
   final int _index;
   final List<int> versions;
@@ -62,6 +62,9 @@ class LivingDexEntry {
 
   /// Variocolor bloqueado por el propio juego (encuentro que nunca es variocolor).
   final bool shinyLocked;
+
+  /// Encuentro del destino: exige un objeto o pase de evento (Isla Lejana, Ticket Libertad…).
+  final bool fateful;
   final int encounterSpecies;
   final int level;
   final LivingDexExclusion? exclusion;
@@ -119,6 +122,7 @@ abstract final class LivingDexDb {
         mode: mode(q[1]),
         shinyMode: mode(q[2]),
         shinyLocked: q[3].contains('L'),
+        fateful: q[3].contains('F'),
         encounterSpecies: int.parse(q[4]),
         level: int.parse(q[5]));
   }
@@ -158,6 +162,16 @@ abstract final class LivingDexDb {
     final vs = versionsOf(game);
     if (vs.isEmpty) return null;
     return versionId != null && vs.contains(versionId) ? versionId : vs.first;
+  }
+
+  static Set<int>? _obtainable;
+
+  /// `true` si la especie solo se pudo obtener en eventos o repartos oficiales (ya
+  /// terminados): ningún juego tiene un encuentro propio que no exija un objeto de evento.
+  static bool eventOnly(int species) {
+    if (!isLegendaryOrMythical(species)) return false;
+    final ok = _obtainable ??= {for (final e in all) if (e.creatable && !e.fateful) e.species};
+    return !ok.contains(species);
   }
 
   /// Filas de [version], en orden de la Pokédex nacional y de forma.

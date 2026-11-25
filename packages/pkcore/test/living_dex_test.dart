@@ -74,6 +74,14 @@ void main() {
     expect(e.where((x) => x.species == 201 && x.creatable).length, 28, reason: 'Unown en Rojo Fuego');
   });
 
+  test('solo por evento (distribución terminada): míticos sin encuentro propio', () {
+    expect(LivingDexDb.eventOnly(151), isTrue, reason: 'Mew (Isla Lejana exige el Mapa Viejo)');
+    expect(LivingDexDb.eventOnly(385), isTrue, reason: 'Jirachi');
+    expect(LivingDexDb.eventOnly(25), isFalse);
+    expect(LivingDexDb.eventOnly(1019), isFalse, reason: 'no legendario');
+    expect(LivingDexDb.eventOnly(150), isFalse, reason: 'Mewtwo estático');
+  });
+
   group('generar en un save', () {
     for (final (code, _, raw) in syntheticSaves(_trainers[1].$1)) {
       test(code, () {

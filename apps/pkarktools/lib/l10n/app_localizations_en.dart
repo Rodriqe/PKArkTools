@@ -3138,13 +3138,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rmUnavailableBody =>
-      'Event ribbons and ribbons from closed online services. They don\'t count towards the max.';
+      'Event ribbons (they come from the origin; the distribution has ended) and closed online services. They do not add to the maximum.';
 
   @override
   String get rmClosedOnline => 'Closed service';
 
   @override
-  String get rmEventOnly => 'Events only';
+  String get rmEventOnly => 'From the origin event (distribution ended)';
 
   @override
   String get rmOnline => 'Online';
@@ -3250,7 +3250,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rmKindGo => 'Pokémon GO';
 
   @override
-  String get rmKindEvent => 'event';
+  String get rmKindEvent => 'event (distribution ended)';
 
   @override
   String get rmNoGuide => 'There\'s no guide for this form.';
@@ -3269,7 +3269,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rmOriginEvent =>
-      'This species only comes from events or distributions.';
+      'This species only originates from events or distributions, and they have ended: event ribbons count as origin ribbons and cannot be obtained today.';
 
   @override
   String rmStepCount(int n) {
@@ -3691,4 +3691,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get livingDexReadOnly =>
       'This save is damaged and was opened read-only.';
+
+  @override
+  String get dexEventOnlyEnded => 'Event only · distribution ended';
+
+  @override
+  String get dexEventOnlyEndedDesc =>
+      'This species was only obtainable from official events or distributions that have ended; its origin is the event.';
 }
