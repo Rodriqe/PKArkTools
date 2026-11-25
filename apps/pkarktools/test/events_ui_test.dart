@@ -1,18 +1,34 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pkcore/pkcore.dart';
+import 'package:pkarktools/data/update/app_update.dart' show MemoryUpdateStore;
+import 'package:pkarktools/data/update/events_update.dart';
 import 'package:pkarktools/l10n/app_localizations.dart';
 import 'package:pkarktools/theme/app_theme.dart';
 import 'package:pkarktools/ui/events/event_explorer.dart';
 
 /// Explorador de eventos (Regalo Misterioso) y «Crear Pokémon → Desde un evento».
 void main() {
-  Future<void> host(WidgetTester tester, Widget Function(BuildContext) child, {Size size = const Size(1000, 1400)}) async {
+  tearDown(EventDb.reset);
+
+  /// Sin conexión (o con [fetch]) y sin tocar disco.
+  EventsUpdater offline({Future<String> Function(Uri)? fetch, MemoryBlobStore? files}) => EventsUpdater(
+        store: MemoryUpdateStore(),
+        files: files ?? MemoryBlobStore(),
+        fetch: fetch ?? (_) async => throw const SocketException('offline'),
+      );
+
+  Future<void> host(WidgetTester tester, Widget Function(BuildContext) child,
+      {Size size = const Size(1000, 1400), EventsUpdater? updater}) async {
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(ProviderScope(
+      overrides: [eventsUpdaterProvider.overrideWithValue(updater ?? offline())],
       child: MaterialApp(
         theme: AppTheme.light(),
         locale: const Locale('es'),
@@ -48,6 +64,35 @@ void main() {
     expect(find.text('Distribución terminada'), findsOneWidget);
     // Gen 3 no tiene archivo de tarjeta: no se ofrece exportar.
     expect(find.byKey(const ValueKey('event-export')), findsNothing);
+  });
+
+  testWidgets('base nueva descargada: estado, eventos nuevos marcados y «Buscar eventos nuevos»', (tester) async {
+    // Ya se había abierto antes con la base integrada.
+    final files = MemoryBlobStore()
+      ..files[EventsUpdater.fileSeen] = [for (final g in EventData.builtin.gifts) g.key].join('\n');
+    // La publicada trae un evento con otro título (cuenta como nuevo).
+    final j = jsonDecode(await tester.runAsync(() => File('../../data/events/events.json').readAsString()) as String)
+        as Map<String, Object?>;
+    j['generatedAt'] = '2030-01-01T00:00:00Z';
+    final ev = (j['events']! as List).last as Map<String, Object?>;
+    final m = ev['m']! as Map<String, Object?>;
+    m['t'] = 'Evento de prueba';
+    final published = jsonEncode(j);
+    final updater = offline(fetch: (_) async => published, files: files);
+    await host(tester, (_) => const EventExplorerScreen(), updater: updater);
+    await tester.pumpAndSettle();
+    final status = find.byKey(const ValueKey('events-data-status'));
+    expect(tester.widget<Text>(status).data, contains('1 nuevos desde la última vez'));
+    expect(tester.widget<Text>(status).data, contains('PKHeX ${EventDb.data.sourceCommit.substring(0, 7)}'));
+    expect(files.files[EventsUpdater.fileJson], published);
+    await tester.enterText(find.byKey(const ValueKey('events-search')), 'Evento de prueba');
+    await tester.pumpAndSettle();
+    final g = EventDb.all.last;
+    expect(g.title, 'Evento de prueba');
+    expect(find.byKey(ValueKey('event-new-${g.id}')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('events-check')));
+    await tester.pumpAndSettle();
+    expect(find.text('La base de eventos ya está al día.'), findsOneWidget);
   });
 
   testWidgets('explorador filtrado por especie (desde la Dex) con tarjeta exportable', (tester) async {

@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pkcore/pkcore.dart';
 
 import '../arca_session.dart' show arcaRepositoryProvider;
+import 'anonymous_get.dart';
 import 'app_update.dart' show UpdateStore;
 import 'update_notice.dart' show RepositoryUpdateStore;
 
@@ -138,29 +136,7 @@ class ChampionsUpdater {
     return ChampionsStatus(data: d, origin: ChampionsOrigin.downloaded, checkedAt: now, check: ChampionsCheck.updated);
   }
 
-  /// El GET por defecto (público para probarlo contra un servidor local).
-  static Future<String> httpGet(Uri url) async {
-    final http = HttpClient()
-      ..connectionTimeout = timeout
-      ..userAgent = null;
-    try {
-      final req = await http.getUrl(url);
-      req.followRedirects = false;
-      final res = await req.close();
-      if (res.statusCode != HttpStatus.ok) {
-        await res.drain<void>();
-        throw HttpException('HTTP ${res.statusCode}', uri: url);
-      }
-      final bytes = BytesBuilder(copy: false);
-      await for (final chunk in res) {
-        bytes.add(chunk);
-        if (bytes.length > maxBytes) throw HttpException('too large', uri: url);
-      }
-      return utf8.decode(bytes.takeBytes());
-    } finally {
-      http.close(force: true);
-    }
-  }
+  static Future<String> httpGet(Uri url) => anonymousGet(url, maxBytes: maxBytes, timeout: timeout);
 }
 
 /// Sustituible en los tests.

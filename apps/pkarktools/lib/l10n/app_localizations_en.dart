@@ -4418,4 +4418,36 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get toolsChampionsFutureSchema =>
       'There is newer format data that this version cannot read: update PKArkTools.';
+
+  @override
+  String eventsDataStatus(String commit, int count, String date) {
+    return '$count events · updated on $date · PKHeX $commit';
+  }
+
+  @override
+  String get eventsCheckNew => 'Check for new events';
+
+  @override
+  String get eventsUpToDate => 'The event database is up to date.';
+
+  @override
+  String eventsUpdatedTo(int count) {
+    return 'Event database updated: $count events.';
+  }
+
+  @override
+  String get eventsCheckFailed =>
+      'Could not check (offline?): using the saved database.';
+
+  @override
+  String get eventsFutureSchema =>
+      'There is a newer event database that this version cannot read: update PKArkTools.';
+
+  @override
+  String get eventsNew => 'New';
+
+  @override
+  String eventsNewCount(int count) {
+    return '$count new since last time';
+  }
 }

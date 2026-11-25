@@ -7118,6 +7118,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Hay datos más nuevos del formato que esta versión no sabe leer: actualiza PKArkTools.'**
   String get toolsChampionsFutureSchema;
+
+  /// No description provided for @eventsDataStatus.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} eventos · actualizados el {date} · PKHeX {commit}'**
+  String eventsDataStatus(String commit, int count, String date);
+
+  /// No description provided for @eventsCheckNew.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar eventos nuevos'**
+  String get eventsCheckNew;
+
+  /// No description provided for @eventsUpToDate.
+  ///
+  /// In es, this message translates to:
+  /// **'La base de eventos ya está al día.'**
+  String get eventsUpToDate;
+
+  /// No description provided for @eventsUpdatedTo.
+  ///
+  /// In es, this message translates to:
+  /// **'Base de eventos actualizada: {count} eventos.'**
+  String eventsUpdatedTo(int count);
+
+  /// No description provided for @eventsCheckFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo comprobar (¿sin conexión?): se usa la base guardada.'**
+  String get eventsCheckFailed;
+
+  /// No description provided for @eventsFutureSchema.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay una base de eventos más nueva que esta versión no sabe leer: actualiza PKArkTools.'**
+  String get eventsFutureSchema;
+
+  /// No description provided for @eventsNew.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo'**
+  String get eventsNew;
+
+  /// No description provided for @eventsNewCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} nuevos desde la última vez'**
+  String eventsNewCount(int count);
 }
 
 class _AppLocalizationsDelegate

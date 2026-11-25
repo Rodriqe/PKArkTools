@@ -4451,4 +4451,36 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get toolsChampionsFutureSchema =>
       'Hay datos más nuevos del formato que esta versión no sabe leer: actualiza PKArkTools.';
+
+  @override
+  String eventsDataStatus(String commit, int count, String date) {
+    return '$count eventos · actualizados el $date · PKHeX $commit';
+  }
+
+  @override
+  String get eventsCheckNew => 'Buscar eventos nuevos';
+
+  @override
+  String get eventsUpToDate => 'La base de eventos ya está al día.';
+
+  @override
+  String eventsUpdatedTo(int count) {
+    return 'Base de eventos actualizada: $count eventos.';
+  }
+
+  @override
+  String get eventsCheckFailed =>
+      'No se pudo comprobar (¿sin conexión?): se usa la base guardada.';
+
+  @override
+  String get eventsFutureSchema =>
+      'Hay una base de eventos más nueva que esta versión no sabe leer: actualiza PKArkTools.';
+
+  @override
+  String get eventsNew => 'Nuevo';
+
+  @override
+  String eventsNewCount(int count) {
+    return '$count nuevos desde la última vez';
+  }
 }

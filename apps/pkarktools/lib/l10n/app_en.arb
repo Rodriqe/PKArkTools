@@ -1167,5 +1167,13 @@
   "toolsChampionsUpToDate": "The format data is up to date.",
   "toolsChampionsUpdated": "Format data updated: {name}.",
   "toolsChampionsCheckFailed": "Could not check (offline?): using the saved data.",
-  "toolsChampionsFutureSchema": "There is newer format data that this version cannot read: update PKArkTools."
+  "toolsChampionsFutureSchema": "There is newer format data that this version cannot read: update PKArkTools.",
+  "eventsDataStatus": "{count} events · updated on {date} · PKHeX {commit}",
+  "eventsCheckNew": "Check for new events",
+  "eventsUpToDate": "The event database is up to date.",
+  "eventsUpdatedTo": "Event database updated: {count} events.",
+  "eventsCheckFailed": "Could not check (offline?): using the saved database.",
+  "eventsFutureSchema": "There is a newer event database that this version cannot read: update PKArkTools.",
+  "eventsNew": "New",
+  "eventsNewCount": "{count} new since last time"
 }

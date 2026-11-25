@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pkcore/pkcore.dart';
 
+import '../../data/update/events_update.dart';
 import '../../providers.dart';
 import '../../theme/app_theme.dart';
 import '../common/format.dart';
@@ -70,6 +71,8 @@ class _EventExplorerState extends ConsumerState<EventExplorer> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    // Carga la última base descargada (y la busca en GitHub si toca).
+    final newKeys = ref.watch(eventsDataProvider).value?.newKeys ?? const <String>{};
     final base = widget.pickFor == null ? EventDb.all : EventDb.creatableIn(widget.pickFor!);
     final list = _filter.apply(base,
         nameEs: (s) => Species.name(s, SpeciesLanguage.es), nameEn: (s) => Species.name(s, SpeciesLanguage.en));
@@ -155,6 +158,7 @@ class _EventExplorerState extends ConsumerState<EventExplorer> {
                 itemCount: list.length,
                 itemBuilder: (context, i) => _EventTile(
                   gift: list[i],
+                  isNew: newKeys.contains(list[i].key),
                   onTap: () => _openDetail(context, list[i]),
                 ),
               ),
@@ -224,8 +228,11 @@ String _gamesText(BuildContext context, EventGift g) {
 }
 
 class _EventTile extends StatelessWidget {
-  const _EventTile({required this.gift, required this.onTap});
+  const _EventTile({required this.gift, required this.onTap, this.isNew = false});
   final EventGift gift;
+
+  /// Nuevo desde la última vez que se abrió el explorador.
+  final bool isNew;
   final VoidCallback onTap;
 
   @override
@@ -248,7 +255,15 @@ class _EventTile extends StatelessWidget {
       subtitle: Text('${l10n.eventsEntry(_gamesText(context, g), g.generation, g.level)}\n$extra',
           maxLines: 2, overflow: TextOverflow.ellipsis),
       isThreeLine: true,
-      trailing: g.shiny.isShiny ? const Icon(Icons.auto_awesome_rounded, size: 18) : null,
+      trailing: isNew || g.shiny.isShiny
+          ? Column(mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min, children: [
+              if (isNew)
+                Text(l10n.eventsNew,
+                    key: ValueKey('event-new-${g.id}'),
+                    style: context.text.labelSmall!.copyWith(color: context.colors.primary, fontWeight: FontWeight.w800)),
+              if (g.shiny.isShiny) const Icon(Icons.auto_awesome_rounded, size: 18),
+            ])
+          : null,
     );
   }
 }
@@ -450,13 +465,41 @@ class _EventDetailViewState extends ConsumerState<EventDetailView> {
 }
 
 /// Pantalla del explorador (desde la Dex o la ficha de especie).
-class EventExplorerScreen extends StatelessWidget {
+class EventExplorerScreen extends ConsumerStatefulWidget {
   const EventExplorerScreen({super.key, this.species});
   final int? species;
 
   @override
+  ConsumerState<EventExplorerScreen> createState() => _EventExplorerScreenState();
+}
+
+class _EventExplorerScreenState extends ConsumerState<EventExplorerScreen> {
+  bool _checking = false;
+
+  Future<void> _checkNow() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
+    setState(() => _checking = true);
+    final r = await ref.read(eventsDataProvider.notifier).checkNow();
+    if (!mounted) return;
+    setState(() => _checking = false);
+    final text = switch (r) {
+      EventsCheck.updated => l10n.eventsUpdatedTo(EventDb.all.length),
+      EventsCheck.upToDate => l10n.eventsUpToDate,
+      EventsCheck.failed => l10n.eventsCheckFailed,
+      EventsCheck.none => null,
+    };
+    if (text != null) messenger.showSnackBar(SnackBar(content: Text(text)));
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final status = ref.watch(eventsDataProvider).value;
+    final data = status?.data ?? EventDb.data;
+    final muted = context.text.bodySmall!.copyWith(color: context.tokens.muted);
+    final commit = data.sourceCommit.length >= 7 ? data.sourceCommit.substring(0, 7) : '?';
+    final newCount = status?.newKeys.length ?? 0;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.eventsTitle)),
       body: SafeArea(
@@ -464,8 +507,29 @@ class EventExplorerScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Text(l10n.eventsSubtitle(EventDb.all.length), style: context.text.bodyMedium!.copyWith(color: context.tokens.muted)),
-            const SizedBox(height: 12),
-            Expanded(child: EventExplorer(species: species)),
+            const SizedBox(height: 4),
+            Text(
+              [
+                l10n.eventsDataStatus(commit, data.count, formatDate(context, data.generatedAt.toLocal())),
+                if (newCount > 0) l10n.eventsNewCount(newCount),
+              ].join(' · '),
+              key: const ValueKey('events-data-status'),
+              style: muted,
+            ),
+            if (status?.futureSchema != null)
+              Text(l10n.eventsFutureSchema,
+                  key: const ValueKey('events-future-schema'),
+                  style: context.text.bodySmall!.copyWith(color: context.colors.error)),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextButton.icon(
+                key: const ValueKey('events-check'),
+                onPressed: _checking || status == null ? null : _checkNow,
+                icon: const Icon(Icons.refresh_rounded, size: 16),
+                label: Text(l10n.eventsCheckNew),
+              ),
+            ),
+            Expanded(child: EventExplorer(species: widget.species)),
           ]),
         ),
       ),

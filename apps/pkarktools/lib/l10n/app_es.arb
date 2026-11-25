@@ -3246,5 +3246,40 @@
     }
   },
   "toolsChampionsCheckFailed": "No se pudo comprobar (¿sin conexión?): se usan los datos guardados.",
-  "toolsChampionsFutureSchema": "Hay datos más nuevos del formato que esta versión no sabe leer: actualiza PKArkTools."
+  "toolsChampionsFutureSchema": "Hay datos más nuevos del formato que esta versión no sabe leer: actualiza PKArkTools.",
+  "eventsDataStatus": "{count} eventos · actualizados el {date} · PKHeX {commit}",
+  "@eventsDataStatus": {
+    "placeholders": {
+      "commit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "eventsCheckNew": "Buscar eventos nuevos",
+  "eventsUpToDate": "La base de eventos ya está al día.",
+  "eventsUpdatedTo": "Base de eventos actualizada: {count} eventos.",
+  "@eventsUpdatedTo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventsCheckFailed": "No se pudo comprobar (¿sin conexión?): se usa la base guardada.",
+  "eventsFutureSchema": "Hay una base de eventos más nueva que esta versión no sabe leer: actualiza PKArkTools.",
+  "eventsNew": "Nuevo",
+  "eventsNewCount": "{count} nuevos desde la última vez",
+  "@eventsNewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
