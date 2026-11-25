@@ -11,32 +11,16 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 
 ## [Unreleased]
 
-### Añadido
+## [2.0.0] — 2026-11-25
 
-- **Generador de Living Dex.** «Generar Living Dex en la partida actual» en la
-  ficha de la partida llena las cajas con un Pokémon de cada especie y forma
-  que admite el juego (con formas regionales y cosméticas que se guardan en
-  caja; sin formas de combate, fusiones ni dominantes/nobles), en orden de la
-  Pokédex nacional, normal o variocolor, con el OT, ID, género e idioma del
-  save. Cada uno sale de un encuentro real de esa versión (huevo eclosionado,
-  estático o salvaje, evolucionado al nivel mínimo legal) elegido por PKHeX
-  (`tool/gen_living_dex_data.sh`, comando `livingdex` del oráculo), o de un
-  evento oficial para los míticos/legendarios que solo existieron así.
-  Variocolor solo donde el juego lo permite. Avisa de que se sobrescriben las
-  cajas (la versión anterior queda en el historial del Arca) y de lo que no
-  cabe. `tool/check_living_dex_pkhex.sh` comprueba la Living Dex completa,
-  normal y variocolor, de 16 juegos leída del save: 0 inválidos de 16938.
-  Incluye los cortes de Furfrou donde se guardan en caja (Sol/Luna, USUL; en
-  X/Y y ROZA vuelven a la forma base al dejarlos en la caja, así que se genera
-  la base), 18 dibujos de Vivillon (Elegante y Poké Ball son de evento),
-  Meowstic hembra en Gen 6–7, las 28 letras de Unown en DBPR y sus
-  evoluciones por intercambio (con el entrenador del intercambio como último
-  entrenador). Al guardar, un resumen lista todo lo que no se generó agrupado
-  por motivo (forma de combate, fusión/dominante, vuelve a la base en la caja,
-  solo por evento, necesita otra región, sin encuentro en esta versión,
-  variocolor imposible, no cupo). Límites: los encuentros con semilla
-  (algunos salvajes de Gen 3–4, símbolos de Espada/Escudo, Z-A) quedan
-  normales si se pide variocolor; los míticos de Let's Go no se incluyen.
+PKArkTools 2.0.0 reúne cuatro grandes novedades: **eventos del Regalo
+Misterioso y Living Dex**, **transferir Pokémon entre partidas** (un «HOME
+local» validado con PKHeX), **herramientas** (Showdown, calculadora, ordenar
+cajas, formato oficial y tarjeta para compartir) y **Pokémon oscuros** de
+Colosseum y XD. La app de macOS llega firmada y notarizada.
+
+### Eventos y Living Dex
+
 - **Eventos (Regalo Misterioso).** Toda la base de eventos de PKHeX (2922
   regalos de Pokémon, de Gen 3 a Gen 9: WC3/PCNY/PCJP, PCD/PGT, PGF, WC6, WC7,
   WB7, WC8, WB8, WA8, WC9, WA9), regenerada con `tool/gen_event_data.sh` y con
@@ -69,36 +53,33 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   - **Legalidad**: reconoce los Pokémon que vienen de un evento (OT/ID, Ball,
     lugar y nivel fijos): sus movimientos especiales, objeto y Ball ya no dan
     avisos y no se aplican las tablas de encuentros.
-- **Crear Pokémon oscuros en Colosseum y XD.** Un hueco vacío ofrece
-  «Pokémon oscuro»: eliges uno de los encuentros oscuros del juego (PKHeX
-  `Encounters3ColoShadow` / `Encounters3XD`, sin los de e-Reader japoneses) y
-  se crea como lo capturaría el juego —especie, nivel, movimientos, lugar,
-  Ball, tu OT/ID, origen Colosseum/XD, marca de encuentro fatídico en XD, id
-  oscuro y medidor de corazón lleno—, oscuro o ya purificado con la Cinta
-  Nacional. El PID y los IV salen del RNG de GameCube con semillas que
-  respetan los bloqueos del equipo del entrenador, así que PKHeX los acepta.
-  El editor también convierte cualquier Pokémon de esos juegos en oscuro,
-  cambia su encuentro oscuro, ajusta el medidor y lo purifica o lo vuelve
-  oscuro, con confirmación. En XD se rellena la entrada de la tabla de oscuros
-  (especie, capturado, medidor) y el Strategy Memo anota la especie.
-- Avisos de legalidad de Pokémon oscuros: id oscuro que no existe en el
-  juego, especie que nunca es oscura en ese juego, PID/IV que no salen del
-  generador CXD y oscuro variocolor en XD.
+- **Generador de Living Dex.** «Generar Living Dex en la partida actual» en la
+  ficha de la partida llena las cajas con un Pokémon de cada especie y forma
+  que admite el juego (con formas regionales y cosméticas que se guardan en
+  caja; sin formas de combate, fusiones ni dominantes/nobles), en orden de la
+  Pokédex nacional, normal o variocolor, con el OT, ID, género e idioma del
+  save. Cada uno sale de un encuentro real de esa versión (huevo eclosionado,
+  estático o salvaje, evolucionado al nivel mínimo legal) elegido por PKHeX
+  (`tool/gen_living_dex_data.sh`, comando `livingdex` del oráculo), o de un
+  evento oficial para los míticos/legendarios que solo existieron así.
+  Variocolor solo donde el juego lo permite. Avisa de que se sobrescriben las
+  cajas (la versión anterior queda en el historial del Arca) y de lo que no
+  cabe. `tool/check_living_dex_pkhex.sh` comprueba la Living Dex completa,
+  normal y variocolor, de 16 juegos leída del save: 0 inválidos de 16938.
+  Incluye los cortes de Furfrou donde se guardan en caja (Sol/Luna, USUL; en
+  X/Y y ROZA vuelven a la forma base al dejarlos en la caja, así que se genera
+  la base), 18 dibujos de Vivillon (Elegante y Poké Ball son de evento),
+  Meowstic hembra en Gen 6–7, las 28 letras de Unown en DBPR y sus
+  evoluciones por intercambio (con el entrenador del intercambio como último
+  entrenador). Al guardar, un resumen lista todo lo que no se generó agrupado
+  por motivo (forma de combate, fusión/dominante, vuelve a la base en la caja,
+  solo por evento, necesita otra región, sin encuentro en esta versión,
+  variocolor imposible, no cupo). Límites: los encuentros con semilla
+  (algunos salvajes de Gen 3–4, símbolos de Espada/Escudo, Z-A) quedan
+  normales si se pide variocolor; los míticos de Let's Go no se incluyen.
 
-### Cambiado
+### Transferencias
 
-- El logo de la barra lateral es mucho más grande (96 px en el rail
-  extendido, 72 px en el compacto) con el nombre debajo.
-- **La app de macOS ahora está firmada y notarizada.** El release se firma con
-  Developer ID y *hardened runtime* y Apple lo notariza, así que se abre con
-  doble clic (sin clic derecho → Abrir). También viene como
-  `PKArkTools-vX.Y.Z-macos.dmg`; el `-macos.zip` que usa el actualizador de la
-  app se mantiene.
-
-### Corregido
-
-- El checksum de los Pokémon de Let's Go (PB7) cubre los 0xE8 bytes que usa PKHeX.
-### Añadido — Transferir Pokémon entre partidas («HOME local»)
 - **Transferir Pokémon…** (encima del equipo, o ⋮ en la ficha): mueve (por
   defecto) o copia uno o varios Pokémon a otra partida del Arca, aunque sea
   de otra generación. Eliges la partida y el hueco de destino, revisas la
@@ -122,7 +103,22 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   (`tool/transfer_oracle.sh`, orígenes sintéticos legales generados con las
   plantillas de encuentro de PKHeX); todos los Pokémon convertidos son legales
   en PKHeX y los saves hacen round-trip con checksums válidos.
-### Añadido — Herramientas
+- **Detector de clones de HOME** (Ajustes → Clones de HOME): busca en la
+  última copia de cada partida del Arca los Pokémon que comparten rastreador de
+  HOME (copias del mismo Pokémon) y dice en qué partida y caja está cada uno.
+- Espada/Escudo: el entrenador que recibe un Pokémon pasa a ser su último
+  entrenador con el recuerdo de intercambio que espera PKHeX (sin el aviso
+  «Fishy» MemoryMissingHT), también entre dos partidas de juegos de Switch.
+- Poké Transfer quita los pañuelos de concurso (no salieron en Gen 5) y en
+  Switch los símbolos ♂/♀ del nombre se guardan como Unicode (Nidoran).
+- Los Pokémon de evento y los de la Living Dex sobreviven a una transferencia:
+  `packages/pkcore/test/integration_test.dart` crea eventos y Living Dex,
+  los transfiere y los relee del save de destino; con el oráculo PKHeX, 0
+  inválidos de 429. La Living Dex queda en orden de Pokédex (ordenar cajas no
+  mueve nada) y el formato oficial la evalúa sin avisos de legalidad.
+
+### Herramientas
+
 - **Pokémon Showdown**: importa uno o varios sets (especie y forma, apodo,
   género, objeto, habilidad, nivel, variocolor, naturaleza, EVs/IVs,
   movimientos, teratipo, felicidad, Gigamax, tipo del Poder Oculto) al equipo
@@ -151,6 +147,64 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   compartir del sistema.
 - Guías: `herramientas.md`, `formato-oficial.md` e
   `instalar.md` (con iPhone/iPad mediante AltStore y el refresco cada 7 días).
+
+### Pokémon oscuros
+
+- **Crear Pokémon oscuros en Colosseum y XD.** Un hueco vacío ofrece
+  «Pokémon oscuro»: eliges uno de los encuentros oscuros del juego (PKHeX
+  `Encounters3ColoShadow` / `Encounters3XD`, sin los de e-Reader japoneses) y
+  se crea como lo capturaría el juego —especie, nivel, movimientos, lugar,
+  Ball, tu OT/ID, origen Colosseum/XD, marca de encuentro fatídico en XD, id
+  oscuro y medidor de corazón lleno—, oscuro o ya purificado con la Cinta
+  Nacional. El PID y los IV salen del RNG de GameCube con semillas que
+  respetan los bloqueos del equipo del entrenador, así que PKHeX los acepta.
+  El editor también convierte cualquier Pokémon de esos juegos en oscuro,
+  cambia su encuentro oscuro, ajusta el medidor y lo purifica o lo vuelve
+  oscuro, con confirmación. En XD se rellena la entrada de la tabla de oscuros
+  (especie, capturado, medidor) y el Strategy Memo anota la especie.
+- Avisos de legalidad de Pokémon oscuros: id oscuro que no existe en el
+  juego, especie que nunca es oscura en ese juego, PID/IV que no salen del
+  generador CXD y oscuro variocolor en XD.
+
+### macOS firmada y notarizada
+
+- **La app de macOS ahora está firmada y notarizada.** El release se firma con
+  Developer ID y *hardened runtime* y Apple lo notariza, así que se abre con
+  doble clic (sin clic derecho → Abrir). También viene como
+  `PKArkTools-vX.Y.Z-macos.dmg`; el `-macos.zip` que usa el actualizador de la
+  app se mantiene.
+
+### Otros cambios
+
+- El logo de la barra lateral es mucho más grande (96 px en el rail
+  extendido, 72 px en el compacto) con el nombre debajo.
+- Ajustes → Acerca de dice que PKArkTools no está afiliado a Nintendo, The
+  Pokémon Company ni Game Freak.
+- En inglés la app dice «Ark» en todos los textos (antes quedaba «Arca» en
+  algunos).
+- Todos los textos de las herramientas están en los `.arb` (español/inglés).
+- Ritmo de crecimiento de Dipplin, Poltchageist y Sinistcha según los datos
+  del juego (el nivel de las formas Artesanas de la Living Dex de Escarlata y
+  Púrpura salía por debajo del de encuentro).
+- La vista previa de una transferencia da la legalidad en el idioma de la app.
+- El checksum de los Pokémon de Let's Go (PB7) cubre los 0xE8 bytes que usa PKHeX.
+- Se retiró por completo el soporte de emuladores que se preparó para esta
+  versión (vincular carpetas, «Abrir en…», lanzador): la app sigue leyendo y
+  exportando los saves de emuladores como siempre.
+
+### Limitaciones conocidas
+
+- La Living Dex deja en normal los encuentros con semilla correlacionada
+  cuando se pide variocolor (algunos salvajes de Gen 3–4, símbolos de
+  Espada/Escudo, Z-A); los singulares de Let's Go no se incluyen.
+- Gen 4/5 guardan las tarjetas cifradas con el resto del bloque y Let's Go y
+  los juegos de Switch no tienen bandeja de tarjetas pendientes: allí el regalo
+  se recibe creando el Pokémon en un hueco.
+- El rastreador de HOME lo genera la app, no los servidores de HOME: la
+  continuidad solo está garantizada hasta Alola; no subas a HOME los Pokémon
+  transferidos así.
+- Las builds de Windows y Linux solo las comprueba el CI; para iPhone/iPad no
+  hay build descargable.
 
 ## [1.1.0] — 2026-11-24
 

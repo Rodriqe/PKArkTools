@@ -217,6 +217,7 @@ jobs:
           path: |
             PKArkTools-*-macos.zip
             PKArkTools-*-macos.dmg
+            macos-signing.txt
           if-no-files-found: error
 
   release:
@@ -228,12 +229,15 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Release notes (English) from CHANGELOG.md
-        run: python3 tool/release_notes.py "$GITHUB_REF_NAME" release-notes.md
       - uses: actions/download-artifact@v4
         with:
           path: dist
           merge-multiple: true
+      - name: Release notes (English) from CHANGELOG.md
+        # El texto de macOS sale del resultado real de la firma (macos-signing.txt).
+        run: |
+          python3 tool/release_notes.py --macos-status dist/macos-signing.txt "$GITHUB_REF_NAME" release-notes.md
+          rm -f dist/macos-signing.txt
       - uses: softprops/action-gh-release@v2
         with:
           draft: true

@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Release notes (in English) from CHANGELOG.md.
 
-Usage: python3 tool/release_notes.py [--any-version] vX.Y.Z [output.md]
+Usage: python3 tool/release_notes.py [--any-version] [--macos-status FILE] vX.Y.Z [output.md]
 
 Copies the "## [X.Y.Z] …" section of the English CHANGELOG.md (up to the next
 "## ") under a "PKArkTools X.Y.Z" heading and appends the Downloads section and
 the fan-project disclaimer. Fails if the tag does not match `version:` in
 apps/pkarktools/pubspec.yaml or the CHANGELOG has no section for it, so a
 half-done release is never published. `--any-version` skips the pubspec check,
-to regenerate the notes of an already published release.
+to regenerate the notes of an already published release. `--macos-status`
+reads the marker written by tool/macos_sign_notarize.sh (adhoc, signed or
+notarized) so the macOS line only promises what the build job really did;
+without it (or if it is missing) the text stays neutral.
 """
 import os
 import re
@@ -24,9 +27,7 @@ FOOTER = """
 
 * **Android**: `PKArkTools-{tag}.apk`. Install it from the file (allow
   installing from that source when Android asks).
-* **macOS**: `PKArkTools-{tag}-macos.dmg`. Open it and drag PKArkTools to
-  Applications (`PKArkTools-{tag}-macos.zip` has the same app). Signed with
-  Developer ID and notarized by Apple, so it opens with a double-click.
+* **macOS**: {macos}
 * **Windows**: `PKArkTools-{tag}-windows-x64-setup.exe` (installer) or
   `PKArkTools-{tag}-windows-x64.zip` (portable: unzip and run
   `PKArkTools.exe`). It is not signed: if SmartScreen warns, choose **More
@@ -43,10 +44,37 @@ and keep backups.
 """
 
 
+MACOS = {
+    'notarized': "`PKArkTools-{tag}-macos.dmg`. Open it and drag PKArkTools to\n"
+                 "  Applications (`PKArkTools-{tag}-macos.zip` has the same app). Signed with\n"
+                 "  Developer ID and notarized by Apple, so it opens with a double-click.",
+    'signed': "`PKArkTools-{tag}-macos.dmg`. Open it and drag PKArkTools to\n"
+              "  Applications (`PKArkTools-{tag}-macos.zip` has the same app). Signed with\n"
+              "  Developer ID but not notarized: the first time, right-click → **Open**.",
+    'adhoc': "`PKArkTools-{tag}-macos.zip`. Unzip it and move PKArkTools to\n"
+             "  Applications. It is not notarized: the first time, right-click → **Open**.",
+    None: "`PKArkTools-{tag}-macos.dmg` (or the `.zip` with the same app). Open\n"
+          "  it and move PKArkTools to Applications; if macOS asks, right-click → **Open**.",
+}
+
+
+def macos_status(path):
+    try:
+        v = open(path, encoding='utf-8').read().strip()
+    except (OSError, TypeError):
+        return None
+    return v if v in MACOS else None
+
+
 def main() -> int:
     args = sys.argv[1:]
     any_version = '--any-version' in args
     args = [a for a in args if a != '--any-version']
+    status_file = None
+    if '--macos-status' in args:
+        i = args.index('--macos-status')
+        status_file = args[i + 1] if i + 1 < len(args) else None
+        del args[i:i + 2]
     if not args:
         print(__doc__)
         return 2
@@ -64,7 +92,7 @@ def main() -> int:
         return 1
     # Relative links (docs/…) do not resolve in a Release body: point them at the tag.
     body = re.sub(r'\]\((?!https?:|#|mailto:)([^)]+)\)', lambda l: f']({REPO}/blob/{tag}/{l.group(1)})', sec.group(1).strip())
-    notes = f'## PKArkTools {version}\n\n' + body + '\n' + FOOTER.format(tag=tag)
+    notes = f'## PKArkTools {version}\n\n' + body + '\n' + FOOTER.format(tag=tag, macos=MACOS[macos_status(status_file)].format(tag=tag))
     if len(args) > 1:
         open(args[1], 'w', encoding='utf-8').write(notes)
     else:

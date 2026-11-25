@@ -11,31 +11,16 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
-### Added
+## [2.0.0] — 2026-11-25
 
-- **Living Dex generator.** “Generate a Living Dex in this save” on the save
-  sheet fills the boxes with one Pokémon of every species and form the game
-  supports (regional forms and box-storable cosmetic forms included,
-  battle-only forms, fusions and Totem/Noble Pokémon left out), in National
-  Dex order, normal or shiny, with the save's OT, ID, gender and language.
-  Each one comes from a real encounter of that version (hatched egg, static or
-  wild, evolved at the lowest legal level) chosen by PKHeX
-  (`tool/gen_living_dex_data.sh`, oracle command `livingdex`), or from an
-  official event for mythicals/legendaries that only existed that way. Shiny
-  only where the game allows it. It warns that the boxes are overwritten (the
-  previous version stays in the Arca history) and what does not fit.
-  `tool/check_living_dex_pkhex.sh` checks the full normal and shiny Living
-  Dex of 16 games read back from the save: 0 invalid out of 16938.
-  Covered forms include Furfrou's trims where they stay in a box (Sun/Moon,
-  USUM; in X/Y and ORAS they revert to the base form when deposited, so only
-  the base form is generated), 18 Vivillon patterns (Fancy and Poké Ball are
-  event-only), female Meowstic in Gen 6-7, all 28 Unown in BDSP and BDSP trade
-  evolutions (with the trade partner as handler). After saving, a summary
-  lists everything not generated grouped by reason (battle-only form,
-  fusion/Totem, reverts in the box, event only, needs another region, no
-  encounter in this version, impossible shiny, did not fit). Known limits:
-  seed-correlated encounters (some Gen 3-4 wild ones, SWSH symbols, Z-A) stay
-  normal when shiny is asked; Let's Go mythicals are not included.
+PKArkTools 2.0.0 brings four big additions: **Mystery Gift events and the
+Living Dex**, **Pokémon transfer between saves** (a "local HOME" validated
+against PKHeX), **tools** (Showdown, stat calculator, box sorting, Official
+format and share card) and **Shadow Pokémon** for Colosseum and XD. The
+macOS app is signed and notarized.
+
+### Events and Living Dex
+
 - **Mystery Gift events.** PKHeX's whole event database (2922 Pokémon gifts,
   Gen 3 to Gen 9: WC3/PCNY/PCJP, PCD/PGT, PGF, WC6, WC7, WB7, WC8, WB8, WA8,
   WC9, WA9), regenerated with `tool/gen_event_data.sh` and loaded lazily.
@@ -66,36 +51,32 @@ developer documentation in `docs/` is in Spanish.
   - **Legality** now recognizes Pokémon that come from an event (fixed OT/ID,
     Ball, place and level): their special moves, item and Ball no longer raise
     notices and the encounter tables are not applied.
-- **Create Shadow Pokémon in Colosseum and XD.** An empty slot offers
-  “Shadow Pokémon”: pick one of the game's Shadow encounters (PKHeX
-  `Encounters3ColoShadow` / `Encounters3XD`, without the Japanese e-Reader
-  ones) and it is created as the game would snag it — species, level, moves,
-  place, ball, your OT/ID, Colosseum/XD origin, XD fateful flag, Shadow ID and
-  full heart gauge — already Shadow or purified with the National Ribbon. PID
-  and IVs come from the GameCube RNG with seeds that respect the NPC trainer's
-  team locks, so PKHeX accepts them. The editor can also turn any Pokémon of
-  those games into a Shadow one, change its Shadow encounter, set the heart
-  gauge and purify or revert it, with confirmation. In XD the Shadow table
-  entry is filled (species, snagged, gauge) and the Strategy Memo records the
-  species.
-- Legality notices for Shadow Pokémon: Shadow ID that does not exist in the
-  game, species that is never Shadow in that game, PID/IV not coming from the
-  CXD generator and shiny Shadow Pokémon in XD.
+- **Living Dex generator.** “Generate a Living Dex in this save” on the save
+  sheet fills the boxes with one Pokémon of every species and form the game
+  supports (regional forms and box-storable cosmetic forms included,
+  battle-only forms, fusions and Totem/Noble Pokémon left out), in National
+  Dex order, normal or shiny, with the save's OT, ID, gender and language.
+  Each one comes from a real encounter of that version (hatched egg, static or
+  wild, evolved at the lowest legal level) chosen by PKHeX
+  (`tool/gen_living_dex_data.sh`, oracle command `livingdex`), or from an
+  official event for mythicals/legendaries that only existed that way. Shiny
+  only where the game allows it. It warns that the boxes are overwritten (the
+  previous version stays in the Arca history) and what does not fit.
+  `tool/check_living_dex_pkhex.sh` checks the full normal and shiny Living
+  Dex of 16 games read back from the save: 0 invalid out of 16938.
+  Covered forms include Furfrou's trims where they stay in a box (Sun/Moon,
+  USUM; in X/Y and ORAS they revert to the base form when deposited, so only
+  the base form is generated), 18 Vivillon patterns (Fancy and Poké Ball are
+  event-only), female Meowstic in Gen 6-7, all 28 Unown in BDSP and BDSP trade
+  evolutions (with the trade partner as handler). After saving, a summary
+  lists everything not generated grouped by reason (battle-only form,
+  fusion/Totem, reverts in the box, event only, needs another region, no
+  encounter in this version, impossible shiny, did not fit). Known limits:
+  seed-correlated encounters (some Gen 3-4 wild ones, SWSH symbols, Z-A) stay
+  normal when shiny is asked; Let's Go mythicals are not included.
 
-### Changed
+### Transfers
 
-- The sidebar logo is much larger (96 px on the extended rail, 72 px on the
-  compact one) with the name below it.
-- **The macOS app is now signed and notarized.** The release is signed with
-  Developer ID with the hardened runtime and notarized by Apple, so it opens
-  with a double-click (no more right-click → Open). It also comes as a
-  `PKArkTools-vX.Y.Z-macos.dmg`; the `-macos.zip` used by the in-app updater
-  stays.
-
-### Fixed
-
-- Let's Go (PB7) Pokémon checksum now covers the 0xE8 bytes PKHeX uses.
-### Added — Transfer Pokémon between saves ("local HOME")
 - **Transfer Pokémon…** (above the party, or ⋮ in a Pokémon's sheet): move
   (default) or copy one or several Pokémon to another save in the Ark, even
   from another generation. Pick the destination save and slot, review a
@@ -119,7 +100,23 @@ developer documentation in `docs/` is in Spanish.
   (`tool/transfer_oracle.sh`, legal synthetic sources generated from PKHeX
   encounter templates); all converted Pokémon are legal in PKHeX, and saves
   round-trip with valid checksums.
-### Added — Tools
+- **HOME clone detector** (Settings → HOME clones): looks through the latest
+  copy of every save in the Ark for Pokémon that share a HOME tracker (copies
+  of the same Pokémon) and shows the save and box of each one.
+- Sword/Shield: the trainer who receives a Pokémon becomes its handler with
+  the link-trade memory PKHeX expects (no MemoryMissingHT "Fishy" notice),
+  also between two saves of Switch games.
+- Poké Transfer drops contest scarves (never released in Gen 5) and on
+  Switch the ♂/♀ symbols in names are stored as Unicode (Nidoran).
+- Event and Living Dex Pokémon survive a transfer:
+  `packages/pkcore/test/integration_test.dart` creates events and Living Dex
+  Pokémon, transfers them and reads them back from the destination save;
+  with the PKHeX oracle, 0 invalid out of 429. The Living Dex stays in
+  National Dex order (sorting the boxes moves nothing) and the Official
+  format checks it without legality warnings.
+
+### Tools
+
 - **Pokémon Showdown**: import one or more sets (species and form, nickname,
   gender, item, ability, level, shiny, nature, EVs/IVs, moves, Tera Type,
   happiness, Gigantamax, Hidden Power type) into the party or the boxes of the
@@ -144,6 +141,63 @@ developer documentation in `docs/` is in Spanish.
   moves), saved as PNG or sent through the system share sheet.
 - User guides: `herramientas.md`, `formato-oficial.md` and
   `instalar.md` (including iPhone/iPad with AltStore and the 7-day refresh).
+
+### Shadow Pokémon
+
+- **Create Shadow Pokémon in Colosseum and XD.** An empty slot offers
+  “Shadow Pokémon”: pick one of the game's Shadow encounters (PKHeX
+  `Encounters3ColoShadow` / `Encounters3XD`, without the Japanese e-Reader
+  ones) and it is created as the game would snag it — species, level, moves,
+  place, ball, your OT/ID, Colosseum/XD origin, XD fateful flag, Shadow ID and
+  full heart gauge — already Shadow or purified with the National Ribbon. PID
+  and IVs come from the GameCube RNG with seeds that respect the NPC trainer's
+  team locks, so PKHeX accepts them. The editor can also turn any Pokémon of
+  those games into a Shadow one, change its Shadow encounter, set the heart
+  gauge and purify or revert it, with confirmation. In XD the Shadow table
+  entry is filled (species, snagged, gauge) and the Strategy Memo records the
+  species.
+- Legality notices for Shadow Pokémon: Shadow ID that does not exist in the
+  game, species that is never Shadow in that game, PID/IV not coming from the
+  CXD generator and shiny Shadow Pokémon in XD.
+
+### macOS signed and notarized
+
+- **The macOS app is now signed and notarized.** The release is signed with
+  Developer ID with the hardened runtime and notarized by Apple, so it opens
+  with a double-click (no more right-click → Open). It also comes as a
+  `PKArkTools-vX.Y.Z-macos.dmg`; the `-macos.zip` used by the in-app updater
+  stays.
+
+### Other changes
+
+- The sidebar logo is much larger (96 px on the extended rail, 72 px on the
+  compact one) with the name below it.
+- Settings → About says PKArkTools is not affiliated with Nintendo, The
+  Pokémon Company or Game Freak.
+- In English the app says "Ark" everywhere (some texts still said "Arca").
+- Every text of the tools lives in the `.arb` files (Spanish/English).
+- Dipplin, Poltchageist and Sinistcha use the game's growth rates (the
+  Artisan forms of the Scarlet/Violet Living Dex showed a level below their
+  met level).
+- The transfer preview shows legality in the app's language.
+- Let's Go (PB7) Pokémon checksum now covers the 0xE8 bytes PKHeX uses.
+- The emulator integration prepared for this release (linked folders, "Open
+  in…", launcher) was removed entirely: the app still reads and exports
+  emulator saves as before.
+
+### Known limits
+
+- The Living Dex leaves seed-correlated encounters normal when shiny is asked
+  (some Gen 3–4 wild ones, Sword/Shield symbols, Z-A); Let's Go mythicals are
+  not included.
+- Gen 4/5 store cards encrypted with the rest of the block and Let's Go and
+  the Switch games keep no pending cards: there a gift is received by creating
+  the Pokémon in a slot.
+- The HOME tracker is generated by the app, not by HOME's servers: continuity
+  is only guaranteed up to Alola; don't upload Pokémon transferred this way to
+  HOME.
+- The Windows and Linux builds are only checked by CI; there is no
+  downloadable iPhone/iPad build.
 
 ## [1.1.0] — 2026-11-24
 

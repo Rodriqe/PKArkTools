@@ -38,6 +38,9 @@ die() { if [ -n "${GITHUB_ACTIONS:-}" ]; then echo "::error::$*"; else echo "ERR
 mkdir -p "$out"
 
 zip_app() { rm -f "$zip_out"; ditto -c -k --sequesterRsrc --keepParent "$app" "$zip_out"; }
+# Resultado para tool/release_notes.py: adhoc | signed | notarized.
+status_out="$out/macos-signing.txt"
+echo adhoc > "$status_out"
 
 if [ -z "${MACOS_CERT_P12_BASE64:-}" ]; then
   notice "No MACOS_CERT_P12_BASE64 secret: the macOS app stays ad-hoc signed and is not notarized (Gatekeeper asks for right-click → Open)."
@@ -165,6 +168,9 @@ if [ "$notarize" = 1 ]; then
   echo "spctl (app): accepted"
   spctl --assess --type open --context context:primary-signature "$dmg_out" > /dev/null 2>&1 || die "Gatekeeper (spctl) rejected the DMG"
   echo "spctl (DMG): accepted"
+  echo notarized > "$status_out"
+else
+  echo signed > "$status_out"
 fi
 
 echo "$zip_out"
