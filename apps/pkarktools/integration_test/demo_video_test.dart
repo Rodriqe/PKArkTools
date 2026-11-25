@@ -140,6 +140,14 @@ void main() {
     }
 
     Future<void> tap(Finder f, {int after = 700}) async {
+      // Si está fuera de la vista (p. ej. al fondo de la hoja de filtros), se
+      // desplaza hasta él con animación antes de pulsar.
+      final hit = tester.hitTestOnBinding(tester.getCenter(f.first, warnIfMissed: false));
+      if (!hit.path.any((e) => e.target == tester.renderObject(f.first))) {
+        unawaited(Scrollable.ensureVisible(tester.element(f.first),
+            alignment: 0.5, duration: const Duration(milliseconds: 400), curve: Curves.easeInOutCubic));
+        await hold(500);
+      }
       await tester.tap(f.first);
       await hold(after);
     }

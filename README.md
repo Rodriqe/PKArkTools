@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="docs/media/pkarktools-demo.mp4"><img src="docs/media/pkarktools-demo.webp" width="600" alt="Animated preview: the Ark with version colours, filters and a save with its party and boxes"></a><br>
-  <sub>▶ <a href="docs/media/pkarktools-demo.mp4">Watch the full demo (40 s, MP4)</a> · <a href="#demo">what it shows</a></sub>
+  <sub>▶ <a href="docs/media/pkarktools-demo.mp4">Watch the full demo (49 s, MP4)</a> · <a href="#demo">what it shows</a></sub>
 </p>
 
 <p align="center">
@@ -263,7 +263,7 @@ Details, containers and known limits: [docs/formatos.md](docs/formatos.md).
 
 ## Demo
 
-[**Watch the demo video**](docs/media/pkarktools-demo.mp4) (40 s, 1080p, no
+[**Watch the demo video**](docs/media/pkarktools-demo.mp4) (49 s, 1080p, no
 audio), recorded on an Android emulator with synthetic saves: the welcome
 screen, the Ark with a colour for every version, filters, a save with its party
 and boxes, the Pokémon editor (level, shiny, moves), origin and ribbons,
