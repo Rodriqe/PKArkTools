@@ -11,6 +11,39 @@ developer documentation in `docs/` is in Spanish.
 
 ## [Unreleased]
 
+### Added — Tools
+- **Pokémon Showdown**: import one or more sets (species and form, nickname,
+  gender, item, ability, level, shiny, nature, EVs/IVs, moves, Tera Type,
+  happiness, Gigantamax, Hidden Power type) into the party or the boxes of the
+  open save, with warnings for everything the game does not allow and the
+  serious legality warnings; origin data Showdown does not carry is filled in
+  with the checker's safe fixes. Export the party or a single Pokémon as
+  Showdown text (copy or system share sheet).
+- **Stat and IV calculator** in the Pokémon editor: final stats at level 50
+  and 100, IV ranges from the stats you see in the game (with *Apply IVs*
+  when they are exact) and Hidden Power type and power (Gen 2–7).
+- **Sort boxes** by Dex number, type, generation, living dex (each species in
+  its slot, duplicates after the last number), level or shiny first; all boxes
+  or a range, with a preview and a single undo step.
+- **Official format**: the current Pokémon Champions regulation (VGC 2026
+  Reg M-C) with its rules, searchable allowed and banned lists, Mega
+  Evolution marks and which Pokémon in your saves are eligible and why the
+  others are not. Species list generated from Pokémon Showdown's `champions`
+  mod (`tool/gen_champions_data.py`, versioned with commit and date);
+  unconfirmed dates and the missing item list are flagged in the app.
+- **Share card**: an image of a Pokémon (app logo, icon, name and form, level,
+  types, shiny, nature, ability, item, Tera Type, origin, ribbons, IVs/EVs and
+  moves), saved as PNG or sent through the system share sheet.
+- **Emulators** (Settings): link the save folder of RetroArch, mGBA, melonDS,
+  Azahar/Lime3DS, Dolphin, Delta's sync folder or the Android Switch ports
+  (with the user's permission) and back it up to the Ark in one tap; known
+  default folders are found on Windows and Linux. **Open in …** launches the
+  installed emulator on Android (intent) and Delta on iOS (URL scheme); the
+  button is hidden elsewhere. Compatibility table in
+  `docs/usuario/emuladores.md`.
+- User guides: `herramientas.md`, `formato-oficial.md`, `emuladores.md` and
+  `instalar.md` (including iPhone/iPad with AltStore and the 7-day refresh).
+
 ## [1.1.0] — 2026-11-24
 
 PKArkTools 1.1.0 brings two big additions: **Ribbon Hunter**, a per-species

@@ -15,6 +15,10 @@ editarla y exportarla lista para el juego o el emulador.
 8. [Saves dañados y reparar checksums](reparar-checksums.md).
 9. [Iconos](iconos.md): sprites bajo demanda y su caché.
 10. [Preguntas frecuentes y solución de problemas](faq.md).
+11. [Herramientas](herramientas.md): importar y exportar texto de Showdown, calculadora de stats e IVs, ordenar cajas y tarjeta para compartir.
+12. [Formato oficial](formato-oficial.md): la regulación vigente de Pokémon Champions y qué Pokémon de tus partidas valen.
+13. [Emuladores](emuladores.md): vincular y respaldar carpetas de saves, abrir el emulador y compatibilidad.
+14. [Instalar](instalar.md): todas las plataformas, y iPhone/iPad con AltStore.
 
 Consulta también [Formatos soportados](../formatos.md) y
 [Seguridad de datos y privacidad](../seguridad-datos.md).
