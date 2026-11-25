@@ -180,6 +180,8 @@ macOS app is signed and notarized.
   Artisan forms of the Scarlet/Violet Living Dex showed a level below their
   met level).
 - The transfer preview shows legality in the app's language.
+- Let's Go event Pokémon get a received date equal to their met date, as
+  PKHeX expects (it failed for gifts created on a later day than the data).
 - Let's Go (PB7) Pokémon checksum now covers the 0xE8 bytes PKHeX uses.
 - The emulator integration prepared for this release (linked folders, "Open
   in…", launcher) was removed entirely: the app still reads and exports

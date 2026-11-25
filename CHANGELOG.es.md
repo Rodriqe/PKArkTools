@@ -187,6 +187,8 @@ Colosseum y XD. La app de macOS llega firmada y notarizada.
   del juego (el nivel de las formas Artesanas de la Living Dex de Escarlata y
   Púrpura salía por debajo del de encuentro).
 - La vista previa de una transferencia da la legalidad en el idioma de la app.
+- Los Pokémon de evento de Let's Go reciben la fecha de recepción igual a la
+  de encuentro, como espera PKHeX (fallaba al crearlos otro día).
 - El checksum de los Pokémon de Let's Go (PB7) cubre los 0xE8 bytes que usa PKHeX.
 - Se retiró por completo el soporte de emuladores que se preparó para esta
   versión (vincular carpetas, «Abrir en…», lanzador): la app sigue leyendo y

@@ -98,6 +98,14 @@ abstract final class EventFactory {
       final d = today ?? DateTime.now();
       pk.metDate = DateTime(d.year, d.month, d.day);
     }
+    // Let's Go guarda además la fecha de recepción: sin intercambiar, PKHeX
+    // exige que coincida con la de encuentro (DateLocalInvalidDate).
+    final met = pk.metDate;
+    if (f == PkFormat.pb7 && met != null && !pk.isEgg) {
+      pk.data[0xCB] = met.year - 2000;
+      pk.data[0xCC] = met.month;
+      pk.data[0xCD] = met.day;
+    }
     pk.dataGame = game;
     if (!f.isGameBoy) pk.refreshPartyStats();
     if (f == PkFormat.pb7) resetCp(pk);
