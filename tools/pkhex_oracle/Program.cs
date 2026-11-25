@@ -8,6 +8,7 @@
 //   dex <outdir>                  formas especiales y evoluciones para la Dex global (DexTable.cs)
 //   ribbons <outdir>              origen, juegos y cintas válidas por especie/forma (RibbonTable.cs)
 //   shadows <outdir>              encuentros oscuros de Colosseum/XD con semillas PID/IV válidas (ShadowTable.cs)
+//   events <outdir> [db]          base de eventos (Mystery Gift) con plantillas legales (EventTable.cs)
 //
 // Los volcados de saves reales contienen datos personales: guárdalos en .scratch/.
 using System.Text.Json;
@@ -26,6 +27,8 @@ static class Program
             return RibbonTable.Run(args[1]);
         if (args.Length == 2 && args[0] == "shadows")
             return ShadowTable.Run(args[1]);
+        if (args.Length is 2 or 3 && args[0] == "events")
+            return EventTable.Run(args[1], args.Length == 3 ? args[2] : null);
         if (args.Length < 2)
         {
             Console.Error.WriteLine("uso: dump <save> [out.json] | roundtrip <save> | edit <in> <out> | forms <outdir>");
