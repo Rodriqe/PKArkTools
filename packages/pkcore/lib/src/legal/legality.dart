@@ -1,6 +1,8 @@
 import '../data/forms.dart';
 import '../data/game_data.dart';
 import '../data/species.dart';
+import '../events/event_db.dart';
+import '../events/event_match.dart';
 import '../model/game.dart';
 import '../pkm/pk_format.dart';
 import '../pkm/pkm.dart';
@@ -380,6 +382,10 @@ abstract final class Legality {
         ? SpeciesForms.displayName(species, pk.form, game, lang)
         : GameStrings.species(species, lang);
 
+    // Evento (Mystery Gift) reconocido: sus datos fijos (movimientos, objeto,
+    // Ball, lugar) no se comparan con las tablas del juego.
+    final event = f.generation >= 3 ? EventMatch.best(pk) : null;
+
     // Especie y forma (PKHeX `IsPresentInGame`: Decidueye normal no está en
     // Leyendas Arceus; Pikachu compañero solo en Let's Go).
     if (!Species.isValid(species) || !table.hasSpecies(species)) {
@@ -429,7 +435,8 @@ abstract final class Legality {
       issues.add(const LegalityIssue(LegalityCode.noMoves, LegalitySeverity.warning, field: 'move1', fix: LegalityFix.moves));
     }
     // Los eventos traen movimientos especiales que no están en los learnsets: no se avisa.
-    final learnable = pk.fatefulEncounter ? const <int>{} : {...learnableMoves(pk, game)};
+    final learnable = pk.fatefulEncounter ? <int>{} : {...learnableMoves(pk, game)};
+    if (event != null && learnable.isNotEmpty) learnable.addAll(EventMatch.moves(event));
     // Colosseum/XD: los movimientos con los que se captura un Pokémon oscuro (Smeargle de Colosseum: esquemas).
     if (learnable.isNotEmpty && pk.version == EncounterTables.cxd) {
       final chain = EncounterTables.evolutionChain(pk.species);
@@ -485,7 +492,7 @@ abstract final class Legality {
 
     // Objeto
     final item = pk.heldItem;
-    if (item != 0) {
+    if (item != 0 && !(event != null && EventMatch.heldItem(event) == item)) {
       final held = ItemTables.held(game);
       final allItems = ItemTables.all(game);
       if (held.isNotEmpty && !held.contains(item) && !allItems.contains(item)) {
@@ -519,15 +526,16 @@ abstract final class Legality {
       issues.add(const LegalityIssue(LegalityCode.natureInvalid, LegalitySeverity.warning, field: 'nature'));
     }
     if (f.generation >= 3) {
-      if (pk.ball == 0 || !BallTables.isValidIn(game, pk.ball)) {
+      final eventBall = event != null && EventMatch.ball(event) == pk.ball;
+      if (!eventBall && (pk.ball == 0 || !BallTables.isValidIn(game, pk.ball))) {
         issues.add(LegalityIssue(LegalityCode.ballInvalid, LegalitySeverity.warning,
             field: 'ball',
             args: {'ball': BallTables.name(pk.ball, lang), 'game': lang == DataLanguage.es ? game.nameEs : game.nameEn},
             fix: LegalityFix.ball));
       }
     }
-    _checkOrigin(pk, game, table, issues, lang, speciesName);
-    _checkEncounter(pk, issues, lang, speciesName);
+    _checkOrigin(pk, game, table, issues, lang, speciesName, event);
+    if (event == null) _checkEncounter(pk, issues, lang, speciesName);
     issues.addAll(GcLegality.check(pk, game, speciesName));
     return issues;
   }
@@ -603,8 +611,8 @@ abstract final class Legality {
   /// Offset de `ObedienceLevel` en PK9/PA9.
   static const _obedienceOfs = 0x11F;
 
-  static void _checkOrigin(
-      Pkm pk, GameVersion game, GameDataTable table, List<LegalityIssue> issues, DataLanguage lang, String speciesName) {
+  static void _checkOrigin(Pkm pk, GameVersion game, GameDataTable table, List<LegalityIssue> issues, DataLanguage lang,
+      String speciesName, EventGift? event) {
     final f = pk.format;
     if (f.generation < 3 || pk.isEgg) return;
     final v = pk.version;
@@ -644,7 +652,10 @@ abstract final class Legality {
     final ball = pk.ball;
     final ballName = BallTables.name(ball, lang);
     final laOrigin = v == OriginGames.legendsArceus;
-    if (ball >= 28 && ball <= 37 && !laOrigin && v != 0) {
+    final eventBall = event != null && EventMatch.ball(event) == ball;
+    if (eventBall) {
+      // La Ball la fija el evento (p. ej. Enamorus de HOME en Leyendas Arceus).
+    } else if (ball >= 28 && ball <= 37 && !laOrigin && v != 0) {
       issues.add(LegalityIssue(LegalityCode.ballOnlyInLegends, LegalitySeverity.warning,
           field: 'ball', args: {'ball': ballName}, fix: LegalityFix.ball));
     } else if (laOrigin && !(ball == 1 || (ball >= 27 && ball <= 37))) {
@@ -658,7 +669,7 @@ abstract final class Legality {
             fix: LegalityFix.ball));
       }
     }
-    if (ball == 16 && formatGen >= 4 && !pk.fatefulEncounter) {
+    if (ball == 16 && formatGen >= 4 && !pk.fatefulEncounter && !eventBall) {
       issues.add(const LegalityIssue(LegalityCode.cherishWithoutEvent, LegalitySeverity.notice, field: 'ball'));
     }
 
@@ -674,13 +685,13 @@ abstract final class Legality {
 
     // Variocolor bloqueado (solo en el encuentro del juego; los eventos, p. ej. Zacian
     // y Zamazenta variocolor de 2020, sí pueden serlo).
-    if (pk.isShiny && !pk.fatefulEncounter && OriginGames.isShinyLocked(pk.species, v)) {
+    if (pk.isShiny && !pk.fatefulEncounter && event == null && OriginGames.isShinyLocked(pk.species, v)) {
       issues.add(LegalityIssue(LegalityCode.shinyLocked, LegalitySeverity.warning,
           field: 'shiny', args: {'species': speciesName, 'origin': origin}, fix: LegalityFix.shiny));
     }
 
     // Singulares de evento sin marca
-    if (formatGen >= 4 && originGen != null && originGen >= 4 && !pk.fatefulEncounter &&
+    if (formatGen >= 4 && originGen != null && originGen >= 4 && !pk.fatefulEncounter && event == null &&
         OriginGames.isEventOnly(pk.species, v)) {
       issues.add(LegalityIssue(LegalityCode.eventSpeciesNotFateful, LegalitySeverity.notice,
           field: 'species', args: {'species': speciesName, 'origin': origin}));
@@ -690,7 +701,7 @@ abstract final class Legality {
     if (pk.hasRelearnMoves) {
       final known = table.learnableMoves(pk.species, pk.form);
       if (known.isNotEmpty && !pk.fatefulEncounter) {
-        final pool = relearnableMoves(pk, game);
+        final pool = {...relearnableMoves(pk, game), if (event != null) ...EventMatch.moves(event)};
         for (final m in pk.relearnMoves) {
           if (m == 0 || pool.contains(m)) continue;
           issues.add(LegalityIssue(LegalityCode.relearnInvalid, LegalitySeverity.notice,

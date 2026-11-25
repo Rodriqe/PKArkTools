@@ -57,3 +57,4 @@ export 'src/util/checksums.dart';
 export 'src/write/save_writer.dart';
 export 'src/events/event_db.dart';
 export 'src/events/event_factory.dart';
+export 'src/events/event_match.dart';

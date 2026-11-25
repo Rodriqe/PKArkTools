@@ -98,9 +98,36 @@ void main() {
           if (g.shiny == EventShiny.never) expect(pk.isShiny, isFalse, reason: '$g');
           if (g.shiny.isShiny && f.generation >= 5) expect(pk.isShiny, isTrue, reason: '$g');
           expect(pk.checksumValid, isTrue);
+          // Legalidad de pkcore: el evento se reconoce y no hay ni un aviso
+          // (PKHeX da por legales todos estos: tool/check_events_pkhex.sh).
+          expect(EventMatch.find(pk), contains(g), reason: '$g');
+          expect(Legality.check(pk, game), isEmpty, reason: '$g');
         }
       });
     }
+  });
+
+  group('reconocer eventos al validar', () {
+    test('un Pokémon con el OT o el lugar cambiados ya no es el evento', () {
+      final (game, raw) = syntheticFor(PkFormat.pk6, _trainers.first.$1);
+      final ed = SaveEditor.open(raw);
+      final g = EventDb.creatableIn(game).firstWhere((g) => !g.recipientOt && !g.isEgg && g.species == 151);
+      final pk = EventFactory.create(g, game, ed.readTrainer(), random: Random(1));
+      expect(EventMatch.best(pk), isNotNull);
+      final otro = pk.clone()..otName = 'Hacker';
+      expect(EventMatch.find(otro), isNot(contains(g)));
+      final lugar = pk.clone()..metLocation = 8;
+      expect(EventMatch.find(lugar), isNot(contains(g)));
+    });
+
+    test('movimiento especial de evento sin marca fatídica (Metang de Gen 3 con Alivio)', () {
+      final (game, raw) = syntheticFor(PkFormat.pk3, _trainers.first.$1);
+      final ed = SaveEditor.open(raw);
+      final g = EventDb.creatableIn(game).firstWhere((g) => g.species == 375);
+      final pk = EventFactory.create(g, game, ed.readTrainer(), random: Random(1));
+      expect(pk.fatefulEncounter, isFalse);
+      expect([for (final i in Legality.check(pk, game)) i.code], isNot(contains(LegalityCode.moveNotLearnable)));
+    });
   });
 
   final out = io.Platform.environment['EVENTS_OUT'];
