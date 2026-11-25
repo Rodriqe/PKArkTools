@@ -14,6 +14,7 @@ import '../editor/legality_view.dart';
 import '../editor/pokemon_editor.dart';
 import '../editor/shadow_panel.dart';
 import '../events/event_explorer.dart';
+import '../transfer/transfer_screen.dart';
 
 /// Lo que viaja al arrastrar un Pokémon.
 class SlotDrag {
@@ -27,11 +28,27 @@ bool get _touchFirst =>
 
 /// Acciones sobre los huecos del borrador (abrir editor, mover, importar…).
 class StorageActions {
-  StorageActions(this.context, this.ref, this.snapshotId, this.game);
+  StorageActions(this.context, this.ref, this.snapshotId, this.game, {this.slotId, this.isLatest = false});
   final BuildContext context;
   final WidgetRef ref;
   final int snapshotId;
   final GameVersion game;
+
+  /// Partida del snapshot (para transferir; null = sin transferencia).
+  final int? slotId;
+
+  /// El snapshot es la copia más reciente (solo se transfiere desde ella).
+  final bool isLatest;
+
+  /// Abre la transferencia a otra partida con [refs] elegidos.
+  Future<void> transfer([List<SlotRef> refs = const []]) async {
+    if (slotId == null) return;
+    if (ref.read(draftProvider(snapshotId)).dirty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.transferDirty)));
+      return;
+    }
+    await TransferScreen.open(context, snapshotId: snapshotId, slotId: slotId!, game: game, initial: refs);
+  }
 
   DraftController get _draft => ref.read(draftProvider(snapshotId).notifier);
   SaveEditor get _editor => ref.read(draftProvider(snapshotId)).editor!;
@@ -82,12 +99,15 @@ class StorageActions {
       pk: pk,
       slotLabel: slotLabel(slot),
       canDelete: !_editor.isSlotLocked(slot),
+      canTransfer: slotId != null && isLatest,
       onExport: exportPokemon,
     );
     if (!context.mounted || res == null) return;
     switch (res) {
       case EditorApply(:final pk):
         _apply(SetSlotEdit(slot, pk));
+      case EditorTransfer():
+        await transfer([slot]);
       case EditorDelete():
         _apply(ClearSlotEdit(slot, species: pk.species));
       case EditorClone(:final pk):

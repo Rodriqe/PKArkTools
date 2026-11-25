@@ -52,3 +52,11 @@ Comandos de la consola (`dotnet <bin>/PkhexOracle.dll …`):
   otro entrenador en normal y variocolor. Lo usa `tool/gen_living_dex_data.sh`.
 - `gifts <save>`: tarjetas de la bandeja del Regalo Misterioso del save y si los
   checksums son válidos.
+- `transfer <manifest.json> <out.json>`: convierte cada Pokémon con
+  `EntityConverter` y analiza la legalidad del resultado de PKHeX y del de
+  pkcore. `transfersrc <cases.json> <dir>` genera orígenes legales con las
+  plantillas de encuentro y `transfertables <out.dart>` regenera
+  `packages/pkcore/lib/src/data/generated/transfer_data.dart`.
+  `tool/transfer_oracle.sh [--sources]` hace todo y actualiza
+  `packages/pkcore/test/data/transfer_oracle.json` (fixture de
+  `transfer_test.dart`, que no necesita .NET).

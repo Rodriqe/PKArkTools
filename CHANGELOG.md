@@ -90,6 +90,30 @@ developer documentation in `docs/` is in Spanish.
 ### Fixed
 
 - Let's Go (PB7) Pokémon checksum now covers the 0xE8 bytes PKHeX uses.
+### Added — Transfer Pokémon between saves ("local HOME")
+- **Transfer Pokémon…** (above the party, or ⋮ in a Pokémon's sheet): move
+  (default) or copy one or several Pokémon to another save in the Ark, even
+  from another generation. Pick the destination save and slot, review a
+  preview (format route, moves, Ball, held item, ribbons, name, ability,
+  level and legality at the destination) and confirm. Both saves are stored
+  as new copies; the originals stay in the history.
+- `PkTransfer` in pkcore, ported from PKHeX's `EntityConverter`: Time
+  Capsule (Gen 1 ↔ 2), Virtual Console → Gen 7, Pal Park, Poké Transfer, Poké
+  Transporter, Pokémon Bank and Pokémon HOME between Gen 7, Let's Go and the
+  Switch games. Only real routes: forward only (both ways among Switch
+  games), no eggs across formats, no unpurified Shadow Pokémon, species and
+  forms must exist at the destination, Spinda/Nincada stay in BDSP.
+- HOME tracker: generated locally (non-zero, unique, kept on later moves).
+  A prominent notice, acknowledged once per device, explains that the app
+  only guarantees continuity up to Alola and recommends not uploading these
+  Pokémon to HOME; a "Take it to Alola and continue with Bank/HOME" option
+  and a step-by-step guide offer the official route. Copying a Pokémon that
+  has a tracker asks for explicit confirmation (it would be a clone);
+  `HomeTrackerClones` finds repeated trackers.
+- Validation: every generation hop is checked with the PKHeX oracle
+  (`tool/transfer_oracle.sh`, legal synthetic sources generated from PKHeX
+  encounter templates); all converted Pokémon are legal in PKHeX, and saves
+  round-trip with valid checksums.
 
 ## [1.1.0] — 2026-11-24
 

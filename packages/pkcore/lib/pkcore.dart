@@ -62,3 +62,6 @@ export 'src/events/event_match.dart';
 export 'src/events/event_card.dart';
 export 'src/events/event_details.dart';
 export 'src/events/gift_tray.dart';
+export 'src/transfer/pk_transfer.dart';
+export 'src/transfer/home_clones.dart';
+export 'src/transfer/transfer_diff.dart';

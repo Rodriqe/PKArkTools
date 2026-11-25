@@ -12,6 +12,9 @@
 //   events <outdir> [db]          base de eventos (Mystery Gift) con plantillas legales (EventTable.cs)
 //   gifts <save>                  tarjetas de la bandeja del Regalo Misterioso (una línea JSON por tarjeta)
 //   livingdex <outdir> [versión]  Living Dex: un Pokémon legal por versión/especie/forma (LivingDexTable.cs)
+//   transfer <manifest> <out>     conversión entre formatos y legalidad (TransferOracle.cs)
+//   transfersrc <cases> <outdir>   orígenes legales para los casos de transferencia
+//   transfertables <out.dart>     tablas del conversor de pkcore (nombres, objetos, amistad base)
 //
 // Los volcados de saves reales contienen datos personales: guárdalos en .scratch/.
 using System.Text.Json;
@@ -36,6 +39,12 @@ static class Program
             return EventTable.Run(args[1], args.Length == 3 ? args[2] : null);
         if (args.Length is 2 or 3 && args[0] == "livingdex")
             return LivingDexTable.Run(args[1], args.Length == 3 ? args[2] : null);
+        if (args.Length == 2 && args[0] == "transfertables")
+            return TransferTables.Run(args[1]);
+        if (args.Length == 3 && args[0] == "transfersrc")
+            return TransferSources.Run(args[1], args[2]);
+        if (args.Length == 3 && args[0] == "transfer")
+            return TransferOracle.Run(args[1], args[2]);
         if (args.Length < 2)
         {
             Console.Error.WriteLine("uso: dump <save> [out.json] | roundtrip <save> | edit <in> <out> | forms <outdir>");
@@ -159,7 +168,7 @@ static class Program
         return a;
     }
 
-    static JsonObject Mon(string slot, PKM pk, SaveFile sav)
+    internal static JsonObject Mon(string slot, PKM pk, SaveFile? sav)
     {
         var la = new LegalityAnalysis(pk);
         var issues = new JsonArray();

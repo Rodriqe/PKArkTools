@@ -93,6 +93,30 @@ que es el que usan las notas de los Releases; se actualizan a la par.
 ### Corregido
 
 - El checksum de los Pokémon de Let's Go (PB7) cubre los 0xE8 bytes que usa PKHeX.
+### Añadido — Transferir Pokémon entre partidas («HOME local»)
+- **Transferir Pokémon…** (encima del equipo, o ⋮ en la ficha): mueve (por
+  defecto) o copia uno o varios Pokémon a otra partida del Arca, aunque sea
+  de otra generación. Eliges la partida y el hueco de destino, revisas la
+  vista previa (ruta de formatos, movimientos, Ball, objeto, cintas, nombre,
+  habilidad, nivel y legalidad en el destino) y confirmas. Las dos partidas
+  se guardan como copias nuevas; las originales siguen en el historial.
+- `PkTransfer` en pkcore, portado de `EntityConverter` de PKHeX: Cápsula del
+  Tiempo (Gen 1 ↔ 2), Consola Virtual → Gen 7, Pal Park, Poké Transfer, Poké
+  Transporter, Pokémon Bank y Pokémon HOME entre Gen 7, Let's Go y los juegos
+  de Switch. Solo rutas reales: hacia adelante (en ambos sentidos entre los
+  de Switch), sin huevos entre formatos, sin Pokémon oscuros sin purificar,
+  especie y forma deben existir en el destino, Spinda/Nincada no salen de BDSP.
+- Rastreador de HOME: generado localmente (no nulo, único, se conserva en
+  saltos posteriores). Un aviso destacado, que se acepta una vez por
+  dispositivo, explica que la app solo garantiza la continuidad hasta Alola y
+  recomienda no subir esos Pokémon a HOME; la opción «Llevar hasta Alola y
+  continuar con Banco/HOME» y una guía paso a paso ofrecen la ruta oficial.
+  Copiar un Pokémon con rastreador pide confirmación expresa (sería un clon);
+  `HomeTrackerClones` detecta rastreadores repetidos.
+- Validación: cada salto de generación se comprueba con el oráculo PKHeX
+  (`tool/transfer_oracle.sh`, orígenes sintéticos legales generados con las
+  plantillas de encuentro de PKHeX); todos los Pokémon convertidos son legales
+  en PKHeX y los saves hacen round-trip con checksums válidos.
 
 ## [1.1.0] — 2026-11-24
 

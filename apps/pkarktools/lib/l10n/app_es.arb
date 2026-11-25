@@ -2745,5 +2745,226 @@
   "ldReasonNeedsRegion": "Necesitan la región de otra consola",
   "ldReasonNotObtainable": "Sin encuentro propio en esta versión (otra versión, intercambio o HOME)",
   "ldReasonShinyImpossible": "Variocolor imposible: quedaron normales",
-  "ldReasonDoesNotFit": "No cupieron en las cajas"
+  "ldReasonDoesNotFit": "No cupieron en las cajas",
+  "transferTo": "Transferir a otra partida…",
+  "transferPokemonMenu": "Transferir Pokémon…",
+  "transferTitle": "Transferir Pokémon",
+  "transferIntro": "Lleva Pokémon a otra partida del Arca, aunque sea de otra generación, con las reglas de Pal Park, Poké Transfer, Poké Transporter, Banco y HOME. Las dos partidas se guardan como copias nuevas; las anteriores siguen en el historial.",
+  "transferStepPokemon": "Pokémon",
+  "transferSelectedCount": "{n, plural, =0{Ninguno seleccionado} =1{1 seleccionado} other{{n} seleccionados}}",
+  "@transferSelectedCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "transferSelectAll": "Todos",
+  "transferSelectNone": "Ninguno",
+  "transferStepDestination": "Partida de destino",
+  "transferNoDestinations": "No hay otra partida en el Arca a la que transferir.",
+  "transferStepWhere": "Dónde dejarlos",
+  "transferFirstFree": "Primer hueco libre",
+  "transferFromBox": "Desde {box}",
+  "@transferFromBox": {
+    "placeholders": {
+      "box": {
+        "type": "String"
+      }
+    }
+  },
+  "transferStepPreview": "Vista previa",
+  "transferStepMode": "Modo",
+  "transferModeMove": "Mover",
+  "transferModeCopy": "Copiar",
+  "transferModeMoveDesc": "Se quita de la partida de origen, como en HOME.",
+  "transferModeCopyDesc": "El original se queda donde está.",
+  "transferCloneWarning": "Algún Pokémon tiene rastreador de HOME: la copia tendría el mismo y PKHeX (y HOME) la verían como un clon del original.",
+  "transferCloneConfirm": "Copiar igualmente como clon",
+  "transferConfirm": "{n, plural, =1{Transferir 1 Pokémon} other{Transferir {n} Pokémon}}",
+  "@transferConfirm": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "transferDone": "{n, plural, =1{1 Pokémon transferido a {game}.} other{{n} Pokémon transferidos a {game}.}}",
+  "@transferDone": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "transferNoteTo": "Recibidos {n} Pokémon de {game}",
+  "@transferNoteTo": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "transferNoteFrom": "Enviados {n} Pokémon a {game}",
+  "@transferNoteFrom": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "transferDirty": "Guarda o descarta los cambios de esta partida antes de transferir.",
+  "transferRoute": "Ruta: {route}",
+  "@transferRoute": {
+    "placeholders": {
+      "route": {
+        "type": "String"
+      }
+    }
+  },
+  "transferGoesTo": "Irá a {slot}",
+  "@transferGoesTo": {
+    "placeholders": {
+      "slot": {
+        "type": "String"
+      }
+    }
+  },
+  "transferNoChanges": "Sin cambios relevantes.",
+  "transferChangeMoves": "Movimientos: {before} → {after}",
+  "@transferChangeMoves": {
+    "placeholders": {
+      "after": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      }
+    }
+  },
+  "transferChangeBall": "Ball: {before} → {after}",
+  "@transferChangeBall": {
+    "placeholders": {
+      "after": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      }
+    }
+  },
+  "transferChangeItemRemoved": "Se retira el objeto: {item}",
+  "@transferChangeItemRemoved": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "transferChangeItem": "Objeto: {before} → {after}",
+  "@transferChangeItem": {
+    "placeholders": {
+      "after": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      }
+    }
+  },
+  "transferChangeRibbonsKept": "{n, plural, =1{Conserva 1 cinta} other{Conserva {n} cintas}}",
+  "@transferChangeRibbonsKept": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "transferChangeRibbonsLost": "Cintas que no existen en el destino: {list}",
+  "@transferChangeRibbonsLost": {
+    "placeholders": {
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "transferChangeNickname": "Nombre: {before} → {after}",
+  "@transferChangeNickname": {
+    "placeholders": {
+      "after": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      }
+    }
+  },
+  "transferChangeAbility": "Habilidad: {before} → {after}",
+  "@transferChangeAbility": {
+    "placeholders": {
+      "after": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      }
+    }
+  },
+  "transferChangeLevel": "Nivel: {before} → {after}",
+  "@transferChangeLevel": {
+    "placeholders": {
+      "after": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      }
+    }
+  },
+  "transferChangeForm": "Cambia de forma",
+  "transferChangeIvs": "IV nuevos: la Consola Virtual da 3 IV perfectos (5 a Mew y Celebi)",
+  "transferChangeNature": "Cambia la naturaleza",
+  "transferBlockBackwards": "No puede volver a una generación anterior.",
+  "transferBlockNoRoute": "No hay forma oficial de llevarlo a ese juego.",
+  "transferBlockShadow": "Es un Pokémon oscuro: primero hay que purificarlo en Colosseum o XD.",
+  "transferBlockEgg": "Los huevos solo se intercambian entre juegos de la misma generación.",
+  "transferBlockSpecies": "Esta especie no existe en el juego de destino.",
+  "transferBlockForm": "Esta forma no puede ir a ese juego.",
+  "transferBlockBdsp": "Spinda y Nincada no pueden entrar ni salir de Diamante Brillante y Perla Reluciente.",
+  "transferBlockLetsGo": "A Let's Go solo vuelven Pokémon que salieron de Let's Go.",
+  "transferBlockGbLanguage": "Las partidas japonesas y las internacionales de Game Boy no pueden intercambiar.",
+  "transferBlockGen1": "La especie, sus movimientos u objeto no existen en Gen 1.",
+  "transferBlockUnsupported": "Colosseum y XD no reciben Pokémon de otros juegos aquí.",
+  "transferSkipNoSpace": "No queda sitio en las cajas del destino.",
+  "transferSkipLocked": "Está en un hueco bloqueado.",
+  "transferSkipLastInParty": "Es el último del equipo: el equipo no puede quedarse vacío.",
+  "transferHomeTitle": "Este traspaso pasa por Pokémon HOME",
+  "transferHomeBody": "La app solo puede garantizar la continuidad hasta Alola (Gen 7: Sol/Luna, Ultrasol/Ultraluna y Pokémon Bank). Para llegar a un juego de Switch, el Pokémon necesita un rastreador de HOME: lo genera la app en tu dispositivo, no los servidores de HOME. PKHeX lo da por válido, pero no podemos garantizar cómo lo trataría el HOME real: te recomendamos no subir a HOME los Pokémon transferidos así.",
+  "transferHomeAck": "Entiendo",
+  "transferAlolaButton": "Llevar hasta Alola y continuar con Banco/HOME",
+  "transferAlolaRecommended": "Recomendado: llévalo con la app hasta un juego de Alola y desde ahí usa Pokémon Bank y HOME oficiales, para que HOME le asigne su propio rastreador.",
+  "transferAlolaNone": "Para eso necesitas una partida de Sol/Luna o Ultrasol/Ultraluna en el Arca.",
+  "transferAlolaPick": "Elige la partida de Alola",
+  "transferGuideButton": "Cómo seguir con Banco y HOME",
+  "transferGuideTitle": "De Alola a Switch con Banco y HOME",
+  "transferGuideBody": "1. Exporta la partida de Alola desde el Arca y ponla en tu 3DS.\n2. En la 3DS, abre Pokémon Bank y deposita el Pokémon (Poké Transporter solo hace falta para Gen 5 y la Consola Virtual).\n3. En Pokémon HOME (móvil o Switch), usa «Pokémon Bank» para pasar la caja de Bank a HOME.\n4. En la Switch, abre HOME y lleva el Pokémon a Espada/Escudo, Diamante Brillante/Perla Reluciente, Leyendas Arceus, Escarlata/Púrpura o Leyendas Z-A.\n\nPokémon Bank solo funciona en una 3DS que ya lo tenga instalado: la eShop de 3DS cerró en 2023. Let's Go no usa Bank: va a HOME directamente desde su propio juego.",
+  "transferLegality": "Legalidad en el destino",
+  "transferNothingReady": "Ninguno de los Pokémon elegidos se puede transferir a esa partida.",
+  "transferFailed": "No se pudo transferir: {error}",
+  "@transferFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }
