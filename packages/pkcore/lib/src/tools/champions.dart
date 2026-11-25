@@ -10,8 +10,8 @@ import 'showdown.dart';
 
 /// Una regulación de Pokémon Champions con sus fechas.
 ///
-/// Las fechas no están en Showdown: salen de `tool/champions_regulations.json`
-/// (con su fuente) y pueden faltar (una regulación anunciada sin calendario).
+/// Las fechas salen de la página oficial de la regulación (noticias del
+/// juego, ver `tool/champions_official.py`) y pueden faltar.
 class ChampionsRegulation {
   const ChampionsRegulation({
     required this.code,
@@ -53,8 +53,9 @@ class ChampionsDataException implements Exception {
 }
 
 /// Datos del formato oficial: los genera `tool/gen_champions_data.py` desde
-/// Pokémon Showdown (`data/champions/champions.json`, que la app descarga de
-/// GitHub, y su copia integrada `champions_data.dart`).
+/// las fuentes oficiales del juego, con Pokémon Showdown para Flat Rules,
+/// Megas y comprobación (`data/champions/champions.json`, que la app descarga
+/// de GitHub, y su copia integrada `champions_data.dart`).
 class ChampionsData {
   ChampionsData._({
     required this.schemaVersion,
