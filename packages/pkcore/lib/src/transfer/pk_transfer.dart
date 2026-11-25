@@ -174,7 +174,8 @@ abstract final class PkTransfer {
       if (++guard > 12) throw StateError('ruta de transferencia sin fin');
     }
     cur.dataGame = to;
-    if (dest.generation >= 8 && route.length > 1) _updateHandler(cur, ctx);
+    // En Switch también al pasar entre dos partidas del mismo juego (intercambio).
+    if (dest.generation >= 8 && !cur.isEgg) _updateHandler(cur, ctx);
     if (!cur.format.isGameBoy) {
       cur.refreshPartyStats();
       cur.refreshChecksum();
@@ -649,12 +650,31 @@ abstract final class PkTransfer {
       return;
     }
     pk.currentHandler = 1;
-    if (pk.htGender == t.gender && pk.htName == t.name) return;
-    pk.htMemory = (0, 0, 0, 0);
-    pk.htName = t.name;
-    pk.htLanguage = t.language;
-    pk.htGender = t.gender;
-    pk.htFriendship = baseFriendship(pk.species);
+    if (pk.htGender != t.gender || pk.htName != t.name) {
+      pk.htMemory = (0, 0, 0, 0);
+      pk.htName = t.name;
+      pk.htLanguage = t.language;
+      pk.htGender = t.gender;
+      pk.htFriendship = baseFriendship(pk.species);
+    }
+    // Espada/Escudo (destino, o origen de un Pokémon que sigue a HOME/Escarlata/
+    // DBPR): sin recuerdo del último entrenador PKHeX avisa MemoryMissingHT
+    // (Fishy); se pone el de intercambio como `SetTradeMemoryHT8` (recuerdo 4,
+    // Centro Pokémon, intensidad 1).
+    final swsh = pk.format == PkFormat.pk8 || pk.version == 44 || pk.version == 45;
+    if (swsh && pk.htMemory.$2 == 0) {
+      pk.htMemory = (1, 4, _tradeFeeling8(ctx.rnd), 9);
+    }
+  }
+
+  /// Sentimiento aleatorio válido para el recuerdo 4 en Gen 8, rango 0–19
+  /// (PKHeX `MemoryContext8.GetRandomFeeling8(4, 20)`; se guarda +1).
+  static int _tradeFeeling8(Random r) {
+    const bits = 0x04CBFD;
+    while (true) {
+      final f = r.nextInt(20);
+      if (bits & (1 << f) != 0) return f + 1;
+    }
   }
 
   static PkFormat? _nativeFormat(int version) => switch (version) {

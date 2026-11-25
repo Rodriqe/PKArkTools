@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:pkcore/pkcore.dart';
+import 'package:pkcore/src/transfer/transfer_fields.dart' show G6FieldAccess;
 import 'package:pkcore/testing.dart';
 import 'package:test/test.dart';
 
@@ -179,6 +180,19 @@ void main() {
       // Dos Pokémon distintos reciben rastreadores distintos.
       final other = transferCases.firstWhere((c) => c.id == 'us-sv').convert().pk!;
       expect(other.homeTracker, isNot(sw.homeTracker));
+    });
+
+    test('Espada/Escudo: el último entrenador recibe el recuerdo de intercambio (PKHeX MemoryMissingHT)', () {
+      for (final id in ['us-sw', 'gg-sw', 'sv-sw', 'sw-sv']) {
+        final pk = transferCases.firstWhere((c) => c.id == id).convert().pk!;
+        expect(pk.currentHandler, 1, reason: id);
+        final (intensity, memory, feeling, variable) = pk.htMemory;
+        expect((intensity, memory, variable), (1, 4, 9), reason: id);
+        expect(feeling, inInclusiveRange(1, 20), reason: id);
+      }
+      // Fuera de Espada/Escudo no se inventan recuerdos.
+      final sv = transferCases.firstWhere((c) => c.id == 'us-sv').convert().pk!;
+      expect(sv.htMemory.$2, 0);
     });
 
     test('HOME quita el objeto; Gen 3 → 4 pierde las MO y convierte el objeto', () {
