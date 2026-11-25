@@ -3378,5 +3378,32 @@
   "compClassic": "Clásica",
   "compClassicDesc": "Juegos principales: IVs, EVs y nivel libres.",
   "compSpecies": "Especie",
-  "compSoon": "Próximamente"
+  "compSoon": "Próximamente",
+  "compNoMega": "Sin Mega",
+  "compStatPoints": "Puntos (SP)",
+  "compSpTotal": "Puntos: {used} / {max}",
+  "@compSpTotal": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      },
+      "used": {
+        "type": "int"
+      }
+    }
+  },
+  "compChampionsRules": "Champions: nivel 50, IVs al máximo y puntos de estadística en lugar de EVs (hasta {perStat} por estadística, {total} en total).",
+  "@compChampionsRules": {
+    "placeholders": {
+      "perStat": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "compLoadFromArk": "Cargar de mis Pokémon",
+  "compPasteShowdown": "Pegar de Showdown",
+  "compFromArkNote": "Se pasa a las reglas de Champions: los EVs se convierten en los puntos que dan la misma estadística a nivel 50 (no es la conversión oficial de HOME)."
 }

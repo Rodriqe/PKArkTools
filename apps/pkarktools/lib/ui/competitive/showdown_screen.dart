@@ -188,10 +188,11 @@ class _CheckedTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final level = c.set.level;
     final notes = [
-      if (c.species == null) es ? 'Especie desconocida: «${c.set.speciesText}».' : 'Unknown species: “${c.set.speciesText}”.',
+      if (c.species == null)
+        es ? 'Especie desconocida: «${c.set.speciesText}».' : 'Unknown species: “${c.set.speciesText}”.',
       for (final r in c.reasons) ChampionsEligibility.reasonText(r, es: es),
       if (level != null && level > ChampionsFormat.level)
-        context.l10n.compShowdownLevel('$level', '${ChampionsFormat.level}'),
+        context.l10n.compShowdownLevel('${ChampionsFormat.level}', '$level'),
     ];
     return ListTile(
       contentPadding: EdgeInsets.zero,

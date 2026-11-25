@@ -1,20 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pkcore/pkcore.dart';
 
+import '../../data/update/champions_update.dart';
 import '../../theme/app_theme.dart';
 import '../common/format.dart';
 import '../editor/pickers.dart';
+import 'build_editor.dart';
 
-/// Calculadora de estadísticas de Competitivo.
-class StatsScreen extends StatelessWidget {
+/// Un set de ejemplo para empezar: el primero permitido (Garchomp si está).
+ChampionsBuild defaultChampionsBuild() {
+  final allowed = ChampionsDex.allowedSpecies();
+  final s = allowed.firstWhere((x) => x.id == 'garchomp', orElse: () => allowed.first);
+  return ChampionsBuild(speciesId: s.id, ability: s.abilities.isEmpty ? '' : s.abilities.first);
+}
+
+/// Calculadora de estadísticas de Competitivo: la de Champions (por
+/// defecto) y la clásica de los juegos principales.
+class StatsScreen extends ConsumerStatefulWidget {
   const StatsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(context.l10n.compStatsTitle)),
-    body: const ClassicStatCalculator(),
-  );
+  ConsumerState<StatsScreen> createState() => _StatsScreenState();
+}
+
+class _StatsScreenState extends ConsumerState<StatsScreen> {
+  bool _classic = false;
+  ChampionsBuild _build = defaultChampionsBuild();
+  int _version = 0;
+
+  void _replace(ChampionsBuild b) => setState(() {
+    _build = b;
+    _version++;
+  });
+
+  Future<void> _fromArk() async {
+    final b = await pickFromArk(context);
+    if (b != null && mounted) _replace(b);
+  }
+
+  Future<void> _fromShowdown() async {
+    final list = await pasteFromShowdown(context);
+    if (list != null && list.isNotEmpty && mounted) _replace(list.first);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.watch(championsDataProvider);
+    final l10n = context.l10n;
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.compStatsTitle)),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
+        children: [
+          Center(
+            child: SegmentedButton<bool>(
+              segments: [
+                ButtonSegment(value: false, label: Text('Champions', key: const ValueKey('stats-mode-champions'))),
+                ButtonSegment(value: true, label: Text(l10n.compClassic, key: const ValueKey('stats-mode-classic'))),
+              ],
+              selected: {_classic},
+              onSelectionChanged: (s) => setState(() => _classic = s.first),
+            ),
+          ),
+          const SizedBox(height: 12),
+          if (_classic)
+            const ClassicStatCalculator()
+          else ...[
+            Text(
+              l10n.compChampionsRules(ChampionsStats.maxPerStat, ChampionsStats.maxTotal),
+              style: context.text.bodySmall!.copyWith(color: context.tokens.muted),
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                OutlinedButton.icon(
+                  key: const ValueKey('stats-from-ark'),
+                  onPressed: _fromArk,
+                  icon: const Icon(Icons.inventory_2_outlined),
+                  label: Text(l10n.compLoadFromArk),
+                ),
+                OutlinedButton.icon(
+                  key: const ValueKey('stats-from-showdown'),
+                  onPressed: _fromShowdown,
+                  icon: const Icon(Icons.content_paste_rounded),
+                  label: Text(l10n.compPasteShowdown),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            ChampionsBuildEditor(
+              key: ValueKey('stats-editor-$_version'),
+              build: _build,
+              full: false,
+              keyPrefix: 'stats',
+              onChanged: () => setState(() {}),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }
 
 /// Modo «Clásica»: fórmula de los juegos principales (Gen 3+) con especie,
@@ -52,8 +141,8 @@ class _ClassicStatCalculatorState extends State<ClassicStatCalculator> {
         onChanged: (v) => setState(() => onChanged((int.tryParse(v) ?? 0).clamp(0, max))),
       ),
     );
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 80),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(context.l10n.compClassicDesc, style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
         const SizedBox(height: 12),
@@ -94,7 +183,13 @@ class _ClassicStatCalculatorState extends State<ClassicStatCalculator> {
         const SizedBox(height: 16),
         Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          columnWidths: const {0: FlexColumnWidth(1.6), 1: FixedColumnWidth(48), 2: FixedColumnWidth(76), 3: FixedColumnWidth(76), 4: FixedColumnWidth(56)},
+          columnWidths: const {
+            0: FlexColumnWidth(1.6),
+            1: FixedColumnWidth(40),
+            2: FixedColumnWidth(72),
+            3: FixedColumnWidth(72),
+            4: FixedColumnWidth(48),
+          },
           children: [
             TableRow(
               children: [

@@ -7346,6 +7346,48 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Próximamente'**
   String get compSoon;
+
+  /// No description provided for @compNoMega.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin Mega'**
+  String get compNoMega;
+
+  /// No description provided for @compStatPoints.
+  ///
+  /// In es, this message translates to:
+  /// **'Puntos (SP)'**
+  String get compStatPoints;
+
+  /// No description provided for @compSpTotal.
+  ///
+  /// In es, this message translates to:
+  /// **'Puntos: {used} / {max}'**
+  String compSpTotal(int max, int used);
+
+  /// No description provided for @compChampionsRules.
+  ///
+  /// In es, this message translates to:
+  /// **'Champions: nivel 50, IVs al máximo y puntos de estadística en lugar de EVs (hasta {perStat} por estadística, {total} en total).'**
+  String compChampionsRules(int perStat, int total);
+
+  /// No description provided for @compLoadFromArk.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargar de mis Pokémon'**
+  String get compLoadFromArk;
+
+  /// No description provided for @compPasteShowdown.
+  ///
+  /// In es, this message translates to:
+  /// **'Pegar de Showdown'**
+  String get compPasteShowdown;
+
+  /// No description provided for @compFromArkNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Se pasa a las reglas de Champions: los EVs se convierten en los puntos que dan la misma estadística a nivel 50 (no es la conversión oficial de HOME).'**
+  String get compFromArkNote;
 }
 
 class _AppLocalizationsDelegate

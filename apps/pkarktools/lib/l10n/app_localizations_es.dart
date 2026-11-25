@@ -4594,4 +4594,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get compSoon => 'Próximamente';
+
+  @override
+  String get compNoMega => 'Sin Mega';
+
+  @override
+  String get compStatPoints => 'Puntos (SP)';
+
+  @override
+  String compSpTotal(int max, int used) {
+    return 'Puntos: $used / $max';
+  }
+
+  @override
+  String compChampionsRules(int perStat, int total) {
+    return 'Champions: nivel 50, IVs al máximo y puntos de estadística en lugar de EVs (hasta $perStat por estadística, $total en total).';
+  }
+
+  @override
+  String get compLoadFromArk => 'Cargar de mis Pokémon';
+
+  @override
+  String get compPasteShowdown => 'Pegar de Showdown';
+
+  @override
+  String get compFromArkNote =>
+      'Se pasa a las reglas de Champions: los EVs se convierten en los puntos que dan la misma estadística a nivel 50 (no es la conversión oficial de HOME).';
 }

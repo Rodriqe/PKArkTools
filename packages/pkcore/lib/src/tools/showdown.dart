@@ -336,6 +336,9 @@ abstract final class Showdown {
   static int? moveId(String name) => _moves[norm(name)];
   static int? abilityId(String name) => _abilities[norm(name)];
   static int? natureId(String name) => _naturesByName[norm(name)];
+
+  /// Nombre de la naturaleza en inglés, como lo escribe Showdown.
+  static String natureName(int id) => GameStrings.nature(id.clamp(0, 24), DataLanguage.en);
   static int? itemId(String name, int generation) => _itemsFor(generation)[norm(name)];
 
   /// Especie y forma de un nombre de Showdown («Rotom-Wash» → (479, 2)).

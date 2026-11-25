@@ -1205,5 +1205,12 @@
   "compClassic": "Classic",
   "compClassicDesc": "Main-series games: free IVs, EVs and level.",
   "compSpecies": "Species",
-  "compSoon": "Coming soon"
+  "compSoon": "Coming soon",
+  "compNoMega": "No Mega",
+  "compStatPoints": "Points (SP)",
+  "compSpTotal": "Points: {used} / {max}",
+  "compChampionsRules": "Champions: level 50, maxed IVs and Stat Points instead of EVs (up to {perStat} per stat, {total} in total).",
+  "compLoadFromArk": "Load from my Pokémon",
+  "compPasteShowdown": "Paste from Showdown",
+  "compFromArkNote": "Converted to Champions rules: EVs become the points that give the same stat at level 50 (not HOME's official conversion)."
 }

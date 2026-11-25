@@ -64,15 +64,17 @@ class CompetitiveScreen extends ConsumerWidget {
                 const SizedBox(height: 12),
                 const RegulationNotice(),
                 const SizedBox(height: 18),
-                LayoutBuilder(builder: (context, c) {
-                  final cols = c.maxWidth >= 640 ? 2 : 1;
-                  final w = (c.maxWidth - (cols - 1) * 12) / cols;
-                  return Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [for (final s in sections) SizedBox(width: w, child: s)],
-                  );
-                }),
+                LayoutBuilder(
+                  builder: (context, c) {
+                    final cols = c.maxWidth >= 640 ? 2 : 1;
+                    final w = (c.maxWidth - (cols - 1) * 12) / cols;
+                    return Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: [for (final s in sections) SizedBox(width: w, child: s)],
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -118,7 +120,9 @@ class RegulationNotice extends ConsumerWidget {
           color: ended ? context.colors.error : context.tokens.muted,
         ),
         const SizedBox(width: 6),
-        Expanded(child: Text(text, style: context.text.bodySmall!.copyWith(color: context.tokens.muted))),
+        Expanded(
+          child: Text(text, style: context.text.bodySmall!.copyWith(color: context.tokens.muted)),
+        ),
       ],
     );
   }

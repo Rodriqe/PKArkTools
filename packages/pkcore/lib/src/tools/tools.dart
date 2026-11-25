@@ -4,5 +4,7 @@ library;
 
 export 'box_sort.dart';
 export 'champions.dart';
+export 'champions_build.dart';
+export 'champions_dex.dart';
 export 'showdown.dart';
 export 'stat_calc.dart';
