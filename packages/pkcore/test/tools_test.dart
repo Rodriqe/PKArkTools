@@ -450,9 +450,54 @@ Bashful Nature
       expect(d.regulation.code, 'M-C');
       expect(d.regulation.name, 'VGC 2026 Reg M-C');
       expect(d.regulation.until, DateTime(2026, 12, 2));
-      expect(d.regulation.datesConfirmed, isFalse);
-      expect(d.regulations.map((r) => r.code), containsAll(['M-A', 'M-B', 'M-C']));
+      // Fechas de la fuente oficial (noticias del juego).
+      expect(d.regulation.from, DateTime(2026, 9, 9));
+      expect(d.regulation.datesConfirmed, isTrue);
+      expect(d.regulation.datesSource, startsWith('https://champions-news.pokemon-home.com/'));
+      // Solo la vigente y la siguiente (sus fechas, sin lista).
+      expect(d.nextRegulation!.code, 'M-D');
+      expect(d.nextRegulation!.name, 'VGC 2026 Reg M-D');
+      expect(d.nextRegulation!.from, DateTime(2026, 12, 2));
+      expect(d.nextRegulation!.until, DateTime(2027, 3, 3));
+      expect(d.nextRegulation!.datesConfirmed, isTrue);
+      expect(d.regulations.map((r) => r.code), ['M-C', 'M-D']);
       expect(d.megaIds, contains('garchompmega'));
+    });
+
+    test('lista oficial de M-C: todos los ids se resuelven y Meowstic hembra es elegible', () {
+      final d = ChampionsData.builtin;
+      expect(d.unresolved, isEmpty);
+      expect(d.allowedIds, hasLength(264));
+      expect(d.allowed, containsAll([(678, 0), (678, 1), (670, 5), (931, 0), (931, 3), (711, 3), (128, 3)]));
+      // Formas que solo existen en combate: no están en la lista oficial.
+      expect(d.allowedIds, isNot(contains('castformsunny')));
+      expect(d.allowedIds, isNot(contains('aegislashblade')));
+      final t = const TrainerData(name: 'Juliana', tid: 12345, sid: 54321);
+      final f = Showdown.toPkm(Showdown.parse('Meowstic-F').single, GameVersion.scarletViolet, t).pkm!;
+      expect(f.form, 1);
+      expect(ChampionsFormat.check(f, GameVersion.scarletViolet).eligible, isTrue);
+    });
+
+    test('el JSON del cambio a M-D (siguiente: ninguna) lo entiende el parser de la 2.0', () {
+      // Lo que escribirá el workflow desde las 02:00 UTC del 2 de diciembre:
+      // M-D vigente (con lista) y sin siguiente anunciada; campos nuevos
+      // opcionales que la 2.0 ignora.
+      final cur = {...base()['nextRegulation'] as Map<String, Object?>, 'allowedSource': 'official'};
+      final j = base()
+        ..['generatedAt'] = '2026-12-02T02:30:00Z'
+        ..['regulation'] = cur
+        ..['nextRegulation'] = null
+        ..['regulations'] = [(base()['regulations'] as List).last]
+        ..['allowed'] = [...base()['allowed'] as List, 'heatran', 'dondozo', 'tatsugiri']
+        ..['megas'] = [...base()['megas'] as List, 'heatranmega', 'tatsugirimega']
+        ..['someFutureField'] = {'x': 1};
+      final d = parse(j);
+      expect(d.isNewerThan(ChampionsData.builtin), isTrue);
+      expect(d.regulation.code, 'M-D');
+      expect(d.regulation.from, DateTime(2026, 12, 2));
+      expect(d.nextRegulation, isNull);
+      expect(d.unresolved, isEmpty);
+      expect(d.megaSpecies, containsAll([485, 978]));
     });
 
     test('válido: otra regulación cambia lo que se permite', () {

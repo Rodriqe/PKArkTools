@@ -242,8 +242,10 @@ void main() {
     );
     await settle(tester);
     expect(find.textContaining(ChampionsFormat.formatName), findsWidgets);
-    expect(find.byKey(const ValueKey('champions-dates-unconfirmed')), findsOneWidget);
-    expect(find.textContaining('Siguiente: aún sin anunciar'), findsOneWidget);
+    // Fechas oficiales (sin aviso) y la siguiente regulación con su fecha.
+    expect(find.byKey(const ValueKey('champions-dates-unconfirmed')), findsNothing);
+    final next = tester.widget<Text>(find.byKey(const ValueKey('champions-next'))).data!;
+    expect(next, allOf(startsWith('Termina el '), contains('Siguiente: VGC 2026 Reg M-D (desde el ')));
     expect(find.textContaining('fuente: Showdown ${ChampionsFormat.sourceCommit.substring(0, 7)}'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('champions-check')));
     await settle(tester);
