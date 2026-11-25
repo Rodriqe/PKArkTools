@@ -41,3 +41,14 @@ Comandos de la consola (`dotnet <bin>/PkhexOracle.dll …`):
   `tool/gen_gc_shadow_data.sh`, que regenera
   `packages/pkcore/lib/src/data/generated/gc_shadow_data.dart` (crear Pokémon
   oscuros como los genera el juego).
+- `legal <dir> [out.jsonl]`: `LegalityAnalysis` de cada `.pk1` … `.pa9` de la
+  carpeta (lo usan `tool/check_events_pkhex.sh` y `tool/check_living_dex_pkhex.sh`).
+- `events <dir> [db]`: base de eventos (Mystery Gift) con plantillas legales
+  (`tool/gen_event_data.sh`).
+- `livingdex <dir> [versión]`: por versión de cada juego principal y cada
+  especie/forma guardable en caja, un Pokémon legal de un encuentro real de esa
+  versión (huevo, estático o salvaje; evolucionado al nivel mínimo legal) y el
+  modo de re-ID que acepta PKHeX (PID libre, Method 1 o conservar), probado con
+  otro entrenador en normal y variocolor. Lo usa `tool/gen_living_dex_data.sh`.
+- `gifts <save>`: tarjetas de la bandeja del Regalo Misterioso del save y si los
+  checksums son válidos.
