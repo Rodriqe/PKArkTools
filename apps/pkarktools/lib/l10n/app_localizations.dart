@@ -5862,6 +5862,132 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'{count} eventos oficiales (distribución terminada)'**
   String dexSpeciesEvents(int count);
+
+  /// No description provided for @livingDexButton.
+  ///
+  /// In es, this message translates to:
+  /// **'Generar Living Dex en la partida actual'**
+  String get livingDexButton;
+
+  /// No description provided for @livingDexButtonDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Un Pokémon legal de cada especie y forma que el juego admite, en orden de Pokédex, con tus datos de entrenador'**
+  String get livingDexButtonDesc;
+
+  /// No description provided for @livingDexKindTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Living Dex normal o variocolor?'**
+  String get livingDexKindTitle;
+
+  /// No description provided for @livingDexNormal.
+  ///
+  /// In es, this message translates to:
+  /// **'Normal'**
+  String get livingDexNormal;
+
+  /// No description provided for @livingDexNormalDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Ningún Pokémon variocolor'**
+  String get livingDexNormalDesc;
+
+  /// No description provided for @livingDexShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor'**
+  String get livingDexShiny;
+
+  /// No description provided for @livingDexShinyDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Variocolor donde el juego lo permite; los bloqueados quedan normales'**
+  String get livingDexShinyDesc;
+
+  /// No description provided for @livingDexConfirmTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Sobrescribir las cajas?'**
+  String get livingDexConfirmTitle;
+
+  /// No description provided for @livingDexConfirmBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se sobrescribirán las {nBoxes} cajas de esta partida ({nCurrent} Pokémon guardados ahora); el equipo no se toca. La versión anterior queda en el historial del Arca y puedes volver a ella.\n\nSe crearán {n} Pokémon de {game}, cada uno de un encuentro real del juego (huevo, estático o salvaje) o de un evento oficial para los míticos y legendarios que solo existieron así, con tu nombre, ID, género e idioma.'**
+  String livingDexConfirmBody(String game, int n, int nBoxes, int nCurrent);
+
+  /// No description provided for @livingDexNoFit.
+  ///
+  /// In es, this message translates to:
+  /// **'No caben todos: hay {nSlots} huecos y la Living Dex tiene {n}. Se llenarán las cajas hasta donde quepan (hasta {last}).'**
+  String livingDexNoFit(String last, int n, int nSlots);
+
+  /// No description provided for @livingDexShinyNote.
+  ///
+  /// In es, this message translates to:
+  /// **'{n} quedarán normales (variocolor imposible: el juego o el encuentro no lo permite).'**
+  String livingDexShinyNote(int n);
+
+  /// No description provided for @livingDexExcludedNote.
+  ///
+  /// In es, this message translates to:
+  /// **'No se incluyen las formas que solo existen en combate (megas, Gigamax, primigenias, Castform con clima, Cherrim soleado, Darmanitan Daruma, Aegislash filo, Meloetta danza, Mimikyu destapado, Wishiwashi banco…), las fusiones (Kyurem, Necrozma, Calyrex) ni los Pokémon dominantes. Tampoco las especies sin encuentro propio en esta versión ({n}: solo por intercambio, HOME u otra versión).'**
+  String livingDexExcludedNote(int n);
+
+  /// No description provided for @livingDexGenerate.
+  ///
+  /// In es, this message translates to:
+  /// **'Generar y guardar'**
+  String get livingDexGenerate;
+
+  /// No description provided for @livingDexWorking.
+  ///
+  /// In es, this message translates to:
+  /// **'Generando la Living Dex…'**
+  String get livingDexWorking;
+
+  /// No description provided for @livingDexDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Living Dex guardada en el Arca: {n} Pokémon ({nShiny} variocolor).'**
+  String livingDexDone(int n, int nShiny);
+
+  /// No description provided for @livingDexDoneLeft.
+  ///
+  /// In es, this message translates to:
+  /// **'No cupieron {n}; puedes generarlos en otra partida.'**
+  String livingDexDoneLeft(int n);
+
+  /// No description provided for @livingDexNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Living Dex {kind} ({n} Pokémon)'**
+  String livingDexNote(String kind, int n);
+
+  /// No description provided for @livingDexKindNormal.
+  ///
+  /// In es, this message translates to:
+  /// **'normal'**
+  String get livingDexKindNormal;
+
+  /// No description provided for @livingDexKindShiny.
+  ///
+  /// In es, this message translates to:
+  /// **'variocolor'**
+  String get livingDexKindShiny;
+
+  /// No description provided for @livingDexUnsupported.
+  ///
+  /// In es, this message translates to:
+  /// **'La Living Dex no está disponible en este juego.'**
+  String get livingDexUnsupported;
+
+  /// No description provided for @livingDexReadOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta partida está dañada y se abrió en solo lectura.'**
+  String get livingDexReadOnly;
 }
 
 class _AppLocalizationsDelegate

@@ -18,6 +18,7 @@ import '../editor/events_panel.dart';
 import '../editor/inventory_panel.dart';
 import '../editor/pokedex_panel.dart';
 import '../editor/trainer_panel.dart';
+import '../livingdex/living_dex_flow.dart';
 import 'pokemon_views.dart';
 import 'compare_screen.dart';
 import 'damage_notice.dart';
@@ -343,6 +344,10 @@ class _SnapshotContentState extends ConsumerState<_SnapshotContent> {
               ],
               _SectionTitle(l10n.boxes),
               const SizedBox(height: 14),
+              if (widget.isLatest && !editor.readOnly && LivingDexDb.supports(game)) ...[
+                LivingDexButton(snapshotId: snapshot.id, game: game, onSaved: widget.onSaved),
+                const SizedBox(height: 14),
+              ],
               BoxBrowser(editor: editor, actions: actions, accent: accent, revision: draft.revision, focus: widget.focus),
             ]),
           _Section.trainer => TrainerPanel(snapshotId: snapshot.id, editor: editor),

@@ -3610,4 +3610,85 @@ class AppLocalizationsEn extends AppLocalizations {
   String dexSpeciesEvents(int count) {
     return '$count official events (distribution ended)';
   }
+
+  @override
+  String get livingDexButton => 'Generate a Living Dex in this save';
+
+  @override
+  String get livingDexButtonDesc =>
+      'One legal Pokémon of every species and form the game supports, in Pokédex order, with your trainer data';
+
+  @override
+  String get livingDexKindTitle => 'Normal or shiny Living Dex?';
+
+  @override
+  String get livingDexNormal => 'Normal';
+
+  @override
+  String get livingDexNormalDesc => 'No shiny Pokémon';
+
+  @override
+  String get livingDexShiny => 'Shiny';
+
+  @override
+  String get livingDexShinyDesc =>
+      'Shiny wherever the game allows it; locked ones stay normal';
+
+  @override
+  String get livingDexConfirmTitle => 'Overwrite the boxes?';
+
+  @override
+  String livingDexConfirmBody(String game, int n, int nBoxes, int nCurrent) {
+    return 'The $nBoxes boxes of this save will be overwritten ($nCurrent Pokémon stored now); the party is not touched. The previous version stays in the Arca history and you can go back to it.\n\n$n Pokémon from $game will be created, each from a real encounter in the game (egg, static or wild) or from an official event for mythicals and legendaries that only existed that way, with your name, ID, gender and language.';
+  }
+
+  @override
+  String livingDexNoFit(String last, int n, int nSlots) {
+    return 'Not everything fits: there are $nSlots slots and the Living Dex has $n. The boxes will be filled as far as they go (up to $last).';
+  }
+
+  @override
+  String livingDexShinyNote(int n) {
+    return '$n will stay normal (shiny impossible: the game or the encounter does not allow it).';
+  }
+
+  @override
+  String livingDexExcludedNote(int n) {
+    return 'Battle-only forms (Megas, Gigantamax, Primal, weather Castform, Sunshine Cherrim, Zen Darmanitan, Blade Aegislash, Pirouette Meloetta, Busted Mimikyu, School Wishiwashi…), fusions (Kyurem, Necrozma, Calyrex) and Totem Pokémon are not included. Neither are species without an encounter of their own in this version ($n: only by trade, HOME or another version).';
+  }
+
+  @override
+  String get livingDexGenerate => 'Generate and save';
+
+  @override
+  String get livingDexWorking => 'Generating the Living Dex…';
+
+  @override
+  String livingDexDone(int n, int nShiny) {
+    return 'Living Dex saved to the Arca: $n Pokémon ($nShiny shiny).';
+  }
+
+  @override
+  String livingDexDoneLeft(int n) {
+    return '$n did not fit; you can generate them in another save.';
+  }
+
+  @override
+  String livingDexNote(String kind, int n) {
+    return '$kind Living Dex ($n Pokémon)';
+  }
+
+  @override
+  String get livingDexKindNormal => 'Normal';
+
+  @override
+  String get livingDexKindShiny => 'Shiny';
+
+  @override
+  String get livingDexUnsupported =>
+      'The Living Dex is not available for this game.';
+
+  @override
+  String get livingDexReadOnly =>
+      'This save is damaged and was opened read-only.';
 }

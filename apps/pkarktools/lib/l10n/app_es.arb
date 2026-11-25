@@ -2620,5 +2620,96 @@
         "type": "int"
       }
     }
-  }
+  },
+  "livingDexButton": "Generar Living Dex en la partida actual",
+  "livingDexButtonDesc": "Un Pokémon legal de cada especie y forma que el juego admite, en orden de Pokédex, con tus datos de entrenador",
+  "livingDexKindTitle": "¿Living Dex normal o variocolor?",
+  "livingDexNormal": "Normal",
+  "livingDexNormalDesc": "Ningún Pokémon variocolor",
+  "livingDexShiny": "Variocolor",
+  "livingDexShinyDesc": "Variocolor donde el juego lo permite; los bloqueados quedan normales",
+  "livingDexConfirmTitle": "¿Sobrescribir las cajas?",
+  "livingDexConfirmBody": "Se sobrescribirán las {nBoxes} cajas de esta partida ({nCurrent} Pokémon guardados ahora); el equipo no se toca. La versión anterior queda en el historial del Arca y puedes volver a ella.\n\nSe crearán {n} Pokémon de {game}, cada uno de un encuentro real del juego (huevo, estático o salvaje) o de un evento oficial para los míticos y legendarios que solo existieron así, con tu nombre, ID, género e idioma.",
+  "@livingDexConfirmBody": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      },
+      "nBoxes": {
+        "type": "int"
+      },
+      "nCurrent": {
+        "type": "int"
+      }
+    }
+  },
+  "livingDexNoFit": "No caben todos: hay {nSlots} huecos y la Living Dex tiene {n}. Se llenarán las cajas hasta donde quepan (hasta {last}).",
+  "@livingDexNoFit": {
+    "placeholders": {
+      "last": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      },
+      "nSlots": {
+        "type": "int"
+      }
+    }
+  },
+  "livingDexShinyNote": "{n} quedarán normales (variocolor imposible: el juego o el encuentro no lo permite).",
+  "@livingDexShinyNote": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "livingDexExcludedNote": "No se incluyen las formas que solo existen en combate (megas, Gigamax, primigenias, Castform con clima, Cherrim soleado, Darmanitan Daruma, Aegislash filo, Meloetta danza, Mimikyu destapado, Wishiwashi banco…), las fusiones (Kyurem, Necrozma, Calyrex) ni los Pokémon dominantes. Tampoco las especies sin encuentro propio en esta versión ({n}: solo por intercambio, HOME u otra versión).",
+  "@livingDexExcludedNote": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "livingDexGenerate": "Generar y guardar",
+  "livingDexWorking": "Generando la Living Dex…",
+  "livingDexDone": "Living Dex guardada en el Arca: {n} Pokémon ({nShiny} variocolor).",
+  "@livingDexDone": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "nShiny": {
+        "type": "int"
+      }
+    }
+  },
+  "livingDexDoneLeft": "No cupieron {n}; puedes generarlos en otra partida.",
+  "@livingDexDoneLeft": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "livingDexNote": "Living Dex {kind} ({n} Pokémon)",
+  "@livingDexNote": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "livingDexKindNormal": "normal",
+  "livingDexKindShiny": "variocolor",
+  "livingDexUnsupported": "La Living Dex no está disponible en este juego.",
+  "livingDexReadOnly": "Esta partida está dañada y se abrió en solo lectura."
 }

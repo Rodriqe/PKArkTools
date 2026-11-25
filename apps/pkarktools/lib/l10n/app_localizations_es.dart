@@ -3640,4 +3640,85 @@ class AppLocalizationsEs extends AppLocalizations {
   String dexSpeciesEvents(int count) {
     return '$count eventos oficiales (distribución terminada)';
   }
+
+  @override
+  String get livingDexButton => 'Generar Living Dex en la partida actual';
+
+  @override
+  String get livingDexButtonDesc =>
+      'Un Pokémon legal de cada especie y forma que el juego admite, en orden de Pokédex, con tus datos de entrenador';
+
+  @override
+  String get livingDexKindTitle => '¿Living Dex normal o variocolor?';
+
+  @override
+  String get livingDexNormal => 'Normal';
+
+  @override
+  String get livingDexNormalDesc => 'Ningún Pokémon variocolor';
+
+  @override
+  String get livingDexShiny => 'Variocolor';
+
+  @override
+  String get livingDexShinyDesc =>
+      'Variocolor donde el juego lo permite; los bloqueados quedan normales';
+
+  @override
+  String get livingDexConfirmTitle => '¿Sobrescribir las cajas?';
+
+  @override
+  String livingDexConfirmBody(String game, int n, int nBoxes, int nCurrent) {
+    return 'Se sobrescribirán las $nBoxes cajas de esta partida ($nCurrent Pokémon guardados ahora); el equipo no se toca. La versión anterior queda en el historial del Arca y puedes volver a ella.\n\nSe crearán $n Pokémon de $game, cada uno de un encuentro real del juego (huevo, estático o salvaje) o de un evento oficial para los míticos y legendarios que solo existieron así, con tu nombre, ID, género e idioma.';
+  }
+
+  @override
+  String livingDexNoFit(String last, int n, int nSlots) {
+    return 'No caben todos: hay $nSlots huecos y la Living Dex tiene $n. Se llenarán las cajas hasta donde quepan (hasta $last).';
+  }
+
+  @override
+  String livingDexShinyNote(int n) {
+    return '$n quedarán normales (variocolor imposible: el juego o el encuentro no lo permite).';
+  }
+
+  @override
+  String livingDexExcludedNote(int n) {
+    return 'No se incluyen las formas que solo existen en combate (megas, Gigamax, primigenias, Castform con clima, Cherrim soleado, Darmanitan Daruma, Aegislash filo, Meloetta danza, Mimikyu destapado, Wishiwashi banco…), las fusiones (Kyurem, Necrozma, Calyrex) ni los Pokémon dominantes. Tampoco las especies sin encuentro propio en esta versión ($n: solo por intercambio, HOME u otra versión).';
+  }
+
+  @override
+  String get livingDexGenerate => 'Generar y guardar';
+
+  @override
+  String get livingDexWorking => 'Generando la Living Dex…';
+
+  @override
+  String livingDexDone(int n, int nShiny) {
+    return 'Living Dex guardada en el Arca: $n Pokémon ($nShiny variocolor).';
+  }
+
+  @override
+  String livingDexDoneLeft(int n) {
+    return 'No cupieron $n; puedes generarlos en otra partida.';
+  }
+
+  @override
+  String livingDexNote(String kind, int n) {
+    return 'Living Dex $kind ($n Pokémon)';
+  }
+
+  @override
+  String get livingDexKindNormal => 'normal';
+
+  @override
+  String get livingDexKindShiny => 'variocolor';
+
+  @override
+  String get livingDexUnsupported =>
+      'La Living Dex no está disponible en este juego.';
+
+  @override
+  String get livingDexReadOnly =>
+      'Esta partida está dañada y se abrió en solo lectura.';
 }

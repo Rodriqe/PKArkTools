@@ -26,6 +26,7 @@ String describeEdits(BuildContext context, List<SaveEditOp> edits, SaveEditor ed
       SetBoxNameEdit(:final box, :final name) => l10n.editBoxName(box + 1, name),
       PokedexEdit() => l10n.editPokedex,
       EventEdit() => l10n.editEvents,
+      FillBoxesEdit(:final label, :final pokemon) => label ?? l10n.livingDexNote(l10n.livingDexKindNormal, pokemon.length),
     });
   }
   final unique = <String>[];
