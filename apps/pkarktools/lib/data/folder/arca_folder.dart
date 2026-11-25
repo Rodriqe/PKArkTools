@@ -159,6 +159,16 @@ class ArcaFolder {
 
   Future<void> delete(String rel) => fs.delete(_full(rel));
 
+  /// Archivos de la carpeta [relDir] (rutas relativas a la raíz del Arca).
+  /// Vacío si no existe.
+  Future<List<String>> listFiles(String relDir) async {
+    final entries = await fs.list(_full(relDir));
+    return [
+      for (final e in entries)
+        prefix.isEmpty ? toNfc(e.path) : toNfc(e.path).substring(prefix.length + 1),
+    ];
+  }
+
   /// Escribe un archivo nuevo (nunca sobrescribe).
   Future<void> writeNew(String rel, Uint8List bytes) => fs.writeNew(_full(rel), bytes);
 
@@ -246,8 +256,8 @@ class ArcaFolder {
       }
       if (ArcaGameFolders.isGameReadme(rel)) continue;
       final reason = ArcaLayout.ignoreReason(rel);
-      // Lo apartado por «Arreglar» no cuenta para nada.
-      if (reason == IgnoreReason.quarantined) continue;
+      // Lo apartado por «Arreglar» y los equipos de Competitivo no cuentan para nada.
+      if (reason == IgnoreReason.quarantined || reason == IgnoreReason.appData) continue;
       if (reason != null) {
         out.ignored.update(reason, (v) => v + 1, ifAbsent: () => 1);
         if (reason == IgnoreReason.cloudPlaceholder) out.placeholders.add(rel);

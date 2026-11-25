@@ -45,6 +45,13 @@ class CompetitiveScreen extends ConsumerWidget {
         route: '/competitivo/danio',
       ),
       _Section(
+        key: const ValueKey('comp-teams'),
+        icon: Icons.groups_rounded,
+        title: l10n.compTeamsTitle,
+        body: l10n.compTeamsDesc,
+        route: '/competitivo/equipos',
+      ),
+      _Section(
         key: const ValueKey('comp-showdown'),
         icon: Icons.content_paste_rounded,
         title: l10n.compShowdownTitle,

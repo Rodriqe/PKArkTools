@@ -33,24 +33,28 @@ void main() {
     await tmp.delete(recursive: true);
   });
 
-  ChampionsBuild chomp() => ChampionsBuild.fromShowdown(Showdown.parse(
-    'Garchomp @ Life Orb\nAbility: Rough Skin\nEVs: 2 HP / 32 Atk / 32 Spe\nJolly Nature\n- Earthquake',
-  ).single)!.build;
+  ChampionsBuild chomp() => ChampionsBuild.fromShowdown(
+    Showdown.parse(
+      'Garchomp @ Life Orb\nAbility: Rough Skin\nEVs: 2 HP / 32 Atk / 32 Spe\nJolly Nature\n- Earthquake',
+    ).single,
+  )!.build;
 
   Future<void> pump(WidgetTester tester, Size size, Widget home) async {
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    await tester.pumpWidget(ProviderScope(
-      overrides: [arcaRepositoryProvider.overrideWithValue(repo)],
-      child: MaterialApp(
-        theme: AppTheme.dark(),
-        locale: const Locale('en'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: home,
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [arcaRepositoryProvider.overrideWithValue(repo)],
+        child: MaterialApp(
+          theme: AppTheme.dark(),
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: home,
+        ),
       ),
-    ));
+    );
     addTearDown(() async {
       await tester.pumpWidget(const SizedBox());
       await tester.pump(const Duration(seconds: 1));
@@ -78,8 +82,11 @@ void main() {
       await tester.ensureVisible(find.byKey(const ValueKey('damage-crit')));
       await tester.tap(find.byKey(const ValueKey('damage-crit')));
       await tester.pump();
-      await tester.scrollUntilVisible(find.byKey(const ValueKey('damage-text')), -300,
-          scrollable: find.byType(Scrollable).first);
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('damage-text')),
+        -300,
+        scrollable: find.byType(Scrollable).first,
+      );
       final crit = tester.widget<SelectableText>(find.byKey(const ValueKey('damage-text'))).data!;
       expect(crit, contains('on a critical hit'));
       expect(tester.takeException(), isNull);
@@ -102,10 +109,12 @@ void main() {
     tester.platformDispatcher.localesTestValue = const [Locale('es')];
     addTearDown(tester.view.reset);
     addTearDown(tester.platformDispatcher.clearLocalesTestValue);
-    await tester.pumpWidget(ProviderScope(
-      overrides: [arcaRepositoryProvider.overrideWithValue(repo)],
-      child: const PKArkToolsApp(initialLocation: '/competitivo/estadisticas'),
-    ));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [arcaRepositoryProvider.overrideWithValue(repo)],
+        child: const PKArkToolsApp(initialLocation: '/competitivo/estadisticas'),
+      ),
+    );
     addTearDown(() async {
       await tester.pumpWidget(const SizedBox());
       await tester.pump(const Duration(seconds: 1));

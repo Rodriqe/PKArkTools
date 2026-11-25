@@ -7266,7 +7266,7 @@ abstract class AppLocalizations {
   /// No description provided for @compTeamsDesc.
   ///
   /// In es, this message translates to:
-  /// **'Equipos guardados solo en este dispositivo.'**
+  /// **'Equipos guardados en tu Arca (Competitive/Teams/), con validación de la regulación.'**
   String get compTeamsDesc;
 
   /// No description provided for @compShowdownTitle.
@@ -7646,6 +7646,150 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Calcular daño'**
   String get compCalcDamage;
+
+  /// No description provided for @compImport.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar'**
+  String get compImport;
+
+  /// No description provided for @compImportJson.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar un .json'**
+  String get compImportJson;
+
+  /// No description provided for @compExportJson.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar .json'**
+  String get compExportJson;
+
+  /// No description provided for @compNewTeam.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo equipo'**
+  String get compNewTeam;
+
+  /// No description provided for @compTeamsWhere.
+  ///
+  /// In es, this message translates to:
+  /// **'Se guardan en tu Arca, en {dir}/ (con la copia de seguridad del resto). Nunca se envían a ningún sitio.'**
+  String compTeamsWhere(String dir);
+
+  /// No description provided for @compNoTeams.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hay equipos.'**
+  String get compNoTeams;
+
+  /// No description provided for @compMembersNotAllowed.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} ya no se permiten en la regulación vigente'**
+  String compMembersNotAllowed(int count);
+
+  /// No description provided for @compMemberNotAllowed.
+  ///
+  /// In es, this message translates to:
+  /// **'No permitido en la regulación {code}'**
+  String compMemberNotAllowed(String code);
+
+  /// No description provided for @compCopyOf.
+  ///
+  /// In es, this message translates to:
+  /// **'{name} (copia)'**
+  String compCopyOf(String name);
+
+  /// No description provided for @compDeleteTeam.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Borrar «{name}»?'**
+  String compDeleteTeam(String name);
+
+  /// No description provided for @compRename.
+  ///
+  /// In es, this message translates to:
+  /// **'Renombrar'**
+  String get compRename;
+
+  /// No description provided for @compDuplicate.
+  ///
+  /// In es, this message translates to:
+  /// **'Duplicar'**
+  String get compDuplicate;
+
+  /// No description provided for @compTeamUnreadable.
+  ///
+  /// In es, this message translates to:
+  /// **'No se puede leer: no se toca.'**
+  String get compTeamUnreadable;
+
+  /// No description provided for @compTeamsNoFolder.
+  ///
+  /// In es, this message translates to:
+  /// **'Los equipos se guardan en la carpeta del Arca y todavía no hay ninguna elegida. Elígela en Ajustes.'**
+  String get compTeamsNoFolder;
+
+  /// No description provided for @compChooseFolder.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegir carpeta'**
+  String get compChooseFolder;
+
+  /// No description provided for @compTeamName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre del equipo'**
+  String get compTeamName;
+
+  /// No description provided for @compTeamSaved.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipo guardado.'**
+  String get compTeamSaved;
+
+  /// No description provided for @compTeamSaveFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo guardar:'**
+  String get compTeamSaveFailed;
+
+  /// No description provided for @compUnsavedTeam.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay cambios sin guardar.'**
+  String get compUnsavedTeam;
+
+  /// No description provided for @compDiscard.
+  ///
+  /// In es, this message translates to:
+  /// **'Descartar'**
+  String get compDiscard;
+
+  /// No description provided for @compSave.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get compSave;
+
+  /// No description provided for @compRemoveMember.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar'**
+  String get compRemoveMember;
+
+  /// No description provided for @compNewMember.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo'**
+  String get compNewMember;
+
+  /// No description provided for @compAddMember.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir Pokémon'**
+  String get compAddMember;
 }
 
 class _AppLocalizationsDelegate

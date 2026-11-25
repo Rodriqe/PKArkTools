@@ -7,5 +7,6 @@ export 'champions.dart';
 export 'champions_build.dart';
 export 'champions_damage.dart';
 export 'champions_dex.dart';
+export 'champions_team.dart';
 export 'showdown.dart';
 export 'stat_calc.dart';

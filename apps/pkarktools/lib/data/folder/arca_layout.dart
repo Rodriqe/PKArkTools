@@ -10,6 +10,7 @@ import 'folder_fs.dart' show SystemJunk;
 /// ```
 /// PKArkTools/
 ///   README.txt
+///   Competitive/Teams/<equipo>.json  ← equipos de Competitivo (no son partidas)
 ///   <Juego>/<Entrenador (TID)>/
 ///     main                      ← última versión (nombre según el juego, ver [mainFileName])
 ///     ultima.json               ← qué copia del historial es la última (derivado)
@@ -41,6 +42,13 @@ abstract final class ArcaLayout {
   /// Carpeta (en la raíz del Arca) donde «Arreglar» aparta lo irreparable.
   /// Nunca se indexa ni se ofrece para adoptar.
   static const quarantineDir = '_cuarentena';
+
+  /// Datos propios de la app que no son partidas (equipos de Competitivo):
+  /// nunca se indexan como saves ni cuentan como archivos sin reconocer.
+  static const competitiveDir = 'Competitive';
+
+  /// Equipos de Competitivo (un JSON por equipo).
+  static const teamsDir = 'Competitive/Teams';
 
   /// Subcarpeta con las copias inmutables de cada entrenador.
   static const historyDir = 'historial';
@@ -234,6 +242,7 @@ abstract final class ArcaLayout {
   static IgnoreReason? ignoreReason(String relPath) {
     final segments = relPath.split('/');
     if (segments.length > 1 && segments.first == quarantineDir) return IgnoreReason.quarantined;
+    if (segments.length > 1 && segments.first == competitiveDir) return IgnoreReason.appData;
     for (final s in segments.take(segments.length - 1)) {
       if (s.startsWith('.') || s.startsWith('~') || SystemJunk.isDir(s)) return IgnoreReason.hidden;
     }
@@ -312,7 +321,16 @@ Reglas
 ''';
 }
 
-enum IgnoreReason { hidden, cloudPlaceholder, partial, conflictCopy, quarantined }
+enum IgnoreReason {
+  hidden,
+  cloudPlaceholder,
+  partial,
+  conflictCopy,
+  quarantined,
+
+  /// Datos de la app en `Competitive/` (equipos): no son partidas.
+  appData,
+}
 
 /// Metadatos de un snapshot tal como se guardan en su `.json`.
 class SnapshotMeta {

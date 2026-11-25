@@ -4514,7 +4514,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get compTeamsTitle => 'My teams';
 
   @override
-  String get compTeamsDesc => 'Teams stored only on this device.';
+  String get compTeamsDesc =>
+      'Teams stored in your Ark (Competitive/Teams/), checked against the regulation.';
 
   @override
   String get compShowdownTitle => 'Showdown';
@@ -4726,4 +4727,87 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compCalcDamage => 'Calculate damage';
+
+  @override
+  String get compImport => 'Import';
+
+  @override
+  String get compImportJson => 'Import a .json';
+
+  @override
+  String get compExportJson => 'Export .json';
+
+  @override
+  String get compNewTeam => 'New team';
+
+  @override
+  String compTeamsWhere(String dir) {
+    return 'Stored in your Ark, in $dir/ (backed up with everything else). Never sent anywhere.';
+  }
+
+  @override
+  String get compNoTeams => 'No teams yet.';
+
+  @override
+  String compMembersNotAllowed(int count) {
+    return '$count no longer allowed in the current regulation';
+  }
+
+  @override
+  String compMemberNotAllowed(String code) {
+    return 'Not allowed in regulation $code';
+  }
+
+  @override
+  String compCopyOf(String name) {
+    return '$name (copy)';
+  }
+
+  @override
+  String compDeleteTeam(String name) {
+    return 'Delete “$name”?';
+  }
+
+  @override
+  String get compRename => 'Rename';
+
+  @override
+  String get compDuplicate => 'Duplicate';
+
+  @override
+  String get compTeamUnreadable => 'Can\'t be read: left untouched.';
+
+  @override
+  String get compTeamsNoFolder =>
+      'Teams are stored in the Ark folder and none is chosen yet. Choose it in Settings.';
+
+  @override
+  String get compChooseFolder => 'Choose folder';
+
+  @override
+  String get compTeamName => 'Team name';
+
+  @override
+  String get compTeamSaved => 'Team saved.';
+
+  @override
+  String get compTeamSaveFailed => 'Couldn\'t save:';
+
+  @override
+  String get compUnsavedTeam => 'There are unsaved changes.';
+
+  @override
+  String get compDiscard => 'Discard';
+
+  @override
+  String get compSave => 'Save';
+
+  @override
+  String get compRemoveMember => 'Remove';
+
+  @override
+  String get compNewMember => 'New';
+
+  @override
+  String get compAddMember => 'Add Pokémon';
 }

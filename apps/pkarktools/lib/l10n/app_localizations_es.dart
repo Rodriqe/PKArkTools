@@ -4548,7 +4548,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get compTeamsTitle => 'Mis equipos';
 
   @override
-  String get compTeamsDesc => 'Equipos guardados solo en este dispositivo.';
+  String get compTeamsDesc =>
+      'Equipos guardados en tu Arca (Competitive/Teams/), con validación de la regulación.';
 
   @override
   String get compShowdownTitle => 'Showdown';
@@ -4760,4 +4761,87 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get compCalcDamage => 'Calcular daño';
+
+  @override
+  String get compImport => 'Importar';
+
+  @override
+  String get compImportJson => 'Importar un .json';
+
+  @override
+  String get compExportJson => 'Exportar .json';
+
+  @override
+  String get compNewTeam => 'Nuevo equipo';
+
+  @override
+  String compTeamsWhere(String dir) {
+    return 'Se guardan en tu Arca, en $dir/ (con la copia de seguridad del resto). Nunca se envían a ningún sitio.';
+  }
+
+  @override
+  String get compNoTeams => 'Todavía no hay equipos.';
+
+  @override
+  String compMembersNotAllowed(int count) {
+    return '$count ya no se permiten en la regulación vigente';
+  }
+
+  @override
+  String compMemberNotAllowed(String code) {
+    return 'No permitido en la regulación $code';
+  }
+
+  @override
+  String compCopyOf(String name) {
+    return '$name (copia)';
+  }
+
+  @override
+  String compDeleteTeam(String name) {
+    return '¿Borrar «$name»?';
+  }
+
+  @override
+  String get compRename => 'Renombrar';
+
+  @override
+  String get compDuplicate => 'Duplicar';
+
+  @override
+  String get compTeamUnreadable => 'No se puede leer: no se toca.';
+
+  @override
+  String get compTeamsNoFolder =>
+      'Los equipos se guardan en la carpeta del Arca y todavía no hay ninguna elegida. Elígela en Ajustes.';
+
+  @override
+  String get compChooseFolder => 'Elegir carpeta';
+
+  @override
+  String get compTeamName => 'Nombre del equipo';
+
+  @override
+  String get compTeamSaved => 'Equipo guardado.';
+
+  @override
+  String get compTeamSaveFailed => 'No se pudo guardar:';
+
+  @override
+  String get compUnsavedTeam => 'Hay cambios sin guardar.';
+
+  @override
+  String get compDiscard => 'Descartar';
+
+  @override
+  String get compSave => 'Guardar';
+
+  @override
+  String get compRemoveMember => 'Quitar';
+
+  @override
+  String get compNewMember => 'Nuevo';
+
+  @override
+  String get compAddMember => 'Añadir Pokémon';
 }

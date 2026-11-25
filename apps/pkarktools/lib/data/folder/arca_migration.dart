@@ -144,6 +144,17 @@ abstract final class ArcaMigration {
       }
       onProgress?.call(++done, pairs.length);
     }
+    // Los equipos de Competitivo viajan con el Arca (uno existente con el
+    // mismo nombre en el destino no se pisa).
+    for (final rel in await from.listFiles(ArcaLayout.teamsDir)) {
+      try {
+        final bytes = await from.read(rel);
+        if (!await to.exists(rel)) await to.writeNew(rel, bytes);
+        if (move && ArcaFolder.sha256Of(await to.read(rel)) == ArcaFolder.sha256Of(bytes)) await from.delete(rel);
+      } catch (e) {
+        result.failures.add('$rel: $e');
+      }
+    }
     result.leftBehind =
         listing.loose.where((e) => !mains.contains(e.path)).length + listing.missingSidecar.length + listing.missingSave.length;
     if (move) {

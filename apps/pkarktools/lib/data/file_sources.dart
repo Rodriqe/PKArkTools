@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
@@ -82,7 +83,9 @@ class FileSources {
   /// propio Arca no se reimportan: cada una acabaría como otra copia más.
   static bool isArcaCopy(String relPath) {
     final segments = relPath.split(RegExp(r'[/\\]'));
-    return ArcaLayout.managedSave.hasMatch(segments.last) || segments.contains(ArcaLayout.quarantineDir);
+    return ArcaLayout.managedSave.hasMatch(segments.last) ||
+        segments.contains(ArcaLayout.quarantineDir) ||
+        (segments.length > 1 && segments.contains(ArcaLayout.competitiveDir) && segments.last.endsWith('.json'));
   }
 
   Future<List<PickedSave>> pickFiles() async {
@@ -192,6 +195,13 @@ class FileSources {
       }
     }
     return FolderScan(rootLabel: '', found: found, scanned: files.length, ignored: 0, unrecognized: unrecognized);
+  }
+
+  /// Elige un `.json` (equipo exportado) y devuelve su texto.
+  Future<String?> pickJson() async {
+    final files = await FilePicker.pickFiles(dialogTitle: 'Importar equipo', type: FileType.custom, allowedExtensions: const ['json']);
+    if (files.isEmpty) return null;
+    return utf8.decode(await files.first.readAsBytes(), allowMalformed: true);
   }
 
   /// Elige un zip exportado del Arca.

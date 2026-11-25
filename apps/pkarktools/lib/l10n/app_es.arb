@@ -3348,7 +3348,7 @@
   "compDamageTitle": "Calculadora de daño",
   "compDamageDesc": "Rango de daño, probabilidad de KO y texto para compartir.",
   "compTeamsTitle": "Mis equipos",
-  "compTeamsDesc": "Equipos guardados solo en este dispositivo.",
+  "compTeamsDesc": "Equipos guardados en tu Arca (Competitive/Teams/), con validación de la regulación.",
   "compShowdownTitle": "Showdown",
   "compShowdownDesc": "Comprueba un equipo pegado de Showdown o exporta el de una partida.",
   "compShowdownCheck": "Comprobar",
@@ -3492,5 +3492,64 @@
   },
   "compDamageLimits": "Mecánicas de Pokémon Showdown (mod Champions). El KO no cuenta curaciones, Banda Focus ni daño residual.",
   "compUseInDamage": "Usar en la calculadora de daño",
-  "compCalcDamage": "Calcular daño"
+  "compCalcDamage": "Calcular daño",
+  "compImport": "Importar",
+  "compImportJson": "Importar un .json",
+  "compExportJson": "Exportar .json",
+  "compNewTeam": "Nuevo equipo",
+  "compTeamsWhere": "Se guardan en tu Arca, en {dir}/ (con la copia de seguridad del resto). Nunca se envían a ningún sitio.",
+  "@compTeamsWhere": {
+    "placeholders": {
+      "dir": {
+        "type": "String"
+      }
+    }
+  },
+  "compNoTeams": "Todavía no hay equipos.",
+  "compMembersNotAllowed": "{count} ya no se permiten en la regulación vigente",
+  "@compMembersNotAllowed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "compMemberNotAllowed": "No permitido en la regulación {code}",
+  "@compMemberNotAllowed": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "compCopyOf": "{name} (copia)",
+  "@compCopyOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "compDeleteTeam": "¿Borrar «{name}»?",
+  "@compDeleteTeam": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "compRename": "Renombrar",
+  "compDuplicate": "Duplicar",
+  "compTeamUnreadable": "No se puede leer: no se toca.",
+  "compTeamsNoFolder": "Los equipos se guardan en la carpeta del Arca y todavía no hay ninguna elegida. Elígela en Ajustes.",
+  "compChooseFolder": "Elegir carpeta",
+  "compTeamName": "Nombre del equipo",
+  "compTeamSaved": "Equipo guardado.",
+  "compTeamSaveFailed": "No se pudo guardar:",
+  "compUnsavedTeam": "Hay cambios sin guardar.",
+  "compDiscard": "Descartar",
+  "compSave": "Guardar",
+  "compRemoveMember": "Quitar",
+  "compNewMember": "Nuevo",
+  "compAddMember": "Añadir Pokémon"
 }

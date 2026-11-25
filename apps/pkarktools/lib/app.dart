@@ -23,6 +23,7 @@ import 'ui/competitive/competitive_screen.dart';
 import 'ui/competitive/damage_screen.dart';
 import 'ui/competitive/showdown_screen.dart';
 import 'ui/competitive/stats_screen.dart';
+import 'ui/competitive/teams_screen.dart';
 import 'ui/tools/champions_screen.dart';
 
 /// Ruta a la que hay que ir según el estado de la carpeta (null = ninguna).
@@ -91,6 +92,7 @@ GoRouter buildRouter({String initialLocation = '/arca', ValueNotifier<ArcaSetup>
                   GoRoute(path: 'formato', builder: (_, _) => const ChampionsScreen()),
                   GoRoute(path: 'estadisticas', builder: (_, _) => const StatsScreen()),
                   GoRoute(path: 'danio', builder: (_, _) => const DamageScreen()),
+                  GoRoute(path: 'equipos', builder: (_, _) => const TeamsScreen()),
                   GoRoute(path: 'showdown', builder: (_, _) => const ShowdownScreen()),
                 ],
               ),
