@@ -58,8 +58,10 @@ Sí se incluyen las formas regionales (Alola, Galar, Hisui, Paldea) y las
 cosméticas que se guardan en una caja: letras de Unown, dibujos de Vivillon
 (Gen 6–7 con la región de consola de cada dibujo), Alcremie, flores de
 Flabébé, Shellos/Gastrodon, Burmy/Wormadam, estaciones de Deerling, Rotom,
-Oricorio, Lycanroc, núcleos de Minior, Toxtricity, Urshifu, Arceus con su
-tabla, géneros como forma (Meowstic, Indeedee, Basculegion, Oinkologne)…
+Oricorio, Lycanroc, núcleos de Minior, Toxtricity, Urshifu, Furfrou, géneros
+como forma (Meowstic, Indeedee, Basculegion, Oinkologne)… Los míticos con
+formas que solo dio un evento (Arceus, Deoxys…) entran con la forma de ese
+evento.
 
 ## Avisos «Fishy» de PKHeX
 
