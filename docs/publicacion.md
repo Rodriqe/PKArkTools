@@ -225,8 +225,10 @@ Hace falta estar en el **Apple Developer Program** (de pago).
    Si guardas un valor en un archivo de texto, también vale
    `gh secret set NOMBRE -R Rodriqe/PKArkTools < archivo`.
 7. **Prueba**: *Actions → CI → Run workflow* sobre `main`. El log del paso
-   *Sign, notarize and package* debe terminar con `source=Notarized Developer
-   ID` en las dos comprobaciones de `spctl`.
+   *Sign, notarize and package* debe mostrar `Notarization of …: Accepted` dos
+   veces y terminar con `spctl (app): accepted` y `spctl (DMG): accepted`. El
+   log es público: el script no imprime el nombre del certificado, el Team
+   ID, el Key ID ni el Issuer ID.
 
 **El `.p12`, el `.p8` y sus contraseñas nunca van al repo.** Guárdalos en
 `RESPALDO-PKArkTools` (excluida de git) y en tu gestor de contraseñas. Si se

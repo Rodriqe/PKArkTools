@@ -87,7 +87,10 @@ identity=$(awk '{print $2}' <<< "$identity_line")
 if [ -n "${APPLE_TEAM_ID:-}" ] && ! grep -q "($APPLE_TEAM_ID)" <<< "$identity_line"; then
   die "the Developer ID certificate does not belong to team APPLE_TEAM_ID"
 fi
-echo "Signing identity: $(cut -d '"' -f 2 <<< "$identity_line")"
+# El repo y sus logs de Actions son públicos: nunca imprimas la identidad
+# (nombre del owner y Team ID), el Key ID, el Issuer ID ni salidas de
+# codesign/spctl con Authority=/origin=. Solo códigos de salida.
+echo "Signing identity: found"
 
 # --- Firma: de dentro hacia fuera ---------------------------------------------
 # Primero cada dylib, framework, app o xpc anidado (los más profundos antes,
@@ -107,8 +110,8 @@ while IFS= read -r -d '' exe; do
 done < <(find "$app/Contents/MacOS" -type f -perm -u+x -print0)
 
 sign --entitlements "$entitlements" "$app"
-codesign --verify --deep --strict --verbose=2 "$app"
-codesign -d --entitlements - "$app"
+codesign --verify --deep --strict "$app" > /dev/null 2>&1 || die "codesign --verify failed for the app"
+echo "codesign --verify (app): valid"
 
 # --- Notarización -------------------------------------------------------------
 submit() {
@@ -120,7 +123,9 @@ submit() {
   echo "Notarization of $(basename "$file"): $status ${id:+(id $id)}"
   if [ "$status" != "Accepted" ]; then
     if [ -n "$id" ]; then
-      xcrun notarytool log "$id" --key "$work/key.p8" --key-id "$APPLE_API_KEY_ID" --issuer "$APPLE_API_ISSUER_ID" || true
+      # Solo la lista de problemas del log (el log completo trae datos de la cuenta).
+      xcrun notarytool log "$id" --key "$work/key.p8" --key-id "$APPLE_API_KEY_ID" --issuer "$APPLE_API_ISSUER_ID" 2>/dev/null \
+        | plutil -extract issues json -o - - 2>/dev/null || echo "(no issues list in the notarization log)"
     fi
     die "notarization of $(basename "$file") failed ($status)"
   fi
@@ -147,15 +152,19 @@ ln -s /Applications "$stage/Applications"
 rm -f "$dmg_out"
 hdiutil create -volname PKArkTools -srcfolder "$stage" -fs HFS+ -format UDZO -ov "$dmg_out" > /dev/null
 codesign --force --timestamp --sign "$identity" --keychain "$keychain" "$dmg_out"
-codesign --verify --verbose=2 "$dmg_out"
+codesign --verify "$dmg_out" > /dev/null 2>&1 || die "codesign --verify failed for the DMG"
+echo "codesign --verify (DMG): valid"
 
 if [ "$notarize" = 1 ]; then
   submit "$dmg_out"
   xcrun stapler staple "$dmg_out"
   xcrun stapler validate "$dmg_out"
   # Comprobación final: lo que diría Gatekeeper a un usuario.
-  spctl --assess --type execute --verbose=4 "$app"
-  spctl --assess --type open --context context:primary-signature --verbose=4 "$dmg_out"
+  # Sin --verbose: spctl imprimiría origin= con el nombre y el Team ID.
+  spctl --assess --type execute "$app" > /dev/null 2>&1 || die "Gatekeeper (spctl) rejected the app"
+  echo "spctl (app): accepted"
+  spctl --assess --type open --context context:primary-signature "$dmg_out" > /dev/null 2>&1 || die "Gatekeeper (spctl) rejected the DMG"
+  echo "spctl (DMG): accepted"
 fi
 
 echo "$zip_out"
