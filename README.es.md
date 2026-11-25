@@ -323,7 +323,7 @@ La versión actual es la **v2.0.0**. Descárgala desde el
 |---|---|
 | Android | `PKArkTools-v2.0.0.apk`: ábrelo en el teléfono y permite instalar desde ese origen cuando Android lo pida. |
 | macOS | `PKArkTools-v2.0.0-macos.dmg`: ábrelo y arrastra PKArkTools a Aplicaciones. Está firmada y notarizada por Apple, así que se abre con doble clic (si alguna build saliera sin notarizar, las notas del release lo dicen: entonces, la primera vez, **clic derecho → Abrir**). |
-| iPhone / iPad | Aún sin build descargable: compílala desde el código con Xcode (abajo). |
+| iPhone / iPad | `PKArkTools-vX.Y.Z-ios-unsigned.ipa`, que se instala con AltStore y tu propio Apple ID (él lo firma; con un Apple ID gratuito hay que refrescarlo cada 7 días). Paso a paso: [docs/usuario/instalar.md](docs/usuario/instalar.md#iphone-y-ipad-con-altstore). Si eres desarrollador, también puedes compilarla desde el código con Xcode (abajo). |
 | Windows | `PKArkTools-v2.0.0-windows-x64-setup.exe` (instalador) o `PKArkTools-v2.0.0-windows-x64.zip` (portátil: descomprímelo y abre `PKArkTools.exe`). No está firmado: si SmartScreen avisa, pulsa **Más información → Ejecutar de todas formas**. |
 | Linux | `PKArkTools-v2.0.0-linux-x64.tar.gz`: extráelo y ejecuta `PKArkTools/pkarktools` (GTK 3; el selector de carpetas necesita `zenity` o `kdialog`). |
 

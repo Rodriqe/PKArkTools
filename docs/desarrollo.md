@@ -89,6 +89,7 @@ reindexado por SAF, tema claro y arranque en frío. Deja capturas en
 | `windows` | siempre | `flutter build windows --release` → zip portátil (`PKArkTools.exe`, DLL y `data/`) e instalador de Inno Setup (`windows/packaging/PKArkTools.iss`). |
 | `linux` | siempre | `flutter build linux --release` → `tar.gz` con la carpeta `PKArkTools/`. |
 | `macos` | tags `v*` y ejecución manual | `flutter build macos --release` → zip de `PKArkTools.app`. |
+| `ios-ipa` | tags `v*` y ejecución manual | `flutter build ios --release --no-codesign` → `Payload/Runner.app` empaquetado como `PKArkTools-<ref>-ios-unsigned.ipa`. Sin firma ni secretos: AltStore lo firma con el Apple ID del usuario ([instalar.md](usuario/instalar.md#iphone-y-ipad-con-altstore)). |
 | `release` | tags `v*` | Borrador de GitHub Release con todos los binarios y las notas de `tool/release_notes.py`. |
 
 En pushes y pull requests los binarios quedan como *artifacts* 7 días: sirven
@@ -144,10 +145,11 @@ requests de forks) el APK sale con la clave debug y el job lo avisa.
    de un release ya publicado: `--any-version vX.Y.Z salida.md`.
 5. Commit en `main` y **tag**: `git tag -a vX.Y.Z -m "PKArkTools X.Y.Z"` y
    `git push origin main vX.Y.Z`.
-6. El workflow compila Android, Windows, Linux y macOS y crea un **borrador**
+6. El workflow compila Android, Windows, Linux, macOS e iOS y crea un **borrador**
    de Release `PKArkTools vX.Y.Z` con las notas en inglés y los binarios:
    `PKArkTools-vX.Y.Z.apk`, `…-macos.dmg`, `…-macos.zip`,
-   `…-windows-x64-setup.exe`, `…-windows-x64.zip` y `…-linux-x64.tar.gz`.
+   `…-windows-x64-setup.exe`, `…-windows-x64.zip`, `…-linux-x64.tar.gz` y
+   `…-ios-unsigned.ipa` (para AltStore).
    La app de macOS sale firmada con Developer ID y notarizada si están los
    secretos ([Firma y notarización de macOS](publicacion.md#firma-y-notarización-de-macos)).
 7. Revisa el borrador en GitHub (*Releases*), descarga al menos el APK y la app

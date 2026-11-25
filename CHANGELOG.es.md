@@ -21,6 +21,11 @@ que es el que usan las notas de los Releases; se actualizan a la par.
   corazón y lo que queda del medidor); un purificado no lleva marca (el editor
   dice **Purificado**). En los demás juegos no hay marca. Solo se muestra: el
   save no cambia.
+- **iPhone / iPad con AltStore**: cada release incluye ahora
+  `PKArkTools-vX.Y.Z-ios-unsigned.ipa`, generado por la CI (job `ios-ipa`)
+  sin firma ni secretos; AltStore (o SideStore) lo firma con tu propio Apple
+  ID al instalarlo. Ver [docs/usuario/instalar.md](docs/usuario/instalar.md#iphone-y-ipad-con-altstore)
+  (compilarlo tú mismo en Xcode queda como opción para desarrolladores).
 
 ### Cambiado
 

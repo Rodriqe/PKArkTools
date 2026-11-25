@@ -35,7 +35,11 @@ FOOTER = """
 * **Linux**: `PKArkTools-{tag}-linux-x64.tar.gz`. Extract it and run
   `PKArkTools/pkarktools` (needs GTK 3; the folder picker uses `zenity` or
   `kdialog`). Built by CI only; not yet tested on a desktop.
-* **iPhone / iPad**: no build yet; build it from source (see the README).
+* **iPhone / iPad (AltStore)**: `PKArkTools-{tag}-ios-unsigned.ipa`. It is
+  not signed: install it with AltStore (or SideStore), which signs it with
+  your own Apple ID; with a free Apple ID it must be refreshed every 7 days.
+  Step by step (in Spanish): [docs/usuario/instalar.md]({repo}/blob/{tag}/docs/usuario/instalar.md#iphone-y-ipad-con-altstore).
+  Built by CI only; not yet tested on a device.
 
 Fan project, not affiliated with or endorsed by Nintendo, Game Freak,
 Creatures or The Pokémon Company. No ROMs, game files or sprites are
@@ -92,7 +96,7 @@ def main() -> int:
         return 1
     # Relative links (docs/…) do not resolve in a Release body: point them at the tag.
     body = re.sub(r'\]\((?!https?:|#|mailto:)([^)]+)\)', lambda l: f']({REPO}/blob/{tag}/{l.group(1)})', sec.group(1).strip())
-    notes = f'## PKArkTools {version}\n\n' + body + '\n' + FOOTER.format(tag=tag, macos=MACOS[macos_status(status_file)].format(tag=tag))
+    notes = f'## PKArkTools {version}\n\n' + body + '\n' + FOOTER.format(tag=tag, repo=REPO, macos=MACOS[macos_status(status_file)].format(tag=tag))
     if len(args) > 1:
         open(args[1], 'w', encoding='utf-8').write(notes)
     else:

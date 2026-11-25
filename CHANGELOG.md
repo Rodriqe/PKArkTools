@@ -20,6 +20,11 @@ developer documentation in `docs/` is in Spanish.
   purification progress (how much of the heart is open and the gauge left);
   a purified Pokémon shows no mark (the editor says **Purified**). No mark in
   any other game. Display only: the save is not changed.
+- **iPhone / iPad build for AltStore**: every release now includes
+  `PKArkTools-vX.Y.Z-ios-unsigned.ipa`, built by CI (`ios-ipa` job) without
+  signing or secrets; AltStore (or SideStore) signs it with your own Apple ID
+  when installing. See [docs/usuario/instalar.md](docs/usuario/instalar.md#iphone-y-ipad-con-altstore)
+  (building it yourself in Xcode stays as an option for developers).
 
 ### Changed
 

@@ -30,7 +30,11 @@ build) · 🟢 **menor**.
 
 Sobre `flutter build ipa --no-codesign`: genera el mismo `.xcarchive` pero
 **no puede producir un `.ipa`** sin firma (la exportación del archivo requiere
-un certificado y un perfil de distribución). Se usó el `xcodebuild archive`
+un certificado y un perfil de distribución). El `.ipa` sin firmar para
+AltStore de cada release lo empaqueta el job `ios-ipa` de
+`.github/workflows/ci.yml` a mano: `flutter build ios --release --no-codesign`
+y `Payload/Runner.app` comprimido como `PKArkTools-vX.Y.Z-ios-unsigned.ipa`
+(AltStore lo firma con el Apple ID del usuario). Se usó el `xcodebuild archive`
 equivalente para fijar `-derivedDataPath` dentro de `.scratch/` y no escribir
 en `~/Library`. Con cuenta de desarrollador: `flutter build ipa --release
 --export-method app-store`.
