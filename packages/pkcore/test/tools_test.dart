@@ -469,6 +469,20 @@ Bashful Nature
       expect(d.unresolved, isEmpty);
       expect(d.allowedIds, hasLength(264));
       expect(d.allowed, containsAll([(678, 0), (678, 1), (670, 5), (931, 0), (931, 3), (711, 3), (128, 3)]));
+      // Cada especie-forma de la lista oficial (copia real) es la misma
+      // especie y forma que resuelve la app desde el id de Showdown; las
+      // entradas sin etiqueta son un icono de la especie (todas sus formas).
+      final html = File('../../tool/fixtures/champions_official/pokemon_816.html').readAsStringSync();
+      final list = jsonDecode(RegExp(r'const pokemons\s*=\s*(\[.*?\])\s*;', dotAll: true).firstMatch(html)!.group(1)!);
+      for (final e in list as List) {
+        final [String id, _, String name] = e as List;
+        final s = int.parse(id.substring(0, 4)), f = int.parse(id.substring(5));
+        if (f == 0 || name.contains('(')) {
+          expect(d.allowed, contains((s, f)), reason: '$id $name');
+        } else {
+          expect(d.allowedSpecies, contains(s), reason: '$id $name');
+        }
+      }
       // Formas que solo existen en combate: no están en la lista oficial.
       expect(d.allowedIds, isNot(contains('castformsunny')));
       expect(d.allowedIds, isNot(contains('aegislashblade')));
