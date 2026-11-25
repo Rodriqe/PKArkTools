@@ -1,0 +1,77 @@
+name: Events data
+
+# Cada día: vuelve a generar data/events/events.json (eventos Mystery Gift)
+# con el último commit de PKHeX y, solo si cambiaron los eventos, lo sube a
+# main. La app lo descarga al abrir el explorador de eventos
+# (docs/usuario/eventos.md). Si hay un solo evento inválido para PKHeX, si el
+# total baja de golpe o si el generador falla, el job falla sin commit y la
+# app sigue con la última versión buena. PKHeX se clona en la carpeta temporal
+# del runner, nunca dentro del repositorio.
+on:
+  schedule:
+    - cron: '41 5 * * *'
+  workflow_dispatch:
+    inputs:
+      fresh:
+        description: 'Regenerate every event (do not reuse unchanged entries)'
+        type: boolean
+        default: false
+
+permissions: {}
+
+concurrency:
+  group: events-data
+  cancel-in-progress: false
+
+env:
+  FLUTTER_VERSION: '3.47.2'
+
+jobs:
+  events:
+    name: Regenerate events data
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - name: Clone PKHeX (latest commit)
+        run: git clone --depth 1 https://github.com/kwsch/PKHeX "$RUNNER_TEMP/PKHeX"
+      - name: Regenerate
+        env:
+          PKHEX_DIR: ${{ runner.temp }}/PKHeX
+          NUGET_PACKAGES: ${{ runner.temp }}/nuget
+          EVENTS_FRESH: ${{ inputs.fresh && '1' || '0' }}
+        run: bash tool/gen_event_data.sh
+      - name: Validate (schema, PKHeX legality, pkcore tests)
+        env:
+          PKHEX_DIR: ${{ runner.temp }}/PKHeX
+          NUGET_PACKAGES: ${{ runner.temp }}/nuget
+        run: |
+          python3 tool/gen_event_data.py --validate data/events/events.json
+          bash tool/check_events_pkhex.sh
+          (cd packages/pkcore && dart test test/events_test.dart test/event_data_test.dart)
+      - name: Commit if changed
+        run: |
+          file=data/events/events.json
+          if git diff --quiet -- "$file"; then
+            echo "No changes."
+            exit 0
+          fi
+          summary=$(python3 -c "import json;d=json.load(open('$file'));print(d['count'], 'events from PKHeX', d['source']['commit'][:7])")
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$file"
+          git commit -m "Events data: $summary"
+          git push origin HEAD:main

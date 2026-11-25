@@ -8,6 +8,7 @@
 #
 #   tool/gen_event_data.sh
 #   PKHEX_DIR=/otra/copia/de/PKHeX tool/gen_event_data.sh
+#   EVENTS_FRESH=1 tool/gen_event_data.sh   # sin reutilizar entradas anteriores
 #
 # Requiere .NET SDK 10 y PKHeX en .ref/PKHeX o en $PKHEX_DIR (ver
 # tools/pkhex_oracle/README.md). El commit y la fecha de PKHeX salen de git
@@ -34,6 +35,7 @@ dotnet "$BIN/PkhexOracle.dll" events "$OUT"
 JSON_ARGS=()
 if [ -n "${PKHEX_COMMIT:-}" ]; then
   JSON_ARGS=(--json "$ROOT/data/events/events.json" --commit "$PKHEX_COMMIT" --date "$PKHEX_DATE")
+  if [ "${EVENTS_FRESH:-0}" = 1 ]; then JSON_ARGS+=(--fresh); fi
 else
   echo "Aviso: sin commit de PKHeX (no es un clon de git); data/events/events.json no se toca." >&2
 fi
