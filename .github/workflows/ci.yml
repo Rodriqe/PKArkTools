@@ -2,8 +2,8 @@ name: CI
 
 # Pushes a main y pull requests: análisis, tests y compilación de Android,
 # Windows y Linux (comprobación; los binarios quedan como artifacts unos días).
-# Tags v*: además macOS y un borrador de GitHub Release con todos los binarios
-# y las notas en inglés sacadas de CHANGELOG.md (ver docs/desarrollo.md#cómo-publicar-un-release).
+# Tags v*: además macOS, el .ipa de iOS sin firmar (AltStore) y un borrador de
+# GitHub Release con todos los binarios y las notas en inglés sacadas de CHANGELOG.md (ver docs/desarrollo.md#cómo-publicar-un-release).
 on:
   push:
     branches: [main]
@@ -222,10 +222,43 @@ jobs:
             macos-signing.txt
           if-no-files-found: error
 
+  ios-ipa:
+    name: iOS .ipa (unsigned, for AltStore)
+    # Sin firmar y sin secretos: AltStore/SideStore lo vuelven a firmar con el
+    # Apple ID del usuario al instalarlo (ver docs/usuario/instalar.md).
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - name: flutter build ios --release --no-codesign
+        working-directory: apps/pkarktools
+        run: flutter build ios --release --no-codesign
+      - name: Package Payload/Runner.app as .ipa
+        run: |
+          label="${GITHUB_REF_NAME//\//-}"
+          app=apps/pkarktools/build/ios/iphoneos/Runner.app
+          test -d "$app" || { echo "::error::$app not found"; exit 1; }
+          rm -rf ipa && mkdir -p ipa/Payload
+          cp -R "$app" ipa/Payload/
+          (cd ipa && zip -qry "../PKArkTools-${label}-ios-unsigned.ipa" Payload)
+          unzip -l "PKArkTools-${label}-ios-unsigned.ipa" | grep -q 'Payload/Runner.app/Info.plist'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa
+          path: PKArkTools-*-ios-unsigned.ipa
+          if-no-files-found: error
+
   release:
     name: GitHub Release (draft)
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [android, windows, linux, macos]
+    needs: [android, windows, linux, macos, ios-ipa]
     runs-on: ubuntu-latest
     permissions:
       contents: write
