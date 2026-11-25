@@ -354,23 +354,30 @@ abstract final class ChampionsFormat {
   static bool isMythical(int species) => _mythicals.contains(species);
   static bool isRestricted(int species) => _restricted.contains(species);
 
+  /// Motivos por los que la especie y forma no valen en la regulación vigente
+  /// (vacío = permitida). [game] decide qué formas son solo estéticas.
+  static List<ChampionsReason> speciesReasons(int s, int f, [GameVersion game = GameVersion.scarletViolet]) {
+    if (_mythicals.contains(s)) return const [ChampionsReason.mythical];
+    if (_restricted.contains(s)) return const [ChampionsReason.restricted];
+    if (!_data.allowedSpecies.contains(s)) return const [ChampionsReason.speciesNotAllowed];
+    if (!_data.allowedKeys.contains(s * 100 + f)) {
+      // Formas solo estéticas (Vivillon, Alcremie…): cuentan como la forma base.
+      final cosmetic = _data.allowedKeys.contains(s * 100) && !SpeciesForms.formsDiffer(s, 0, f, game);
+      if (!cosmetic) return const [ChampionsReason.formNotAllowed];
+    }
+    return const [];
+  }
+
+  /// ¿Está permitida la especie y forma en la regulación vigente?
+  static bool isAllowed(int species, int form) => speciesReasons(species, form).isEmpty;
+
   /// ¿Puede usarse [pk] (de un save de [game]) en el formato?
   static ChampionsEligibility check(Pkm pk, GameVersion game, {DataLanguage lang = DataLanguage.es}) {
     final reasons = <ChampionsReason>[];
     if (pk.isEgg) reasons.add(ChampionsReason.egg);
     if (pk.gc?.isShadow ?? false) reasons.add(ChampionsReason.shadow);
-    final s = pk.species, f = pk.form;
-    if (_mythicals.contains(s)) {
-      reasons.add(ChampionsReason.mythical);
-    } else if (_restricted.contains(s)) {
-      reasons.add(ChampionsReason.restricted);
-    } else if (!_data.allowedSpecies.contains(s)) {
-      reasons.add(ChampionsReason.speciesNotAllowed);
-    } else if (!_data.allowedKeys.contains(s * 100 + f)) {
-      // Formas solo estéticas (Vivillon, Alcremie…): cuentan como la forma base.
-      final cosmetic = _data.allowedKeys.contains(s * 100) && !SpeciesForms.formsDiffer(s, 0, f, game);
-      if (!cosmetic) reasons.add(ChampionsReason.formNotAllowed);
-    }
+    final s = pk.species;
+    reasons.addAll(speciesReasons(s, pk.form, game));
     var detail = '';
     if (reasons.isEmpty) {
       final warn = Legality.check(pk, game, lang: lang).where((i) => i.severity == LegalitySeverity.warning);

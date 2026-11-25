@@ -193,7 +193,7 @@ void main() {
     await write('07_transfer');
 
     // 8. Formato oficial (Pokémon Champions).
-    await open('/dex/formato-oficial', desktop);
+    await open('/competitivo/formato', desktop);
     await write('08_official_format');
 
     // 9-11. Herramientas de la partida: calculadora, Showdown y tarjeta.

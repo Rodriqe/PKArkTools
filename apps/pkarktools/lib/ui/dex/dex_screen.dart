@@ -134,7 +134,7 @@ class _DexBody extends ConsumerWidget {
               IconButton(
                 key: const ValueKey('dex-official-format'),
                 tooltip: l10n.toolsOfficialFormat,
-                onPressed: () => context.go('/dex/formato-oficial'),
+                onPressed: () => context.go('/competitivo/formato'),
                 icon: const Icon(Icons.emoji_events_outlined),
               ),
               IconButton(

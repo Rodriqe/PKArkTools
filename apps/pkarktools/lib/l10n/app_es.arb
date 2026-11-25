@@ -3306,5 +3306,77 @@
         "type": "String"
       }
     }
-  }
+  },
+  "navCompetitive": "Competitivo",
+  "navCompetitiveShort": "Combate",
+  "compSubtitle": "Pokémon Champions · {formatName}",
+  "@compSubtitle": {
+    "placeholders": {
+      "formatName": {
+        "type": "String"
+      }
+    }
+  },
+  "compRegulationUntil": "Regulación {code} · hasta el {date} · siguiente: {next}",
+  "@compRegulationUntil": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      },
+      "next": {
+        "type": "String"
+      }
+    }
+  },
+  "compRegulationEnded": "La regulación {code} terminó el {date}: buscando los datos de la nueva…",
+  "@compRegulationEnded": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "compFormatDesc": "Regulación vigente, reglas, Pokémon permitidos y cuáles de tus partidas valen.",
+  "compStatsTitle": "Calculadora de estadísticas",
+  "compStatsDesc": "Estadísticas finales con las reglas de Champions (nivel 50, puntos de estadística).",
+  "compDamageTitle": "Calculadora de daño",
+  "compDamageDesc": "Rango de daño, probabilidad de KO y texto para compartir.",
+  "compTeamsTitle": "Mis equipos",
+  "compTeamsDesc": "Equipos guardados solo en este dispositivo.",
+  "compShowdownTitle": "Showdown",
+  "compShowdownDesc": "Comprueba un equipo pegado de Showdown o exporta el de una partida.",
+  "compShowdownCheck": "Comprobar",
+  "compShowdownPasteHint": "Pega un equipo de Pokémon Showdown (nombres en inglés) para ver si vale en {formatName}.",
+  "@compShowdownPasteHint": {
+    "placeholders": {
+      "formatName": {
+        "type": "String"
+      }
+    }
+  },
+  "compShowdownAllowed": "Permitido",
+  "compShowdownLevel": "Nivel {level}: se ajusta a {cap}.",
+  "@compShowdownLevel": {
+    "placeholders": {
+      "cap": {
+        "type": "String"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "compShowdownExportTitle": "Exportar el equipo de una partida",
+  "compShowdownImportHint": "Para importar a una partida, ábrela en el Arca y usa «Importar de Showdown».",
+  "compTeamOk": "El equipo cumple las reglas del formato.",
+  "compClassic": "Clásica",
+  "compClassicDesc": "Juegos principales: IVs, EVs y nivel libres.",
+  "compSpecies": "Especie",
+  "compSoon": "Próximamente"
 }

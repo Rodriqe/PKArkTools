@@ -234,7 +234,18 @@ class _Header extends StatelessWidget {
       ],
     );
     if (compact) {
-      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [title, const SizedBox(height: 18), field]);
+      // En el teléfono Actividad no cabe en la barra inferior: se abre desde aquí.
+      final activity = IconButton(
+        key: const ValueKey('arca-activity'),
+        tooltip: l10n.navActivity,
+        onPressed: () => context.go('/actividad'),
+        icon: const Icon(Icons.history_rounded),
+      );
+      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(child: title), activity]),
+        const SizedBox(height: 18),
+        field,
+      ]);
     }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,

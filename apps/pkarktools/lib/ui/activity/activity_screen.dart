@@ -29,7 +29,20 @@ class ActivityScreen extends ConsumerWidget {
               SliverPadding(
                 padding: EdgeInsets.fromLTRB(pad, compact ? 20 : 36, pad, 16),
                 sliver: SliverToBoxAdapter(
-                  child: Text(l10n.navActivity, style: compact ? context.text.displaySmall : context.text.displayMedium),
+                  child: Row(children: [
+                    // En el teléfono se llega desde el Arca: botón para volver.
+                    if (compact)
+                      IconButton(
+                        key: const ValueKey('activity-back'),
+                        tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                        onPressed: () => context.go('/arca'),
+                        icon: const Icon(Icons.arrow_back_rounded),
+                      ),
+                    Expanded(
+                      child: Text(l10n.navActivity,
+                          style: compact ? context.text.displaySmall : context.text.displayMedium),
+                    ),
+                  ]),
                 ),
               ),
               if (items.isEmpty)

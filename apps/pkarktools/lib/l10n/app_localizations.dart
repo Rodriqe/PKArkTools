@@ -7196,6 +7196,156 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Medidor de corazón: {value}'**
   String shadowHeartUnknown(String value);
+
+  /// No description provided for @navCompetitive.
+  ///
+  /// In es, this message translates to:
+  /// **'Competitivo'**
+  String get navCompetitive;
+
+  /// No description provided for @navCompetitiveShort.
+  ///
+  /// In es, this message translates to:
+  /// **'Combate'**
+  String get navCompetitiveShort;
+
+  /// No description provided for @compSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Pokémon Champions · {formatName}'**
+  String compSubtitle(String formatName);
+
+  /// No description provided for @compRegulationUntil.
+  ///
+  /// In es, this message translates to:
+  /// **'Regulación {code} · hasta el {date} · siguiente: {next}'**
+  String compRegulationUntil(String code, String date, String next);
+
+  /// No description provided for @compRegulationEnded.
+  ///
+  /// In es, this message translates to:
+  /// **'La regulación {code} terminó el {date}: buscando los datos de la nueva…'**
+  String compRegulationEnded(String code, String date);
+
+  /// No description provided for @compFormatDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Regulación vigente, reglas, Pokémon permitidos y cuáles de tus partidas valen.'**
+  String get compFormatDesc;
+
+  /// No description provided for @compStatsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Calculadora de estadísticas'**
+  String get compStatsTitle;
+
+  /// No description provided for @compStatsDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Estadísticas finales con las reglas de Champions (nivel 50, puntos de estadística).'**
+  String get compStatsDesc;
+
+  /// No description provided for @compDamageTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Calculadora de daño'**
+  String get compDamageTitle;
+
+  /// No description provided for @compDamageDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Rango de daño, probabilidad de KO y texto para compartir.'**
+  String get compDamageDesc;
+
+  /// No description provided for @compTeamsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis equipos'**
+  String get compTeamsTitle;
+
+  /// No description provided for @compTeamsDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipos guardados solo en este dispositivo.'**
+  String get compTeamsDesc;
+
+  /// No description provided for @compShowdownTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Showdown'**
+  String get compShowdownTitle;
+
+  /// No description provided for @compShowdownDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Comprueba un equipo pegado de Showdown o exporta el de una partida.'**
+  String get compShowdownDesc;
+
+  /// No description provided for @compShowdownCheck.
+  ///
+  /// In es, this message translates to:
+  /// **'Comprobar'**
+  String get compShowdownCheck;
+
+  /// No description provided for @compShowdownPasteHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Pega un equipo de Pokémon Showdown (nombres en inglés) para ver si vale en {formatName}.'**
+  String compShowdownPasteHint(String formatName);
+
+  /// No description provided for @compShowdownAllowed.
+  ///
+  /// In es, this message translates to:
+  /// **'Permitido'**
+  String get compShowdownAllowed;
+
+  /// No description provided for @compShowdownLevel.
+  ///
+  /// In es, this message translates to:
+  /// **'Nivel {level}: se ajusta a {cap}.'**
+  String compShowdownLevel(String cap, String level);
+
+  /// No description provided for @compShowdownExportTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar el equipo de una partida'**
+  String get compShowdownExportTitle;
+
+  /// No description provided for @compShowdownImportHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Para importar a una partida, ábrela en el Arca y usa «Importar de Showdown».'**
+  String get compShowdownImportHint;
+
+  /// No description provided for @compTeamOk.
+  ///
+  /// In es, this message translates to:
+  /// **'El equipo cumple las reglas del formato.'**
+  String get compTeamOk;
+
+  /// No description provided for @compClassic.
+  ///
+  /// In es, this message translates to:
+  /// **'Clásica'**
+  String get compClassic;
+
+  /// No description provided for @compClassicDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Juegos principales: IVs, EVs y nivel libres.'**
+  String get compClassicDesc;
+
+  /// No description provided for @compSpecies.
+  ///
+  /// In es, this message translates to:
+  /// **'Especie'**
+  String get compSpecies;
+
+  /// No description provided for @compSoon.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximamente'**
+  String get compSoon;
 }
 
 class _AppLocalizationsDelegate

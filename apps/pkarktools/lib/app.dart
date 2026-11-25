@@ -19,6 +19,9 @@ import 'ui/onboarding/onboarding_screen.dart';
 import 'ui/ribbons/ribbon_hunter_screen.dart';
 import 'ui/settings/settings_screen.dart';
 import 'ui/shell.dart';
+import 'ui/competitive/competitive_screen.dart';
+import 'ui/competitive/showdown_screen.dart';
+import 'ui/competitive/stats_screen.dart';
 import 'ui/tools/champions_screen.dart';
 
 /// Ruta a la que hay que ir según el estado de la carpeta (null = ninguna).
@@ -64,7 +67,8 @@ GoRouter buildRouter({String initialLocation = '/arca', ValueNotifier<ArcaSetup>
                 builder: (_, _) => const DexScreen(),
                 routes: [
                   GoRoute(path: 'progreso', builder: (_, _) => const DexProgressScreen()),
-                  GoRoute(path: 'formato-oficial', builder: (_, _) => const ChampionsScreen()),
+                  // Antes vivía aquí: los enlaces viejos llevan a Competitivo.
+                  GoRoute(path: 'formato-oficial', redirect: (_, _) => '/competitivo/formato'),
                   GoRoute(
                     path: 'eventos',
                     builder: (_, state) => EventExplorerScreen(species: int.tryParse(state.uri.queryParameters['especie'] ?? '')),
@@ -75,6 +79,17 @@ GoRouter buildRouter({String initialLocation = '/arca', ValueNotifier<ArcaSetup>
                       species: (int.tryParse(state.pathParameters['species']!) ?? 1).clamp(1, GlobalDex.maxSpecies),
                     ),
                   ),
+                ],
+              ),
+            ]),
+            StatefulShellBranch(routes: [
+              GoRoute(
+                path: '/competitivo',
+                builder: (_, _) => const CompetitiveScreen(),
+                routes: [
+                  GoRoute(path: 'formato', builder: (_, _) => const ChampionsScreen()),
+                  GoRoute(path: 'estadisticas', builder: (_, _) => const StatsScreen()),
+                  GoRoute(path: 'showdown', builder: (_, _) => const ShowdownScreen()),
                 ],
               ),
             ]),

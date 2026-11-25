@@ -94,7 +94,7 @@ class SaveToolsBar extends ConsumerWidget {
           ),
         OutlinedButton.icon(
           key: const ValueKey('tool-official'),
-          onPressed: () => context.push('/dex/formato-oficial'),
+          onPressed: () => context.go('/competitivo/formato'),
           icon: const Icon(Icons.emoji_events_outlined),
           label: Text(context.l10n.toolsOfficialFormat),
         ),

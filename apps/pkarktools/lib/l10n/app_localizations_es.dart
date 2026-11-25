@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -1541,7 +1540,8 @@ class AppLocalizationsEs extends AppLocalizations {
       locale: localeName,
       other:
           '$count archivos omitidos (temporales, parciales o copias de conflicto de la nube).',
-      one: '1 archivo omitido (temporal, parcial o copia de conflicto de la nube).',
+      one:
+          '1 archivo omitido (temporal, parcial o copia de conflicto de la nube).',
     );
     return '$_temp0';
   }
@@ -4504,4 +4504,94 @@ class AppLocalizationsEs extends AppLocalizations {
   String shadowHeartUnknown(String value) {
     return 'Medidor de corazón: $value';
   }
+
+  @override
+  String get navCompetitive => 'Competitivo';
+
+  @override
+  String get navCompetitiveShort => 'Combate';
+
+  @override
+  String compSubtitle(String formatName) {
+    return 'Pokémon Champions · $formatName';
+  }
+
+  @override
+  String compRegulationUntil(String code, String date, String next) {
+    return 'Regulación $code · hasta el $date · siguiente: $next';
+  }
+
+  @override
+  String compRegulationEnded(String code, String date) {
+    return 'La regulación $code terminó el $date: buscando los datos de la nueva…';
+  }
+
+  @override
+  String get compFormatDesc =>
+      'Regulación vigente, reglas, Pokémon permitidos y cuáles de tus partidas valen.';
+
+  @override
+  String get compStatsTitle => 'Calculadora de estadísticas';
+
+  @override
+  String get compStatsDesc =>
+      'Estadísticas finales con las reglas de Champions (nivel 50, puntos de estadística).';
+
+  @override
+  String get compDamageTitle => 'Calculadora de daño';
+
+  @override
+  String get compDamageDesc =>
+      'Rango de daño, probabilidad de KO y texto para compartir.';
+
+  @override
+  String get compTeamsTitle => 'Mis equipos';
+
+  @override
+  String get compTeamsDesc => 'Equipos guardados solo en este dispositivo.';
+
+  @override
+  String get compShowdownTitle => 'Showdown';
+
+  @override
+  String get compShowdownDesc =>
+      'Comprueba un equipo pegado de Showdown o exporta el de una partida.';
+
+  @override
+  String get compShowdownCheck => 'Comprobar';
+
+  @override
+  String compShowdownPasteHint(String formatName) {
+    return 'Pega un equipo de Pokémon Showdown (nombres en inglés) para ver si vale en $formatName.';
+  }
+
+  @override
+  String get compShowdownAllowed => 'Permitido';
+
+  @override
+  String compShowdownLevel(String cap, String level) {
+    return 'Nivel $level: se ajusta a $cap.';
+  }
+
+  @override
+  String get compShowdownExportTitle => 'Exportar el equipo de una partida';
+
+  @override
+  String get compShowdownImportHint =>
+      'Para importar a una partida, ábrela en el Arca y usa «Importar de Showdown».';
+
+  @override
+  String get compTeamOk => 'El equipo cumple las reglas del formato.';
+
+  @override
+  String get compClassic => 'Clásica';
+
+  @override
+  String get compClassicDesc => 'Juegos principales: IVs, EVs y nivel libres.';
+
+  @override
+  String get compSpecies => 'Especie';
+
+  @override
+  String get compSoon => 'Próximamente';
 }
